@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class TsumugiGameTarget : TargetRules
 {
-	public TsumugiGameTarget( TargetInfo Target) : base(Target)
+	public TsumugiGameTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
