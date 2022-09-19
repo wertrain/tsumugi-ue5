@@ -56,6 +56,39 @@ char LexingStringReader::Read() {
     return -1;
 }
 
+int LexingStringReader::Seek(int offset) {
+    return Seek(offset, SeekOrigin::kBegin);
+}
+
+int LexingStringReader::Seek(int offset, SeekOrigin origin) {
+    
+    // TODO: s”A—ñ”‚ÌÄŒvŽZ
+
+    switch (origin) {
+    case SeekOrigin::kBegin:
+        if (0 > string_.length() + offset || string_.length() <= offset) {
+            return position_;
+        }
+        position_ = offset;
+        break;
+
+    case SeekOrigin::kCurrent:
+        if (0 > string_.length() + offset || string_.length() <= position_ + offset) {
+            return position_;
+        }
+        position_ = position_ + offset;
+        break;
+
+    case SeekOrigin::kEnd:
+        if (0 > string_.length() + offset || string_.length() <= string_.length() + offset) {
+            return position_;
+        }
+        position_ = string_.length() + offset;
+        break;
+    }
+    return position_;
+}
+
 void LexingStringReader::SkipNewLine() {
 
     if (string_[position_] == '\n') {

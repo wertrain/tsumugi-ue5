@@ -9,6 +9,13 @@ namespace tsumugi::script::lexing {
 /// </summary>
 class LexingStringReader {
 public:
+    enum class SeekOrigin {
+        kBegin,
+        kCurrent,
+        kEnd
+    };
+
+public:
     LexingStringReader(const char* string);
 
     int GetPosition() const;
@@ -21,6 +28,8 @@ public:
     char Peek() const;
     char Peek(int offset) const;
     char Read();
+    int Seek(int offset);
+    int Seek(int offset, SeekOrigin origin);
 
 private:
     void SkipNewLine();
