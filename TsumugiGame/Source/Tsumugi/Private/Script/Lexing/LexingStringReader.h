@@ -1,13 +1,15 @@
 #pragma once
 
+#include "Foundation/Types.h"
+
 namespace tsumugi::script::lexing {
 
 /// <summary>
-/// 解析位置
+/// 字句解析用の StringReader クラス
 /// </summary>
-class LexingPosition {
+class LexingStringReader {
 public:
-    LexingPosition();
+    LexingStringReader(const char* string);
 
     int GetPosition() const;
     void SetPosition(int position);
@@ -16,10 +18,18 @@ public:
     int GetColumns() const;
     void SetColumns(int columns);
 
+    char Peek() const;
+    char Peek(int offset) const;
+    char Read();
+
+private:
+    void SkipNewLine();
+
 private:
     int position_;
     int lines_;
     int columns_;
+    tstring string_;
 };
 
 }
