@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Tsumugi">
+      <UniqueIdentifier>{61c3f9af-36e2-43d7-a9e1-6b4431463ac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Public">
+      <UniqueIdentifier>{759598a7-26c9-469b-8c4b-135541165e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private">
+      <UniqueIdentifier>{97b3b594-6a34-4ee8-b200-06577da7e0c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Foundation">
+      <UniqueIdentifier>{84c67e5e-eabc-4bbe-84cf-afd7283f79cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Script">
+      <UniqueIdentifier>{000c33f3-ce6e-4a65-a70a-8ad262429216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Text">
+      <UniqueIdentifier>{1c1d30b0-7075-4aa8-a623-cf7eae4505b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Script\Lexing">
+      <UniqueIdentifier>{1c684aec-eb96-4d1d-9c45-56a29645760e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Text\Lexing">
+      <UniqueIdentifier>{43aba79e-cf8b-498a-888c-f50e65ee7904}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.h">
+      <Filter>Tsumugi\Private\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.h">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexer.h">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.h">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.h">
+      <Filter>Tsumugi\Private\Text\Lexing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.h">
+      <Filter>Tsumugi\Private\Text\Lexing</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexer.cpp">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.cpp">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.cpp">
+      <Filter>Tsumugi\Private\Text\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.cpp">
+      <Filter>Tsumugi\Private\Text\Lexing</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

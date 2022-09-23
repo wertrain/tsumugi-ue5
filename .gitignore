@@ -1,1 +1,7 @@
 ThirdPartyResources/
+
+# My Project
+Libararys/TsumugiLib/*.user
+Libararys/TsumugiLib/x64/Debug/*
+Libararys/UnitTest/*.user
+Libararys/UnitTest/x64/Debug/*

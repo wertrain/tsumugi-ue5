@@ -11,10 +11,12 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(TestLexingStringReader)
 		{
-			std::string name = "Bill";
-			Assert::AreEqual(name.c_str(), "Bill");
+			tsumugi::script::lexing::LexingStringReader reader;
+			reader.SetString(L"日本語のテスト。これはテストです。");
+			Assert::AreEqual(reader.Peek(), L'日');
+			Assert::AreNotEqual(reader.Peek(), L'本');
 		}
 	};
 }

@@ -3,7 +3,7 @@
 #include <string>
 #include <cinttypes>
 
-typedef std::string tstring;
+typedef std::wstring tstring;
 
 typedef uint8_t u8;
 typedef uint16_t u16;

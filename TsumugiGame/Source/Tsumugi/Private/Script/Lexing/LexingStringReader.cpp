@@ -2,12 +2,21 @@
 
 namespace tsumugi::script::lexing {
 
-LexingStringReader::LexingStringReader(const char* string) :
+LexingStringReader::LexingStringReader() :
+    LexingStringReader(L"") {
+
+}
+
+LexingStringReader::LexingStringReader(const wchar_t* string) :
     position_(0),
     lines_(0),
     columns_(0),
     string_(string)  {
 
+}
+
+void LexingStringReader::SetString(const wchar_t* string) {
+    string_ = string;
 }
 
 int LexingStringReader::GetPosition() const {
@@ -34,11 +43,11 @@ void LexingStringReader::SetColumns(int columns) {
     columns_ = columns;
 }
 
-char LexingStringReader::Peek() const {
+wchar_t LexingStringReader::Peek() const {
     return Peek(0);
 }
 
-char LexingStringReader::Peek(int offset) const {
+wchar_t LexingStringReader::Peek(int offset) const {
 
     int position = position_ + offset;
     if (0 <= position && string_.length() > position) {
@@ -47,7 +56,7 @@ char LexingStringReader::Peek(int offset) const {
     return -1;
 }
 
-char LexingStringReader::Read() {
+wchar_t LexingStringReader::Read() {
 
     if (string_.length() > position_) {
         SkipNewLine();

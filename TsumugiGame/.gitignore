@@ -73,7 +73,5 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-# Project tests
+# My Projects
 x64/*
-Tests/UnitTest/x64/Debug/*
-Tests/UnitTest/*.user

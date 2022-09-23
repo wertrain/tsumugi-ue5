@@ -8,13 +8,13 @@ namespace {
 /// ó\ñÒåÍÇÃé´èë
 /// </summary>
 static const std::map<tstring, tsumugi::script::lexing::TokenType> Keywords = {
-    { "let", tsumugi::script::lexing::TokenType::kLet },
-    { "function", tsumugi::script::lexing::TokenType::kFunction },
-    { "if", tsumugi::script::lexing::TokenType::kIf },
-    { "else", tsumugi::script::lexing::TokenType::kElse },
-    { "return", tsumugi::script::lexing::TokenType::kReturn },
-    { "true", tsumugi::script::lexing::TokenType::kTrue },
-    { "false", tsumugi::script::lexing::TokenType::kFalse },
+    { L"let", tsumugi::script::lexing::TokenType::kLet },
+    { L"function", tsumugi::script::lexing::TokenType::kFunction },
+    { L"if", tsumugi::script::lexing::TokenType::kIf },
+    { L"else", tsumugi::script::lexing::TokenType::kElse },
+    { L"return", tsumugi::script::lexing::TokenType::kReturn },
+    { L"true", tsumugi::script::lexing::TokenType::kTrue },
+    { L"false", tsumugi::script::lexing::TokenType::kFalse },
 };
 
 }
