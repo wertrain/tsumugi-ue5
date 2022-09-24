@@ -17,6 +17,10 @@ namespace UnitTest
 			reader.SetString(L"日本語のテスト。これはテストです。");
 			Assert::AreEqual(reader.Peek(), L'日');
 			Assert::AreNotEqual(reader.Peek(), L'本');
+
+			Assert::AreEqual(reader.Read(), L'日');
+			Assert::AreEqual(reader.Read(), L'本');
+			Assert::AreEqual(reader.Read(), L'語');
 		}
 	};
 }

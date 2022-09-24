@@ -17,9 +17,9 @@ public:
 
 public:
     LexingStringReader();
-    LexingStringReader(const wchar_t* string);
+    LexingStringReader(const tchar* string);
 
-    void SetString(const wchar_t* string);
+    void SetString(const tchar* string);
     int GetPosition() const;
     void SetPosition(int position);
     int GetLines() const;
@@ -27,9 +27,9 @@ public:
     int GetColumns() const;
     void SetColumns(int columns);
 
-    wchar_t Peek() const;
-    wchar_t Peek(int offset) const;
-    wchar_t Read();
+    tchar Peek() const;
+    tchar Peek(int offset) const;
+    tchar Read();
     int Seek(int offset);
     int Seek(int offset, SeekOrigin origin);
 
