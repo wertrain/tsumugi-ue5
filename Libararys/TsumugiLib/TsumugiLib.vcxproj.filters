@@ -45,6 +45,9 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.h">
       <Filter>Tsumugi\Private\Text\Lexing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.h">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.cpp">
       <Filter>Tsumugi\Private\Text\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.cpp">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

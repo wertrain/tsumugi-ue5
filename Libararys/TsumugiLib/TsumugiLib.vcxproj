@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexer.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.h" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexer.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.cpp" />

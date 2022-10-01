@@ -1,36 +1,44 @@
 #include "Script/Lexing/ScriptLexer.h"
+#include "Script/Lexing/LexingStringReader.h"
 
 namespace tsumugi::script::lexing {
 
-LexingPosition::LexingPosition() :
-    position_(0),
-    lines_(0),
-    columns_(0) {
-
+Lexer::Lexer(const tchar* script) :
+    reader_(std::make_unique<LexingStringReader>(script)) {
 }
 
-int LexingPosition::GetPosition() const {
-    return position_;
+Token* Lexer::NextToken() {
+    SkipWhiteSpace();
+    Token* token = nullptr;
+
+    tchar next = reader_->Peek();
+    if (next < 0) {
+        token = CreateToken(TokenType::kEOF, tstring());
+    } else {
+        switch (next) {
+            case TT('+'):
+                token = CreateToken(TokenType::kPlus, tstring());
+                break;
+        }
+    }
+
+    reader_->Read();
+    return token;
 }
 
-void LexingPosition::SetPosition(const int position) {
-    position_ = position;
+Token* Lexer::CreateToken(const TokenType type, const tstring& literal_string) const {
+    return new Token(type, literal_string, reader_->GetLexingPosition());
 }
 
-int LexingPosition::GetLines() const {
-    return lines_;
-}
-
-void LexingPosition::SetLines(int lines) {
-    lines_ = lines;
-}
-
-int LexingPosition::GetColumns() const {
-    return columns_;
-}
-
-void LexingPosition::SetColumns(int columns) {
-    columns_ = columns;
+void Lexer::SkipWhiteSpace() {
+    tchar next = reader_->Peek();
+    while (next == TT(' ')
+        || next == TT('\t')
+        || next == TT('\r')
+        || next == TT('\n')) {
+        reader_->Read();
+        next = reader_->Peek();
+    }
 }
 
 }

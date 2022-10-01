@@ -1,25 +1,24 @@
 #pragma once
 
+#include <cstdlib>
+#include <memory>
+#include "Foundation/Types.h"
+#include "Script/Lexing/ScriptToken.h"
+#include "Script/Lexing/ScriptLexingTypes.h"
+
 namespace tsumugi::script::lexing {
 
-/// <summary>
-/// âêÕà íu
-/// </summary>
-class LexingPosition {
+class Lexer {
 public:
-    LexingPosition();
-
-    int GetPosition() const;
-    void SetPosition(int position);
-    int GetLines() const;
-    void SetLines(int lines);
-    int GetColumns() const;
-    void SetColumns(int columns);
+    Lexer(const tchar* script);
+    Token* NextToken();
 
 private:
-    int position_;
-    int lines_;
-    int columns_;
+    Token* CreateToken(const TokenType type, const tstring& literal_string) const;
+    void SkipWhiteSpace();
+
+private:
+    std::unique_ptr<class LexingStringReader> reader_;
 };
 
 }

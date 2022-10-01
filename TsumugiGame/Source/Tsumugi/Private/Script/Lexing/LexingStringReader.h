@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Types.h"
+#include "Script/Lexing/ScriptLexingTypes.h"
 
 namespace tsumugi::script::lexing {
 
@@ -32,6 +33,8 @@ public:
     tchar Read();
     int Seek(int offset);
     int Seek(int offset, SeekOrigin origin);
+
+    LexingPosition GetLexingPosition() const;
 
 private:
     void SkipNewLine();

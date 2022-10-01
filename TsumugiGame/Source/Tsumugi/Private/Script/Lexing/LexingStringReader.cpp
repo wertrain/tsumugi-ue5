@@ -100,12 +100,16 @@ int LexingStringReader::Seek(int offset, SeekOrigin origin) {
 
 void LexingStringReader::SkipNewLine() {
 
-    if (string_[position_] == '\n') {
+    if (string_[position_] == TT('\n')) {
         ++lines_;
         columns_ = 0;
     } else {
         ++columns_;
     }
+}
+
+LexingPosition LexingStringReader::GetLexingPosition() const {
+    return LexingPosition(position_, lines_, columns_);
 }
 
 }
