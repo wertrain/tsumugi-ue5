@@ -8,7 +8,7 @@ namespace tsumugi::script::lexing {
 /// <summary>
 /// ƒg[ƒNƒ“í—Ş
 /// </summary>
-enum class TokenType {
+enum class TokenType : int32_t {
 
     /// --------- “Áê --------- 
 

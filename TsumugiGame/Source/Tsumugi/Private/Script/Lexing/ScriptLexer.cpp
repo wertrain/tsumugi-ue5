@@ -40,6 +40,27 @@ Token* Lexer::NextToken() {
             case TT('/'):
                 token = CreateToken(TokenType::kSlash, tstring(1, c));
                 break;
+            case TT('('):
+                token = CreateToken(TokenType::kLeftParenthesis, tstring(1, c));
+                break;
+            case TT(')'):
+                token = CreateToken(TokenType::kRightParenthesis, tstring(1, c));
+                break;
+            case TT('{'):
+                token = CreateToken(TokenType::kLeftBraces, tstring(1, c));
+                break;
+            case TT('}'):
+                token = CreateToken(TokenType::kRightBraces, tstring(1, c));
+                break;
+            case TT(','):
+                token = CreateToken(TokenType::kComma, tstring(1, c));
+                break;
+            case TT(';'):
+                token = CreateToken(TokenType::kSemicolon, tstring(1, c));
+                break;
+            case TT('\0'):
+                token = CreateToken(TokenType::kEOF , tstring(1, c));
+                break;
         }
     }
 

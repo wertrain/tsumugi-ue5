@@ -53,7 +53,7 @@ tchar LexingStringReader::Peek(int offset) const {
     if (0 <= position && string_.length() > position) {
         return string_[position];
     }
-    return -1;
+    return TT('\0');
 }
 
 tchar LexingStringReader::Read() {
