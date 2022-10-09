@@ -15,9 +15,30 @@ Token* Lexer::NextToken() {
     if (next < 0) {
         token = CreateToken(TokenType::kEOF, tstring());
     } else {
-        switch (next) {
+        tchar c = next;
+        switch (c) {
+            case '=':
+                // 次の文字によって、トークンの意味が変わるのでチェックする
+                if (reader_->Peek(1) == TT('=')) {
+                    // = が二回続けば比較演算子
+                    token = CreateToken(TokenType::kEqual, TT("=="));
+                    reader_->Read();
+                // そうでなければ代入演算子
+                } else {
+                    token = CreateToken(TokenType::kAssign, tstring(1, c));
+                }
+                break;
             case TT('+'):
-                token = CreateToken(TokenType::kPlus, tstring());
+                token = CreateToken(TokenType::kPlus, tstring(1, c));
+                break;
+            case TT('-'):
+                token = CreateToken(TokenType::kMinus, tstring(1, c));
+                break;
+            case TT('*'):
+                token = CreateToken(TokenType::kAsterisk, tstring(1, c));
+                break;
+            case TT('/'):
+                token = CreateToken(TokenType::kSlash, tstring(1, c));
                 break;
         }
     }
