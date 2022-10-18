@@ -4,6 +4,7 @@
 #include "Script/Lexing/ScriptLexer.h"
 #include "Script/Lexing/ScriptToken.h"
 #include "Script/Lexing/LexingStringReader.h"
+#include <vector>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -23,6 +24,38 @@ namespace UnitTest
 			Assert::AreEqual(reader.Read(), L'“ú');
 			Assert::AreEqual(reader.Read(), L'–{');
 			Assert::AreEqual(reader.Read(), L'Œê');
+		}
+
+		TEST_METHOD(TokenList)
+		{
+			auto input = TT("=+-(){},;");
+
+			std::vector<tsumugi::script::lexing::Token*> testTokens;
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kPlus, TT("+")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kMinus, TT("-")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftParenthesis, TT("(")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightParenthesis, TT(")")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftBraces, TT("{")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightBraces, TT("}")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kComma, TT(",")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kEOF, TT("")));
+
+			tsumugi::script::lexing::Lexer lexer(input);
+			for each (const auto* testToken in testTokens)
+			{
+				const auto* nextToken = lexer.NextToken();
+				Assert::IsNotNull(nextToken);
+				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true);
+				//Assert::AreEqual(testToken->GetLiteral().compare(nextToken->GetLiteral()), 0);
+			}
+
+			for each (auto token in testTokens)
+			{
+				delete(token);
+			}
+			testTokens.clear();
 		}
 
 		TEST_METHOD(Token)

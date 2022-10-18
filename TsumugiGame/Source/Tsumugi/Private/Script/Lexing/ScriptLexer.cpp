@@ -40,6 +40,46 @@ Token* Lexer::NextToken() {
             case TT('/'):
                 token = CreateToken(TokenType::kSlash, tstring(1, c));
                 break;
+            case TT('!'):
+                if (reader_->Peek(1) == TT('=')) {
+                    token = CreateToken(TokenType::kNotEqual, tstring(TT("!=")));
+                    reader_->Read();
+                } else {
+                    token = CreateToken(TokenType::kBang, tstring(1, c));
+                }
+                break;
+            case TT('>'):
+                if (reader_->Peek(1) == TT('=')) {
+                    token = CreateToken(TokenType::kGreaterThanOrEqual, tstring(TT(">=")));
+                    reader_->Read();
+                } else {
+                    token = CreateToken(TokenType::kGreaterThan, tstring(1, c));
+                }
+                break;
+            case TT('<'):
+                if (reader_->Peek(1) == TT('=')) {
+                    token = CreateToken(TokenType::kLessThanOrEqual, tstring(TT("<=")));
+                    reader_->Read();
+                } else {
+                    token = CreateToken(TokenType::kLessThan, tstring(1, c));
+                }
+                break;
+            case TT('&'):
+                if (reader_->Peek(1) == TT('&')) {
+                    token = CreateToken(TokenType::kAnd, tstring(TT("&&")));
+                    reader_->Read();
+                } else {
+                    token = CreateToken(TokenType::kLogicalConjunction, tstring(1, c));
+                }
+                break;
+            case TT('|'):
+                if (reader_->Peek(1) == TT('|')) {
+                    token = CreateToken(TokenType::kOr, tstring(TT("||")));
+                    reader_->Read();
+                } else {
+                    token = CreateToken(TokenType::kLogicalDisjunction , tstring(1, c));
+                }
+                break;
             case TT('('):
                 token = CreateToken(TokenType::kLeftParenthesis, tstring(1, c));
                 break;
@@ -51,6 +91,12 @@ Token* Lexer::NextToken() {
                 break;
             case TT('}'):
                 token = CreateToken(TokenType::kRightBraces, tstring(1, c));
+                break;
+            case TT('['):
+                token = CreateToken(TokenType::kLeftBrackets, tstring(1, c));
+                break;
+            case TT(']'):
+                token = CreateToken(TokenType::kRightBrackets, tstring(1, c));
                 break;
             case TT(','):
                 token = CreateToken(TokenType::kComma, tstring(1, c));
