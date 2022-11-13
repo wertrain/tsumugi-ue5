@@ -16,6 +16,11 @@ public:
 private:
     Token* CreateToken(const TokenType type, const tstring& literal_string) const;
     void SkipWhiteSpace();
+    bool IsDigit(tchar c);
+    bool IsLetter(tchar c);
+    void ReadNumber(tstring& outNumber);
+    void ReadIdentifier(tstring& outIdentifier);
+    Token* CreateAsNumericToken();
 
 private:
     std::unique_ptr<class LexingStringReader> reader_;
