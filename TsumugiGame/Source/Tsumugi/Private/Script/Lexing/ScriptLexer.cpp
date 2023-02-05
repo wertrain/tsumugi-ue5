@@ -192,15 +192,15 @@ Token* Lexer::CreateAsNumericToken() {
 
     if (number.find(TT('.')) == tstring::npos) {
         tchar* end;
-        [[maybe_unused]] double v = std::wcstod(number.c_str(), &end);
+        [[maybe_unused]] long v = std::wcstol(number.c_str(), &end, 10);
         if (errno != ERANGE && number.c_str() != end) {
-            return CreateToken(TokenType::kDouble, number);
+            return CreateToken(TokenType::kInteger, number);
         }
     } else {
         tchar* end;
-        [[maybe_unused]] long v = std::wcstol(number.c_str(), &end, 10);
+        [[maybe_unused]] double v = std::wcstod(number.c_str(), &end);
         if (errno != ERANGE && number.c_str() != end) {
-            return CreateToken(TokenType::kInteger , number);
+            return CreateToken(TokenType::kDouble, number);
         }
     }
     return CreateToken(TokenType::kIllegal, number);

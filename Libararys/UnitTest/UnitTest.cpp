@@ -8,6 +8,8 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+#define MSG(msg) [&]{ std::wstringstream _s; _s << msg; return _s.str(); }().c_str()
+
 namespace UnitTest
 {
 	TEST_CLASS(UnitTest)
@@ -70,6 +72,28 @@ namespace UnitTest
 			tsumugi::script::lexing::Token* token = lexer.NextToken();
 			Assert::IsTrue(token->GetTokenType() == tsumugi::script::lexing::TokenType::kPlus);
 			delete(token);
+		}
+
+		TEST_METHOD(SimpleExpression)
+		{
+			auto input = TT("let five = 5;");
+			tsumugi::script::lexing::Lexer lexer(input);
+
+			std::vector<tsumugi::script::lexing::Token*> testTokens;
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLet, TT("let")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("five")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kInteger, TT("5")));
+			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
+
+			for each (const auto * testToken in testTokens)
+			{
+				const auto* nextToken = lexer.NextToken();
+				Assert::IsNotNull(nextToken);
+				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true, 
+					MSG("Expected " << tsumugi::script::lexing::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexing::TokenTypeToString(nextToken->GetTokenType())));
+				//Assert::AreEqual(testToken->GetLiteral().compare(nextToken->GetLiteral()), 0);
+			}
 		}
 	};
 }

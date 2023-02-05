@@ -48,6 +48,9 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.h">
       <Filter>Tsumugi\Private\Script\Lexing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Public\Tsumugi.h">
+      <Filter>Tsumugi\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">

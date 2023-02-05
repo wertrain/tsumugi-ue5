@@ -218,7 +218,14 @@ enum class TokenType : int32_t {
 /// </summary>
 /// <param name="identifier"></param>
 /// <returns></returns>
-const TokenType LookupIdentifier(tstring identifier);
+const TokenType LookupIdentifier(const tstring& identifier);
+
+/// <summary>
+/// トークンタイプを文字列に変更する
+/// </summary>
+/// <param name="token_type"></param>
+/// <returns></returns>
+const wchar_t* TokenTypeToString(const TokenType token_type);
 
 /// <summary>
 /// トークン

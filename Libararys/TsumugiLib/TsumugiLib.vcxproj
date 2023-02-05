@@ -150,6 +150,7 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Public\Tsumugi.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp" />
