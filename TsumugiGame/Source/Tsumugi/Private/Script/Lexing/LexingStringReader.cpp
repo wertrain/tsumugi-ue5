@@ -92,7 +92,7 @@ int LexingStringReader::Seek(int offset, SeekOrigin origin) {
         if (0 > string_.length() + offset || string_.length() <= string_.length() + offset) {
             return position_;
         }
-        position_ = string_.length() + offset;
+        position_ = static_cast<int>(string_.length()) + offset;
         break;
     }
     return position_;

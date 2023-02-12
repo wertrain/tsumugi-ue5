@@ -170,7 +170,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TsumugiLib\TsumugiLib.vcxproj">
+    <ProjectReference Include="..\..\Libararys\TsumugiLib\TsumugiLib.vcxproj">
       <Project>{20ae2b99-38ac-4f0f-be7d-a576786f309b}</Project>
     </ProjectReference>
   </ItemGroup>
