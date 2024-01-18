@@ -128,8 +128,8 @@ Token* Lexer::NextToken() {
     return token;
 }
 
-Token* Lexer::CreateToken(const TokenType type, const tstring& literal_string) const {
-    return new Token(type, literal_string, reader_->GetLexingPosition());
+Token* Lexer::CreateToken(const TokenType type, const tstring& literalString) const {
+    return new Token(type, literalString, reader_->GetLexingPosition());
 }
 
 void Lexer::SkipWhiteSpace() {

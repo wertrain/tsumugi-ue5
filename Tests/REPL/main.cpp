@@ -13,16 +13,16 @@ int main()
     {
         std::cout << PROMPT;
 
-        wchar_t input[1024];
-        std::wcin >> input;
+        tstring input;
+        std::getline(std::wcin, input);
 
-        if (wcslen(input) == 0) {
+        if (input.size() == 0) {
             return 0;
         }
 
-        tsumugi::script::lexing::Lexer lexer(input);
+        tsumugi::script::lexing::Lexer lexer(input.c_str());
         for (auto* token = lexer.NextToken(); token->GetTokenType() != tsumugi::script::lexing::TokenType::kEOF; token = lexer.NextToken()) {
-            std::wcout << "{ Type: " << tsumugi::script::lexing::TokenTypeToString(token->GetTokenType()) << ", Literal: " << token->GetLiteral() << " }"<< std::endl;
+            std::wcout << "{ Type: " << tsumugi::script::lexing::TokenTypeToString(token->GetTokenType()) << ", Literal: " << token->GetLiteral() << " }" << std::endl;
             delete token;
         }
     }
