@@ -1,4 +1,6 @@
 #include "Script/Lexing/ScriptLexer.h"
+#include "Script/Lexing/ScriptToken.h"
+#include "Script/Lexing/ScriptLexingTypes.h"
 #include "Script/Lexing/LexingStringReader.h"
 
 namespace tsumugi::script::lexing {
@@ -191,15 +193,13 @@ Token* Lexer::CreateAsNumericToken() {
     reader_->Seek(-1, script::lexing::LexingStringReader::SeekOrigin::kCurrent);
 
     if (number.find(TT('.')) == tstring::npos) {
-        tchar* end;
-        [[maybe_unused]] long v = std::wcstol(number.c_str(), &end, 10);
-        if (errno != ERANGE && number.c_str() != end) {
+        [[maybe_unused]] long v = 0;
+        if (tsumugi::type::convert::FromChars(number, v)) {
             return CreateToken(TokenType::kInteger, number);
         }
     } else {
-        tchar* end;
-        [[maybe_unused]] double v = std::wcstod(number.c_str(), &end);
-        if (errno != ERANGE && number.c_str() != end) {
+        [[maybe_unused]] double v = 0;
+        if (tsumugi::type::convert::FromChars(number, v)) {
             return CreateToken(TokenType::kDouble, number);
         }
     }

@@ -25,6 +25,24 @@
     <Filter Include="Tsumugi\Private\Text\Lexing">
       <UniqueIdentifier>{43aba79e-cf8b-498a-888c-f50e65ee7904}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\AbstractSyntaxTree">
+      <UniqueIdentifier>{932431a9-2d32-4995-a0b0-5de6b4b8bf74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Script\AbstractSyntaxTree\Statements">
+      <UniqueIdentifier>{d322b0e5-ab11-4248-b557-6a80d23045e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Script\AbstractSyntaxTree\Expressions">
+      <UniqueIdentifier>{7235f005-a981-4b4a-b0a2-aa41221733ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Script\Parsing">
+      <UniqueIdentifier>{e58f3d88-6487-4324-a633-5cfd43fcd841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Log">
+      <UniqueIdentifier>{e68bea62-ca71-4afc-ab86-e0c80a3356ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Localization">
+      <UniqueIdentifier>{fbbe1591-9dd0-416e-b8ad-0f1dd03d872e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.h">
@@ -51,6 +69,45 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Public\Tsumugi.h">
       <Filter>Tsumugi\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\INode.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IStatement.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Root.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\LetStatement.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\Identifier.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Parsing\ScriptParser.h">
+      <Filter>Tsumugi\Private\Script\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Log\TextLogger.h">
+      <Filter>Tsumugi\Private\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Localization\Localizer.h">
+      <Filter>Tsumugi\Private\Localization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ReturnStatement.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ExpressionStatement.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptTokenTypes.h">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IntegerLiteral.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">
@@ -70,6 +127,48 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.cpp">
       <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\INode.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Root.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\LetStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\Identifier.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Parsing\ScriptParser.cpp">
+      <Filter>Tsumugi\Private\Script\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Log\TextLogger.cpp">
+      <Filter>Tsumugi\Private\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.cpp">
+      <Filter>Tsumugi\Private\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Localization\Localizer.cpp">
+      <Filter>Tsumugi\Private\Localization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ReturnStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ExpressionStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptTokenTypes.cpp">
+      <Filter>Tsumugi\Private\Script\Lexing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IntegerLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstdlib>
-#include <memory>
 #include "Foundation/Types.h"
-#include "Script/Lexing/ScriptToken.h"
-#include "Script/Lexing/ScriptLexingTypes.h"
+#include "Script/Lexing/ScriptTokenTypes.h"
+
+namespace tsumugi::script::lexing { class Token; }
+namespace tsumugi::script::lexing { class LexingStringReader; }
 
 namespace tsumugi::script::lexing {
 
@@ -23,7 +23,7 @@ private:
     Token* CreateAsNumericToken();
 
 private:
-    std::unique_ptr<class LexingStringReader> reader_;
+    std::unique_ptr<LexingStringReader> reader_;
 };
 
 }

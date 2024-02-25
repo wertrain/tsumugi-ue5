@@ -132,7 +132,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\..\TsumugiGame\Source\Tsumugi\Private;..\..\TsumugiGame\Source\Tsumugi\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -144,19 +144,46 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Localization\Localizer.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Log\TextLogger.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\Identifier.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IntegerLiteral.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IExpression.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\INode.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IStatement.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Root.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ExpressionStatement.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\LetStatement.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ReturnStatement.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexer.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptTokenTypes.h" />
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Parsing\ScriptParser.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.h" />
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Public\Tsumugi.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Localization\Localizer.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Log\TextLogger.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\Identifier.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IntegerLiteral.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IExpression.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\INode.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\IStatement.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Root.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ExpressionStatement.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\LetStatement.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\ReturnStatement.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexer.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptLexingTypes.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptToken.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\ScriptTokenTypes.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Parsing\ScriptParser.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextLexer.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Text\Lexing\TextToken.cpp" />
   </ItemGroup>

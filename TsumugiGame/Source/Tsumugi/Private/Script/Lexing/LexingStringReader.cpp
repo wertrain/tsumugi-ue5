@@ -11,7 +11,7 @@ LexingStringReader::LexingStringReader(const tchar* string) :
     position_(0),
     lines_(0),
     columns_(0),
-    string_(string)  {
+    string_(string) {
 
 }
 

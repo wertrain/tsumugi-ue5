@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Foundation/Types.h"
-
 namespace tsumugi::script::lexing {
 
 /// <summary>
