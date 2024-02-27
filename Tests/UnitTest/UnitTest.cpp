@@ -4,6 +4,7 @@
 #include "Script/AbstractSyntaxTree/Root.h"
 #include "Script/AbstractSyntaxTree/Expressions/Identifier.h"
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
 #include "Script/AbstractSyntaxTree/Statements/LetStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ReturnStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ExpressionStatement.h"
@@ -297,12 +298,12 @@ namespace UnitTest
 
 		TEST_METHOD(TestReturnStatement)
 		{
-			tstring letcode =
+			tstring retcode =
 				TT("return 5;")
 				TT("return 10;")
 				TT("return = 993322;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(letcode.c_str()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(retcode.c_str()));
 			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
 			auto root = parser->ParseProgram();
 
@@ -324,10 +325,10 @@ namespace UnitTest
 
 		TEST_METHOD(TestIdentifierExpression)
 		{
-			tstring letcode =
+			tstring code =
 				TT("foobar;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(letcode.c_str()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
 			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 			auto root = parser->ParseProgram();
@@ -352,10 +353,10 @@ namespace UnitTest
 
 		TEST_METHOD(TestIntegerExpression)
 		{
-			tstring letcode =
+			tstring code =
 				TT("123;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(letcode.c_str()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
 			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 			auto root = parser->ParseProgram();
@@ -373,6 +374,121 @@ namespace UnitTest
 			auto* integer = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(statement->GetExpression());
 			Assert::AreEqual(integer->GetValue() == 123, true,
 				MSG("integer.Value is incorrect."));
+		}
+
+		TEST_METHOD(TestPrefixExpressions)
+		{
+			struct PrefixExpressionSet {
+				tstring code_;
+				tstring operator_;
+				int value_;
+			};
+			std::vector<PrefixExpressionSet> tests = {
+				{ TT("!5"), TT("!"), 5 },
+				{ TT("-15"), TT("-"), 15 },
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+				auto root = parser->ParseProgram();
+
+				Assert::AreEqual(root->GetStatementCount() == 1, true,
+					MSG("The number of Root.Statements is incorrect."));
+
+				//Assert::AreEqual(typeid(root->GetStatement(0)) == typeid(tsumugi::script::ast::statement::ExpressionStatement), true,
+				//	MSG("Root.Statements(0) is not ExpressionStatement."));
+
+				auto* expressionStatement = static_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
+				//Assert::AreEqual(typeid(expressionStatement) == typeid(tsumugi::script::ast::expression::PrefixExpression), true,
+				//	MSG("expressionStatement is not PrefixExpression."));
+
+				const tsumugi::script::ast::expression::PrefixExpression* prefixExpression = static_cast<const tsumugi::script::ast::expression::PrefixExpression*>(expressionStatement->GetExpression());
+				Assert::AreEqual(prefixExpression->GetOperator().compare(test.operator_) == 0, true,
+					MSG("prefixExpression.Operator is incorrect."));
+
+				const tsumugi::script::ast::expression::IntegerLiteral* integer = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight());
+				Assert::AreEqual(integer->GetValue() == test.value_, true,
+					MSG("integer.Value is incorrect."));
+			}
+		}
+
+		TEST_METHOD(TestInfixExpressions)
+		{
+			struct InfixExpressionSet {
+				tstring code_;
+				int value0_;
+				tstring operator_;
+				int value1_;
+			};
+			std::vector<InfixExpressionSet> tests = {
+				{TT("1 + 1;"), 1, TT("+"), 1},
+				{TT("1 - 1;"), 1, TT("-"), 1},
+				{TT("1 * 1;"), 1, TT("*"), 1},
+				{TT("1 / 1;"), 1, TT("/"), 1},
+				{TT("1 < 1;"), 1, TT("<"), 1},
+				{TT("1 > 1;"), 1, TT(">"), 1},
+				{TT("1 == 1;"), 1, TT("=="), 1},
+				{TT("1 != 1;"), 1, TT("!="), 1},
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+				auto root = parser->ParseProgram();
+
+				Assert::AreEqual(root->GetStatementCount() == 1, true,
+					MSG("The number of Root.Statements is incorrect."));
+
+				//Assert::AreEqual(typeid(root->GetStatement(0)) == typeid(tsumugi::script::ast::statement::ExpressionStatement), true,
+				//	MSG("Root.Statements(0) is not ExpressionStatement."));
+
+				auto* expressionStatement = static_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
+				//Assert::AreEqual(typeid(expressionStatement) == typeid(tsumugi::script::ast::expression::PrefixExpression), true,
+				//	MSG("expressionStatement is not PrefixExpression."));
+
+				const tsumugi::script::ast::expression::PrefixExpression* prefixExpression = static_cast<const tsumugi::script::ast::expression::PrefixExpression*>(expressionStatement->GetExpression());
+				Assert::AreEqual(prefixExpression->GetOperator().compare(test.operator_) == 0, true,
+					MSG("prefixExpression.Operator is incorrect."));
+
+				const tsumugi::script::ast::expression::IntegerLiteral* integerLeft = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight());
+				Assert::AreEqual(integerLeft->GetValue() == test.value0_, true,
+					MSG("integerLeft.Value is incorrect."));
+
+				const tsumugi::script::ast::expression::IntegerLiteral* integerRight = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight());
+				Assert::AreEqual(integerRight->GetValue() == test.value1_, true,
+					MSG("integerRight.Value is incorrect."));
+			}
+		}
+
+		TEST_METHOD(TestOperatorPrecedenceParsing)
+		{
+			struct InfixExpressionSet {
+				tstring code_;
+				tstring to_code_;
+			};
+			std::vector<InfixExpressionSet> tests = {
+				{TT("a + b"), TT("(a + b)")},
+				{TT("!-a"), TT("(!(-a))")},
+				{TT("a + b - c"), TT("((a + b) - c)")},
+				{TT("a * b / c"), TT("((a * b) / c)")},
+				{TT("a + b * c"), TT("(a + (b * c))")},
+				{TT("a + b * c + d / e - f"), TT("(((a + (b * c)) + (d / e)) - f)")},
+				{TT("1 + 2; -3 * 4"), TT("(1 + 2)((-3) * 4)")},
+				{TT("5 > 4 == 3 < 4"), TT("((5 > 4) == (3 < 4))")},
+				{TT("3 + 4 * 5 == 3 * 1 + 4 * 5"), TT("((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))")},
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+				auto root = parser->ParseProgram();
+ 				auto tocode = root->ToCode();
+				Assert::AreEqual(tocode.compare(test.to_code_) == 0, true, MSG("ToCode is incorrect."));
+			}
 		}
 	};
 }

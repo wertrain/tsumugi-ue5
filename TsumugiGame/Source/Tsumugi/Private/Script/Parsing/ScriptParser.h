@@ -55,13 +55,20 @@ public:
     script::ast::IExpression* ParseExpression(Precedence precedence);
     script::ast::IExpression* ParseIdentifier();
     script::ast::IExpression* ParseIntegerLiteral();
+    script::ast::IExpression* ParsePrefixExpression();
+    script::ast::IExpression* ParseInfixExpression(const script::ast::IExpression* left);
     script::ast::Root* ParseProgram();
 
     bool ExpectPeek(const tsumugi::script::lexing::TokenType& type);
     const auto& GetCurrentToken() const { return currentToken_; }
     const auto& GetNextToken() const { return nextToken_; }
+    const Precedence GetCurrentPrecedence() const;
+    const Precedence GetNextPrecedence() const;
     const auto& GetLexer() const { return lexer_; }
     log::TextLogger& GetLogger() { return logger_; }
+
+public:
+    static const std::unordered_map<tsumugi::script::lexing::TokenType, Precedence> Precedences;
 
 private:
     void RegisterPrefixParseFunctions();

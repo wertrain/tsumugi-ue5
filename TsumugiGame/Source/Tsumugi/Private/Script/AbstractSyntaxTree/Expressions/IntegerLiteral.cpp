@@ -3,7 +3,7 @@
 
 namespace tsumugi::script::ast::expression {
 
-IntegerLiteral::IntegerLiteral(std::shared_ptr<tsumugi::script::lexing::Token>& token, const int value) {
+IntegerLiteral::IntegerLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const int value) {
 
     token_ = token;
     value_ = value;
@@ -14,17 +14,13 @@ IntegerLiteral::~IntegerLiteral() {
 }
 
 tstring IntegerLiteral::TokenLiteral() const {
-    
+
     return token_->GetLiteral();
 }
 
 tstring IntegerLiteral::ToCode() const {
-    
-    tstring code;
-    code.append(token_->GetLiteral());
-    code.append(TT(" "));
-    code.append(type::convert::IntegerToTString(value_));
-    return code;
+
+    return token_->GetLiteral();
 }
 
 }

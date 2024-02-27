@@ -14,6 +14,7 @@ enum class Languages : uint32_t {
 enum class MessageId : uint32_t {
     kInvalidInputFormat,
     kConversionFailed,
+    kPrefixParseFunctionMissing,
 };
 
 class Localizer {

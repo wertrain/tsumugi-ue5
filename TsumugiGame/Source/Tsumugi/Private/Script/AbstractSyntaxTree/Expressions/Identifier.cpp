@@ -9,7 +9,7 @@ Identifier::Identifier()
 
 }
 
-Identifier::Identifier(std::shared_ptr<tsumugi::script::lexing::Token>& token, const tstring& value) {
+Identifier::Identifier(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const tstring& value) {
 
     token_ = token;
     value_ = value;
@@ -25,12 +25,8 @@ tstring Identifier::TokenLiteral() const {
 }
 
 tstring Identifier::ToCode() const {
-    
-    tstring code;
-    code.append(token_->GetLiteral());
-    code.append(TT(" "));
-    code.append(value_);
-    return code;
+
+    return value_;
 }
 
 }

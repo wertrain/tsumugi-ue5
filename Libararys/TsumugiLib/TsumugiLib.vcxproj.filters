@@ -108,6 +108,12 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IntegerLiteral.h">
       <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\PrefixExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\InfixExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">
@@ -168,6 +174,12 @@
       <Filter>Tsumugi\Private\Script\Lexing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IntegerLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\PrefixExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\InfixExpression.cpp">
       <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
     </ClCompile>
   </ItemGroup>

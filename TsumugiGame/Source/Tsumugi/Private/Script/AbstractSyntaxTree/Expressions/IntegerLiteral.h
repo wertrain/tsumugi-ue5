@@ -9,7 +9,7 @@ namespace tsumugi::script::ast::expression {
 
 class IntegerLiteral : public IExpression {
 public:
-    IntegerLiteral(std::shared_ptr<tsumugi::script::lexing::Token>& token, const int value);
+    IntegerLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const int value);
     virtual ~IntegerLiteral();
 
     const auto* GetToken() const { return token_.get(); }
@@ -22,7 +22,7 @@ public:
     virtual tstring ToCode() const final override;
 
 private:
-    std::shared_ptr<tsumugi::script::lexing::Token> token_;
+    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
     int value_;
 };
 

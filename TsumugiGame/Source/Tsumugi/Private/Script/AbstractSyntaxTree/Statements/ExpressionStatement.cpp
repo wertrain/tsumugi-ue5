@@ -18,11 +18,7 @@ tstring ExpressionStatement::TokenLiteral() const {
 
 tstring ExpressionStatement::ToCode() const {
 
-    tstring code;
-    code.append(token_->GetLiteral());
-    code.append(TT(" "));
-    code.append(expression_->ToCode());
-    return code;
+    return expression_->ToCode();
 }
 
 }

@@ -10,7 +10,7 @@ namespace tsumugi::script::ast::expression {
 class Identifier : public IExpression {
 public:
     Identifier();
-    Identifier(std::shared_ptr<tsumugi::script::lexing::Token>& token, const tstring& value);
+    Identifier(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const tstring& value);
     virtual ~Identifier();
 
     const auto* GetToken() const { return token_.get(); }
@@ -23,7 +23,7 @@ public:
     virtual tstring ToCode() const final override;
 
 private:
-    std::shared_ptr<tsumugi::script::lexing::Token> token_;
+    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
     tstring value_;
 };
 

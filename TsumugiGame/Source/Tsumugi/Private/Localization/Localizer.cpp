@@ -8,11 +8,13 @@ const std::unordered_map<tsumugi::i18n::Languages, std::unordered_map<tsumugi::i
     {tsumugi::i18n::Languages::kJapanese, {
         { tsumugi::i18n::MessageId::kInvalidInputFormat, "{0} ではなく {1} が来なければなりません。"},
         { tsumugi::i18n::MessageId::kConversionFailed, "{0} を {1} に変換できません。"},
+        { tsumugi::i18n::MessageId::kPrefixParseFunctionMissing, "{0} に関連付けられた Prefix Parse Function が存在しません。"},
         // 他のメッセージの初期化
     }},
     {tsumugi::i18n::Languages::kEnglish, {
         { tsumugi::i18n::MessageId::kInvalidInputFormat, "Expected {1} instead of {0}."},
         { tsumugi::i18n::MessageId::kConversionFailed, "Cannot convert {0} to {1}."},
+        { tsumugi::i18n::MessageId::kPrefixParseFunctionMissing, "No Prefix Parse Function associated with {0}."},
         // 他のメッセージの初期化
     }},
     // 他の言語に対するメッセージの初期化
