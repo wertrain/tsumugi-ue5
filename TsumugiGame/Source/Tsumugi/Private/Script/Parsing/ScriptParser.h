@@ -11,9 +11,11 @@ namespace tsumugi::script::lexing { class Token; }
 namespace tsumugi::script::ast { class Root; }
 namespace tsumugi::script::ast { class IStatement; }
 namespace tsumugi::script::ast { class IExpression; }
+namespace tsumugi::script::ast::expression { class Identifier; }
 namespace tsumugi::script::ast::statement { class LetStatement; }
 namespace tsumugi::script::ast::statement { class ReturnStatement; }
 namespace tsumugi::script::ast::statement { class ExpressionStatement; }
+namespace tsumugi::script::ast::statement { class BlockStatement; }
 
 namespace tsumugi::script::parsing {
 
@@ -52,11 +54,19 @@ public:
     script::ast::statement::LetStatement* ParseLetStatement();
     script::ast::statement::ReturnStatement* ParseReturnStatement();
     script::ast::statement::ExpressionStatement* ParseExpressionStatement();
+    script::ast::statement::BlockStatement* ParseBlockStatement();
     script::ast::IExpression* ParseExpression(Precedence precedence);
     script::ast::IExpression* ParseIdentifier();
     script::ast::IExpression* ParseIntegerLiteral();
+    script::ast::IExpression* ParseBooleanLiteral();
+    script::ast::IExpression* ParseGroupedExpression();
+    script::ast::IExpression* ParseIfExpression();
+    script::ast::IExpression* ParseFunctionLiteral();
     script::ast::IExpression* ParsePrefixExpression();
     script::ast::IExpression* ParseInfixExpression(const script::ast::IExpression* left);
+    script::ast::IExpression* ParseCallExpression(const script::ast::IExpression* function);
+    bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
+    bool ParseCallArguments(std::vector<std::shared_ptr<tsumugi::script::ast::IExpression>>& arguments);
     script::ast::Root* ParseProgram();
 
     bool ExpectPeek(const tsumugi::script::lexing::TokenType& type);
@@ -73,6 +83,7 @@ public:
 private:
     void RegisterPrefixParseFunctions();
     void RegisterInfixParseFunctions();
+    bool ExpectPeekRequiredTokenType(const tsumugi::script::lexing::TokenType tokenType, const std::string& symbol);
 
 private:
     log::TextLogger logger_;

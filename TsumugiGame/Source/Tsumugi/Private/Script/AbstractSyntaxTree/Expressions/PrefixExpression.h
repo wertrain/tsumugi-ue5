@@ -13,7 +13,7 @@ public:
     virtual ~PrefixExpression();
 
     const auto* GetToken() const { return token_.get(); }
-    void SetToken(std::shared_ptr<const tsumugi::script::lexing::Token> token) { token_ = token; }
+    void SetToken(const std::shared_ptr<const tsumugi::script::lexing::Token>& token) { token_ = token; }
 
     const auto& GetOperator() const { return value_; }
     void SetOperator(const tstring& value) { value_ = value; }

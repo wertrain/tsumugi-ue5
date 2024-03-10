@@ -25,7 +25,7 @@ public:
     void SetName(std::shared_ptr<tsumugi::script::ast::expression::Identifier>& name) { name_ = name; }
 
     const tsumugi::script::ast::IExpression* GetValue() const { return value_.get(); }
-    //void SetValue(std::shared_ptr<tsumugi::script::ast::IExpression>&& value) { value_ = value; }
+    void SetValue(std::shared_ptr<tsumugi::script::ast::IExpression>& value) { value_ = value; }
 
     virtual tstring TokenLiteral() const override final;
     virtual tstring ToCode() const override final;
