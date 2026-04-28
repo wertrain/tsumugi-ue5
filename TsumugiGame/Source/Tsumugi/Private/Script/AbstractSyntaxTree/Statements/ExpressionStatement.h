@@ -9,26 +9,26 @@ namespace tsumugi::script::ast { class IExpression; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// éÆ
-/// íËã`ÅF<expression>;
+/// Âºè
+/// ÂÆöÁæ©Ôºö<expression>;
 /// </summary>
 class ExpressionStatement : public IStatement {
 public:
     ExpressionStatement();
     virtual ~ExpressionStatement();
 
-    const tsumugi::script::lexing::Token* GetToken() const { return token_.get(); }
-    void SetToken(std::shared_ptr<tsumugi::script::lexing::Token>& token) { token_ = token; }
+    const std::shared_ptr<const lexing::Token>& GetToken() const { return token_; }
+    void SetToken(std::shared_ptr<const lexing::Token> token) { token_ = std::move(token); }
+    const std::shared_ptr<const IExpression>& GetExpression() const { return expression_; }
+    void SetExpression(std::shared_ptr<const IExpression> expr) { expression_ = std::move(expr); }
 
-    const tsumugi::script::ast::IExpression* GetExpression() const { return expression_.get(); }
-    void SetExpression(std::shared_ptr<tsumugi::script::ast::IExpression>& value) { expression_ = value; }
-
-    virtual tstring TokenLiteral() const override final;
-    virtual tstring ToCode() const override final;
+    NodeType GetNodeType() const override { return NodeType::kExpressionStatement; }
+    tstring TokenLiteral() const override;
+    tstring ToCode() const override;
 
 private:
-    std::shared_ptr<tsumugi::script::lexing::Token> token_;
-    std::shared_ptr<tsumugi::script::ast::IExpression> expression_;
+    std::shared_ptr<const lexing::Token> token_;
+    std::shared_ptr<const ast::IExpression> expression_;
 };
 
 }

@@ -1,36 +1,28 @@
 #include "Script/Lexing/ScriptTokenTypes.h"
-#include <map>
-
-namespace {
-
-/// <summary>
-/// 予約語の辞書
-/// </summary>
-static const std::map<tstring, tsumugi::script::lexing::TokenType> Keywords = {
-    { TT("let"), tsumugi::script::lexing::TokenType::kLet },
-    { TT("function"), tsumugi::script::lexing::TokenType::kFunction },
-    { TT("if"), tsumugi::script::lexing::TokenType::kIf },
-    { TT("else"), tsumugi::script::lexing::TokenType::kElse },
-    { TT("return"), tsumugi::script::lexing::TokenType::kReturn },
-    { TT("true"), tsumugi::script::lexing::TokenType::kTrue },
-    { TT("false"), tsumugi::script::lexing::TokenType::kFalse },
-};
-
-}
+#include <unordered_map>
 
 namespace tsumugi::script::lexing {
 
 const TokenType LookupIdentifier(const tstring& identifier) {
 
-    if (Keywords.find(identifier) != Keywords.end()) {
-        return Keywords.at(identifier);
-    }
-    return TokenType::kIdentifier;
+    /// 予約語の辞書
+    static const std::unordered_map<tstring, tsumugi::script::lexing::TokenType> Keywords = {
+        { TT("let"), tsumugi::script::lexing::TokenType::kLet },
+        { TT("function"), tsumugi::script::lexing::TokenType::kFunction },
+        { TT("if"), tsumugi::script::lexing::TokenType::kIf },
+        { TT("else"), tsumugi::script::lexing::TokenType::kElse },
+        { TT("return"), tsumugi::script::lexing::TokenType::kReturn },
+        { TT("true"), tsumugi::script::lexing::TokenType::kTrue },
+        { TT("false"), tsumugi::script::lexing::TokenType::kFalse },
+    };
+    auto it = Keywords.find(identifier);
+    return it != Keywords.end() ? it->second : TokenType::kIdentifier;
 }
 
 const tchar* TokenTypeToTString(const TokenType token_type) {
 
-    const std::map<tsumugi::script::lexing::TokenType, const tchar*> Table = {
+    /// タイプの辞書
+    static const std::unordered_map<tsumugi::script::lexing::TokenType, const tchar*> Table = {
         { tsumugi::script::lexing::TokenType::kIllegal, TT("kIllegal") },
         { tsumugi::script::lexing::TokenType::kEOF, TT("kEOF") },
         { tsumugi::script::lexing::TokenType::kIdentifier, TT("kIdentifier") },
@@ -47,7 +39,7 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexing::TokenType::kGreaterThan, TT("kGreaterThan") },
         { tsumugi::script::lexing::TokenType::kLessThanOrEqual, TT("kLessThanOrEqual") },
         { tsumugi::script::lexing::TokenType::kGreaterThanOrEqual, TT("kGreaterThanOrEqual") },
-        { tsumugi::script::lexing::TokenType::kEqual, TT("kGreaterThanOrEqual") },
+        { tsumugi::script::lexing::TokenType::kEqual, TT("kEqual") },
         { tsumugi::script::lexing::TokenType::kNotEqual, TT("kNotEqual") },
         { tsumugi::script::lexing::TokenType::kLogicalDisjunction, TT("kLogicalDisjunction") },
         { tsumugi::script::lexing::TokenType::kLogicalConjunction, TT("kLogicalConjunction") },
@@ -79,7 +71,8 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
 
 const char* TokenTypeToString(const TokenType token_type) {
 
-    const std::map<tsumugi::script::lexing::TokenType, const char*> Table = {
+    // トークンタイプの辞書
+    static const std::unordered_map<tsumugi::script::lexing::TokenType, const char*> Table = {
         { tsumugi::script::lexing::TokenType::kIllegal, ("kIllegal") },
         { tsumugi::script::lexing::TokenType::kEOF, ("kEOF") },
         { tsumugi::script::lexing::TokenType::kIdentifier, ("kIdentifier") },
@@ -96,7 +89,7 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexing::TokenType::kGreaterThan, ("kGreaterThan") },
         { tsumugi::script::lexing::TokenType::kLessThanOrEqual, ("kLessThanOrEqual") },
         { tsumugi::script::lexing::TokenType::kGreaterThanOrEqual, ("kGreaterThanOrEqual") },
-        { tsumugi::script::lexing::TokenType::kEqual, ("kGreaterThanOrEqual") },
+        { tsumugi::script::lexing::TokenType::kEqual, ("kEqual") },
         { tsumugi::script::lexing::TokenType::kNotEqual, ("kNotEqual") },
         { tsumugi::script::lexing::TokenType::kLogicalDisjunction, ("kLogicalDisjunction") },
         { tsumugi::script::lexing::TokenType::kLogicalConjunction, ("kLogicalConjunction") },

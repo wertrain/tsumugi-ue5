@@ -8,7 +8,7 @@ public class TsumugiGameEditorTarget : TargetRules
 	public TsumugiGameEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		DefaultBuildSettings = BuildSettingsVersion.V6;
 		ExtraModuleNames.AddRange( new string[] { "TsumugiGame" } );
 	}
 }

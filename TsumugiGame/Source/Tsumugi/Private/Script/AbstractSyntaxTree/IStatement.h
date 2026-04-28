@@ -8,7 +8,7 @@ namespace tsumugi::script::ast {
 class IStatement : public INode {
 public:
     IStatement();
-    virtual ~IStatement();
+    virtual ~IStatement() = default;
 };
 
 }

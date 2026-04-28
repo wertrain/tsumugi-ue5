@@ -10,8 +10,8 @@ namespace tsumugi::script::ast::expression { class Identifier; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// Let ï∂
-/// íËã`ÅFlet <identifier> = <expression>;
+/// Let Êñá
+/// ÂÆöÁæ©Ôºölet <identifier> = <expression>;
 /// </summary>
 class LetStatement : public IStatement {
 public:
@@ -27,8 +27,9 @@ public:
     const tsumugi::script::ast::IExpression* GetValue() const { return value_.get(); }
     void SetValue(std::shared_ptr<tsumugi::script::ast::IExpression>& value) { value_ = value; }
 
-    virtual tstring TokenLiteral() const override final;
-    virtual tstring ToCode() const override final;
+    NodeType GetNodeType() const final override { return NodeType::kLetStatement; }
+    tstring TokenLiteral() const override final;
+    tstring ToCode() const override final;
 
 private:
     std::shared_ptr<tsumugi::script::lexing::Token> token_;

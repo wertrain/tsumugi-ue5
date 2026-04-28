@@ -9,8 +9,8 @@ namespace tsumugi::script::ast { class IExpression; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// Return •¶
-/// ’è‹`Freturn <expression>;
+/// Return æ–‡
+/// å®šç¾©ï¼šreturn <expression>;
 /// </summary>
 class ReturnStatement : public IStatement {
 public:
@@ -23,8 +23,9 @@ public:
     const tsumugi::script::ast::IExpression* GetValue() const { return value_.get(); }
     void SetValue(std::shared_ptr<tsumugi::script::ast::IExpression>& value) { value_ = value; }
 
-    virtual tstring TokenLiteral() const override final;
-    virtual tstring ToCode() const override final;
+    NodeType GetNodeType() const final override { return NodeType::kReturnStatement; }
+    tstring TokenLiteral() const override final;
+    tstring ToCode() const override final;
 
 private:
     std::shared_ptr<tsumugi::script::lexing::Token> token_;

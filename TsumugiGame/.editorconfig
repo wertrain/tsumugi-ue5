@@ -1,0 +1,25 @@
+root = true
+
+[*.{cpp,h,hpp,cxx}]
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+end_of_line = crlf
+charset = utf-8
+
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+cpp_indent_case_labels = true
+cpp_indent_namespace_contents = true
+cpp_indent_constructor_initializer = true
+cpp_indent_continuation_lines = 1
+
+cpp_new_line_before_open_brace = all
+cpp_new_line_before_else = true
+cpp_new_line_before_catch = true
+
+cpp_space_before_function_open_parenthesis = false
+cpp_space_within_parentheses = false
+cpp_space_pointer_reference_alignment = left

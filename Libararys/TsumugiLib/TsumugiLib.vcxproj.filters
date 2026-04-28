@@ -43,6 +43,15 @@
     <Filter Include="Tsumugi\Private\Localization">
       <UniqueIdentifier>{fbbe1591-9dd0-416e-b8ad-0f1dd03d872e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Objects">
+      <UniqueIdentifier>{e537086d-8b1e-4a21-b0c3-c09c51399711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Script\Evaluator">
+      <UniqueIdentifier>{88f26a19-0d84-49cb-8cd6-60339e1e88b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Common">
+      <UniqueIdentifier>{c9c05af4-6710-4cf3-8d56-3882d968947d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Foundation\Types.h">
@@ -114,6 +123,54 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\InfixExpression.h">
       <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\BooleanLiteral.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\CallExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\FunctionLiteral.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IfExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\BlockStatement.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\IObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\IntegerObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\BooleanObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\NullObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Evaluator\Evaluator.h">
+      <Filter>Tsumugi\Private\Script\Evaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ReturnValue.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ErrorObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ObjectTypes.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\Environment.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Common\ErrorReporter.h">
+      <Filter>Tsumugi\Private\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\FunctionObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">
@@ -182,5 +239,56 @@
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\InfixExpression.cpp">
       <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\BooleanLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\CallExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\FunctionLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IfExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\BlockStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\IObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\IntegerObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\BooleanObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\NullObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Evaluator\Evaluator.cpp">
+      <Filter>Tsumugi\Private\Script\Evaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ReturnValue.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ErrorObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ObjectTypes.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\Environment.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
+      <Filter>Tsumugi\Private\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\FunctionObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\TsumugiGame\.editorconfig" />
   </ItemGroup>
 </Project>

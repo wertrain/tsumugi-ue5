@@ -9,7 +9,7 @@ namespace tsumugi::script::ast { class IExpression; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// ÉuÉçÉbÉN ï∂
+/// „Éñ„É≠„ÉÉ„ÇØ Êñá
 /// </summary>
 class BlockStatement : public IStatement {
 public:
@@ -19,15 +19,16 @@ public:
     const tsumugi::script::lexing::Token* GetToken() const { return token_.get(); }
     void SetToken(std::shared_ptr<tsumugi::script::lexing::Token>& token) { token_ = token; }
 
-    const std::vector<std::shared_ptr<tsumugi::script::ast::IStatement>>& GetStatements() const { return statements_; }
-    void AddStatement(std::shared_ptr<tsumugi::script::ast::IStatement>& statement) { statements_.push_back(statement); }
+    const std::vector<std::unique_ptr<tsumugi::script::ast::IStatement>>& GetStatements() const { return statements_; }
+    void AddStatement(std::unique_ptr<tsumugi::script::ast::IStatement> statement) { statements_.push_back(std::move(statement)); }
 
-    virtual tstring TokenLiteral() const override final;
-    virtual tstring ToCode() const override final;
+    NodeType GetNodeType() const final override { return NodeType::kBlockStatement; }
+    tstring TokenLiteral() const override final;
+    tstring ToCode() const override final;
 
 private:
     std::shared_ptr<const tsumugi::script::lexing::Token> token_;
-    std::vector<std::shared_ptr<tsumugi::script::ast::IStatement>> statements_;
+    std::vector<std::unique_ptr<tsumugi::script::ast::IStatement>> statements_;
 };
 
 }

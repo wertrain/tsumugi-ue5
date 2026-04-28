@@ -4,21 +4,44 @@
 
 namespace tsumugi::script::ast {
 
+enum class NodeType {
+    kProgram,
+    kIntegerLiteral,
+    kBooleanLiteral,
+    kIdentifier,
+    kPrefixExpression,
+    kInfixExpression,
+    kIfExpression,
+    kLetStatement,
+    kReturnStatement,
+    kCallExpression,
+    kFunctionLiteral,
+    kExpressionStatement,
+    kBlockStatement,
+    Num
+};
+
 class INode {
 public:
     INode();
-    virtual ~INode();
+    virtual ~INode() = default;
 
     /// <summary>
-    /// ƒg[ƒNƒ“‚ÌƒŠƒeƒ‰ƒ‹
+    /// ãƒãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—ã‚’å–å¾—
     /// </summary>
-    /// <returns>ƒg[ƒNƒ“‚ÌƒŠƒeƒ‰ƒ‹</returns>
+    /// <returns>ãƒãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—</returns>
+    virtual NodeType GetNodeType() const = 0;
+
+    /// <summary>
+    /// ãƒˆãƒ¼ã‚¯ãƒ³ã®ãƒªãƒ†ãƒ©ãƒ«
+    /// </summary>
+    /// <returns>ãƒˆãƒ¼ã‚¯ãƒ³ã®ãƒªãƒ†ãƒ©ãƒ«</returns>
     virtual tstring TokenLiteral() const = 0;
 
     /// <summary>
-    /// ƒR[ƒh‚É•ÏŠ·
+    /// ã‚³ãƒ¼ãƒ‰ã«å¤‰æ›
     /// </summary>
-    /// <returns>ƒR[ƒh</returns>
+    /// <returns>ã‚³ãƒ¼ãƒ‰</returns>
     virtual tstring ToCode() const = 0;
 };
 

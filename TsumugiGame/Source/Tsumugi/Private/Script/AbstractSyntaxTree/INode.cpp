@@ -5,8 +5,4 @@ namespace tsumugi::script::ast {
 INode::INode() {
 }
 
-INode::~INode() {
-
-}
-
 }

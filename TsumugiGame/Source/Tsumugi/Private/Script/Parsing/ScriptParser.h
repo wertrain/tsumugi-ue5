@@ -22,12 +22,12 @@ namespace tsumugi::script::parsing {
 /// <summary>
 /// 前置構文解析関数
 /// </summary>
-using PrefixParseFunction = std::function<tsumugi::script::ast::IExpression* ()>;
+using PrefixParseFunction = std::function<std::unique_ptr<tsumugi::script::ast::IExpression> ()>;
 
 /// <summary>
 /// 中置構文解析関数
 /// </summary>
-using InfixParseFunction = std::function<tsumugi::script::ast::IExpression* (tsumugi::script::ast::IExpression*)>;
+using InfixParseFunction = std::function<std::unique_ptr<tsumugi::script::ast::IExpression> (std::unique_ptr<tsumugi::script::ast::IExpression>)>;
 
 /// <summary>
 /// 優先順位
@@ -50,24 +50,24 @@ public:
     virtual ~Parser();
     void ReadToken();
     script::ast::Root* ParseRoot();
-    script::ast::IStatement* ParseStatement();
-    script::ast::statement::LetStatement* ParseLetStatement();
-    script::ast::statement::ReturnStatement* ParseReturnStatement();
-    script::ast::statement::ExpressionStatement* ParseExpressionStatement();
-    script::ast::statement::BlockStatement* ParseBlockStatement();
-    script::ast::IExpression* ParseExpression(Precedence precedence);
-    script::ast::IExpression* ParseIdentifier();
-    script::ast::IExpression* ParseIntegerLiteral();
-    script::ast::IExpression* ParseBooleanLiteral();
-    script::ast::IExpression* ParseGroupedExpression();
-    script::ast::IExpression* ParseIfExpression();
-    script::ast::IExpression* ParseFunctionLiteral();
-    script::ast::IExpression* ParsePrefixExpression();
-    script::ast::IExpression* ParseInfixExpression(const script::ast::IExpression* left);
-    script::ast::IExpression* ParseCallExpression(const script::ast::IExpression* function);
+    std::unique_ptr<script::ast::IStatement> ParseStatement();
+    std::unique_ptr<script::ast::statement::LetStatement> ParseLetStatement();
+    std::unique_ptr<script::ast::statement::ReturnStatement> ParseReturnStatement();
+    std::unique_ptr<script::ast::statement::ExpressionStatement> ParseExpressionStatement();
+    std::unique_ptr<script::ast::statement::BlockStatement> ParseBlockStatement();
+    std::unique_ptr<script::ast::IExpression> ParseExpression(Precedence precedence);
+    std::unique_ptr<script::ast::IExpression> ParseIdentifier();
+    std::unique_ptr<script::ast::IExpression> ParseIntegerLiteral();
+    std::unique_ptr<script::ast::IExpression> ParseBooleanLiteral();
+    std::unique_ptr<script::ast::IExpression> ParseGroupedExpression();
+    std::unique_ptr<script::ast::IExpression> ParseIfExpression();
+    std::unique_ptr<script::ast::IExpression> ParseFunctionLiteral();
+    std::unique_ptr<script::ast::IExpression> ParsePrefixExpression();
+    std::unique_ptr<script::ast::IExpression> ParseInfixExpression(std::unique_ptr<script::ast::IExpression> left);
+    std::unique_ptr<script::ast::IExpression> ParseCallExpression(std::unique_ptr<script::ast::IExpression> function);
     bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
     bool ParseCallArguments(std::vector<std::shared_ptr<tsumugi::script::ast::IExpression>>& arguments);
-    script::ast::Root* ParseProgram();
+    std::unique_ptr<ast::Root> ParseProgram();
 
     bool ExpectPeek(const tsumugi::script::lexing::TokenType& type);
     const auto& GetCurrentToken() const { return currentToken_; }

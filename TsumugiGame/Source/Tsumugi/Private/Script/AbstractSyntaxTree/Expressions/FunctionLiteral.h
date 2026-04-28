@@ -10,24 +10,25 @@ namespace tsumugi::script::ast::statement { class BlockStatement; }
 namespace tsumugi::script::ast::expression {
 
 /// <summary>
-/// ŠÖ” ®
-/// ’è‹`Ffunction (<parameters>) <block statement>
+/// é–¢æ•° å¼
+/// å®šç¾©ï¼šfunction (<parameters>) <block statement>
 /// </summary>
 class FunctionLiteral : public IExpression {
 public:
     FunctionLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token);
     virtual ~FunctionLiteral();
 
-    const auto* GetToken() const { return token_.get(); }
+    const std::shared_ptr<const tsumugi::script::lexing::Token>& GetToken() const { return token_; }
     void SetToken(const std::shared_ptr<const tsumugi::script::lexing::Token>& token) { token_ = token; }
-    const auto* GetParameter(const int index) const { return parameters_.at(index).get(); }
+    std::shared_ptr<const Identifier> GetParameter(const int index) const { return parameters_.at(index); }
+    const std::vector<std::shared_ptr<const Identifier>>& GetParameters() const { return parameters_; }
     void AddParameter(const std::shared_ptr<const tsumugi::script::ast::expression::Identifier>& parameter) { parameters_.push_back(parameter);  }
-    const auto& GetParameters() const { return parameters_; }
-    const auto* GetBody() const { return body_.get(); }
+    const std::shared_ptr<const tsumugi::script::ast::statement::BlockStatement>& GetBody() const { return body_; }
     void SetBody(const std::shared_ptr<const tsumugi::script::ast::statement::BlockStatement>& body) { body_ = body; }
 
-    virtual tstring TokenLiteral() const final override;
-    virtual tstring ToCode() const final override;
+    NodeType GetNodeType() const final override { return NodeType::kFunctionLiteral; }
+    tstring TokenLiteral() const final override;
+    tstring ToCode() const final override;
 
 private:
     std::shared_ptr<const tsumugi::script::lexing::Token> token_;

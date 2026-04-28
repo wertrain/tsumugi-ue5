@@ -28,12 +28,17 @@ const IStatement* Root::GetStatement(int index) const {
     if (statements_.size() <= index) {
         return nullptr;
     }
-    return statements_[index];
+    return statements_[index].get();
 }
 
-void Root::AddStatement(IStatement* statement) {
+const tarray<std::unique_ptr<IStatement>>& Root::GetStatements() const {
 
-    statements_.push_back(statement);
+    return statements_;
+}
+
+void Root::AddStatement(std::unique_ptr<IStatement> statement) {
+
+    statements_.push_back(std::move(statement));
 }
 
 size_t Root::GetStatementCount() const {

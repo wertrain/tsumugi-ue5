@@ -97,6 +97,41 @@ public:
         Logging_(category, tlogstring(stream.str()));
     }
 
+    /// <summary>
+    /// ログ履歴を取得
+    /// </summary>
+    /// <returns></returns>
+    const auto& GetHistories() const { return histories_; }
+    
+    /// <summary>
+    /// 指定したカテゴリのログ履歴を取得
+    /// </summary>
+    /// <param name="c"></param>
+    /// <returns></returns>
+    const std::vector<History>& GetHistory(Categories c) const {
+        return histories_[static_cast<size_t>(c)];
+    }
+
+    /// <summary>
+    /// 指定したカテゴリのログが存在するかどうかを取得
+    /// </summary>
+    /// <param name="c"></param>
+    /// <returns></returns>
+    bool HasLog(Categories c) const {
+        return !histories_[static_cast<size_t>(c)].empty();
+    }
+
+    /// <summary>
+    /// いずれかのログが存在するかどうかを取得
+    /// </summary>
+    /// <returns></returns>
+    bool HasAnyLog() const {
+        for (const auto& vec : histories_) {
+            if (!vec.empty()) return true;
+        }
+        return false;
+    }
+
     const auto& GetLogConsole() const { return console_; }
     void SetLogConsole(ILogConsole* console) { console_ = console; }
 

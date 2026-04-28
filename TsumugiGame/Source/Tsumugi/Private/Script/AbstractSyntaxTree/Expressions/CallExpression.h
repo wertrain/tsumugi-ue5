@@ -9,24 +9,25 @@ namespace tsumugi::script::ast::expression {
 
 class CallExpression : public IExpression {
 public:
-    CallExpression(const std::shared_ptr<const tsumugi::script::lexing::Token>& token);
+    CallExpression(const std::shared_ptr<const lexing::Token>& token);
     virtual ~CallExpression();
 
-    const auto* GetToken() const { return token_.get(); }
-    void SetToken(const std::shared_ptr<const tsumugi::script::lexing::Token>& token) { token_ = token; }
-    const auto* GetFunction() const { return function_.get(); }
-    void SetFunction(const std::shared_ptr<const tsumugi::script::ast::IExpression>& function) { function_ = function; }
-    const auto GetArguments() const { return arguments_; }
-    const auto* GetArgument(const int index) const { return arguments_.at(index).get(); }
-    void AddArgument(const std::shared_ptr<const tsumugi::script::ast::IExpression>& argument) { arguments_.push_back(argument); }
+    const std::shared_ptr<const lexing::Token>& GetToken() const { return token_; }
+    void SetToken(std::shared_ptr<const lexing::Token> token) { token_ = std::move(token); }
+    const std::shared_ptr<const ast::IExpression>& GetFunction() const { return function_; }
+    void SetFunction(std::shared_ptr<const ast::IExpression> function) { function_ = std::move(function); }
+    const std::vector<std::shared_ptr<const ast::IExpression>>& GetArguments() const { return arguments_; }
+    const std::shared_ptr<const ast::IExpression>& GetArgument(int index) const { return arguments_.at(index); }
+    void AddArgument(std::shared_ptr<const ast::IExpression> argument) { arguments_.push_back(std::move(argument)); }
 
-    virtual tstring TokenLiteral() const final override;
-    virtual tstring ToCode() const final override;
+    NodeType GetNodeType() const override { return NodeType::kCallExpression; }
+    tstring TokenLiteral() const override;
+    tstring ToCode() const override;
 
 private:
-    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
-    std::shared_ptr<const tsumugi::script::ast::IExpression> function_;
-    std::vector<std::shared_ptr<const tsumugi::script::ast::IExpression>> arguments_;
+    std::shared_ptr<const lexing::Token> token_;
+    std::shared_ptr<const ast::IExpression> function_;
+    std::vector<std::shared_ptr<const ast::IExpression>> arguments_;
 };
 
 }

@@ -18,8 +18,9 @@ public:
     const auto& GetValue() const { return value_; }
     void SetValue(const bool value) { value_ = value; }
 
-    virtual tstring TokenLiteral() const final override;
-    virtual tstring ToCode() const final override;
+    NodeType GetNodeType() const final override { return NodeType::kBooleanLiteral; }
+    tstring TokenLiteral() const final override;
+    tstring ToCode() const final override;
 
 private:
     std::shared_ptr<const tsumugi::script::lexing::Token> token_;
