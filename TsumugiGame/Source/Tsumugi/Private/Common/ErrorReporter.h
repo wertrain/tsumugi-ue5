@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Localization/Localizer.h"
@@ -63,6 +63,7 @@ private:
     static std::string ToString(const char* s) { return std::string(s); }
     static std::string ToString(script::lexing::TokenType t);
     static std::string ToString(script::object::ObjectType t);
+    static std::string ToString(const size_t t) { return std::to_string(t); }
 
     // 数値型のみ std::to_string を許可
     template <typename T>

@@ -16,9 +16,9 @@ public:
     void SetToken(std::shared_ptr<const lexing::Token> token) { token_ = std::move(token); }
     const std::shared_ptr<const ast::IExpression>& GetFunction() const { return function_; }
     void SetFunction(std::shared_ptr<const ast::IExpression> function) { function_ = std::move(function); }
-    const std::vector<std::shared_ptr<const ast::IExpression>>& GetArguments() const { return arguments_; }
-    const std::shared_ptr<const ast::IExpression>& GetArgument(int index) const { return arguments_.at(index); }
-    void AddArgument(std::shared_ptr<const ast::IExpression> argument) { arguments_.push_back(std::move(argument)); }
+    const std::vector<std::unique_ptr<const ast::IExpression>>& GetArguments() const { return arguments_; }
+    const std::unique_ptr<const ast::IExpression>& GetArgument(int index) const { return arguments_.at(index); }
+    void AddArgument(std::unique_ptr<const ast::IExpression> argument) { arguments_.push_back(std::move(argument)); }
 
     NodeType GetNodeType() const override { return NodeType::kCallExpression; }
     tstring TokenLiteral() const override;
@@ -27,7 +27,7 @@ public:
 private:
     std::shared_ptr<const lexing::Token> token_;
     std::shared_ptr<const ast::IExpression> function_;
-    std::vector<std::shared_ptr<const ast::IExpression>> arguments_;
+    std::vector<std::unique_ptr<const ast::IExpression>> arguments_;
 };
 
 }

@@ -16,9 +16,11 @@ enum class MessageId : uint32_t {
     kConversionFailed,
     kPrefixParseFunctionMissing,
     kRequiredSymbolMissing,
-    kUnknownOperator,       // 未知の演算子
-    kTypeMismatch,          // 型のミスマッチ
-    kIdentifierNotFound     // 識別子が見つからない
+    kUnknownOperator,        // 未知の演算子
+    kTypeMismatch,           // 型のミスマッチ
+    kIdentifierNotFound,     // 識別子が見つからない
+    kNotFunction,            // 関数でない呼び出し
+    kWrongNumberOfArguments  // 引数の数違い
 };
 
 class Localizer {

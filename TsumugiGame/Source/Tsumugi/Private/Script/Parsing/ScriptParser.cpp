@@ -327,12 +327,12 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseCallExpression(std::uniqu
     auto expression = std::make_unique<ast::expression::CallExpression>(currentToken_);
     expression->SetFunction(std::move(function));
     
-    std::vector<std::shared_ptr<tsumugi::script::ast::IExpression>> arguments;
+    std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>> arguments;
     if (!ParseCallArguments(arguments)) {
         return nullptr;
     }
     for (auto& argument : arguments) {
-        expression->AddArgument(argument);
+        expression->AddArgument(std::move(argument));
     }
 
     return expression;
@@ -370,7 +370,7 @@ bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::e
     return true;
 }
 
-bool Parser::ParseCallArguments(std::vector<std::shared_ptr<tsumugi::script::ast::IExpression>>& arguments) {
+bool Parser::ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>>& arguments) {
 
     arguments.clear();
 

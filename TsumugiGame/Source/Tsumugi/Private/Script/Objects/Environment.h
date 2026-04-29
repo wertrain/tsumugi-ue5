@@ -13,7 +13,7 @@ public:
     Environment(std::shared_ptr<Environment> outer);
 
     std::shared_ptr<object::IObject> Get(const tstring& name);
-    std::shared_ptr<object::IObject> Set(const tstring& name, std::shared_ptr<object::IObject> val);
+    std::shared_ptr<object::IObject> Set(const tstring& name, std::shared_ptr<object::IObject> value);
 
 private:
     std::unordered_map<tstring, std::shared_ptr<object::IObject>> store_;

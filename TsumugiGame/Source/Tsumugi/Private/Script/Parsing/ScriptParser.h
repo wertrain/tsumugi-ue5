@@ -20,17 +20,17 @@ namespace tsumugi::script::ast::statement { class BlockStatement; }
 namespace tsumugi::script::parsing {
 
 /// <summary>
-/// ‘O’u\•¶‰ğÍŠÖ”
+/// å‰ç½®æ§‹æ–‡è§£æé–¢æ•°
 /// </summary>
 using PrefixParseFunction = std::function<std::unique_ptr<tsumugi::script::ast::IExpression> ()>;
 
 /// <summary>
-/// ’†’u\•¶‰ğÍŠÖ”
+/// ä¸­ç½®æ§‹æ–‡è§£æé–¢æ•°
 /// </summary>
 using InfixParseFunction = std::function<std::unique_ptr<tsumugi::script::ast::IExpression> (std::unique_ptr<tsumugi::script::ast::IExpression>)>;
 
 /// <summary>
-/// —Dæ‡ˆÊ
+/// å„ªå…ˆé †ä½
 /// </summary>
 enum class Precedence {
     kLowest = 1,
@@ -66,7 +66,7 @@ public:
     std::unique_ptr<script::ast::IExpression> ParseInfixExpression(std::unique_ptr<script::ast::IExpression> left);
     std::unique_ptr<script::ast::IExpression> ParseCallExpression(std::unique_ptr<script::ast::IExpression> function);
     bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
-    bool ParseCallArguments(std::vector<std::shared_ptr<tsumugi::script::ast::IExpression>>& arguments);
+    bool ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>>& arguments);
     std::unique_ptr<ast::Root> ParseProgram();
 
     bool ExpectPeek(const tsumugi::script::lexing::TokenType& type);

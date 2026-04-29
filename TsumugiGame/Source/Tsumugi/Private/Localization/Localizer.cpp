@@ -20,6 +20,8 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kUnknownOperator, TT("演算子 {0}{1}{2} は定義されていません。") },
     { tsumugi::i18n::MessageId::kTypeMismatch, TT("型のミスマッチが発生しました: {0} {1} {2}") },
     { tsumugi::i18n::MessageId::kIdentifierNotFound, TT("識別子 {0} が見つかりません。") },
+    { tsumugi::i18n::MessageId::kNotFunction, TT("{0} は関数ではないため、呼び出しできません。") },
+    { tsumugi::i18n::MessageId::kWrongNumberOfArguments, TT("引数の数が一致しません。期待値: {0}、実際値: {1}") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -30,6 +32,8 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kUnknownOperator, TT("Unknown operator: {0}{1}{2}") },
     { tsumugi::i18n::MessageId::kTypeMismatch, TT("Type mismatch: {0} {1} {2}") },
     { tsumugi::i18n::MessageId::kIdentifierNotFound, TT("Identifier not found: {0}") },
+    { tsumugi::i18n::MessageId::kNotFunction, TT("{0} is not a function.") },
+    { tsumugi::i18n::MessageId::kWrongNumberOfArguments, TT("Wrong number of arguments. expected={0}, got={1}") },
 };
 
 }

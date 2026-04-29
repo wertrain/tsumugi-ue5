@@ -2,6 +2,7 @@
 #include "Script/AbstractSyntaxTree/INode.h"
 #include "Script/AbstractSyntaxTree/Root.h"
 #include "Script/AbstractSyntaxTree/IStatement.h"
+#include "Script/AbstractSyntaxTree/IExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
@@ -9,6 +10,7 @@
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/Identifier.h"
 #include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/CallExpression.h"
 #include "Script/AbstractSyntaxTree/Statements/ExpressionStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/BlockStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ReturnStatement.h"
@@ -99,7 +101,20 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
             auto functionObject = std::make_shared<object::FunctionObject>();
             functionObject->SetParameters(functionLiteral->GetParameters());
             functionObject->SetBody(functionLiteral->GetBody());
+            functionObject->SetEnvironment(environment);
             return functionObject;
+        }
+        case ast::NodeType::kCallExpression: {
+            auto* callExpression = static_cast<const ast::expression::CallExpression*>(node);
+            auto function = Eval(callExpression->GetFunction().get(), environment);
+            if (IsErrorObject(function)) {
+                return function;
+            }
+            std::vector<std::shared_ptr<object::IObject>> arguments = EvalExpressions(callExpression->GetArguments(), environment);
+            if (arguments.size() > 0 && IsErrorObject(arguments.at(0))) {
+                return arguments.at(0);
+            }
+            return ApplyFunction(function, arguments);
         }
     }
     return nullptr;
@@ -117,6 +132,24 @@ std::shared_ptr<object::IObject> Evaluator::EvalRootProgram(const tarray<std::un
             return result;
         }
     }
+    return result;
+}
+
+std::vector<std::shared_ptr<object::IObject>> Evaluator::EvalExpressions(const std::vector<std::unique_ptr<const ast::IExpression>>& arguments, const std::shared_ptr<object::Environment>& environment) const {
+
+    std::vector<std::shared_ptr<object::IObject>> result;
+    result.reserve(arguments.size());
+
+    for (const auto& arg : arguments) {
+        std::shared_ptr<object::IObject> evaluated = Eval(arg.get(), environment);
+        if (IsErrorObject(evaluated)) {
+            std::vector<std::shared_ptr<object::IObject>> errorResult;
+            errorResult.push_back(std::move(evaluated));
+            return errorResult;
+        }
+        result.push_back(std::move(evaluated));
+    }
+
     return result;
 }
 
@@ -233,6 +266,31 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
         return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
     }
     return value;
+}
+
+std::shared_ptr<object::IObject> Evaluator::ApplyFunction(const std::shared_ptr<object::IObject>& object, const std::vector<std::shared_ptr<object::IObject>> arguments) const {
+
+    if (object->GetType() != object::ObjectType::kFunction) {
+        return errors.MakeErrorObject(i18n::MessageId::kNotFunction, object->GetType());
+    }
+
+    auto functionObject = std::static_pointer_cast<const object::FunctionObject>(object);
+    if (functionObject->GetParameters().size() != arguments.size()) {
+        return errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, functionObject->GetParameters().size(), arguments.size());
+    }
+
+    auto functionEnvironment = std::make_shared<object::Environment>(functionObject->GetEnvironment());
+
+    for (size_t i = 0, num = arguments.size();  i < num; ++i) {
+        functionEnvironment->Set(functionObject->GetParameters()[i]->GetValue(), arguments[i]);
+    }
+    std::shared_ptr<object::IObject> evaluated = EvalBlockStatement(functionObject->GetBody()->GetStatements(), functionEnvironment);
+
+    if (evaluated->GetType() == object::ObjectType::kReturnValue) {
+        auto returnValue = std::static_pointer_cast<const object::ReturnValue>(evaluated);
+        return returnValue->GetValue();
+    }
+    return evaluated;
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {

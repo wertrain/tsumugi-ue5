@@ -12,6 +12,7 @@ namespace tsumugi::script::object { class NullObject; }
 namespace tsumugi::script::object { class Environment; }
 namespace tsumugi::script::ast { class INode; }
 namespace tsumugi::script::ast { class IStatement; }
+namespace tsumugi::script::ast { class IExpression; }
 namespace tsumugi::script::ast::expression { class IfExpression; }
 namespace tsumugi::script::ast::expression { class Identifier; }
 
@@ -22,6 +23,7 @@ public:
     Evaluator();
     std::shared_ptr<object::IObject> Eval(const ast::INode* node, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalRootProgram(const tarray<std::unique_ptr<ast::IStatement>>& statements, const std::shared_ptr<object::Environment>& environment) const;
+    std::vector<std::shared_ptr<object::IObject>> EvalExpressions(const std::vector<std::unique_ptr<const ast::IExpression>>& arguments, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalBlockStatement(const tarray<std::unique_ptr<ast::IStatement>>& statements, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalPrefixExpression(const tstring& op, const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalBangOperator(const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const;
@@ -30,6 +32,7 @@ public:
     std::shared_ptr<object::IObject> EvalIntegerInfixExpression(const tstring& op, const std::shared_ptr<object::IntegerObject>& left, const std::shared_ptr<object::IntegerObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIfExpression(const ast::expression::IfExpression* ifExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIdentifier(const ast::expression::Identifier* identifier, const std::shared_ptr<object::Environment>& environment) const;
+    std::shared_ptr<object::IObject> ApplyFunction(const std::shared_ptr<object::IObject>& object, const std::vector<std::shared_ptr<object::IObject>> arguments) const;
 
 private:
     bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;

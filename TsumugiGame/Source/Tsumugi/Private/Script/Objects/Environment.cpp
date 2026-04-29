@@ -30,10 +30,10 @@ std::shared_ptr<object::IObject> Environment::Get(const tstring& name) {
     return nullptr;
 }
 
-std::shared_ptr<object::IObject> Environment::Set(const tstring& name, std::shared_ptr<IObject> val) {
+std::shared_ptr<object::IObject> Environment::Set(const tstring& name, std::shared_ptr<IObject> value) {
 
-    store_[name] = val;
-    return val;
+    store_[name] = value;
+    return value;
 }
 
 }

@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Foundation/Types.h"
 
 namespace tsumugi::log {
 
 /// <summary>
-/// ƒƒO‚Ìo—Í‘ÎÛ
+/// ãƒ­ã‚°ã®å‡ºåŠ›å¯¾è±¡
 /// </summary>
 class ILogConsole {
 public:
