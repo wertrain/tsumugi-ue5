@@ -14,7 +14,7 @@ FunctionObject::FunctionObject()
 
 std::shared_ptr<object::Environment> FunctionObject::GetEnvironment() const {
 
-    return environment_.lock();
+    return environment_;
 }
 
 void FunctionObject::SetEnvironment(std::shared_ptr<object::Environment> environment) {

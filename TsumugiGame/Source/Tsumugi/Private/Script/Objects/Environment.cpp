@@ -23,8 +23,8 @@ std::shared_ptr<object::IObject> Environment::Get(const tstring& name) {
     }
 
     // 自分のスコープになければ親を探しに行く
-    if (outer_) {
-        return outer_->Get(name);
+    if (auto outer = outer_.lock()) {
+        return outer->Get(name);
     }
 
     return nullptr;
@@ -34,6 +34,11 @@ std::shared_ptr<object::IObject> Environment::Set(const tstring& name, std::shar
 
     store_[name] = value;
     return value;
+}
+
+void Environment::Clear() {
+
+    store_.clear();
 }
 
 }
