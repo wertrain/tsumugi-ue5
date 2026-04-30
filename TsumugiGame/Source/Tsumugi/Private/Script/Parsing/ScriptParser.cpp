@@ -8,6 +8,7 @@
 #include "Script/AbstractSyntaxTree/Statements/BlockStatement.h"
 #include "Script/AbstractSyntaxTree/Expressions/Identifier.h"
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/StringLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
@@ -210,6 +211,11 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIntegerLiteral() {
         logger_.Log(log::TextLogger::Categories::Error, localizer.GetMessage(i18n::MessageId::kConversionFailed, placeholders));
         return nullptr;
     }
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseStringLiteral() {
+
+    return std::make_unique<ast::expression::StringLiteral>(currentToken_, currentToken_->GetLiteral());
 }
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseBooleanLiteral() {
@@ -464,6 +470,7 @@ void Parser::RegisterPrefixParseFunctions() {
 
     prefixParseFunctions_.emplace(lexing::TokenType::kIdentifier, [this] { return ParseIdentifier(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kInteger, [this] { return ParseIntegerLiteral(); });
+    prefixParseFunctions_.emplace(lexing::TokenType::kString, [this] { return ParseStringLiteral(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kBang, [this] { return ParsePrefixExpression(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kMinus, [this] { return ParsePrefixExpression(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kTrue, [this] { return ParseBooleanLiteral(); });

@@ -10,6 +10,7 @@ namespace tsumugi::script::object {
 enum class ObjectType : int32_t {
     kNull,
     kInteger,
+    kString,
     kBoolean,
     kReturnValue,
     kFunction,

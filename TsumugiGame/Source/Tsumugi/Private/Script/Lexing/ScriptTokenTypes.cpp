@@ -5,7 +5,7 @@ namespace tsumugi::script::lexing {
 
 const TokenType LookupIdentifier(const tstring& identifier) {
 
-    /// —\–ñŒê‚ÌŽ«‘
+    /// äºˆç´„èªžã®è¾žæ›¸
     static const std::unordered_map<tstring, tsumugi::script::lexing::TokenType> Keywords = {
         { TT("let"), tsumugi::script::lexing::TokenType::kLet },
         { TT("function"), tsumugi::script::lexing::TokenType::kFunction },
@@ -21,13 +21,13 @@ const TokenType LookupIdentifier(const tstring& identifier) {
 
 const tchar* TokenTypeToTString(const TokenType token_type) {
 
-    /// ƒ^ƒCƒv‚ÌŽ«‘
+    /// ã‚¿ã‚¤ãƒ—ã®è¾žæ›¸
     static const std::unordered_map<tsumugi::script::lexing::TokenType, const tchar*> Table = {
         { tsumugi::script::lexing::TokenType::kIllegal, TT("kIllegal") },
         { tsumugi::script::lexing::TokenType::kEOF, TT("kEOF") },
         { tsumugi::script::lexing::TokenType::kIdentifier, TT("kIdentifier") },
         { tsumugi::script::lexing::TokenType::kInteger, TT("kInteger") },
-        { tsumugi::script::lexing::TokenType::kDouble, TT("kDouble") },
+        { tsumugi::script::lexing::TokenType::kFloat, TT("kFloat") },
         { tsumugi::script::lexing::TokenType::kString, TT("kString") },
         { tsumugi::script::lexing::TokenType::kAssign, TT("kAssign") },
         { tsumugi::script::lexing::TokenType::kPlus, TT("kPlus") },
@@ -71,13 +71,13 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
 
 const char* TokenTypeToString(const TokenType token_type) {
 
-    // ƒg[ƒNƒ“ƒ^ƒCƒv‚ÌŽ«‘
+    // ãƒˆãƒ¼ã‚¯ãƒ³ã‚¿ã‚¤ãƒ—ã®è¾žæ›¸
     static const std::unordered_map<tsumugi::script::lexing::TokenType, const char*> Table = {
         { tsumugi::script::lexing::TokenType::kIllegal, ("kIllegal") },
         { tsumugi::script::lexing::TokenType::kEOF, ("kEOF") },
         { tsumugi::script::lexing::TokenType::kIdentifier, ("kIdentifier") },
         { tsumugi::script::lexing::TokenType::kInteger, ("kInteger") },
-        { tsumugi::script::lexing::TokenType::kDouble, ("kDouble") },
+        { tsumugi::script::lexing::TokenType::kFloat, ("kFloat") },
         { tsumugi::script::lexing::TokenType::kString, ("kString") },
         { tsumugi::script::lexing::TokenType::kAssign, ("kAssign") },
         { tsumugi::script::lexing::TokenType::kPlus, ("kPlus") },

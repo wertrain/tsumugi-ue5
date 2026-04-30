@@ -4,6 +4,7 @@
 #include "Script/AbstractSyntaxTree/IStatement.h"
 #include "Script/AbstractSyntaxTree/IExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/StringLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/InfixExpression.h"
@@ -17,6 +18,7 @@
 #include "Script/AbstractSyntaxTree/Statements/LetStatement.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/IntegerObject.h"
+#include "Script/Objects/StringObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/ReturnValue.h"
@@ -49,6 +51,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         case ast::NodeType::kIntegerLiteral: {
             auto* integerLiteral = static_cast<const ast::expression::IntegerLiteral*>(node);
             return std::make_shared<object::IntegerObject>(integerLiteral->GetValue());
+        }
+        case ast::NodeType::kStringLiteral: {
+            auto* stringLiteral = static_cast<const ast::expression::StringLiteral*>(node);
+            return std::make_shared<object::StringObject>(stringLiteral->GetValue());
         }
         case ast::NodeType::kBooleanLiteral: {
             auto* booleanLiteral = static_cast<const ast::expression::BooleanLiteral*>(node);
@@ -202,6 +208,20 @@ std::shared_ptr<object::IObject> Evaluator::EvalInfixExpression(const tstring& o
         auto leftIntegerObject = std::static_pointer_cast<object::IntegerObject>(left);
         auto rightIntegerObject = std::static_pointer_cast<object::IntegerObject>(right);
         return EvalIntegerInfixExpression(op, leftIntegerObject, rightIntegerObject, environment);
+    } else if (left->GetType() == object::ObjectType::kString && right->GetType() == object::ObjectType::kString) {
+        auto leftStringObject = std::static_pointer_cast<object::StringObject>(left);
+        auto rightStringObject = std::static_pointer_cast<object::StringObject>(right);
+        return EvalStringInfixExpression(op, leftStringObject, rightStringObject, environment);
+    } else if (left->GetType() == object::ObjectType::kString && right->GetType() == object::ObjectType::kInteger && op == TT("*")) {
+        auto leftStringObject = std::static_pointer_cast<object::StringObject>(left);
+        auto rightIntegerObject = std::static_pointer_cast<object::IntegerObject>(right);
+
+        tstring result;
+        result.reserve(leftStringObject->GetValue().size() * rightIntegerObject->GetValue());
+        for (int i = 0; i < rightIntegerObject->GetValue(); ++i) {
+            result += leftStringObject->GetValue();
+        }
+        return std::make_shared<object::StringObject>(result);
     }
 
     if (op == TT("==")) {
@@ -242,7 +262,30 @@ std::shared_ptr<object::IObject> Evaluator::EvalIntegerInfixExpression(const tst
     } else if (op == TT("!=")) {
         return ToBooleanObject(leftValue != rightValue);
     }
-    return nullObject_;
+    return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kInteger, op, object::ObjectType::kInteger);
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalStringInfixExpression(const tstring& op, const std::shared_ptr<object::StringObject>& left, const std::shared_ptr<object::StringObject>& right, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto leftValue = left->GetValue();
+    auto rightValue = right->GetValue();
+
+    if (op == TT("+")) {
+        return std::make_shared<object::StringObject>(leftValue + rightValue);
+    } else if (op == TT("<")) {
+        return ToBooleanObject(leftValue < rightValue);
+    } else if (op == TT(">")) {
+        return ToBooleanObject(leftValue > rightValue);
+    } else if (op == TT("<=")) {
+        return ToBooleanObject(leftValue <= rightValue);
+    } else if (op == TT(">=")) {
+        return ToBooleanObject(leftValue >= rightValue);
+    } else if (op == TT("==")) {
+        return ToBooleanObject(leftValue == rightValue);
+    } else if (op == TT("!=")) {
+        return ToBooleanObject(leftValue != rightValue);
+    }
+    return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kString, op, object::ObjectType::kString);
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalIfExpression(const ast::expression::IfExpression* ifExpression, const std::shared_ptr<object::Environment>& environment) const {

@@ -22,6 +22,7 @@ private:
     void ReadNumber(tstring& outNumber);
     void ReadIdentifier(tstring& outIdentifier);
     Token* CreateAsNumericToken();
+    Token* CreateAsStringToken();
 
 private:
     std::unique_ptr<LexingStringReader> reader_;

@@ -108,6 +108,10 @@ Token* Lexer::NextToken() {
             case TT(';'):
                 token = CreateToken(TokenType::kSemicolon, tstring(1, c));
                 break;
+            case TT('\"'):
+            case TT('\''):
+                token = CreateAsStringToken();
+                break;
             case TT('\0'):
                 token = CreateToken(TokenType::kEOF , tstring(1, c));
                 break;
@@ -202,10 +206,50 @@ Token* Lexer::CreateAsNumericToken() {
     } else {
         [[maybe_unused]] double v = 0;
         if (tsumugi::type::convert::FromChars(number, v)) {
-            return CreateToken(TokenType::kDouble, number);
+            return CreateToken(TokenType::kFloat, number);
         }
     }
     return CreateToken(TokenType::kIllegal, number);
+}
+Token* Lexer::CreateAsStringToken() {
+
+    tchar quote = reader_->Read();
+
+    tstring str;
+
+    while (true) {
+        auto ch = reader_->Read();
+
+        if (ch == 0) {
+            // 終端まで閉じクォートが無い → エラー
+            return CreateToken(TokenType::kIllegal, str);
+        }
+
+        if (ch == quote) {
+            // 同じクォートで閉じる
+            break;
+        }
+
+        // エスケープ対応したいならここで処理
+        if (ch == '\\') {
+            auto next = reader_->Read();
+            switch (next) {
+                case 'n':  str.push_back('\n'); break;
+                case 't':  str.push_back('\t'); break;
+                case '\\': str.push_back('\\'); break;
+                case '"':  str.push_back('"'); break;
+                case '\'': str.push_back('\''); break;
+                default:
+                    str.push_back(next);
+                    break;
+            }
+            continue;
+        }
+
+        str.push_back(ch);
+    }
+
+    return CreateToken(TokenType::kString, str);
 }
 
 }

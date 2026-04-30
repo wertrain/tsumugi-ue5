@@ -7,6 +7,7 @@ namespace tsumugi::script::ast {
 enum class NodeType {
     kProgram,
     kIntegerLiteral,
+    kStringLiteral,
     kBooleanLiteral,
     kIdentifier,
     kPrefixExpression,
