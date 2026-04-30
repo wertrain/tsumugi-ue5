@@ -7,13 +7,14 @@
 namespace tsumugi::script::lexing {
 
 /// <summary>
-/// ÉgÅ[ÉNÉì
+/// „Éà„Éº„ÇØ„É≥
 /// </summary>
 class Token {
 public:
     Token();
     Token(const TokenType token_type, const tstring& literal_string);
     Token(const TokenType token_type, const tstring& literal_string, const LexingPosition& position);
+    ~Token();
 
     TokenType GetTokenType() const;
     void SetTokenType(const TokenType token_type);

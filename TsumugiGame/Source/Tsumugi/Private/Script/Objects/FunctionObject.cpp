@@ -7,44 +7,19 @@ namespace tsumugi::script::object {
 
 FunctionObject::FunctionObject()
     : parameters_()
-    , body_()
+    , body_(nullptr)
     , environment_() {
 
 }
 
-const std::vector<std::shared_ptr<const ast::expression::Identifier>>& FunctionObject::GetParameters() const {
+std::shared_ptr<object::Environment> FunctionObject::GetEnvironment() const {
 
-    return parameters_;
-}
-
-void FunctionObject::SetParameters(const std::vector<std::shared_ptr<const ast::expression::Identifier>>& parameters) {
-
-    parameters_ = parameters;
-}
-
-void FunctionObject::AddParameter(std::shared_ptr<ast::expression::Identifier> parameter) {
-
-    parameters_.push_back(std::move(parameter));
-}
-
-const std::shared_ptr<const ast::statement::BlockStatement>& FunctionObject::GetBody() const {
-
-    return body_;
-}
-
-void FunctionObject::SetBody(std::shared_ptr<const ast::statement::BlockStatement> body) {
-
-    body_ = std::move(body);
-}
-
-const std::shared_ptr<object::Environment>& FunctionObject::GetEnvironment() const {
-
-    return environment_;
+    return environment_.lock();
 }
 
 void FunctionObject::SetEnvironment(std::shared_ptr<object::Environment> environment) {
 
-    environment_ = std::move(environment);
+    environment_ = environment;
 }
 
 tstring FunctionObject::Inspect() const {

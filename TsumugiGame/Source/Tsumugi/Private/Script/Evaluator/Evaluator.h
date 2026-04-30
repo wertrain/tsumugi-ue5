@@ -23,7 +23,7 @@ public:
     Evaluator();
     std::shared_ptr<object::IObject> Eval(const ast::INode* node, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalRootProgram(const tarray<std::unique_ptr<ast::IStatement>>& statements, const std::shared_ptr<object::Environment>& environment) const;
-    std::vector<std::shared_ptr<object::IObject>> EvalExpressions(const std::vector<std::unique_ptr<const ast::IExpression>>& arguments, const std::shared_ptr<object::Environment>& environment) const;
+    std::vector<std::shared_ptr<object::IObject>> EvalExpressions(const std::vector<std::unique_ptr<ast::IExpression>>& arguments, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalBlockStatement(const tarray<std::unique_ptr<ast::IStatement>>& statements, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalPrefixExpression(const tstring& op, const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalBangOperator(const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const;

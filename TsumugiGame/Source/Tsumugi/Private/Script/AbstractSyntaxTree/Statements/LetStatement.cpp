@@ -7,9 +7,7 @@ namespace tsumugi::script::ast::statement {
 LetStatement::LetStatement() {
 }
 
-LetStatement::~LetStatement() {
-
-}
+LetStatement::~LetStatement() = default;
 
 tstring LetStatement::TokenLiteral() const {
 

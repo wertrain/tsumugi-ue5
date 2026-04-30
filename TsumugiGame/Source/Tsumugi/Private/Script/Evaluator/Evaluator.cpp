@@ -44,7 +44,7 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kExpressionStatement: {
             auto* statement = static_cast<const ast::statement::ExpressionStatement*>(node);
-            return Eval(statement->GetExpression().get(), environment);
+            return Eval(statement->GetExpression(), environment);
         }
         case ast::NodeType::kIntegerLiteral: {
             auto* integerLiteral = static_cast<const ast::expression::IntegerLiteral*>(node);
@@ -56,16 +56,16 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kPrefixExpression: {
             auto* expression = static_cast<const ast::expression::PrefixExpression*>(node);
-            auto right = Eval(expression->GetRight().get(), environment);
+            auto right = Eval(expression->GetRight(), environment);
             return EvalPrefixExpression(expression->GetOperator(), right, environment);
         }
         case ast::NodeType::kInfixExpression: {
             auto* expression = static_cast<const ast::expression::InfixExpression*>(node);
-            auto left = Eval(expression->GetLeft().get(), environment);
+            auto left = Eval(expression->GetLeft(), environment);
             if (IsErrorObject(left)) {
                 return left;
             }
-            auto right = Eval(expression->GetRight().get(), environment);
+            auto right = Eval(expression->GetRight(), environment);
             if (IsErrorObject(right)) {
                 return right;
             }
@@ -99,14 +99,16 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         case ast::NodeType::kFunctionLiteral: {
             auto* functionLiteral = static_cast<const ast::expression::FunctionLiteral*>(node);
             auto functionObject = std::make_shared<object::FunctionObject>();
-            functionObject->SetParameters(functionLiteral->GetParameters());
+            for (auto& param : functionLiteral->GetParameters()) {
+                functionObject->AddParameter(std::move(param));
+            }
             functionObject->SetBody(functionLiteral->GetBody());
             functionObject->SetEnvironment(environment);
             return functionObject;
         }
         case ast::NodeType::kCallExpression: {
             auto* callExpression = static_cast<const ast::expression::CallExpression*>(node);
-            auto function = Eval(callExpression->GetFunction().get(), environment);
+            auto function = Eval(callExpression->GetFunction(), environment);
             if (IsErrorObject(function)) {
                 return function;
             }
@@ -135,7 +137,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalRootProgram(const tarray<std::un
     return result;
 }
 
-std::vector<std::shared_ptr<object::IObject>> Evaluator::EvalExpressions(const std::vector<std::unique_ptr<const ast::IExpression>>& arguments, const std::shared_ptr<object::Environment>& environment) const {
+std::vector<std::shared_ptr<object::IObject>> Evaluator::EvalExpressions(const std::vector<std::unique_ptr<ast::IExpression>>& arguments, const std::shared_ptr<object::Environment>& environment) const {
 
     std::vector<std::shared_ptr<object::IObject>> result;
     result.reserve(arguments.size());

@@ -3,15 +3,13 @@
 
 namespace tsumugi::script::ast::expression {
 
-PrefixExpression::PrefixExpression(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const tstring& value)
- : token_(token)
- , value_(value)
- , right_() {
+PrefixExpression::PrefixExpression(std::shared_ptr<lexing::Token> token, const tstring& value)
+    : token_(std::move(token))
+    , value_(value)
+    , right_() {
 }
 
-PrefixExpression::~PrefixExpression() {
-
-}
+PrefixExpression::~PrefixExpression() = default;
 
 tstring PrefixExpression::TokenLiteral() const {
     

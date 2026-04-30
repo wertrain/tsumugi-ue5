@@ -14,6 +14,7 @@ namespace tsumugi::script::ast {
 class Root : public INode {
 public:
     Root();
+    ~Root();
     NodeType GetNodeType() const final override { return NodeType::kProgram; }
     tstring TokenLiteral() const final override;
     tstring ToCode() const final override;

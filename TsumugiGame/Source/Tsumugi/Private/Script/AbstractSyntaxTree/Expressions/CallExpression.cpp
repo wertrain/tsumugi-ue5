@@ -3,14 +3,11 @@
 
 namespace tsumugi::script::ast::expression {
 
-CallExpression::CallExpression(const std::shared_ptr<const tsumugi::script::lexing::Token>& token) {
-
-    token_ = token;
+CallExpression::CallExpression(std::shared_ptr<lexing::Token> token)
+    : token_(std::move(token)) {
 }
 
-CallExpression::~CallExpression() {
-
-}
+CallExpression::~CallExpression() = default;
 
 tstring CallExpression::TokenLiteral() const {
     

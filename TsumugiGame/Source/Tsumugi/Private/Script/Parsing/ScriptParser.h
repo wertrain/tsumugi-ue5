@@ -47,14 +47,14 @@ enum class Precedence {
 class Parser {
 public:
     Parser(tsumugi::script::lexing::Lexer* lexer);
-    virtual ~Parser();
+    ~Parser();
     void ReadToken();
     script::ast::Root* ParseRoot();
     std::unique_ptr<script::ast::IStatement> ParseStatement();
     std::unique_ptr<script::ast::statement::LetStatement> ParseLetStatement();
     std::unique_ptr<script::ast::statement::ReturnStatement> ParseReturnStatement();
     std::unique_ptr<script::ast::statement::ExpressionStatement> ParseExpressionStatement();
-    std::unique_ptr<script::ast::statement::BlockStatement> ParseBlockStatement();
+    std::shared_ptr<script::ast::statement::BlockStatement> ParseBlockStatement();
     std::unique_ptr<script::ast::IExpression> ParseExpression(Precedence precedence);
     std::unique_ptr<script::ast::IExpression> ParseIdentifier();
     std::unique_ptr<script::ast::IExpression> ParseIntegerLiteral();

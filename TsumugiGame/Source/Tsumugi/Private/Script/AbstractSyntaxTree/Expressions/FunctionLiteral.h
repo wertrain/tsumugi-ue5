@@ -15,25 +15,25 @@ namespace tsumugi::script::ast::expression {
 /// </summary>
 class FunctionLiteral : public IExpression {
 public:
-    FunctionLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token);
-    virtual ~FunctionLiteral();
+    FunctionLiteral(std::shared_ptr<lexing::Token> token);
+    ~FunctionLiteral() override;
 
-    const std::shared_ptr<const tsumugi::script::lexing::Token>& GetToken() const { return token_; }
-    void SetToken(const std::shared_ptr<const tsumugi::script::lexing::Token>& token) { token_ = token; }
-    std::shared_ptr<const Identifier> GetParameter(const int index) const { return parameters_.at(index); }
-    const std::vector<std::shared_ptr<const Identifier>>& GetParameters() const { return parameters_; }
-    void AddParameter(const std::shared_ptr<const tsumugi::script::ast::expression::Identifier>& parameter) { parameters_.push_back(parameter);  }
-    const std::shared_ptr<const tsumugi::script::ast::statement::BlockStatement>& GetBody() const { return body_; }
-    void SetBody(const std::shared_ptr<const tsumugi::script::ast::statement::BlockStatement>& body) { body_ = body; }
+    const lexing::Token* GetToken() const { return token_.get(); }
+    void SetToken(std::shared_ptr<lexing::Token> token) { token_ = std::move(token); }
+    const Identifier* GetParameter(int index) const { return parameters_.at(index).get(); }
+    const std::vector<std::shared_ptr<Identifier>>& GetParameters() const { return parameters_; }
+    void AddParameter(std::shared_ptr<Identifier> parameter) { parameters_.push_back(std::move(parameter)); }
+    const std::shared_ptr < statement::BlockStatement>& GetBody() const { return body_; }
+    void SetBody(std::shared_ptr<statement::BlockStatement> body) { body_ = std::move(body); }
 
     NodeType GetNodeType() const final override { return NodeType::kFunctionLiteral; }
     tstring TokenLiteral() const final override;
     tstring ToCode() const final override;
 
 private:
-    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
-    std::vector<std::shared_ptr<const tsumugi::script::ast::expression::Identifier>> parameters_;
-    std::shared_ptr<const tsumugi::script::ast::statement::BlockStatement> body_;
+    std::shared_ptr<lexing::Token> token_;
+    std::vector<std::shared_ptr<Identifier>> parameters_;
+    std::shared_ptr<statement::BlockStatement> body_;
 };
 
 }

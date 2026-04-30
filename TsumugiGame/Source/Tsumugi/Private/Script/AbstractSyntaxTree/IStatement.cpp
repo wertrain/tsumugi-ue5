@@ -6,4 +6,8 @@ IStatement::IStatement() {
 
 }
 
+IStatement::~IStatement() {
+
+}
+
 }

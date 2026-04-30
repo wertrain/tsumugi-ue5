@@ -15,20 +15,20 @@ namespace tsumugi::script::ast::statement {
 class ExpressionStatement : public IStatement {
 public:
     ExpressionStatement();
-    virtual ~ExpressionStatement();
+    ~ExpressionStatement() override;
 
-    const std::shared_ptr<const lexing::Token>& GetToken() const { return token_; }
-    void SetToken(std::shared_ptr<const lexing::Token> token) { token_ = std::move(token); }
-    const std::shared_ptr<const IExpression>& GetExpression() const { return expression_; }
-    void SetExpression(std::shared_ptr<const IExpression> expr) { expression_ = std::move(expr); }
+    const lexing::Token* GetToken() const { return token_.get(); }
+    void SetToken(std::shared_ptr<lexing::Token> token) { token_ = std::move(token); }
+    const IExpression* GetExpression() const { return expression_.get(); }
+    void SetExpression(std::unique_ptr<IExpression> expr) { expression_ = std::move(expr); }
 
     NodeType GetNodeType() const override { return NodeType::kExpressionStatement; }
     tstring TokenLiteral() const override;
     tstring ToCode() const override;
 
 private:
-    std::shared_ptr<const lexing::Token> token_;
-    std::shared_ptr<const ast::IExpression> expression_;
+    std::shared_ptr<lexing::Token> token_;
+    std::unique_ptr<ast::IExpression> expression_;
 };
 
 }

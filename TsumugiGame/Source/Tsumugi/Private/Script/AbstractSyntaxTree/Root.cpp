@@ -6,6 +6,8 @@ Root::Root() {
 
 }
 
+Root::~Root() = default;
+
 tstring Root::TokenLiteral() const {
 
     if (statements_.size() == 0) {

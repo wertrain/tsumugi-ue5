@@ -3,21 +3,17 @@
 
 namespace tsumugi::script::ast::expression {
 
-Identifier::Identifier() 
+Identifier::Identifier()
     : token_()
     , value_() {
-
 }
 
-Identifier::Identifier(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const tstring& value) {
-
-    token_ = token;
-    value_ = value;
+Identifier::Identifier(std::shared_ptr<lexing::Token> token, const tstring& value)
+    : token_(std::move(token))
+    , value_(value) {
 }
 
-Identifier::~Identifier() {
-
-}
+Identifier::~Identifier() = default;
 
 tstring Identifier::TokenLiteral() const {
     

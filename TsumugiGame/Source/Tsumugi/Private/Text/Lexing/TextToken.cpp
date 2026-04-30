@@ -14,6 +14,8 @@ Token::Token(const TokenType token_type, const tstring& literal_string) :
 
 }
 
+Token::~Token() = default;
+
 void Token::SetTokenType(const TokenType token_type) {
     token_type_ = token_type;
 }

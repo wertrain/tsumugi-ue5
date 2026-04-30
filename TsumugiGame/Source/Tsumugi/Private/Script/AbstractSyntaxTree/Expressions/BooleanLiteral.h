@@ -9,21 +9,20 @@ namespace tsumugi::script::ast::expression {
 
 class BooleanLiteral : public IExpression {
 public:
-    BooleanLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const bool value);
-    virtual ~BooleanLiteral();
+    BooleanLiteral(std::shared_ptr<lexing::Token> token, bool value);
+    ~BooleanLiteral() override;
 
-    const auto* GetToken() const { return token_.get(); }
-    void SetToken(const std::shared_ptr<tsumugi::script::lexing::Token>& token) { token_ = token; }
-
-    const auto& GetValue() const { return value_; }
-    void SetValue(const bool value) { value_ = value; }
+    const lexing::Token* GetToken() const { return token_.get(); }
+    void SetToken(std::shared_ptr<lexing::Token> token) { token_ = std::move(token); }
+    bool GetValue() const { return value_; }
+    void SetValue(bool value) { value_ = value; }
 
     NodeType GetNodeType() const final override { return NodeType::kBooleanLiteral; }
     tstring TokenLiteral() const final override;
     tstring ToCode() const final override;
 
 private:
-    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
+    std::shared_ptr<lexing::Token> token_;
     bool value_;
 };
 

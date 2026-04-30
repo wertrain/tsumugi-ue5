@@ -7,9 +7,7 @@ namespace tsumugi::script::ast::statement {
 ReturnStatement::ReturnStatement() {
 }
 
-ReturnStatement::~ReturnStatement() {
-
-}
+ReturnStatement::~ReturnStatement() = default;
 
 tstring ReturnStatement::TokenLiteral() const {
 

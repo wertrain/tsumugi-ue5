@@ -10,21 +10,20 @@ namespace tsumugi::script::ast::expression {
 class Identifier : public IExpression {
 public:
     Identifier();
-    Identifier(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const tstring& value);
-    virtual ~Identifier();
+    Identifier(std::shared_ptr<lexing::Token> token, const tstring& value);
+    ~Identifier() override;
 
-    const auto* GetToken() const { return token_.get(); }
-    void SetToken(const std::shared_ptr<tsumugi::script::lexing::Token>& token) { token_ = token; }
-
-    const auto& GetValue() const { return value_; }
+    const lexing::Token* GetToken() const { return token_.get(); }
+    void SetToken(std::shared_ptr<lexing::Token> token) { token_ = std::move(token); }
+    const tstring& GetValue() const { return value_; }
     void SetValue(const tstring& value) { value_ = value; }
 
-    NodeType GetNodeType() const final override { return NodeType::kIdentifier; }
-    tstring TokenLiteral() const final override;
-    tstring ToCode() const final override;
+    NodeType GetNodeType() const override { return NodeType::kIdentifier; }
+    tstring TokenLiteral() const override;
+    tstring ToCode() const override;
 
 private:
-    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
+    std::shared_ptr<lexing::Token> token_;
     tstring value_;
 };
 

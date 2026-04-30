@@ -4,13 +4,11 @@
 
 namespace tsumugi::script::ast::statement {
 
-BlockStatement::BlockStatement(const std::shared_ptr<const tsumugi::script::lexing::Token>& token)
- : token_(token) {
+BlockStatement::BlockStatement(std::shared_ptr<lexing::Token> token)
+ : token_(std::move(token)) {
 }
 
-BlockStatement::~BlockStatement() {
-
-}
+BlockStatement::~BlockStatement() = default;
 
 tstring BlockStatement::TokenLiteral() const {
 

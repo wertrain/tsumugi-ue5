@@ -24,7 +24,7 @@ enum class NodeType {
 class INode {
 public:
     INode();
-    virtual ~INode() = default;
+    virtual ~INode();
 
     /// <summary>
     /// ノードタイプを取得

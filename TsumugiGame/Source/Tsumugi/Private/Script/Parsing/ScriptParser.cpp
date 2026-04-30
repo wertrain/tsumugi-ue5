@@ -50,15 +50,13 @@ Parser::Parser(lexing::Lexer* lexer)
     RegisterInfixParseFunctions();
 }
 
-Parser::~Parser() {
-
-}
+Parser::~Parser() = default;
 
 void Parser::ReadToken() {
 
-    currentToken_ = std::move(nextToken_);
+    currentToken_ = nextToken_;
     nextToken_.reset();
-    nextToken_ = std::unique_ptr<lexing::Token>(lexer_->NextToken());
+    nextToken_ = std::shared_ptr<lexing::Token>(lexer_->NextToken());
 }
 
 ast::Root* Parser::ParseRoot() {
@@ -87,8 +85,8 @@ std::unique_ptr<ast::statement::LetStatement> Parser::ParseLetStatement() {
         return nullptr;
     }
 
-    auto name = std::make_shared<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
-    statement->SetName(name);
+    auto name = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
+    statement->SetName(std::move(name));
 
     // 次は = (等号)がある
     if (!ExpectPeekRequiredTokenType(lexing::TokenType::kAssign, "=")) {
@@ -97,8 +95,8 @@ std::unique_ptr<ast::statement::LetStatement> Parser::ParseLetStatement() {
     // = を読み飛ばす
     ReadToken();
 
-    auto expression = std::shared_ptr<ast::IExpression>(ParseExpression(Precedence::kLowest));
-    statement->SetValue(expression);
+    auto expression = ParseExpression(Precedence::kLowest);
+    statement->SetValue(std::move(expression));
 
     // セミコロンは必須ではない
     if (nextToken_->GetTokenType() == lexing::TokenType::kSemicolon) {
@@ -115,8 +113,8 @@ std::unique_ptr<ast::statement::ReturnStatement> Parser::ParseReturnStatement() 
 
     ReadToken();
 
-    auto expression = std::shared_ptr<ast::IExpression>(ParseExpression(Precedence::kLowest));
-    statement->SetValue(expression);
+    auto expression = ParseExpression(Precedence::kLowest);
+    statement->SetValue(std::move(expression));
 
     // セミコロンは必須ではない
     if (nextToken_->GetTokenType() == lexing::TokenType::kSemicolon) {
@@ -131,9 +129,9 @@ std::unique_ptr<ast::statement::ExpressionStatement> Parser::ParseExpressionStat
     auto statement = std::make_unique<ast::statement::ExpressionStatement>();
     statement->SetToken(currentToken_);
 
-    auto expression = std::shared_ptr<ast::IExpression>(ParseExpression(Precedence::kLowest));
+    auto expression = ParseExpression(Precedence::kLowest);
     if (!expression) return nullptr;
-    statement->SetExpression(expression);
+    statement->SetExpression(std::move(expression));
 
     // セミコロンは必須ではない
     if (nextToken_->GetTokenType() == lexing::TokenType::kSemicolon) {
@@ -143,9 +141,9 @@ std::unique_ptr<ast::statement::ExpressionStatement> Parser::ParseExpressionStat
     return statement;
 }
 
-std::unique_ptr<script::ast::statement::BlockStatement> Parser::ParseBlockStatement() {
+std::shared_ptr<script::ast::statement::BlockStatement> Parser::ParseBlockStatement() {
 
-    auto block = std::make_unique<ast::statement::BlockStatement>(currentToken_);
+    auto block = std::make_shared<ast::statement::BlockStatement>(currentToken_);
 
     // "{" を読み飛ばす
     ReadToken();
@@ -245,8 +243,8 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIfExpression() {
 
     ReadToken();
 
-    auto condition = std::shared_ptr<tsumugi::script::ast::IExpression>(ParseExpression(Precedence::kLowest));
-    expression->SetCondition(condition);
+    auto condition = ParseExpression(Precedence::kLowest);
+    expression->SetCondition(std::move(condition));
 
     if (!ExpectPeekRequiredTokenType(lexing::TokenType::kRightParenthesis, ")")) {
         return nullptr;
@@ -256,8 +254,8 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIfExpression() {
     }
 
     // ブロック文の解析
-    auto blockif = std::shared_ptr<tsumugi::script::ast::statement::BlockStatement>(ParseBlockStatement());
-    expression->SetConsequence(blockif);
+    auto blockif = ParseBlockStatement();
+    expression->SetConsequence(std::move(blockif));
 
     if (nextToken_->GetTokenType() == lexing::TokenType::kElse) {
         
@@ -267,8 +265,8 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIfExpression() {
             return nullptr;
         }
 
-        auto blockelse = std::shared_ptr<tsumugi::script::ast::statement::BlockStatement>(ParseBlockStatement());
-        expression->SetAlternative(blockelse);
+        auto blockelse = ParseBlockStatement();
+        expression->SetAlternative(std::move(blockelse));
     }
 
     return expression;
@@ -287,15 +285,15 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseFunctionLiteral() {
         return nullptr;
     }
     for (auto& parameter : parameters) {
-        expression->AddParameter(parameter);
+        expression->AddParameter(std::move(parameter));
     }
 
     if (!ExpectPeekRequiredTokenType(lexing::TokenType::kLeftBraces, "{")) {
         return nullptr;
     }
 
-    auto block = std::shared_ptr<tsumugi::script::ast::statement::BlockStatement>(ParseBlockStatement());
-    expression->SetBody(block);
+    auto block = ParseBlockStatement();
+    expression->SetBody(std::move(block));
 
     return expression;
 }
@@ -306,7 +304,8 @@ std::unique_ptr<script::ast::IExpression> Parser::ParsePrefixExpression() {
 
     ReadToken();
 
-    expression->SetRight(std::shared_ptr<const tsumugi::script::ast::IExpression>(ParseExpression(Precedence::kPrefix)));
+    auto right = ParseExpression(Precedence::kPrefix);
+    expression->SetRight(std::move(right));
 
     return expression;
 }
@@ -317,7 +316,9 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseInfixExpression(std::uniq
 
     const auto currentPrecedence = GetCurrentPrecedence();
     ReadToken();
-    expression->SetRight(std::shared_ptr<const tsumugi::script::ast::IExpression>(ParseExpression(currentPrecedence)));
+
+    auto right = ParseExpression(currentPrecedence);
+    expression->SetRight(std::move(right));
 
     return expression;
 }

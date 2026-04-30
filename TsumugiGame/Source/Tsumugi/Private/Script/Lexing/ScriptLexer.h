@@ -11,6 +11,7 @@ namespace tsumugi::script::lexing {
 class Lexer {
 public:
     Lexer(const tchar* script);
+    ~Lexer();
     Token* NextToken();
 
 private:

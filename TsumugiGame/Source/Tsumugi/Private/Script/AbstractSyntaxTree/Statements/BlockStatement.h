@@ -13,22 +13,21 @@ namespace tsumugi::script::ast::statement {
 /// </summary>
 class BlockStatement : public IStatement {
 public:
-    BlockStatement(const std::shared_ptr<const tsumugi::script::lexing::Token>& token);
-    virtual ~BlockStatement();
+    BlockStatement(std::shared_ptr<lexing::Token> token);
+    ~BlockStatement() override;
 
-    const tsumugi::script::lexing::Token* GetToken() const { return token_.get(); }
-    void SetToken(std::shared_ptr<tsumugi::script::lexing::Token>& token) { token_ = token; }
-
-    const std::vector<std::unique_ptr<tsumugi::script::ast::IStatement>>& GetStatements() const { return statements_; }
-    void AddStatement(std::unique_ptr<tsumugi::script::ast::IStatement> statement) { statements_.push_back(std::move(statement)); }
+    const lexing::Token* GetToken() const { return token_.get(); }
+    void SetToken(std::shared_ptr<lexing::Token> token) { token_ = std::move(token); }
+    const std::vector<std::unique_ptr<ast::IStatement>>& GetStatements() const { return statements_; }
+    void AddStatement(std::unique_ptr<ast::IStatement> statement) { statements_.push_back(std::move(statement)); }
 
     NodeType GetNodeType() const final override { return NodeType::kBlockStatement; }
     tstring TokenLiteral() const override final;
     tstring ToCode() const override final;
 
 private:
-    std::shared_ptr<const tsumugi::script::lexing::Token> token_;
-    std::vector<std::unique_ptr<tsumugi::script::ast::IStatement>> statements_;
+    std::shared_ptr<lexing::Token> token_;
+    std::vector<std::unique_ptr<ast::IStatement>> statements_;
 };
 
 }

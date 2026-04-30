@@ -24,6 +24,8 @@ Token::Token(const TokenType token_type, const tstring& literal_string, const Le
 
 }
 
+Token::~Token() = default;
+
 TokenType Token::GetTokenType() const {
     return token_type_;
 }

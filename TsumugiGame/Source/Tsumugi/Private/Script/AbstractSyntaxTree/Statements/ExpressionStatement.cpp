@@ -7,9 +7,7 @@ namespace tsumugi::script::ast::statement {
 ExpressionStatement::ExpressionStatement() {
 }
 
-ExpressionStatement::~ExpressionStatement() {
-
-}
+ExpressionStatement::~ExpressionStatement() = default;
 
 tstring ExpressionStatement::TokenLiteral() const {
 

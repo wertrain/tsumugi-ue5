@@ -4,14 +4,12 @@
 
 namespace tsumugi::script::ast::expression {
 
-IfExpression::IfExpression(const std::shared_ptr<const tsumugi::script::lexing::Token>& token) {
-
-    token_ = token;
-}
-
-IfExpression::~IfExpression() {
+IfExpression::IfExpression(std::shared_ptr<lexing::Token> token)
+    : token_(std::move(token)) {
 
 }
+
+IfExpression::~IfExpression() = default;
 
 tstring IfExpression::TokenLiteral() const {
     

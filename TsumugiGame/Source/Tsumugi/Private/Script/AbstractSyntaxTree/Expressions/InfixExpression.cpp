@@ -3,16 +3,13 @@
 
 namespace tsumugi::script::ast::expression {
 
-InfixExpression::InfixExpression(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const tstring& value, const std::shared_ptr<const tsumugi::script::ast::IExpression> left) {
-
-    token_ = token;
-    value_ = value;
-    left_ = left;
+InfixExpression::InfixExpression(std::shared_ptr<lexing::Token> token, const tstring& value, std::unique_ptr<ast::IExpression> left)
+    : token_(std::move(token))
+    , value_(value)
+    , left_(std::move(left)) {
 }
 
-InfixExpression::~InfixExpression() {
-
-}
+InfixExpression::~InfixExpression() = default;
 
 tstring InfixExpression::TokenLiteral() const {
     

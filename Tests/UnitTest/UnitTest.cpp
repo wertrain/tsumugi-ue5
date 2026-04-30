@@ -357,7 +357,7 @@ namespace UnitTest
 			//Assert::AreEqual(typeid(statement->GetExpression()) == typeid(tsumugi::script::ast::expression::Identifier), true,
 			//	MSG("Statements.Expression is not Identifier."));
 
-			const tsumugi::script::ast::expression::Identifier* identifier = static_cast<const tsumugi::script::ast::expression::Identifier*>(statement->GetExpression().get());
+			const tsumugi::script::ast::expression::Identifier* identifier = static_cast<const tsumugi::script::ast::expression::Identifier*>(statement->GetExpression());
 			Assert::AreEqual(identifier->GetValue().compare(TT("foobar")) == 0, true, MSG("identifier.Value is incorrect."));
 			Assert::AreEqual(identifier->TokenLiteral().compare(TT("foobar")) == 0, true, MSG("identifier.Token is incorrect."));
 		}
@@ -382,7 +382,7 @@ namespace UnitTest
 			//Assert::AreEqual(typeid(statement->GetExpression()) == typeid(tsumugi::script::ast::expression::IntegerLiteral), true,
 			//	MSG("Statements.Expression is not Identifier."));
 
-			const tsumugi::script::ast::expression::IntegerLiteral* integer = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(statement->GetExpression().get());
+			const tsumugi::script::ast::expression::IntegerLiteral* integer = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(statement->GetExpression());
 			Assert::AreEqual(integer->GetValue() == 123, true, MSG("integer.Value is incorrect."));
 		}
 
@@ -414,11 +414,11 @@ namespace UnitTest
 				//Assert::AreEqual(typeid(expressionStatement) == typeid(tsumugi::script::ast::expression::PrefixExpression), true,
 				//	MSG("expressionStatement is not PrefixExpression."));
 
-				const tsumugi::script::ast::expression::PrefixExpression* prefixExpression = static_cast<const tsumugi::script::ast::expression::PrefixExpression*>(expressionStatement->GetExpression().get());
+				const tsumugi::script::ast::expression::PrefixExpression* prefixExpression = static_cast<const tsumugi::script::ast::expression::PrefixExpression*>(expressionStatement->GetExpression());
 				Assert::AreEqual(prefixExpression->GetOperator().compare(test.operator_) == 0, true,
 					MSG("prefixExpression.Operator is incorrect."));
 
-				const tsumugi::script::ast::expression::IntegerLiteral* integer = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight().get());
+				const tsumugi::script::ast::expression::IntegerLiteral* integer = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight());
 				Assert::AreEqual(integer->GetValue() == test.value_, true,
 					MSG("integer.Value is incorrect."));
 			}
@@ -459,15 +459,15 @@ namespace UnitTest
 				//Assert::AreEqual(typeid(expressionStatement) == typeid(tsumugi::script::ast::expression::PrefixExpression), true,
 				//	MSG("expressionStatement is not PrefixExpression."));
 
-				const tsumugi::script::ast::expression::PrefixExpression* prefixExpression = static_cast<const tsumugi::script::ast::expression::PrefixExpression*>(expressionStatement->GetExpression().get());
+				const tsumugi::script::ast::expression::PrefixExpression* prefixExpression = static_cast<const tsumugi::script::ast::expression::PrefixExpression*>(expressionStatement->GetExpression());
 				Assert::AreEqual(prefixExpression->GetOperator().compare(test.operator_) == 0, true,
 					MSG("prefixExpression.Operator is incorrect."));
 
-				const tsumugi::script::ast::expression::IntegerLiteral* integerLeft = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight().get());
+				const tsumugi::script::ast::expression::IntegerLiteral* integerLeft = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight());
 				Assert::AreEqual(integerLeft->GetValue() == test.value0_, true,
 					MSG("integerLeft.Value is incorrect."));
 
-				const tsumugi::script::ast::expression::IntegerLiteral* integerRight = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight().get());
+				const tsumugi::script::ast::expression::IntegerLiteral* integerRight = static_cast<const tsumugi::script::ast::expression::IntegerLiteral*>(prefixExpression->GetRight());
 				Assert::AreEqual(integerRight->GetValue() == test.value1_, true,
 					MSG("integerRight.Value is incorrect."));
 			}
@@ -519,10 +519,10 @@ namespace UnitTest
 				const tsumugi::script::ast::statement::ExpressionStatement* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
 				Assert::IsNotNull(statement, MSG("Statements.Expression is not Identifier."));
 
-				const tsumugi::script::ast::expression::IfExpression* expression = dynamic_cast<const tsumugi::script::ast::expression::IfExpression*>(statement->GetExpression().get());
+				const tsumugi::script::ast::expression::IfExpression* expression = dynamic_cast<const tsumugi::script::ast::expression::IfExpression*>(statement->GetExpression());
 				Assert::IsNotNull(expression, MSG("expressionStatement is not IfExpression"));
 
-				this->_TestInfixExpression(expression->GetCondition(), TT("x"), TT("<"), TT("y"));
+				this->_TestInfixExpression(expression->GetCondition().get(), TT("x"), TT("<"), TT("y"));
 
 				auto consequenceBlock = expression->GetConsequence();
 				Assert::AreEqual(size_t(1), consequenceBlock->GetStatements().size(), MSG("The number of sentences in Consequence is not 1."));
@@ -556,10 +556,10 @@ namespace UnitTest
 				const tsumugi::script::ast::statement::ExpressionStatement* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
 				Assert::IsNotNull(statement, MSG("Statements.Expression is not Identifier."));
 
-				const tsumugi::script::ast::expression::IfExpression* expression = dynamic_cast<const tsumugi::script::ast::expression::IfExpression*>(statement->GetExpression().get());
+				const tsumugi::script::ast::expression::IfExpression* expression = dynamic_cast<const tsumugi::script::ast::expression::IfExpression*>(statement->GetExpression());
 				Assert::IsNotNull(expression, MSG("expressionStatement is not IfExpression"));
 
-				this->_TestInfixExpression(expression->GetCondition(), TT("x"), TT("<"), TT("y"));
+				this->_TestInfixExpression(expression->GetCondition().get(), TT("x"), TT("<"), TT("y"));
 
 				auto consequenceBlock = expression->GetConsequence();
 				Assert::AreEqual(size_t(1), consequenceBlock->GetStatements().size(), MSG("The number of sentences in Consequence is not 1."));
@@ -600,7 +600,7 @@ namespace UnitTest
 				Assert::AreEqual(root->GetStatementCount(), size_t{ 1 }, MSG("The number of Root.Statements is incorrect."));
 				const auto* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
 				Assert::IsNotNull(statement, MSG("statement is not ExpressionStatement."));
-				const auto* expression = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*> (statement->GetExpression().get());
+				const auto* expression = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*> (statement->GetExpression());
 				Assert::IsNotNull(expression, MSG("expression is not FunctionLiteral."));
 				Assert::AreEqual(expression->GetParameters().size(), size_t{ 2 }, MSG("expression is not FunctionLiteral."));
 				_TestIdentifier(expression->GetParameter(0), TT("x"));
@@ -631,7 +631,7 @@ namespace UnitTest
 
 				auto root = parser->ParseProgram();
 				const auto* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
-				const tsumugi::script::ast::expression::FunctionLiteral* function = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*> (statement->GetExpression().get());
+				const tsumugi::script::ast::expression::FunctionLiteral* function = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*> (statement->GetExpression());
 
 
 				Assert::AreEqual(function->GetParameters().size(), test.params_.size(),
@@ -662,7 +662,7 @@ namespace UnitTest
 				Assert::AreEqual(root->GetStatementCount(), size_t{ 1 }, MSG("The number of Root.Statements is incorrect."));
 				const auto* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
 				Assert::IsNotNull(statement, MSG("statement is not ExpressionStatement."));
-				const auto* expression = dynamic_cast<const tsumugi::script::ast::expression::CallExpression*> (statement->GetExpression().get());
+				const auto* expression = dynamic_cast<const tsumugi::script::ast::expression::CallExpression*> (statement->GetExpression());
 				Assert::IsNotNull(expression, MSG("expression is not CallExpression."));
 				_TestIdentifier(expression->GetFunction(), TT("add"));
 				Assert::AreEqual(expression->GetArguments().size(), size_t{3}, MSG("The number of arguments for the function literal is incorrect."));
@@ -691,13 +691,13 @@ namespace UnitTest
 				Assert::AreEqual(root->GetStatementCount(), size_t{ 1 }, MSG("The number of Root.Statements is incorrect."));
 				const auto* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
 				Assert::IsNotNull(statement, MSG("statement is not ExpressionStatement."));
-				const auto* expression = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*> (statement->GetExpression().get());
+				const tsumugi::script::ast::expression::FunctionLiteral* expression = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*> (statement->GetExpression());
 				Assert::IsNotNull(expression, MSG("expression is not FunctionLiteral."));
 				Assert::AreEqual(expression->GetParameters().size(), size_t{ 2 }, MSG("expression is not FunctionLiteral."));
 				_TestIdentifier(expression->GetParameter(0), TT("x"));
 				_TestIdentifier(expression->GetParameter(1), TT("y"));
 				Assert::AreEqual(expression->GetBody()->GetStatements().size(), size_t{1}, MSG("The number of expressions in the body of the function literal is incorrect."));
-				const auto* bodyStatement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(expression->GetBody()->GetStatements()[0].get());
+				tsumugi::script::ast::statement::ExpressionStatement* bodyStatement = dynamic_cast<tsumugi::script::ast::statement::ExpressionStatement*>(expression->GetBody()->GetStatements()[0].get());
 				Assert::IsNotNull(bodyStatement, MSG("bodyStatement is not ExpressionStatement."));
 				_TestInfixExpression(bodyStatement->GetExpression(), TT("x"), TT("+"), TT("y"));
 			}
@@ -951,12 +951,12 @@ namespace UnitTest
 				int expected_;
 			};
 			std::vector<EvalFuncSet> tests = {
-				{ TT("let identity = fn(x) { x }; identity(10);"), 10},
-				{ TT("let identity = fn(x) { return x; }; identity(10);"), 10},
-				{ TT("let double = fn(x) { x * 2; }; double(10);"), 20},
-				{ TT("let add = fn(x, y) { x + y; }; add(10, 20);"), 30},
-				{ TT("let add = fn(x, y) { x + y; }; add(add(10, 20), 30 + 40);"), 100},
-				{ TT("fn(x) { x; }(10);"), 10}
+				{ TT("let identity = function(x) { x }; identity(10);"), 10},
+				{ TT("let identity = function(x) { return x; }; identity(10);"), 10},
+				{ TT("let double = function(x) { x * 2; }; double(10);"), 20},
+				{ TT("let add = function(x, y) { x + y; }; add(10, 20);"), 30},
+				{ TT("let add = function(x, y) { x + y; }; add(add(10, 20), 30 + 40);"), 100},
+				{ TT("function(x) { x; }(10);"), 10}
 			};
 
 			for (auto& test : tests) {
@@ -1004,18 +1004,18 @@ namespace UnitTest
 private:
 		// ÉwÉãÉpÅ[ä÷êîåQ
 
-		void _TestIdentifier(const std::shared_ptr<const tsumugi::script::ast::IExpression>& exp, const tstring& value)
+		void _TestIdentifier(const tsumugi::script::ast::IExpression* exp, const tstring& value)
 		{
-			auto ident = dynamic_cast<const tsumugi::script::ast::expression::Identifier*>(exp.get());
+			auto ident = dynamic_cast<const tsumugi::script::ast::expression::Identifier*>(exp);
 			Assert::IsNotNull(ident, MSG("Expression is not Identifier."));
 			Assert::AreEqual(value, ident->GetValue(), MSG("Identifier value mismatch."));
 			Assert::AreEqual(value, ident->GetToken()->GetLiteral(), MSG("Identifier token mismatch."));
 		}
 
 		using ExpectedType = const std::variant<int, tstring, bool>;
-		void _TestInfixExpression(const std::shared_ptr<const tsumugi::script::ast::IExpression>& exp,	const ExpectedType& left, const tstring& op, const ExpectedType& right)
+		void _TestInfixExpression(const tsumugi::script::ast::IExpression* exp, const ExpectedType& left, const tstring& op, const ExpectedType& right)
 		{
-			const tsumugi::script::ast::expression::InfixExpression* opExp = dynamic_cast<const tsumugi::script::ast::expression::InfixExpression*>(exp.get());
+			const tsumugi::script::ast::expression::InfixExpression* opExp = dynamic_cast<const tsumugi::script::ast::expression::InfixExpression*>(exp);
 			Assert::IsNotNull(opExp, MSG("Expression is not InfixExpression."));
 
 			_TestLiteralExpression(opExp->GetLeft(), left);
@@ -1023,7 +1023,7 @@ private:
 			_TestLiteralExpression(opExp->GetRight(), right);
 		}
 
-		void _TestLiteralExpression(const std::shared_ptr<const tsumugi::script::ast::IExpression>& exp, const ExpectedType& expected)
+		void _TestLiteralExpression(const tsumugi::script::ast::IExpression* exp, const ExpectedType& expected)
 		{
 			std::visit([&](auto&& value) {
 				using T = std::decay_t<decltype(value)>;
@@ -1043,9 +1043,9 @@ private:
 			}, expected);
 		}
 
-		void _TestIntegerLiteral(const std::shared_ptr<const tsumugi::script::ast::IExpression>& exp, int value)
+		void _TestIntegerLiteral(const tsumugi::script::ast::IExpression* exp, int value)
 		{
-			const tsumugi::script::ast::expression::IntegerLiteral* integerLiteral = dynamic_cast<const tsumugi::script::ast::expression::IntegerLiteral* > (exp.get());
+			const tsumugi::script::ast::expression::IntegerLiteral* integerLiteral = dynamic_cast<const tsumugi::script::ast::expression::IntegerLiteral* > (exp);
 			if (integerLiteral == nullptr)
 			{
 				Assert::Fail(MSG("Expression is not IntegerLiteral."));
@@ -1060,9 +1060,9 @@ private:
 			}
 		}
 
-		void _TestBooleanLiteral(const std::shared_ptr<const tsumugi::script::ast::IExpression>& exp, bool value)
+		void _TestBooleanLiteral(const tsumugi::script::ast::IExpression* exp, bool value)
 		{
-			const tsumugi::script::ast::expression::BooleanLiteral* booleanLiteral = dynamic_cast<const tsumugi::script::ast::expression::BooleanLiteral*> (exp.get());
+			const tsumugi::script::ast::expression::BooleanLiteral* booleanLiteral = dynamic_cast<const tsumugi::script::ast::expression::BooleanLiteral*> (exp);
 			if (booleanLiteral == nullptr)
 			{
 				Assert::Fail(MSG("Expression is not BooleanLiteral."));

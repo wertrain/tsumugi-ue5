@@ -3,15 +3,12 @@
 
 namespace tsumugi::script::ast::expression {
 
-BooleanLiteral::BooleanLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const bool value) {
-
-    token_ = token;
-    value_ = value;
+BooleanLiteral::BooleanLiteral(std::shared_ptr<lexing::Token> token, const bool value)
+    : token_(std::move(token))
+    , value_(value) {
 }
 
-BooleanLiteral::~BooleanLiteral() {
-
-}
+BooleanLiteral::~BooleanLiteral() = default;
 
 tstring BooleanLiteral::TokenLiteral() const {
 

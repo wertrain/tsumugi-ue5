@@ -5,15 +5,13 @@
 
 namespace tsumugi::script::ast::expression {
 
-FunctionLiteral::FunctionLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token)
- : token_(token)
- , parameters_()
- , body_() {
+FunctionLiteral::FunctionLiteral(std::shared_ptr<lexing::Token> token)
+    : token_(std::move(token))
+    , parameters_()
+    , body_() {
 }
 
-FunctionLiteral::~FunctionLiteral() {
-
-}
+FunctionLiteral::~FunctionLiteral() = default;
 
 tstring FunctionLiteral::TokenLiteral() const {
     

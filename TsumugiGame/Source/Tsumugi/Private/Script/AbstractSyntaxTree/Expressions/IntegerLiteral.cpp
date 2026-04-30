@@ -3,15 +3,12 @@
 
 namespace tsumugi::script::ast::expression {
 
-IntegerLiteral::IntegerLiteral(const std::shared_ptr<const tsumugi::script::lexing::Token>& token, const int value) {
-
-    token_ = token;
-    value_ = value;
+IntegerLiteral::IntegerLiteral(std::shared_ptr<lexing::Token> token, const int value)
+    : token_(std::move(token))
+    , value_(value) {
 }
 
-IntegerLiteral::~IntegerLiteral() {
-
-}
+IntegerLiteral::~IntegerLiteral() = default;
 
 tstring IntegerLiteral::TokenLiteral() const {
 
