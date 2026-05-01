@@ -211,6 +211,7 @@ Token* Lexer::CreateAsNumericToken() {
     }
     return CreateToken(TokenType::kIllegal, number);
 }
+
 Token* Lexer::CreateAsStringToken() {
 
     tchar quote = reader_->Read();
@@ -248,6 +249,7 @@ Token* Lexer::CreateAsStringToken() {
 
         str.push_back(ch);
     }
+    reader_->Seek(-1, script::lexing::LexingStringReader::SeekOrigin::kCurrent);
 
     return CreateToken(TokenType::kString, str);
 }

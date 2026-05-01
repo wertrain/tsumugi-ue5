@@ -10,6 +10,7 @@
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/StringLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/ArrayLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
@@ -221,6 +222,45 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseStringLiteral() {
 std::unique_ptr<script::ast::IExpression> Parser::ParseBooleanLiteral() {
 
     return std::make_unique<ast::expression::BooleanLiteral>(currentToken_, currentToken_->GetTokenType() == lexing::TokenType::kTrue);
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseArrayLiteral() {
+
+    std::vector<std::unique_ptr<ast::IExpression>> list;
+
+    // [ を読み飛ばす
+    ReadToken();
+
+    // 空の配列の場合
+    if (currentToken_->GetTokenType() == lexing::TokenType::kRightBrackets) {
+        return std::make_unique<ast::expression::ArrayLiteral>(currentToken_, std::move(list));
+    }
+
+    auto parameter = ParseExpression(parsing::Precedence::kLowest);
+    if (parameter == nullptr) {
+        return nullptr;
+    }
+    list.push_back(std::move(parameter));
+
+    // カンマが続く限り読み続ける
+    while (nextToken_->GetTokenType() == lexing::TokenType::kComma) {
+
+        // カンマか読み込み済み識別子をスキップ
+        ReadToken();
+        ReadToken();
+
+        parameter = ParseExpression(parsing::Precedence::kLowest);
+        if (parameter == nullptr) {
+            return nullptr;
+        }
+        list.push_back(std::move(parameter));
+    }
+
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kRightBrackets, "]")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::expression::ArrayLiteral>(currentToken_, std::move(list));
 }
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseGroupedExpression() {
@@ -478,6 +518,7 @@ void Parser::RegisterPrefixParseFunctions() {
     prefixParseFunctions_.emplace(lexing::TokenType::kLeftParenthesis, [this] { return ParseGroupedExpression(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kIf, [this] { return ParseIfExpression(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kFunction, [this] { return ParseFunctionLiteral(); });
+    prefixParseFunctions_.emplace(lexing::TokenType::kLeftBrackets, [this] { return ParseArrayLiteral(); });
 }
 
 void Parser::RegisterInfixParseFunctions() {

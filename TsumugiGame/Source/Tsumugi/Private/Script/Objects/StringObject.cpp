@@ -19,7 +19,11 @@ void StringObject::SetValue(const tstring& value) {
 
 tstring StringObject::Inspect() const {
 
-    return value_;
+    tstring result;
+    result.append(TT("\""));
+    result.append(value_);
+    result.append(TT("\""));
+    return result;
 }
 
 ObjectType StringObject::GetType() const {

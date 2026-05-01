@@ -12,6 +12,7 @@ enum class ObjectType : int32_t {
     kInteger,
     kString,
     kBoolean,
+    kArray,
     kReturnValue,
     kFunction,
     kError,

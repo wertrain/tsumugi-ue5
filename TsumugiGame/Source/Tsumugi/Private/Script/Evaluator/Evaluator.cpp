@@ -6,6 +6,7 @@
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/StringLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/ArrayLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/InfixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
@@ -20,6 +21,7 @@
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/BooleanObject.h"
+#include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/ReturnValue.h"
 #include "Script/Objects/ErrorObject.h"
@@ -59,6 +61,20 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         case ast::NodeType::kBooleanLiteral: {
             auto* booleanLiteral = static_cast<const ast::expression::BooleanLiteral*>(node);
             return ToBooleanObject(booleanLiteral->GetValue());
+        }
+        case ast::NodeType::kArrayLiteral: {
+            auto* arrayLiteral = static_cast<const ast::expression::ArrayLiteral*>(node);
+            std::vector<std::shared_ptr<object::IObject>> elements;
+            elements.reserve(arrayLiteral->GetElements().size());
+
+            for (auto& element : arrayLiteral->GetElements()) {
+                auto evaluated = Eval(element.get(), environment);
+                if (IsErrorObject(evaluated)) {
+                    return evaluated;
+                }
+                elements.push_back(evaluated);
+            }
+            return std::make_shared<object::ArrayObject>(std::move(elements));
         }
         case ast::NodeType::kPrefixExpression: {
             auto* expression = static_cast<const ast::expression::PrefixExpression*>(node);

@@ -19,6 +19,7 @@ enum class NodeType {
     kFunctionLiteral,
     kExpressionStatement,
     kBlockStatement,
+    kArrayLiteral,
     Num
 };
 
