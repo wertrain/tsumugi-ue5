@@ -171,6 +171,33 @@
     <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\FunctionObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\StringLiteral.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\StringObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\ArrayLiteral.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ArrayObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IndexExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\WhileExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\AssignmentExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\FunctionStatement.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IndexAssignmentExpression.h">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Lexing\LexingStringReader.cpp">
@@ -286,6 +313,33 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\FunctionObject.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\StringLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\StringObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\ArrayLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\Objects\ArrayObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IndexExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\WhileExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\AssignmentExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Statements\FunctionStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Source\Tsumugi\Private\Script\AbstractSyntaxTree\Expressions\IndexAssignmentExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AbstractSyntaxTree\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

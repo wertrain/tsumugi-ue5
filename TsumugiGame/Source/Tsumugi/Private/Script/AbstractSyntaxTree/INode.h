@@ -20,6 +20,11 @@ enum class NodeType {
     kExpressionStatement,
     kBlockStatement,
     kArrayLiteral,
+    kIndexExpression,
+    kWhileExpression,
+    kAssignmentExpression,
+    kFunctionStatement,
+    kIndexAssignmentExpression,
     Num
 };
 

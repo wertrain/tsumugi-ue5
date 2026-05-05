@@ -198,6 +198,11 @@ enum class TokenType : int32_t {
     kElse,
 
     /// <summary>
+    /// while キーワード
+    /// </summary>
+    kWhile,
+
+    /// <summary>
     /// return キーワード
     /// </summary>
     kReturn,

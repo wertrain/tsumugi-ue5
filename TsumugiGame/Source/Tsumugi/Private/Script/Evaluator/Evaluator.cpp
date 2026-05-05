@@ -10,13 +10,18 @@
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/InfixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/WhileExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/Identifier.h"
 #include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/CallExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/IndexExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/AssignmentExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/IndexAssignmentExpression.h"
 #include "Script/AbstractSyntaxTree/Statements/ExpressionStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/BlockStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ReturnStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/LetStatement.h"
+#include "Script/AbstractSyntaxTree/Statements/FunctionStatement.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
@@ -139,6 +144,34 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
                 return arguments.at(0);
             }
             return ApplyFunction(function, arguments);
+        }
+        case ast::NodeType::kIndexExpression: {
+            auto* indexExpression = static_cast<const ast::expression::IndexExpression*>(node);
+            auto left = Eval(indexExpression->GetLeft(), environment);
+            if (IsErrorObject(left)) {
+                return left;
+            }
+            auto index = Eval(indexExpression->GetIndex(), environment);
+            if (IsErrorObject(index)) {
+                return index;
+            }
+            return EvalIndexExpression(left, index, environment);
+        }
+        case ast::NodeType::kWhileExpression: {
+            auto* whileExpression = static_cast<const ast::expression::WhileExpression*>(node);
+            return EvalWhileExpression(whileExpression, environment);
+        }
+        case ast::NodeType::kAssignmentExpression: {
+            auto* assignmentExpression = static_cast<const ast::expression::AssignmentExpression*>(node);
+            return EvalAssignmentExpression(assignmentExpression, environment);
+        }
+        case ast::NodeType::kFunctionStatement: {
+            auto* functionStatement = static_cast<const ast::statement::FunctionStatement*>(node);
+            return EvalFunctionStatement(functionStatement, environment);
+        }
+        case ast::NodeType::kIndexAssignmentExpression: {
+            auto* indexAssignmentExpression = static_cast<const ast::expression::IndexAssignmentExpression*>(node);
+            return EvalIndexAssignmentExpression(indexAssignmentExpression, environment);
         }
     }
     return nullptr;
@@ -329,6 +362,31 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
     return value;
 }
 
+std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& index, const std::shared_ptr<object::Environment>& environment) const {
+
+    if (left->GetType() == object::ObjectType::kArray && index->GetType() == object::ObjectType::kInteger) {
+        auto arrayObject = std::static_pointer_cast<const object::ArrayObject>(left);
+        auto integerObject = std::static_pointer_cast<const object::IntegerObject>(index);
+        auto idx = integerObject->GetValue();
+
+        if (idx < 0 || idx >= arrayObject->GetElements().size()) {
+            return nullObject_;
+        }
+        return arrayObject->GetElements()[idx];
+    } else if (left->GetType() == object::ObjectType::kString && index->GetType() == object::ObjectType::kInteger) {
+        auto stringObject = std::static_pointer_cast<const object::StringObject>(left);
+        auto integerObject = std::static_pointer_cast<const object::IntegerObject>(index);
+        auto idx = integerObject->GetValue();
+        const auto& str = stringObject->GetValue();
+        if (idx < 0 || idx >= str.length()) {
+            return nullObject_;
+        }
+        tstring oneChar(1, str[idx]);
+        return std::make_shared<object::StringObject>(oneChar);
+    }
+    return errors.MakeErrorObject(i18n::MessageId::kIndexOperatorNotSupported, left->Inspect());
+}
+
 std::shared_ptr<object::IObject> Evaluator::ApplyFunction(const std::shared_ptr<object::IObject>& object, const std::vector<std::shared_ptr<object::IObject>> arguments) const {
 
     if (object->GetType() != object::ObjectType::kFunction) {
@@ -352,6 +410,79 @@ std::shared_ptr<object::IObject> Evaluator::ApplyFunction(const std::shared_ptr<
         return returnValue->GetValue();
     }
     return evaluated;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const {
+
+    std::shared_ptr<object::IObject> result = nullObject_;
+    auto blockEnvironment = std::make_shared<object::Environment>(environment);
+
+    while (true) {
+        auto condition = Eval(whileExpression->GetCondition().get(), blockEnvironment);
+        if (IsErrorObject(condition)) {
+            return condition;
+        }
+        if (!IsTruthly(condition)) {
+            break;
+        }
+        result = EvalBlockStatement(whileExpression->GetBody()->GetStatements(), blockEnvironment);
+    }
+    return result;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalAssignmentExpression(const ast::expression::AssignmentExpression* assignmentExpression, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto value = Eval(assignmentExpression->GetValue(), environment);
+    if (IsErrorObject(value)) {
+        return value;
+    }
+    auto identifier = static_cast<const ast::expression::Identifier*>(assignmentExpression->GetLeft());
+    environment->Set(identifier->GetValue(), value);
+    return value;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto functionObject = std::make_shared<object::FunctionObject>();
+    for (auto& param : functionStatement->GetParameters()) {
+        functionObject->AddParameter(std::move(param));
+    }
+    functionObject->SetBody(functionStatement->GetBody());
+    functionObject->SetEnvironment(environment);
+
+    environment->Set(functionStatement->GetName()->GetValue(), functionObject);
+    return functionObject;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const ast::expression::IndexAssignmentExpression* indexAssignmentExpression, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto left = Eval(indexAssignmentExpression->GetLeft(), environment);
+    if (IsErrorObject(left)) {
+        return left;
+    }
+    auto index = Eval(indexAssignmentExpression->GetIndex(), environment);
+    if (IsErrorObject(index)) {
+        return index;
+    }
+    auto value = Eval(indexAssignmentExpression->GetValue(), environment);
+    if (IsErrorObject(value)) {
+        return value;
+    }
+
+    // 配列のみ対応
+    if (left->GetType() != object::ObjectType::kArray) {
+        return errors.MakeErrorObject(i18n::MessageId::kIndexAssignmentNotSupported, left->Inspect());
+    }
+
+    auto arrayObject = std::static_pointer_cast<object::ArrayObject>(left);
+    auto idx = static_cast<object::IntegerObject*>(index.get())->GetValue();
+
+    if (idx < 0 || idx >= arrayObject->GetElements().size()) {
+        return errors.MakeErrorObject(i18n::MessageId::kIndexOutOfRange);
+    }
+
+    arrayObject->SetElement(idx, value);
+    return value;
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {

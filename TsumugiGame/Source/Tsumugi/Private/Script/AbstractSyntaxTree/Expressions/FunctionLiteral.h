@@ -23,7 +23,7 @@ public:
     const Identifier* GetParameter(int index) const { return parameters_.at(index).get(); }
     const std::vector<std::shared_ptr<Identifier>>& GetParameters() const { return parameters_; }
     void AddParameter(std::shared_ptr<Identifier> parameter) { parameters_.push_back(std::move(parameter)); }
-    const std::shared_ptr < statement::BlockStatement>& GetBody() const { return body_; }
+    const std::shared_ptr<statement::BlockStatement>& GetBody() const { return body_; }
     void SetBody(std::shared_ptr<statement::BlockStatement> body) { body_ = std::move(body); }
 
     NodeType GetNodeType() const final override { return NodeType::kFunctionLiteral; }

@@ -48,6 +48,8 @@ int main()
         }
     }
 
+    environment->Clear();
+
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 
     return 0;

@@ -17,6 +17,7 @@
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/NullObject.h"
+#include "Script/Objects/StringObject.h"
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/FunctionObject.h"
@@ -923,7 +924,7 @@ namespace UnitTest
 				tstring bodycode_;
 			};
 			std::vector<EvalFuncSet> tests = {
-				{ TT("function(x) { x + 2; }"), 1, TT("x"), TT("(x + 2)")}
+				{ TT("function(x) { x + 2; }"), 1, TT("x"), TT("{ (x + 2); }")}
 			};
 
 			for (auto& test : tests) {
@@ -972,6 +973,31 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestEvalStringExpression)
+		{
+			struct EvalFuncSet {
+				tstring code_;
+				tstring expected_;
+			};
+			std::vector<EvalFuncSet> tests = {
+				{ TT("\"test\""),  TT("test")},
+				{ TT("\"test\"*3"),  TT("testtesttest")}
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+				_TestStringObject(evaluated.get(), test.expected_);
+			}
+		}
+
+
 		void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::IntegerObject*>(obj);
@@ -1000,6 +1026,12 @@ namespace UnitTest
 			const auto* result = dynamic_cast<const tsumugi::script::object::FunctionObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not FunctionObject."));
 			Logger::WriteMessage((TT("message : ") + result->Inspect() + TT("\n")).c_str());
+		}
+		void _TestStringObject(tsumugi::script::object::IObject* obj, tstring expected)
+		{
+			const auto* result = dynamic_cast<const tsumugi::script::object::StringObject*>(obj);
+			Assert::IsNotNull(result, MSG("result is not StringObject."));
+			Assert::IsTrue(expected == result->GetValue());
 		}
 private:
 		// ÉwÉãÉpÅ[ä÷êîåQ

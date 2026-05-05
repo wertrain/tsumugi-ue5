@@ -19,7 +19,7 @@ tstring IfExpression::TokenLiteral() const {
 tstring IfExpression::ToCode() const {
 
     tstring code;
-    code.append(TT("if"));
+    code.append(TT("if "));
     code.append(condition_->ToCode());
     code.append(TT(" "));
     code.append(consequence_->ToCode());

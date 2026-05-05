@@ -6,22 +6,28 @@
 #include "Script/AbstractSyntaxTree/Statements/ReturnStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ExpressionStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/BlockStatement.h"
+#include "Script/AbstractSyntaxTree/Statements/FunctionStatement.h"
 #include "Script/AbstractSyntaxTree/Expressions/Identifier.h"
 #include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/StringLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/ArrayLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/WhileExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/InfixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/CallExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/IndexExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/AssignmentExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/IndexAssignmentExpression.h"
 #include <cassert>
 #include <unordered_map>
 
 namespace tsumugi::script::parsing {
 
 const std::unordered_map<tsumugi::script::lexing::TokenType, Precedence> Parser::Precedences = {
+    { lexing::TokenType::kAssign, Precedence::kAssign },
     { lexing::TokenType::kEqual, Precedence::kEquals },
     { lexing::TokenType::kNotEqual, Precedence::kEquals },
     { lexing::TokenType::kLessThan, Precedence::kLessgreater },
@@ -33,6 +39,7 @@ const std::unordered_map<tsumugi::script::lexing::TokenType, Precedence> Parser:
     { lexing::TokenType::kSlash, Precedence::kProduct },
     { lexing::TokenType::kAsterisk, Precedence::kProduct },
     { lexing::TokenType::kLeftParenthesis, Precedence::kCall },
+    { lexing::TokenType::kLeftBrackets, Precedence::kCall },
 };
 
 Parser::Parser(lexing::Lexer* lexer)
@@ -73,6 +80,15 @@ std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
         return ParseLetStatement();
     case lexing::TokenType::kReturn :
         return ParseReturnStatement();
+    // 既存の仕様と競合するので関数宣言はいったん閉じる
+    //case lexing::TokenType::kFunction:
+    //    return ParseFunctionStatement();
+    // 識別子が続く場合のみ関数宣言とみなせるのでここで分岐してみる
+    case lexing::TokenType::kFunction:
+        if (PeekTokenIs(lexing::TokenType::kIdentifier)) {
+            return Parser::ParseFunctionStatement();
+        }
+        return ParseExpressionStatement();
     default:
         return ParseExpressionStatement();
     }
@@ -162,6 +178,39 @@ std::shared_ptr<script::ast::statement::BlockStatement> Parser::ParseBlockStatem
     }
 
     return block;
+}
+
+std::unique_ptr<script::ast::statement::FunctionStatement> Parser::ParseFunctionStatement() {
+
+    auto statement = std::make_unique<ast::statement::FunctionStatement>(currentToken_);
+
+    if (!ExpectPeek(lexing::TokenType::kIdentifier)) {
+        return nullptr;
+    }
+
+    auto name = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
+    statement->SetName(std::move(name));
+
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kLeftParenthesis, "(")) {
+        return nullptr;
+    }
+
+    std::vector<std::shared_ptr<ast::expression::Identifier>> parameters;
+    if (!ParseParameters(parameters)) {
+        return nullptr;
+    }
+    for (auto& parameter : parameters) {
+        statement->AddParameter(std::move(parameter));
+    }
+
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kLeftBraces, "{")) {
+        return nullptr;
+    }
+
+    auto block = ParseBlockStatement();
+    statement->SetBody(std::move(block));
+
+    return statement;
 }
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseExpression(const Precedence precedence) {
@@ -318,6 +367,33 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIfExpression() {
     return expression;
 }
 
+std::unique_ptr<script::ast::IExpression> Parser::ParseWhileExpression() {
+
+    auto expression = std::make_unique<ast::expression::WhileExpression>(currentToken_);
+
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kLeftParenthesis, "(")) {
+        return nullptr;
+    }
+
+    ReadToken();
+
+    auto condition = ParseExpression(Precedence::kLowest);
+    expression->SetCondition(std::move(condition));
+
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kRightParenthesis, ")")) {
+        return nullptr;
+    }
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kLeftBraces, "{")) {
+        return nullptr;
+    }
+
+    // ブロック文の解析
+    auto block = ParseBlockStatement();
+    expression->SetBody(std::move(block));
+
+    return expression;
+}
+
 std::unique_ptr<script::ast::IExpression> Parser::ParseFunctionLiteral() {
 
     auto expression = std::make_unique<ast::expression::FunctionLiteral>(currentToken_);
@@ -383,6 +459,46 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseCallExpression(std::uniqu
     }
 
     return expression;
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseIndexExpression(std::unique_ptr<tsumugi::script::ast::IExpression> left) {
+
+    // [ を読み飛ばす
+    ReadToken();
+
+    auto index = ParseExpression(parsing::Precedence::kLowest);
+
+    if (!ExpectPeekRequiredTokenType(lexing::TokenType::kRightBrackets, "]")) {
+        return nullptr;
+    }
+
+    // インデックスへの代入を判定
+    if (PeekTokenIs(lexing::TokenType::kAssign)) {
+        ReadToken(); // ] を読み飛ばす
+        ReadToken(); // = を読み飛ばす
+        auto value = ParseExpression(parsing::Precedence::kLowest);
+        return std::make_unique<ast::expression::IndexAssignmentExpression>(currentToken_, std::move(left), std::move(index), std::move(value));
+    }
+
+    return std::make_unique<ast::expression::IndexExpression>(currentToken_, std::move(left), std::move(index));
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseAssignmentExpression(std::unique_ptr<tsumugi::script::ast::IExpression> left) {
+
+    if (left->GetNodeType() != ast::NodeType::kIdentifier) {
+        std::unordered_map<std::string, std::string> placeholders = {
+            {"0", type::convert::TStringToString(left->ToCode())}
+        };
+        logger_.Log(log::TextLogger::Categories::Error, localizer.GetMessage(i18n::MessageId::kInvalidAssignmentTarget, placeholders));
+    }
+
+    auto assignmentExpression = std::make_unique<ast::expression::AssignmentExpression>(currentToken_, std::move(left));
+
+    ReadToken();
+    auto value = ParseExpression(parsing::Precedence::kLowest);
+    assignmentExpression->SetValue(std::move(value));
+
+    return assignmentExpression;
 }
 
 bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters) {
@@ -470,6 +586,14 @@ std::unique_ptr<ast::Root> Parser::ParseProgram() {
     return root;
 }
 
+bool Parser::PeekTokenIs(const lexing::TokenType& type) {
+
+    if (nextToken_->GetTokenType() == type) {
+        return true;
+    }
+    return false;
+}
+
 bool Parser::ExpectPeek(const lexing::TokenType& type) {
 
     if (nextToken_->GetTokenType() == type) {
@@ -517,6 +641,7 @@ void Parser::RegisterPrefixParseFunctions() {
     prefixParseFunctions_.emplace(lexing::TokenType::kFalse, [this] { return ParseBooleanLiteral(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kLeftParenthesis, [this] { return ParseGroupedExpression(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kIf, [this] { return ParseIfExpression(); });
+    prefixParseFunctions_.emplace(lexing::TokenType::kWhile, [this] { return ParseWhileExpression(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kFunction, [this] { return ParseFunctionLiteral(); });
     prefixParseFunctions_.emplace(lexing::TokenType::kLeftBrackets, [this] { return ParseArrayLiteral(); });
 }
@@ -534,6 +659,8 @@ void Parser::RegisterInfixParseFunctions() {
     infixParseFunctions_.emplace(lexing::TokenType::kLessThanOrEqual, [this](auto left) { return ParseInfixExpression(std::move(left)); });
     infixParseFunctions_.emplace(lexing::TokenType::kGreaterThanOrEqual, [this](auto left) { return ParseInfixExpression(std::move(left)); });
     infixParseFunctions_.emplace(lexing::TokenType::kLeftParenthesis, [this](auto left) { return ParseCallExpression(std::move(left)); });
+    infixParseFunctions_.emplace(lexing::TokenType::kLeftBrackets, [this](auto left) { return ParseIndexExpression(std::move(left)); });
+    infixParseFunctions_.emplace(lexing::TokenType::kAssign, [this](auto left) { return ParseAssignmentExpression(std::move(left)); });
 }
 
 bool Parser::ExpectPeekRequiredTokenType(const tsumugi::script::lexing::TokenType tokenType, const std::string& symbol) {

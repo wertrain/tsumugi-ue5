@@ -32,6 +32,20 @@ std::shared_ptr<object::IObject> Environment::Get(const tstring& name) {
 
 std::shared_ptr<object::IObject> Environment::Set(const tstring& name, std::shared_ptr<IObject> value) {
 
+    // すでにこのスコープにあるなら更新
+    if (store_.find(name) != store_.end()) {
+        store_[name] = value;
+        return value;
+    }
+
+    // 親スコープにあるなら親を更新
+    if (auto outer = outer_.lock()) {
+        if (outer->store_.find(name) != outer->store_.end()) {
+            outer->Set(name, value);
+            return value;
+        }
+    }
+
     store_[name] = value;
     return value;
 }

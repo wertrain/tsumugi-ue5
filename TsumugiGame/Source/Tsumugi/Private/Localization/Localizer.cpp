@@ -22,6 +22,10 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kIdentifierNotFound, TT("識別子 {0} が見つかりません。") },
     { tsumugi::i18n::MessageId::kNotFunction, TT("{0} は関数ではないため、呼び出しできません。") },
     { tsumugi::i18n::MessageId::kWrongNumberOfArguments, TT("引数の数が一致しません。期待値: {0}、実際値: {1}") },
+    { tsumugi::i18n::MessageId::kIndexOperatorNotSupported, TT("インデックス演算子は {0} に対して使用できません。") },
+    { tsumugi::i18n::MessageId::kInvalidAssignmentTarget,  TT("左辺値 {0} は識別子ではありません。") },
+    { tsumugi::i18n::MessageId::kIndexAssignmentNotSupported, TT("インデックス代入は {0} に対して使用できません。") },
+    { tsumugi::i18n::MessageId::kIndexOutOfRange, TT("インデックスが範囲外です。") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -34,6 +38,10 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kIdentifierNotFound, TT("Identifier not found: {0}") },
     { tsumugi::i18n::MessageId::kNotFunction, TT("{0} is not a function.") },
     { tsumugi::i18n::MessageId::kWrongNumberOfArguments, TT("Wrong number of arguments. expected={0}, got={1}") },
+    { tsumugi::i18n::MessageId::kIndexOperatorNotSupported, TT("Index operator not supported for type {0}.") },
+    { tsumugi::i18n::MessageId::kInvalidAssignmentTarget, TT("Invalid assignment target: {0}") },
+    { tsumugi::i18n::MessageId::kIndexAssignmentNotSupported, TT("Index assignment is not supported for type {0}.") },
+    { tsumugi::i18n::MessageId::kIndexOutOfRange, TT("Index out of range.") },
 };
 
 }

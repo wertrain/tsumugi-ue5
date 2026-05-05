@@ -16,6 +16,7 @@ namespace tsumugi::script::ast::statement { class LetStatement; }
 namespace tsumugi::script::ast::statement { class ReturnStatement; }
 namespace tsumugi::script::ast::statement { class ExpressionStatement; }
 namespace tsumugi::script::ast::statement { class BlockStatement; }
+namespace tsumugi::script::ast::statement { class FunctionStatement; }
 
 namespace tsumugi::script::parsing {
 
@@ -55,6 +56,7 @@ public:
     std::unique_ptr<script::ast::statement::ReturnStatement> ParseReturnStatement();
     std::unique_ptr<script::ast::statement::ExpressionStatement> ParseExpressionStatement();
     std::shared_ptr<script::ast::statement::BlockStatement> ParseBlockStatement();
+    std::unique_ptr<script::ast::statement::FunctionStatement> ParseFunctionStatement();
     std::unique_ptr<script::ast::IExpression> ParseExpression(Precedence precedence);
     std::unique_ptr<script::ast::IExpression> ParseIdentifier();
     std::unique_ptr<script::ast::IExpression> ParseIntegerLiteral();
@@ -63,14 +65,18 @@ public:
     std::unique_ptr<script::ast::IExpression> ParseArrayLiteral();
     std::unique_ptr<script::ast::IExpression> ParseGroupedExpression();
     std::unique_ptr<script::ast::IExpression> ParseIfExpression();
+    std::unique_ptr<script::ast::IExpression> ParseWhileExpression();
     std::unique_ptr<script::ast::IExpression> ParseFunctionLiteral();
     std::unique_ptr<script::ast::IExpression> ParsePrefixExpression();
     std::unique_ptr<script::ast::IExpression> ParseInfixExpression(std::unique_ptr<script::ast::IExpression> left);
     std::unique_ptr<script::ast::IExpression> ParseCallExpression(std::unique_ptr<script::ast::IExpression> function);
+    std::unique_ptr<script::ast::IExpression> ParseIndexExpression(std::unique_ptr<script::ast::IExpression> left);
+    std::unique_ptr<script::ast::IExpression> ParseAssignmentExpression(std::unique_ptr<script::ast::IExpression> left);
     bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
     bool ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>>& arguments);
     std::unique_ptr<ast::Root> ParseProgram();
 
+    bool PeekTokenIs(const tsumugi::script::lexing::TokenType& type);
     bool ExpectPeek(const tsumugi::script::lexing::TokenType& type);
     const auto& GetCurrentToken() const { return currentToken_; }
     const auto& GetNextToken() const { return nextToken_; }

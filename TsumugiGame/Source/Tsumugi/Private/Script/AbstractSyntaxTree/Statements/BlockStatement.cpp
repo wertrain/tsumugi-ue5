@@ -18,9 +18,13 @@ tstring BlockStatement::TokenLiteral() const {
 tstring BlockStatement::ToCode() const {
 
     tstring code;
+    code.append(TT("{"));
     for (auto& statement : statements_) {
+        code.append(TT(" "));
         code.append(statement->ToCode());
+        code.append(TT(";"));
     }
+    code.append(TT(" }"));
     return code;
 }
 

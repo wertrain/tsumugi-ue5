@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include <unordered_map>
@@ -16,11 +16,15 @@ enum class MessageId : uint32_t {
     kConversionFailed,
     kPrefixParseFunctionMissing,
     kRequiredSymbolMissing,
-    kUnknownOperator,        // 未知の演算子
-    kTypeMismatch,           // 型のミスマッチ
-    kIdentifierNotFound,     // 識別子が見つからない
-    kNotFunction,            // 関数でない呼び出し
-    kWrongNumberOfArguments  // 引数の数違い
+    kUnknownOperator,             // 未知の演算子
+    kTypeMismatch,                // 型のミスマッチ
+    kIdentifierNotFound,          // 識別子が見つからない
+    kNotFunction,                 // 関数でない呼び出し
+    kWrongNumberOfArguments,      // 引数の数違い
+    kIndexOperatorNotSupported,   // インデックス演算子が使えない型
+    kInvalidAssignmentTarget,     // 識別子ではない
+    kIndexAssignmentNotSupported, // 代入できないインデックスアクセス
+    kIndexOutOfRange,             // インデックスが範囲外
 };
 
 class Localizer {
