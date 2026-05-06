@@ -8,8 +8,11 @@
 #include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/InfixExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/IndexExpression.h"
 #include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
 #include "Script/AbstractSyntaxTree/Expressions/CallExpression.h"
+#include "Script/AbstractSyntaxTree/Expressions/ArrayLiteral.h"
+#include "Script/AbstractSyntaxTree/Expressions/WhileExpression.h"
 #include "Script/AbstractSyntaxTree/Statements/LetStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ReturnStatement.h"
 #include "Script/AbstractSyntaxTree/Statements/ExpressionStatement.h"
@@ -997,6 +1000,135 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestEvalLetStatementAssignment)
+		{
+			struct EvalSet {
+				tstring code_;
+				int expected_;
+			};
+			std::vector<EvalSet> tests = {
+				{ TT("let x = 5; x;"), 5 },
+				{ TT("let x = 5 * 5; x;"), 25 },
+				{ TT("let x = 5; let y = x + 10; y;"), 15 },
+				{ TT("let x = 1; x = x + 2; x;"), 3 }
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
+
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				_TestIntegerObject(evaluated.get(), test.expected_);
+			}
+		}
+
+		TEST_METHOD(LiteralArrayAssignment)
+		{
+			tstring code = TT("let arr = [1, 2, 3];");
+
+			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			parser->GetLogger().SetLogConsole(&s_Console);
+
+			auto root = parser->ParseProgram();
+			Assert::AreEqual(size_t{ 1 }, root->GetStatementCount());
+
+			const auto* stmt = dynamic_cast<const tsumugi::script::ast::statement::LetStatement*>(root->GetStatement(0));
+			Assert::IsNotNull(stmt);
+			_TestIdentifier(stmt->GetName(), TT("arr"));
+
+			const auto* array = dynamic_cast<const tsumugi::script::ast::expression::ArrayLiteral*>(stmt->GetValue());
+			Assert::IsNotNull(array);
+			Assert::AreEqual(size_t{ 3 }, array->GetElements().size());
+
+			_TestIntegerLiteral(array->GetElements()[0].get(), 1);
+			_TestIntegerLiteral(array->GetElements()[1].get(), 2);
+			_TestIntegerLiteral(array->GetElements()[2].get(), 3);
+		}
+
+		TEST_METHOD(LiteralIndexExpression)
+		{
+			tstring code = TT("arr[1 + 2];");
+
+			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			parser->GetLogger().SetLogConsole(&s_Console);
+
+			auto root = parser->ParseProgram();
+			Assert::AreEqual(size_t{ 1 }, root->GetStatementCount());
+
+			const auto* stmt = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
+			Assert::IsNotNull(stmt);
+
+			const auto* index = dynamic_cast<const tsumugi::script::ast::expression::IndexExpression*>(stmt->GetExpression());
+			Assert::IsNotNull(index);
+
+			_TestIdentifier(index->GetLeft(), TT("arr"));
+			_TestInfixExpression(index->GetIndex(), 1, TT("+"), 2);
+		}
+
+		TEST_METHOD(LiteralFunctionDeclaration)
+		{
+			tstring code = TT("let add = function(x, y) { return x + y; };");
+
+			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			parser->GetLogger().SetLogConsole(&s_Console);
+
+			auto root = parser->ParseProgram();
+			Assert::AreEqual(size_t{ 1 }, root->GetStatementCount());
+
+			const auto* stmt = dynamic_cast<const tsumugi::script::ast::statement::LetStatement*>(root->GetStatement(0));
+			Assert::IsNotNull(stmt);
+			_TestIdentifier(stmt->GetName(), TT("add"));
+
+			const auto* func = dynamic_cast<const tsumugi::script::ast::expression::FunctionLiteral*>(stmt->GetValue());
+			Assert::IsNotNull(func);
+
+			Assert::AreEqual(size_t{ 2 }, func->GetParameters().size());
+			_TestIdentifier(func->GetParameter(0), TT("x"));
+			_TestIdentifier(func->GetParameter(1), TT("y"));
+
+			Assert::AreEqual(size_t{ 1 }, func->GetBody()->GetStatements().size());
+			const auto* bodyStmt = dynamic_cast<const tsumugi::script::ast::statement::ReturnStatement*>(func->GetBody()->GetStatements()[0].get());
+			Assert::IsNotNull(bodyStmt);
+
+			_TestInfixExpression(bodyStmt->GetValue(), TT("x"), TT("+"), TT("y"));
+		}
+
+		TEST_METHOD(TestEvalWhileExpression)
+		{
+			struct EvalSet {
+				tstring code_;
+				int expected_;
+			};
+			std::vector<EvalSet> tests = {
+				{ TT("let x = 0; while (x < 5) { x = x + 1; } x;"), 5 },
+				{ TT("let i = 1; let sum = 0; while (i <= 5) { sum = sum + i; i = i + 1; } sum;"), 15 }
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
+
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				_TestIntegerObject(evaluated.get(), test.expected_);
+			}
+		}
 
 		void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{
