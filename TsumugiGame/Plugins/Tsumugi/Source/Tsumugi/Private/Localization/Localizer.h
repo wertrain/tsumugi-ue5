@@ -25,6 +25,9 @@ enum class MessageId : uint32_t {
     kInvalidAssignmentTarget,     // 識別子ではない
     kIndexAssignmentNotSupported, // 代入できないインデックスアクセス
     kIndexOutOfRange,             // インデックスが範囲外
+    kUnusableAsHashKey,
+    kDuplicateHashKey,
+    kInvalidHashLiteral,
 };
 
 class Localizer {

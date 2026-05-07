@@ -7,6 +7,7 @@
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/AST/Expressions/ArrayLiteral.h"
+#include "Script/AST/Expressions/HashLiteral.h"
 #include "Script/AST/Expressions/PrefixExpression.h"
 #include "Script/AST/Expressions/InfixExpression.h"
 #include "Script/AST/Expressions/IfExpression.h"
@@ -27,11 +28,13 @@
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/ArrayObject.h"
+#include "Script/Objects/HashObject.h"
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/ReturnValue.h"
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/FunctionObject.h"
+#include "Script/Objects/ObjectHash.h"
 
 namespace tsumugi::script::evaluator {
 
@@ -80,6 +83,27 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
                 elements.push_back(evaluated);
             }
             return std::make_shared<object::ArrayObject>(std::move(elements));
+        }
+        case ast::NodeType::kHashLiteral: {
+            auto* hashLiteral = static_cast<const ast::expression::HashLiteral*>(node);
+            std::unordered_map<object::HashKey, object::HashPair> pairs;
+
+            for (auto& kv : hashLiteral->GetPairs()) {
+                auto key = Eval(kv.first.get(), environment);
+                if (IsErrorObject(key)) {
+                    return key;
+                }
+                if (!IsHashable(key.get())) {
+                    return errors.MakeErrorObject(i18n::MessageId::kUnusableAsHashKey, key->Inspect());
+                }
+                auto value = Eval(kv.second.get(), environment);
+                if (IsErrorObject(value)) {
+                    return value;
+                }
+                object::HashKey hashKey = object::MakeHashKey(key.get());
+                pairs[hashKey] = object::HashPair{ key, value };
+            }
+            return std::make_shared<object::HashObject>(std::move(pairs));
         }
         case ast::NodeType::kPrefixExpression: {
             auto* expression = static_cast<const ast::expression::PrefixExpression*>(node);
@@ -373,6 +397,18 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
             return nullObject_;
         }
         return arrayObject->GetElements()[idx];
+    } else if (left->GetType() == object::ObjectType::kHash) {
+        auto hashObject = std::static_pointer_cast<const object::HashObject>(left);
+        if (!IsHashable(index.get())) {
+            return errors.MakeErrorObject(i18n::MessageId::kUnusableAsHashKey, index->Inspect());
+        }
+        object::HashKey key = MakeHashKey(index.get());
+        const auto& pairs = hashObject->GetPairs();
+        auto it = pairs.find(key);
+        if (it == pairs.end()) {
+            return nullObject_;
+        }
+        return it->second.value;
     } else if (left->GetType() == object::ObjectType::kString && index->GetType() == object::ObjectType::kInteger) {
         auto stringObject = std::static_pointer_cast<const object::StringObject>(left);
         auto integerObject = std::static_pointer_cast<const object::IntegerObject>(index);

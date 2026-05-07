@@ -26,6 +26,9 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidAssignmentTarget,  TT("左辺値 {0} は識別子ではありません。") },
     { tsumugi::i18n::MessageId::kIndexAssignmentNotSupported, TT("インデックス代入は {0} に対して使用できません。") },
     { tsumugi::i18n::MessageId::kIndexOutOfRange, TT("インデックスが範囲外です。") },
+    { tsumugi::i18n::MessageId::kUnusableAsHashKey, TT("{0} はハッシュのキーとして使用できません。") },
+    { tsumugi::i18n::MessageId::kDuplicateHashKey, TT("ハッシュキー {0} は重複しています。") },
+    { tsumugi::i18n::MessageId::kInvalidHashLiteral, TT("ハッシュリテラルの形式が正しくありません: {0}") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -42,6 +45,9 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidAssignmentTarget, TT("Invalid assignment target: {0}") },
     { tsumugi::i18n::MessageId::kIndexAssignmentNotSupported, TT("Index assignment is not supported for type {0}.") },
     { tsumugi::i18n::MessageId::kIndexOutOfRange, TT("Index out of range.") },
+    { tsumugi::i18n::MessageId::kUnusableAsHashKey, TT("{0} cannot be used as a hash key.") },
+    { tsumugi::i18n::MessageId::kDuplicateHashKey, TT("Hash key {0} is duplicated.") },
+    { tsumugi::i18n::MessageId::kInvalidHashLiteral, TT("Invalid hash literal format: {0}") },
 };
 
 }

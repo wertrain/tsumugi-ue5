@@ -108,6 +108,9 @@ Token* Lexer::NextToken() {
             case TT(';'):
                 token = CreateToken(TokenType::kSemicolon, tstring(1, c));
                 break;
+            case TT(':'):
+                token = CreateToken(TokenType::kColon, tstring(1, c));
+                break;
             case TT('\"'):
             case TT('\''):
                 token = CreateAsStringToken();

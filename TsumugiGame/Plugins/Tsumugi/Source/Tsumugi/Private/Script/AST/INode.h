@@ -20,6 +20,7 @@ enum class NodeType {
     kExpressionStatement,
     kBlockStatement,
     kArrayLiteral,
+    kHashLiteral,
     kIndexExpression,
     kWhileExpression,
     kAssignmentExpression,

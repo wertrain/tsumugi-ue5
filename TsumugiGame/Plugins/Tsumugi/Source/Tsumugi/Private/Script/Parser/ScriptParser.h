@@ -63,6 +63,7 @@ public:
     std::unique_ptr<script::ast::IExpression> ParseStringLiteral();
     std::unique_ptr<script::ast::IExpression> ParseBooleanLiteral();
     std::unique_ptr<script::ast::IExpression> ParseArrayLiteral();
+    std::unique_ptr<script::ast::IExpression> ParseHashLiteral();
     std::unique_ptr<script::ast::IExpression> ParseGroupedExpression();
     std::unique_ptr<script::ast::IExpression> ParseIfExpression();
     std::unique_ptr<script::ast::IExpression> ParseWhileExpression();

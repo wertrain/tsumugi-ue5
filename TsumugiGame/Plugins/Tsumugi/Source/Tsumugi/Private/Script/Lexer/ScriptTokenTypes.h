@@ -134,6 +134,11 @@ enum class TokenType : int32_t {
     kComma,
 
     /// <summary>
+    /// コロンデリミタ
+    /// </summary>
+    kColon,
+
+    /// <summary>
     /// セミコロンデリミタ
     /// </summary>
     kSemicolon,

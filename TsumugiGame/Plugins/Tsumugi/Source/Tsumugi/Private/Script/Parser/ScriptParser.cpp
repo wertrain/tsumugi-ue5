@@ -12,6 +12,7 @@
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/AST/Expressions/ArrayLiteral.h"
+#include "Script/AST/Expressions/HashLiteral.h"
 #include "Script/AST/Expressions/IfExpression.h"
 #include "Script/AST/Expressions/WhileExpression.h"
 #include "Script/AST/Expressions/FunctionLiteral.h"
@@ -310,6 +311,38 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseArrayLiteral() {
     }
 
     return std::make_unique<ast::expression::ArrayLiteral>(currentToken_, std::move(list));
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseHashLiteral() {
+
+    std::vector<std::pair<std::unique_ptr<ast::IExpression>, std::unique_ptr<ast::IExpression>>> pairs;
+
+    while (!PeekTokenIs(lexer::TokenType::kRightBraces)) {
+
+        ReadToken(); // key
+        auto key = ParseExpression(Precedence::kLowest);
+
+        if (!ExpectPeekRequiredTokenType(lexer::TokenType::kColon, ":")) {
+            return nullptr;
+        }
+
+        ReadToken(); // value
+        auto value = ParseExpression(Precedence::kLowest);
+
+        pairs.push_back({ std::move(key), std::move(value) });
+
+        if (!PeekTokenIs(lexer::TokenType::kRightBraces)) {
+            if (!ExpectPeekRequiredTokenType(lexer::TokenType::kComma, ",")) {
+                return nullptr;
+            }
+        }
+    }
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kRightBraces, "}")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::expression::HashLiteral>(currentToken_, std::move(pairs));
 }
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseGroupedExpression() {
@@ -644,6 +677,7 @@ void Parser::RegisterPrefixParseFunctions() {
     prefixParseFunctions_.emplace(lexer::TokenType::kWhile, [this] { return ParseWhileExpression(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kFunction, [this] { return ParseFunctionLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kLeftBrackets, [this] { return ParseArrayLiteral(); });
+    prefixParseFunctions_.emplace(lexer::TokenType::kLeftBraces, [this] { return ParseHashLiteral(); });
 }
 
 void Parser::RegisterInfixParseFunctions() {
