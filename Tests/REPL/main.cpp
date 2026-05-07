@@ -2,12 +2,12 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #include <iostream>
-#include "Script/Lexing/ScriptLexer.h"
-#include "Script/Parsing/ScriptParser.h"
-#include "Script/Lexing/ScriptToken.h"
-#include "Script/Lexing/LexingStringReader.h"
+#include "Script/Lexer/ScriptLexer.h"
+#include "Script/Parser/ScriptParser.h"
+#include "Script/Lexer/ScriptToken.h"
+#include "Script/Lexer/LexingStringReader.h"
 #include "Script/Evaluator/Evaluator.h"
-#include "Script/AbstractSyntaxTree/Root.h"
+#include "Script/AST/Root.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/Environment.h"
@@ -33,8 +33,8 @@ int main()
             break;
         }
 
-        auto lexer = std::make_unique<tsumugi::script::lexing::Lexer>(input.c_str());
-        auto parser = std::make_unique<tsumugi::script::parsing::Parser>(lexer.get());
+        auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(input.c_str());
+        auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
         auto root = parser->ParseProgram();
 
         if (parser->GetLogger().HasAnyLog()) {
@@ -72,8 +72,8 @@ int main()
         tstring letcode =
             TT("foobar;");
 
-        auto lexer = std::make_unique<tsumugi::script::lexing::Lexer>(letcode.c_str());
-        auto parser = std::make_unique<tsumugi::script::parsing::Parser>(lexer.get());
+        auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(letcode.c_str());
+        auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
         auto root = parser->ParseProgram();
     }
 

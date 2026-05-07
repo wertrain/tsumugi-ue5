@@ -1,0 +1,15 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Tsumugi Script Engine",
+  "Description": "Lightweight script engine for Unreal Engine.",
+  "Category": "Scripting",
+  "Modules": [
+    {
+      "Name": "Tsumugi",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}

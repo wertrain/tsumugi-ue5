@@ -1,22 +1,22 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "Foundation/Types.h"
-#include "Script/AbstractSyntaxTree/Root.h"
-#include "Script/AbstractSyntaxTree/Expressions/Identifier.h"
-#include "Script/AbstractSyntaxTree/Expressions/IntegerLiteral.h"
-#include "Script/AbstractSyntaxTree/Expressions/BooleanLiteral.h"
-#include "Script/AbstractSyntaxTree/Expressions/PrefixExpression.h"
-#include "Script/AbstractSyntaxTree/Expressions/IfExpression.h"
-#include "Script/AbstractSyntaxTree/Expressions/InfixExpression.h"
-#include "Script/AbstractSyntaxTree/Expressions/IndexExpression.h"
-#include "Script/AbstractSyntaxTree/Expressions/FunctionLiteral.h"
-#include "Script/AbstractSyntaxTree/Expressions/CallExpression.h"
-#include "Script/AbstractSyntaxTree/Expressions/ArrayLiteral.h"
-#include "Script/AbstractSyntaxTree/Expressions/WhileExpression.h"
-#include "Script/AbstractSyntaxTree/Statements/LetStatement.h"
-#include "Script/AbstractSyntaxTree/Statements/ReturnStatement.h"
-#include "Script/AbstractSyntaxTree/Statements/ExpressionStatement.h"
-#include "Script/AbstractSyntaxTree/Statements/BlockStatement.h"
+#include "Script/AST/Root.h"
+#include "Script/AST/Expressions/Identifier.h"
+#include "Script/AST/Expressions/IntegerLiteral.h"
+#include "Script/AST/Expressions/BooleanLiteral.h"
+#include "Script/AST/Expressions/PrefixExpression.h"
+#include "Script/AST/Expressions/IfExpression.h"
+#include "Script/AST/Expressions/InfixExpression.h"
+#include "Script/AST/Expressions/IndexExpression.h"
+#include "Script/AST/Expressions/FunctionLiteral.h"
+#include "Script/AST/Expressions/CallExpression.h"
+#include "Script/AST/Expressions/ArrayLiteral.h"
+#include "Script/AST/Expressions/WhileExpression.h"
+#include "Script/AST/Statements/LetStatement.h"
+#include "Script/AST/Statements/ReturnStatement.h"
+#include "Script/AST/Statements/ExpressionStatement.h"
+#include "Script/AST/Statements/BlockStatement.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/NullObject.h"
@@ -24,10 +24,10 @@
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/FunctionObject.h"
-#include "Script/Lexing/ScriptLexer.h"
-#include "Script/Lexing/ScriptToken.h"
-#include "Script/Parsing/ScriptParser.h"
-#include "Script/Lexing/LexingStringReader.h"
+#include "Script/Lexer/ScriptLexer.h"
+#include "Script/Lexer/ScriptToken.h"
+#include "Script/Parser/ScriptParser.h"
+#include "Script/Lexer/LexingStringReader.h"
 #include "Script/Evaluator/Evaluator.h"
 #include "Log/TextLogger.h"
 #include <vector>
@@ -53,7 +53,7 @@ namespace UnitTest
 		
 		TEST_METHOD(TestLexingStringReader)
 		{
-			tsumugi::script::lexing::LexingStringReader reader;
+			tsumugi::script::lexer::LexingStringReader reader;
 			reader.SetString(TT("日本語のテスト。これはテストです。"));
 			Assert::AreEqual(reader.Peek(), TT('日'));
 			Assert::AreNotEqual(reader.Peek(), TT('本'));
@@ -82,25 +82,25 @@ namespace UnitTest
 		{
 			auto input = TT("=+-(){},;[]<>>=<===");
 
-			std::vector<tsumugi::script::lexing::Token*> testTokens;
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kPlus, TT("+")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kMinus, TT("-")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftParenthesis, TT("(")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightParenthesis, TT(")")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftBraces, TT("{")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightBraces, TT("}")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kComma, TT(",")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftBrackets , TT("[")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightBrackets, TT("]")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLessThan, TT("<")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kGreaterThan, TT(">")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kGreaterThanOrEqual, TT(">=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLessThanOrEqual , TT("<=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kEqual, TT("==")));
+			std::vector<tsumugi::script::lexer::Token*> testTokens;
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kPlus, TT("+")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kMinus, TT("-")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftParenthesis, TT("(")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightParenthesis, TT(")")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftBraces, TT("{")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightBraces, TT("}")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kComma, TT(",")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftBrackets , TT("[")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightBrackets, TT("]")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLessThan, TT("<")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kGreaterThan, TT(">")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kGreaterThanOrEqual, TT(">=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLessThanOrEqual , TT("<=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kEqual, TT("==")));
 
-			tsumugi::script::lexing::Lexer lexer(input);
+			tsumugi::script::lexer::Lexer lexer(input);
 			for (const auto* testToken : testTokens)
 			{
 				const auto* nextToken = lexer.NextToken();
@@ -114,30 +114,30 @@ namespace UnitTest
 
 		TEST_METHOD(TokenWithWhiteSpace)
 		{
-			tsumugi::script::lexing::Lexer lexer(TT("  \t +  "));
-			tsumugi::script::lexing::Token* token = lexer.NextToken();
-			Assert::IsTrue(token->GetTokenType() == tsumugi::script::lexing::TokenType::kPlus);
+			tsumugi::script::lexer::Lexer lexer(TT("  \t +  "));
+			tsumugi::script::lexer::Token* token = lexer.NextToken();
+			Assert::IsTrue(token->GetTokenType() == tsumugi::script::lexer::TokenType::kPlus);
 			delete(token);
 		}
 
 		TEST_METHOD(SimpleExpression)
 		{
 			auto input = TT("let five = 5;");
-			tsumugi::script::lexing::Lexer lexer(input);
+			tsumugi::script::lexer::Lexer lexer(input);
 
-			std::vector<tsumugi::script::lexing::Token*> testTokens;
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLet, TT("let")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("five")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kInteger, TT("5")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
+			std::vector<tsumugi::script::lexer::Token*> testTokens;
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLet, TT("let")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("five")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kInteger, TT("5")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
 
 			for (const auto * testToken : testTokens)
 			{
 				const auto* nextToken = lexer.NextToken();
 				Assert::IsNotNull(nextToken);
 				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true, 
-					MSG("Expected " << tsumugi::script::lexing::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexing::TokenTypeToString(nextToken->GetTokenType())));
+					MSG("Expected " << tsumugi::script::lexer::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexer::TokenTypeToString(nextToken->GetTokenType())));
 				//Assert::AreEqual(testToken->GetLiteral().compare(nextToken->GetLiteral()), 0);
 				delete nextToken;
 			}
@@ -156,56 +156,56 @@ namespace UnitTest
 				TT("")
 				TT("let result = add(five, ten);");
 
-			std::vector<tsumugi::script::lexing::Token*> testTokens;
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLet, TT("let")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("five")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kInteger, TT("5")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLet, TT("let")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("ten")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kInteger, TT("10")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
+			std::vector<tsumugi::script::lexer::Token*> testTokens;
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLet, TT("let")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("five")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kInteger, TT("5")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLet, TT("let")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("ten")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kInteger, TT("10")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
 
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLet, TT("let")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("add")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kFunction, TT("function")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftParenthesis, TT("(")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("x")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kComma, TT(",")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("y")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightParenthesis, TT(")")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftBraces, TT("{")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLet, TT("let")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("add")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kFunction, TT("function")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftParenthesis, TT("(")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("x")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kComma, TT(",")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("y")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightParenthesis, TT(")")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftBraces, TT("{")));
 
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("x")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kPlus, TT("+")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("y")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("x")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kPlus, TT("+")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("y")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
 
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightBraces, TT("}")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightBraces, TT("}")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
 
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLet, TT("let")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("result")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kAssign, TT("=")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("add")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftParenthesis, TT("(")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("five")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kComma, TT(",")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIdentifier, TT("ten")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightParenthesis, TT(")")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kEOF, TT_EMPTY()));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLet, TT("let")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("result")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kAssign, TT("=")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("add")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftParenthesis, TT("(")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("five")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kComma, TT(",")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIdentifier, TT("ten")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightParenthesis, TT(")")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kEOF, TT_EMPTY()));
 
-			tsumugi::script::lexing::Lexer lexer(simplecode.c_str());
+			tsumugi::script::lexer::Lexer lexer(simplecode.c_str());
 			for (const auto * testToken : testTokens)
 			{
 				const auto* nextToken = lexer.NextToken();
 				Assert::IsNotNull(nextToken);
 				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true,
-					MSG("Expected " << tsumugi::script::lexing::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexing::TokenTypeToString(nextToken->GetTokenType())));
+					MSG("Expected " << tsumugi::script::lexer::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexer::TokenTypeToString(nextToken->GetTokenType())));
 				delete nextToken;
 			}
 			testTokens.clear();
@@ -220,33 +220,33 @@ namespace UnitTest
 				TT("    return false;")
 				TT("}");
 
-			std::vector<tsumugi::script::lexing::Token*> testTokens;
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kIf, TT("if")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftParenthesis, TT("(")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kInteger, TT("5")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLessThan, TT("<")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kInteger, TT("10")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightParenthesis, TT(")")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftBraces, TT("{")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kReturn, TT("return")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kTrue, TT("true")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightBraces, TT("}")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kElse, TT("else")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kLeftBraces, TT("{")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kReturn, TT("return")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kFalse, TT("false")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kSemicolon, TT(";")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kRightBraces, TT("}")));
-			testTokens.push_back(new tsumugi::script::lexing::Token(tsumugi::script::lexing::TokenType::kEOF, TT_EMPTY()));
+			std::vector<tsumugi::script::lexer::Token*> testTokens;
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kIf, TT("if")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftParenthesis, TT("(")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kInteger, TT("5")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLessThan, TT("<")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kInteger, TT("10")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightParenthesis, TT(")")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftBraces, TT("{")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kReturn, TT("return")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kTrue, TT("true")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightBraces, TT("}")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kElse, TT("else")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kLeftBraces, TT("{")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kReturn, TT("return")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kFalse, TT("false")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kSemicolon, TT(";")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kRightBraces, TT("}")));
+			testTokens.push_back(new tsumugi::script::lexer::Token(tsumugi::script::lexer::TokenType::kEOF, TT_EMPTY()));
 
-			tsumugi::script::lexing::Lexer lexer(simplecode.c_str());
+			tsumugi::script::lexer::Lexer lexer(simplecode.c_str());
 			for (const auto * testToken : testTokens)
 			{
 				const auto* nextToken = lexer.NextToken();
 				Assert::IsNotNull(nextToken);
 				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true,
-					MSG("Expected " << tsumugi::script::lexing::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexing::TokenTypeToString(nextToken->GetTokenType())));
+					MSG("Expected " << tsumugi::script::lexer::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexer::TokenTypeToString(nextToken->GetTokenType())));
 				delete nextToken;
 			}
 			testTokens.clear();
@@ -273,8 +273,8 @@ namespace UnitTest
 				TT("let y = 10;")
 				TT("let xyz = 838383;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(letcode.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(letcode.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			auto root = parser->ParseProgram();
 
 			Assert::AreEqual(root->GetStatementCount() == 3, true,
@@ -304,8 +304,8 @@ namespace UnitTest
 				TT("let = 10;")
 				TT("let;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(letcode.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(letcode.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 			auto root = parser->ParseProgram();
 
@@ -321,8 +321,8 @@ namespace UnitTest
 				//TT("return = 993322;");
 				TT("return 5 + 5;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(retcode.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(retcode.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			auto root = parser->ParseProgram();
 
 			Assert::AreEqual(root->GetStatementCount() == 3, true,
@@ -346,8 +346,8 @@ namespace UnitTest
 			tstring code =
 				TT("foobar;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 			auto root = parser->ParseProgram();
 
@@ -371,8 +371,8 @@ namespace UnitTest
 			tstring code =
 				TT("123;");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 			auto root = parser->ParseProgram();
 
@@ -403,8 +403,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 
@@ -448,8 +448,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 
@@ -496,8 +496,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
  				auto tocode = root->ToCode();
@@ -514,8 +514,8 @@ namespace UnitTest
 				{TT("if (x < y) { x }"), TT("if (x < y) { x }")}
 			};
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
@@ -551,8 +551,8 @@ namespace UnitTest
 				{TT("if (x < y) { x } else { y; }"), TT("if (x < y) { x } else { y; }")}
 			};
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
@@ -596,8 +596,8 @@ namespace UnitTest
 				{TT("function(x, y) { x + y; }"), TT("function(x, y) { x + y; }")}
 			};
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();
@@ -629,8 +629,8 @@ namespace UnitTest
 				{TT("function(x, y, z) {};"), TT("function(x, y) { x + y; }"), {TT("x"), TT("y"), TT("z")}}
 			};
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();
@@ -658,8 +658,8 @@ namespace UnitTest
 				{TT("add(1, 2 * 3, 4 + 5);"), TT("add(1, 2 * 3, 4 + 5);")}
 			};
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();
@@ -687,8 +687,8 @@ namespace UnitTest
 				{TT("function(x, y) { x + y; }"), TT("function(x, y) { x + y; }")}
 			};
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();
@@ -728,8 +728,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
@@ -761,8 +761,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
@@ -789,8 +789,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
@@ -819,8 +819,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -850,8 +850,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -880,8 +880,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -906,8 +906,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -931,8 +931,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -964,8 +964,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -988,8 +988,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
@@ -1014,8 +1014,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();
@@ -1033,8 +1033,8 @@ namespace UnitTest
 		{
 			tstring code = TT("let arr = [1, 2, 3];");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 
 			auto root = parser->ParseProgram();
@@ -1057,8 +1057,8 @@ namespace UnitTest
 		{
 			tstring code = TT("arr[1 + 2];");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 
 			auto root = parser->ParseProgram();
@@ -1078,8 +1078,8 @@ namespace UnitTest
 		{
 			tstring code = TT("let add = function(x, y) { return x + y; };");
 
-			auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(code.c_str()));
-			auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 			parser->GetLogger().SetLogConsole(&s_Console);
 
 			auto root = parser->ParseProgram();
@@ -1115,8 +1115,8 @@ namespace UnitTest
 			};
 
 			for (auto& test : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexing::Lexer>(new tsumugi::script::lexing::Lexer(test.code_.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parsing::Parser>(new tsumugi::script::parsing::Parser(lexer.get()));
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();

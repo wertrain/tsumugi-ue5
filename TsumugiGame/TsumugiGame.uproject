@@ -9,11 +9,6 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
-		{
-			"Name": "Tsumugi",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		}
 	],
 	"Plugins": [
 		{
