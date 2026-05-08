@@ -51,11 +51,7 @@ private:
     std::shared_ptr<object::BooleanObject> ToBooleanObject(bool value) const;
 
 private:
-    i18n::Localizer localizer;
     common::ErrorReporter errors;
-    std::shared_ptr<object::BooleanObject> trueObject_;
-    std::shared_ptr<object::BooleanObject> falseObject_;
-    std::shared_ptr<object::NullObject> nullObject_;
 };
 
 }

@@ -16,6 +16,7 @@ enum class ObjectType : int32_t {
     kHash,
     kReturnValue,
     kFunction,
+    kBuiltin,
     kError,
     kNum
 };

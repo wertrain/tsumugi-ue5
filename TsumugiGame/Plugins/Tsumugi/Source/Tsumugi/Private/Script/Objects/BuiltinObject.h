@@ -1,0 +1,23 @@
+#pragma once
+
+#include "Foundation/Types.h"
+#include "Script/Objects/IObject.h"
+#include <functional>
+
+namespace tsumugi::script::object {
+
+using BuiltinFunctionType = std::function<std::shared_ptr<object::IObject>(const std::vector<std::shared_ptr<object::IObject>>&)>;
+
+class BuiltinObject : public IObject {
+public:
+    explicit BuiltinObject(BuiltinFunctionType fn);
+    BuiltinFunctionType GetFunction() const { return function_; }
+
+    tstring Inspect() const override;
+    ObjectType GetType() const override;
+
+private:
+    BuiltinFunctionType function_;
+};
+
+}

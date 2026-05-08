@@ -64,6 +64,8 @@ private:
     static std::string ToString(script::lexer::TokenType t);
     static std::string ToString(script::object::ObjectType t);
     static std::string ToString(const size_t t) { return std::to_string(t); }
+    static std::string ToString(const wchar_t* s) { return type::convert::TStringToString(s); }
+    template <size_t N> static std::string ToString(const wchar_t (&s)[N]) { return type::convert::TStringToString(s); }
 
     // 数値型のみ std::to_string を許可
     template <typename T>

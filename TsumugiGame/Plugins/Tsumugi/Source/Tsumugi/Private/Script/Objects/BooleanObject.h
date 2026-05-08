@@ -7,6 +7,16 @@ namespace tsumugi::script::object {
 
 class BooleanObject : public IObject {
 public:
+    static std::shared_ptr<BooleanObject> True() {
+        static auto instance = std::make_shared<BooleanObject>(true);
+        return instance;
+    }
+    static std::shared_ptr<BooleanObject> False() {
+        static auto instance = std::make_shared<BooleanObject>(false);
+        return instance;
+    }
+
+public:
     explicit BooleanObject(bool value);
     bool GetValue() const;
     void SetValue(bool value);

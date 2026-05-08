@@ -35,15 +35,14 @@
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/FunctionObject.h"
 #include "Script/Objects/ObjectHash.h"
+#include "Script/Builtins/Builtins.h"
 
 namespace tsumugi::script::evaluator {
 
 Evaluator::Evaluator()
-    : errors()
-    , trueObject_(std::make_shared<object::BooleanObject>(true))
-    , falseObject_(std::make_shared<object::BooleanObject>(false))
-    , nullObject_(std::make_shared<object::NullObject>()) {
+    : errors() {
 
+    InitializeBuiltinFunctions();
 }
 
 std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const std::shared_ptr<object::Environment>& environment) const {
@@ -259,10 +258,10 @@ std::shared_ptr<object::IObject> Evaluator::EvalPrefixExpression(const tstring& 
 
 std::shared_ptr<object::IObject> Evaluator::EvalBangOperator(const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const {
 
-    if      (right == trueObject_) return falseObject_;
-    else if (right == falseObject_) return trueObject_;
-    else if (right == nullObject_) return trueObject_;
-    return falseObject_;
+    if      (right == object::BooleanObject::True()) return object::BooleanObject::False();
+    else if (right == object::BooleanObject::False()) return object::BooleanObject::True();
+    else if (right == object::NullObject::Instance()) return object::BooleanObject::True();
+    return object::BooleanObject::False();
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalMinusPrefixOperatorExpression(const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const {
@@ -298,9 +297,9 @@ std::shared_ptr<object::IObject> Evaluator::EvalInfixExpression(const tstring& o
     }
 
     if (op == TT("==")) {
-        return (left == right) ? trueObject_ : falseObject_;
+        return ToBooleanObject(left == right);
     } else if (op == TT("!=")) {
-        return (left != right) ? trueObject_ : falseObject_;
+        return ToBooleanObject(left != right);
     }
 
     if (left->GetType() != right->GetType()) {
@@ -374,16 +373,17 @@ std::shared_ptr<object::IObject> Evaluator::EvalIfExpression(const ast::expressi
         auto blockEnvironment = std::make_shared<object::Environment>(environment);
         return EvalBlockStatement(ifExpression->GetAlternative()->GetStatements(), blockEnvironment);
     }
-    return nullObject_;
+    return object::NullObject::Instance();
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression::Identifier* identifier, const std::shared_ptr<object::Environment>& environment) const {
 
-    auto value = environment->Get(identifier->GetValue());
-    if (value == nullptr) {
-        return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
+    if (auto value = environment->Get(identifier->GetValue())) {
+        return value;
+    } else if (auto builtin = GetBuiltinByName(identifier->GetValue())) {
+        return builtin;
     }
-    return value;
+    return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& index, const std::shared_ptr<object::Environment>& environment) const {
@@ -394,7 +394,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
         auto idx = integerObject->GetValue();
 
         if (idx < 0 || idx >= arrayObject->GetElements().size()) {
-            return nullObject_;
+            return object::NullObject::Instance();
         }
         return arrayObject->GetElements()[idx];
     } else if (left->GetType() == object::ObjectType::kHash) {
@@ -406,7 +406,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
         const auto& pairs = hashObject->GetPairs();
         auto it = pairs.find(key);
         if (it == pairs.end()) {
-            return nullObject_;
+            return object::NullObject::Instance();
         }
         return it->second.value;
     } else if (left->GetType() == object::ObjectType::kString && index->GetType() == object::ObjectType::kInteger) {
@@ -415,7 +415,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
         auto idx = integerObject->GetValue();
         const auto& str = stringObject->GetValue();
         if (idx < 0 || idx >= str.length()) {
-            return nullObject_;
+            return object::NullObject::Instance();
         }
         tstring oneChar(1, str[idx]);
         return std::make_shared<object::StringObject>(oneChar);
@@ -425,32 +425,35 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
 
 std::shared_ptr<object::IObject> Evaluator::ApplyFunction(const std::shared_ptr<object::IObject>& object, const std::vector<std::shared_ptr<object::IObject>> arguments) const {
 
-    if (object->GetType() != object::ObjectType::kFunction) {
-        return errors.MakeErrorObject(i18n::MessageId::kNotFunction, object->GetType());
+    if (object->GetType() == object::ObjectType::kFunction) {
+        auto functionObject = std::static_pointer_cast<const object::FunctionObject>(object);
+        if (functionObject->GetParameters().size() != arguments.size()) {
+            return errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, functionObject->GetParameters().size(), arguments.size());
+        }
+
+        auto functionEnvironment = std::make_shared<object::Environment>(functionObject->GetEnvironment());
+
+        for (size_t i = 0, num = arguments.size(); i < num; ++i) {
+            functionEnvironment->Set(functionObject->GetParameters()[i]->GetValue(), arguments[i]);
+        }
+        std::shared_ptr<object::IObject> evaluated = EvalBlockStatement(functionObject->GetBody()->GetStatements(), functionEnvironment);
+
+        if (evaluated->GetType() == object::ObjectType::kReturnValue) {
+            auto returnValue = std::static_pointer_cast<const object::ReturnValue>(evaluated);
+            return returnValue->GetValue();
+        }
+        return evaluated;
+    } else if (object->GetType() == object::ObjectType::kBuiltin) {
+        auto builtin = static_cast<object::BuiltinObject*>(object.get());
+        return builtin->GetFunction()(arguments);
     }
 
-    auto functionObject = std::static_pointer_cast<const object::FunctionObject>(object);
-    if (functionObject->GetParameters().size() != arguments.size()) {
-        return errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, functionObject->GetParameters().size(), arguments.size());
-    }
-
-    auto functionEnvironment = std::make_shared<object::Environment>(functionObject->GetEnvironment());
-
-    for (size_t i = 0, num = arguments.size();  i < num; ++i) {
-        functionEnvironment->Set(functionObject->GetParameters()[i]->GetValue(), arguments[i]);
-    }
-    std::shared_ptr<object::IObject> evaluated = EvalBlockStatement(functionObject->GetBody()->GetStatements(), functionEnvironment);
-
-    if (evaluated->GetType() == object::ObjectType::kReturnValue) {
-        auto returnValue = std::static_pointer_cast<const object::ReturnValue>(evaluated);
-        return returnValue->GetValue();
-    }
-    return evaluated;
+    return errors.MakeErrorObject(i18n::MessageId::kNotFunction, object->GetType());
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const {
 
-    std::shared_ptr<object::IObject> result = nullObject_;
+    std::shared_ptr<object::IObject> result = object::NullObject::Instance();
     auto blockEnvironment = std::make_shared<object::Environment>(environment);
 
     while (true) {
@@ -505,29 +508,30 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const 
         return value;
     }
 
-    // 配列のみ対応
-    if (left->GetType() != object::ObjectType::kArray) {
+    if (left->GetType() == object::ObjectType::kArray) {
+        auto arrayObject = std::static_pointer_cast<object::ArrayObject>(left);
+        auto idx = static_cast<object::IntegerObject*>(index.get())->GetValue();
+        if (idx < 0 || idx >= arrayObject->GetElements().size()) {
+            return errors.MakeErrorObject(i18n::MessageId::kIndexOutOfRange);
+        }
+        arrayObject->SetElement(idx, value);
+    } else if (left->GetType() == object::ObjectType::kHash) {
+        auto hashObject = std::static_pointer_cast<object::HashObject>(left);
+        object::HashKey key = MakeHashKey(index.get());
+        hashObject->SetPair(key, index, value);
+    } else {
         return errors.MakeErrorObject(i18n::MessageId::kIndexAssignmentNotSupported, left->Inspect());
     }
-
-    auto arrayObject = std::static_pointer_cast<object::ArrayObject>(left);
-    auto idx = static_cast<object::IntegerObject*>(index.get())->GetValue();
-
-    if (idx < 0 || idx >= arrayObject->GetElements().size()) {
-        return errors.MakeErrorObject(i18n::MessageId::kIndexOutOfRange);
-    }
-
-    arrayObject->SetElement(idx, value);
     return value;
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {
 
-    if (object == trueObject_) {
+    if (object == object::BooleanObject::True()) {
         return true;
-    } else if (object == falseObject_) {
+    } else if (object == object::BooleanObject::False()) {
         return false;
-    } else if (object == nullObject_) {
+    } else if (object == object::NullObject::Instance()) {
         return false;
     }
     return true;
@@ -543,7 +547,7 @@ bool Evaluator::IsErrorObject(const std::shared_ptr<object::IObject>& object) co
 
 std::shared_ptr<object::BooleanObject> Evaluator::ToBooleanObject(bool value) const {
 
-    return (value) ? trueObject_ : falseObject_;
+    return (value) ? object::BooleanObject::True() : object::BooleanObject::False();
 }
 
 }
