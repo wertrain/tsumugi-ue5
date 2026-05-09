@@ -26,6 +26,7 @@ enum class NodeType {
     kAssignmentExpression,
     kFunctionStatement,
     kIndexAssignmentExpression,
+    kForStatement,
     Num
 };
 

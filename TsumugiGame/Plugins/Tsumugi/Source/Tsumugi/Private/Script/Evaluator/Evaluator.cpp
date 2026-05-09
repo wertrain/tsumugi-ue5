@@ -23,6 +23,7 @@
 #include "Script/AST/Statements/ReturnStatement.h"
 #include "Script/AST/Statements/LetStatement.h"
 #include "Script/AST/Statements/FunctionStatement.h"
+#include "Script/AST/Statements/ForStatement.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
@@ -196,6 +197,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
             auto* indexAssignmentExpression = static_cast<const ast::expression::IndexAssignmentExpression*>(node);
             return EvalIndexAssignmentExpression(indexAssignmentExpression, environment);
         }
+        case ast::NodeType::kForStatement: {
+            auto* forStatement = static_cast<const ast::statement::ForStatement*>(node);
+            return EvalForStatement(forStatement, environment);
+        }
     }
     return nullptr;
 }
@@ -244,6 +249,46 @@ std::shared_ptr<object::IObject> Evaluator::EvalBlockStatement(const tarray<std:
         }
     }
     return result;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalForStatement(const ast::statement::ForStatement* forStatement, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto iterable = Eval(forStatement->GetIterable(), environment);
+    if (IsErrorObject(iterable)) {
+        return iterable;
+    }
+
+    std::vector<std::shared_ptr<object::IObject>> elements;
+
+    switch (iterable->GetType()) {
+
+    case object::ObjectType::kArray: {
+        auto arr = static_cast<object::ArrayObject*>(iterable.get());
+        elements = arr->GetElements();
+        break;
+    }
+
+    case object::ObjectType::kString: {
+        auto str = static_cast<object::StringObject*>(iterable.get());
+        for (auto ch : str->GetValue()) {
+            elements.push_back(std::make_shared<object::StringObject>(tstring(1, ch)));
+        }
+        break;
+    }
+    default:
+        return errors.MakeErrorObject(i18n::MessageId::kTypeMismatch, iterable->Inspect(), TT("Array/String"));
+    }
+
+    // ループ実行
+    for (auto& elem : elements) {
+        auto loopEnv = std::make_shared<object::Environment>(environment);
+        loopEnv->Set(forStatement->GetIdentifier()->GetValue(), elem);
+        auto result = EvalBlockStatement(forStatement->GetBody()->GetStatements(), loopEnv);
+        if (result->GetType() == object::ObjectType::kReturnValue) {
+            return result;
+        }
+    }
+    return object::NullObject::Instance();
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalPrefixExpression(const tstring& op, const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const {

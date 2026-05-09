@@ -7,6 +7,7 @@
 #include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/AST/Statements/FunctionStatement.h"
+#include "Script/AST/Statements/ForStatement.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
 #include "Script/AST/Expressions/StringLiteral.h"
@@ -81,6 +82,8 @@ std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
         return ParseLetStatement();
     case lexer::TokenType::kReturn :
         return ParseReturnStatement();
+    case lexer::TokenType::kFor:
+        return ParseForStatement();
     // 既存の仕様と競合するので関数宣言はいったん閉じる
     //case lexer::TokenType::kFunction:
     //    return ParseFunctionStatement();
@@ -207,6 +210,39 @@ std::unique_ptr<script::ast::statement::FunctionStatement> Parser::ParseFunction
     if (!ExpectPeekRequiredTokenType(lexer::TokenType::kLeftBraces, "{")) {
         return nullptr;
     }
+
+    auto block = ParseBlockStatement();
+    statement->SetBody(std::move(block));
+
+    return statement;
+}
+
+std::unique_ptr<script::ast::statement::ForStatement> Parser::ParseForStatement() {
+
+    auto statement = std::make_unique<ast::statement::ForStatement>(currentToken_);
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kLeftParenthesis, "(")) {
+        return nullptr;
+    }
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
+        return nullptr;
+    }
+
+    auto iden = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
+    statement->SetIdentifier(std::move(iden));
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIn, "in")) {
+        return nullptr;
+    }
+    ReadToken();
+
+    auto expression = ParseExpression(Precedence::kLowest);
+    statement->SetIterable(std::move(expression));
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kRightParenthesis, ")")) {
+        return nullptr;
+    }
+    ReadToken();
 
     auto block = ParseBlockStatement();
     statement->SetBody(std::move(block));

@@ -208,6 +208,16 @@ enum class TokenType : int32_t {
     kWhile,
 
     /// <summary>
+    /// for キーワード
+    /// </summary>
+    kFor,
+
+    /// <summary>
+    /// in キーワード
+    /// </summary>
+    kIn,
+
+    /// <summary>
     /// return キーワード
     /// </summary>
     kReturn,
