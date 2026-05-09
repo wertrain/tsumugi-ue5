@@ -27,6 +27,8 @@ enum class NodeType {
     kFunctionStatement,
     kIndexAssignmentExpression,
     kForStatement,
+    kBreakStatement,
+    kContinueStatement,
     Num
 };
 

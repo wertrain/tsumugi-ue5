@@ -14,6 +14,8 @@ const TokenType LookupIdentifier(const tstring& identifier) {
         { TT("while"), tsumugi::script::lexer::TokenType::kWhile },
         { TT("for"), tsumugi::script::lexer::TokenType::kFor },
         { TT("in"), tsumugi::script::lexer::TokenType::kIn },
+        { TT("break"), tsumugi::script::lexer::TokenType::kBreak },
+        { TT("continue"), tsumugi::script::lexer::TokenType::kContinue },
         { TT("return"), tsumugi::script::lexer::TokenType::kReturn },
         { TT("true"), tsumugi::script::lexer::TokenType::kTrue },
         { TT("false"), tsumugi::script::lexer::TokenType::kFalse },
@@ -63,6 +65,8 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kElse, TT("kElse") },
         { tsumugi::script::lexer::TokenType::kWhile, TT("kWhile") },
         { tsumugi::script::lexer::TokenType::kFor, TT("kFor") },
+        { tsumugi::script::lexer::TokenType::kBreak, TT("kBreak") },
+        { tsumugi::script::lexer::TokenType::kContinue, TT("kContinue") },
         { tsumugi::script::lexer::TokenType::kReturn, TT("kReturn") },
         { tsumugi::script::lexer::TokenType::kTrue, TT("kTrue") },
         { tsumugi::script::lexer::TokenType::kFalse, TT("kFalse") }
@@ -115,6 +119,8 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kElse, ("kElse") },
         { tsumugi::script::lexer::TokenType::kWhile, ("kWhile") },
         { tsumugi::script::lexer::TokenType::kFor, ("kFor") },
+        { tsumugi::script::lexer::TokenType::kBreak, ("kBreak") },
+        { tsumugi::script::lexer::TokenType::kContinue, ("kContinue") },
         { tsumugi::script::lexer::TokenType::kReturn, ("kReturn") },
         { tsumugi::script::lexer::TokenType::kTrue, ("kTrue") },
         { tsumugi::script::lexer::TokenType::kFalse, ("kFalse") }

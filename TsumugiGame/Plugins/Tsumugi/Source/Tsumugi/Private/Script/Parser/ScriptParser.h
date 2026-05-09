@@ -18,6 +18,8 @@ namespace tsumugi::script::ast::statement { class ExpressionStatement; }
 namespace tsumugi::script::ast::statement { class BlockStatement; }
 namespace tsumugi::script::ast::statement { class FunctionStatement; }
 namespace tsumugi::script::ast::statement { class ForStatement; }
+namespace tsumugi::script::ast::statement { class BreakStatement; }
+namespace tsumugi::script::ast::statement { class ContinueStatement; }
 
 namespace tsumugi::script::parser {
 
@@ -59,6 +61,8 @@ public:
     std::shared_ptr<script::ast::statement::BlockStatement> ParseBlockStatement();
     std::unique_ptr<script::ast::statement::FunctionStatement> ParseFunctionStatement();
     std::unique_ptr<script::ast::statement::ForStatement> ParseForStatement();
+    std::unique_ptr<script::ast::statement::BreakStatement> ParseBreakStatement();
+    std::unique_ptr<script::ast::statement::ContinueStatement> ParseContinueStatement();
     std::unique_ptr<script::ast::IExpression> ParseExpression(Precedence precedence);
     std::unique_ptr<script::ast::IExpression> ParseIdentifier();
     std::unique_ptr<script::ast::IExpression> ParseIntegerLiteral();

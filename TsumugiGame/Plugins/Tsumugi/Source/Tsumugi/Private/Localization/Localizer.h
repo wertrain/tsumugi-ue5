@@ -29,6 +29,7 @@ enum class MessageId : uint32_t {
     kDuplicateHashKey,
     kInvalidHashLiteral,
     kInvalidArgument,
+    kInvalidStatement,
 };
 
 class Localizer {

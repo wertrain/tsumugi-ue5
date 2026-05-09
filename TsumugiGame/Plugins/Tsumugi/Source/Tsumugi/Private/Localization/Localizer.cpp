@@ -30,6 +30,7 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kDuplicateHashKey, TT("ハッシュキー {0} は重複しています。") },
     { tsumugi::i18n::MessageId::kInvalidHashLiteral, TT("ハッシュリテラルの形式が正しくありません: {0}") },
     { tsumugi::i18n::MessageId::kInvalidArgument, TT("無効な引数です: {0}") },
+    { tsumugi::i18n::MessageId::kInvalidStatement, TT("無効な {0} です。") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -50,6 +51,7 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kDuplicateHashKey, TT("Hash key {0} is duplicated.") },
     { tsumugi::i18n::MessageId::kInvalidHashLiteral, TT("Invalid hash literal format: {0}") },
     { tsumugi::i18n::MessageId::kInvalidArgument, TT("Invalid argument: {0}") },
+    { tsumugi::i18n::MessageId::kInvalidStatement, TT("Invalid {0}.") },
 };
 
 }

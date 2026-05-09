@@ -52,6 +52,9 @@
     <Filter Include="Tsumugi\Private\Script\Lexer">
       <UniqueIdentifier>{1c684aec-eb96-4d1d-9c45-56a29645760e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Builtins">
+      <UniqueIdentifier>{6c35b43e-d84d-45c9-a9bb-363679afa7e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -198,6 +201,36 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\WhileExpression.h">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\HashLiteral.h">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\HashObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ObjectHash.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Builtins.h">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ForStatement.h">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\BreakStatement.h">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ContinueStatement.h">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BreakObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ContinueObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -343,6 +376,36 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\WhileExpression.cpp">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\HashLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\HashObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ObjectHash.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Builtins.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ForStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\BreakStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ContinueStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BreakObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ContinueObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

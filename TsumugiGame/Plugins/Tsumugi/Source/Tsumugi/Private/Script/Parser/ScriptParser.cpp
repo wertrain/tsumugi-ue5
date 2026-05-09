@@ -8,6 +8,8 @@
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/AST/Statements/FunctionStatement.h"
 #include "Script/AST/Statements/ForStatement.h"
+#include "Script/AST/Statements/BreakStatement.h"
+#include "Script/AST/Statements/ContinueStatement.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
 #include "Script/AST/Expressions/StringLiteral.h"
@@ -84,6 +86,10 @@ std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
         return ParseReturnStatement();
     case lexer::TokenType::kFor:
         return ParseForStatement();
+    case lexer::TokenType::kBreak:
+        return ParseBreakStatement();
+    case lexer::TokenType::kContinue:
+        return ParseContinueStatement();
     // 既存の仕様と競合するので関数宣言はいったん閉じる
     //case lexer::TokenType::kFunction:
     //    return ParseFunctionStatement();
@@ -246,6 +252,32 @@ std::unique_ptr<script::ast::statement::ForStatement> Parser::ParseForStatement(
 
     auto block = ParseBlockStatement();
     statement->SetBody(std::move(block));
+
+    return statement;
+}
+
+std::unique_ptr<script::ast::statement::BreakStatement> Parser::ParseBreakStatement() {
+
+    auto statement = std::make_unique<ast::statement::BreakStatement>(currentToken_);
+    ReadToken();
+
+    // セミコロンは必須ではない
+    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+        ReadToken();
+    }
+
+    return statement;
+}
+
+std::unique_ptr<script::ast::statement::ContinueStatement> Parser::ParseContinueStatement() {
+
+    auto statement = std::make_unique<ast::statement::ContinueStatement>(currentToken_);
+    ReadToken();
+
+    // セミコロンは必須ではない
+    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+        ReadToken();
+    }
 
     return statement;
 }

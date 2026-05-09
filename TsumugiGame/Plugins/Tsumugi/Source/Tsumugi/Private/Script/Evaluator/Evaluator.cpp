@@ -35,6 +35,8 @@
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/FunctionObject.h"
+#include "Script/Objects/BreakObject.h"
+#include "Script/Objects/ContinueObject.h"
 #include "Script/Objects/ObjectHash.h"
 #include "Script/Builtins/Builtins.h"
 
@@ -201,6 +203,12 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
             auto* forStatement = static_cast<const ast::statement::ForStatement*>(node);
             return EvalForStatement(forStatement, environment);
         }
+        case ast::NodeType::kBreakStatement: {
+            return std::make_shared<object::BreakObject>();
+        }
+        case ast::NodeType::kContinueStatement: {
+            return std::make_shared<object::ContinueObject>();
+        }
     }
     return nullptr;
 }
@@ -215,6 +223,8 @@ std::shared_ptr<object::IObject> Evaluator::EvalRootProgram(const tarray<std::un
             return returnValue->GetValue();
         } else if (result->GetType() == object::ObjectType::kError) {
             return result;
+        } else if (result->GetType() == object::ObjectType::kBreak || result->GetType() == object::ObjectType::kContinue) {
+            return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, result->Inspect());
         }
     }
     return result;
@@ -244,6 +254,8 @@ std::shared_ptr<object::IObject> Evaluator::EvalBlockStatement(const tarray<std:
     for (const auto& statement : statements) {
         result = Eval(statement.get(), environment);
         if (result->GetType() == object::ObjectType::kReturnValue ||
+            result->GetType() == object::ObjectType::kBreak ||
+            result->GetType() == object::ObjectType::kContinue ||
             result->GetType() == object::ObjectType::kError) {
             return result;
         }
@@ -284,8 +296,13 @@ std::shared_ptr<object::IObject> Evaluator::EvalForStatement(const ast::statemen
         auto loopEnv = std::make_shared<object::Environment>(environment);
         loopEnv->Set(forStatement->GetIdentifier()->GetValue(), elem);
         auto result = EvalBlockStatement(forStatement->GetBody()->GetStatements(), loopEnv);
-        if (result->GetType() == object::ObjectType::kReturnValue) {
-            return result;
+        switch (result->GetType()) {
+            case object::ObjectType::kBreak:
+                return object::NullObject::Instance();
+            case object::ObjectType::kContinue:
+                continue;
+            case object::ObjectType::kReturnValue:
+                return result;
         }
     }
     return object::NullObject::Instance();
@@ -509,7 +526,16 @@ std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expre
         if (!IsTruthly(condition)) {
             break;
         }
+
         result = EvalBlockStatement(whileExpression->GetBody()->GetStatements(), blockEnvironment);
+        switch (result->GetType()) {
+            case object::ObjectType::kBreak:
+                return object::NullObject::Instance();
+            case object::ObjectType::kContinue:
+                continue;
+            case object::ObjectType::kReturnValue:
+                return result;
+        }
     }
     return result;
 }

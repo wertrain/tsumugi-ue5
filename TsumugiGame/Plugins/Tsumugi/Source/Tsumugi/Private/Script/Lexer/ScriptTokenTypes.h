@@ -218,6 +218,16 @@ enum class TokenType : int32_t {
     kIn,
 
     /// <summary>
+    /// break キーワード
+    /// </summary>
+    kBreak,
+
+    /// <summary>
+    /// continue キーワード
+    /// </summary>
+    kContinue,
+
+    /// <summary>
     /// return キーワード
     /// </summary>
     kReturn,
