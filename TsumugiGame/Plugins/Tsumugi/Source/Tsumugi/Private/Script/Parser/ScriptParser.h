@@ -79,6 +79,7 @@ public:
     std::unique_ptr<script::ast::IExpression> ParseCallExpression(std::unique_ptr<script::ast::IExpression> function);
     std::unique_ptr<script::ast::IExpression> ParseIndexExpression(std::unique_ptr<script::ast::IExpression> left);
     std::unique_ptr<script::ast::IExpression> ParseAssignmentExpression(std::unique_ptr<script::ast::IExpression> left);
+    std::unique_ptr<script::ast::IExpression> ParsePropertyAccessExpression(std::unique_ptr<script::ast::IExpression> left);
     bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
     bool ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>>& arguments);
     std::unique_ptr<ast::Root> ParseProgram();

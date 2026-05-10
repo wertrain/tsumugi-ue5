@@ -31,6 +31,7 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidHashLiteral, TT("ハッシュリテラルの形式が正しくありません: {0}") },
     { tsumugi::i18n::MessageId::kInvalidArgument, TT("無効な引数です: {0}") },
     { tsumugi::i18n::MessageId::kInvalidStatement, TT("無効な {0} です。") },
+    { tsumugi::i18n::MessageId::kInvalidProperty, TT("無効なプロパティです: {0}") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -52,6 +53,7 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidHashLiteral, TT("Invalid hash literal format: {0}") },
     { tsumugi::i18n::MessageId::kInvalidArgument, TT("Invalid argument: {0}") },
     { tsumugi::i18n::MessageId::kInvalidStatement, TT("Invalid {0}.") },
+    { tsumugi::i18n::MessageId::kInvalidProperty, TT("Invalid property: {0}") },
 };
 
 }

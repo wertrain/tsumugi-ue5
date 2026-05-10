@@ -118,7 +118,9 @@ Token* Lexer::NextToken() {
             case TT('\0'):
                 token = CreateToken(TokenType::kEOF , tstring(1, c));
                 break;
-
+            case TT('.'):
+                token = CreateToken(TokenType::kDot, tstring(1, c));
+                break;
             default:
                 if (IsDigit(c)) {
                     token = CreateAsNumericToken();

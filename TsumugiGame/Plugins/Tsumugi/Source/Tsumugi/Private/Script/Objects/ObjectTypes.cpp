@@ -17,7 +17,8 @@ const tchar* ObjectTypeToTString(const ObjectType objectType) {
         { object::ObjectType::kBreak, TT("kBreak") },
         { object::ObjectType::kContinue, TT("kContinue") },
         { object::ObjectType::kFunction, TT("kFunction") },
-        { object::ObjectType::kBuiltin, TT("kBuiltin") },
+        { object::ObjectType::kBuiltinFunction, TT("kBuiltinFunction") },
+        { object::ObjectType::kBuiltinMethod, TT("kBuiltinMethod") },
         { object::ObjectType::kError, TT("kError") },
     };
 
@@ -40,7 +41,8 @@ const char* ObjectTypeToString(const ObjectType objectType) {
         { object::ObjectType::kBreak, ("kBreak") },
         { object::ObjectType::kContinue, ("kContinue") },
         { object::ObjectType::kFunction, ("kFunction") },
-        { object::ObjectType::kBuiltin, ("kBuiltin") },
+        { object::ObjectType::kBuiltinFunction, ("BuiltinFunction") },
+        { object::ObjectType::kBuiltinMethod, ("BuiltinMethod") },
         { object::ObjectType::kError, ("kError") },
     };
 

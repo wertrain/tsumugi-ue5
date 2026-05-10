@@ -25,6 +25,7 @@
 #include "Script/AST/Expressions/IndexExpression.h"
 #include "Script/AST/Expressions/AssignmentExpression.h"
 #include "Script/AST/Expressions/IndexAssignmentExpression.h"
+#include "Script/AST/Expressions/PropertyAccessExpression.h"
 #include <cassert>
 #include <unordered_map>
 
@@ -44,6 +45,7 @@ const std::unordered_map<tsumugi::script::lexer::TokenType, Precedence> Parser::
     { lexer::TokenType::kAsterisk, Precedence::kProduct },
     { lexer::TokenType::kLeftParenthesis, Precedence::kCall },
     { lexer::TokenType::kLeftBrackets, Precedence::kCall },
+    { lexer::TokenType::kDot, Precedence::kCall },
 };
 
 Parser::Parser(lexer::Lexer* lexer)
@@ -602,6 +604,19 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseAssignmentExpression(std:
     return assignmentExpression;
 }
 
+std::unique_ptr<script::ast::IExpression> Parser::ParsePropertyAccessExpression(std::unique_ptr<script::ast::IExpression> left) {
+
+    auto expression = std::make_unique<ast::expression::PropertyAccessExpression>(currentToken_, std::move(left));
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
+        return nullptr;
+    }
+    auto name = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
+    expression->SetName(std::move(name));
+
+    return expression;
+}
+
 bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters) {
 
     parameters.clear();
@@ -763,6 +778,7 @@ void Parser::RegisterInfixParseFunctions() {
     infixParseFunctions_.emplace(lexer::TokenType::kLeftParenthesis, [this](auto left) { return ParseCallExpression(std::move(left)); });
     infixParseFunctions_.emplace(lexer::TokenType::kLeftBrackets, [this](auto left) { return ParseIndexExpression(std::move(left)); });
     infixParseFunctions_.emplace(lexer::TokenType::kAssign, [this](auto left) { return ParseAssignmentExpression(std::move(left)); });
+    infixParseFunctions_.emplace(lexer::TokenType::kDot, [this](auto left) { return ParsePropertyAccessExpression(std::move(left)); });
 }
 
 bool Parser::ExpectPeekRequiredTokenType(const tsumugi::script::lexer::TokenType tokenType, const std::string& symbol) {

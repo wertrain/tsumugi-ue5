@@ -8,9 +8,9 @@ namespace tsumugi::script::object {
 
 using BuiltinFunctionType = std::function<std::shared_ptr<object::IObject>(const std::vector<std::shared_ptr<object::IObject>>&)>;
 
-class BuiltinObject : public IObject {
+class BuiltinFunctionObject : public IObject {
 public:
-    explicit BuiltinObject(BuiltinFunctionType fn);
+    explicit BuiltinFunctionObject(BuiltinFunctionType fn);
     BuiltinFunctionType GetFunction() const { return function_; }
 
     tstring Inspect() const override;

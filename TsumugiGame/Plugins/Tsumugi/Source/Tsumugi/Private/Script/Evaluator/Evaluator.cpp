@@ -18,6 +18,7 @@
 #include "Script/AST/Expressions/IndexExpression.h"
 #include "Script/AST/Expressions/AssignmentExpression.h"
 #include "Script/AST/Expressions/IndexAssignmentExpression.h"
+#include "Script/AST/Expressions/PropertyAccessExpression.h"
 #include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/AST/Statements/ReturnStatement.h"
@@ -38,6 +39,7 @@
 #include "Script/Objects/BreakObject.h"
 #include "Script/Objects/ContinueObject.h"
 #include "Script/Objects/ObjectHash.h"
+#include "Script/Objects/BuiltinMethodObject.h"
 #include "Script/Builtins/Builtins.h"
 
 namespace tsumugi::script::evaluator {
@@ -169,6 +171,7 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
             if (arguments.size() > 0 && IsErrorObject(arguments.at(0))) {
                 return arguments.at(0);
             }
+            // 通常の関数呼び出し
             return ApplyFunction(function, arguments);
         }
         case ast::NodeType::kIndexExpression: {
@@ -199,6 +202,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
             auto* indexAssignmentExpression = static_cast<const ast::expression::IndexAssignmentExpression*>(node);
             return EvalIndexAssignmentExpression(indexAssignmentExpression, environment);
         }
+        case ast::NodeType::kPropertyAccessExpression: {
+            auto* propertyAccessExpression = static_cast<const ast::expression::PropertyAccessExpression*>(node);
+            return EvalPropertyAccessExpression(propertyAccessExpression, environment);
+        }
         case ast::NodeType::kForStatement: {
             auto* forStatement = static_cast<const ast::statement::ForStatement*>(node);
             return EvalForStatement(forStatement, environment);
@@ -218,13 +225,16 @@ std::shared_ptr<object::IObject> Evaluator::EvalRootProgram(const tarray<std::un
     std::shared_ptr<object::IObject> result;
     for (const auto& statement : statements) {
         result = Eval(statement.get(), environment);
-        if (result->GetType() == object::ObjectType::kReturnValue) {
-            auto returnValue = std::static_pointer_cast<const object::ReturnValue>(result);
-            return returnValue->GetValue();
-        } else if (result->GetType() == object::ObjectType::kError) {
-            return result;
-        } else if (result->GetType() == object::ObjectType::kBreak || result->GetType() == object::ObjectType::kContinue) {
-            return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, result->Inspect());
+        switch (result->GetType()) {
+            case object::ObjectType::kReturnValue: {
+                auto returnValue = std::static_pointer_cast<const object::ReturnValue>(result);
+                return returnValue->GetValue();
+            }
+            case object::ObjectType::kError:
+                return result;
+            case object::ObjectType::kBreak:
+            case object::ObjectType::kContinue:
+                return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, result->Inspect());
         }
     }
     return result;
@@ -442,7 +452,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
 
     if (auto value = environment->Get(identifier->GetValue())) {
         return value;
-    } else if (auto builtin = GetBuiltinByName(identifier->GetValue())) {
+    } else if (auto builtin = GetBuiltinFunctionByName(identifier->GetValue())) {
         return builtin;
     }
     return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
@@ -505,9 +515,12 @@ std::shared_ptr<object::IObject> Evaluator::ApplyFunction(const std::shared_ptr<
             return returnValue->GetValue();
         }
         return evaluated;
-    } else if (object->GetType() == object::ObjectType::kBuiltin) {
-        auto builtin = static_cast<object::BuiltinObject*>(object.get());
+    } else if (object->GetType() == object::ObjectType::kBuiltinFunction) {
+        auto builtin = static_cast<object::BuiltinFunctionObject*>(object.get());
         return builtin->GetFunction()(arguments);
+    } else if (object->GetType() == object::ObjectType::kBuiltinMethod) {
+        auto method = static_cast<object::BuiltinMethodObject*>(object.get());
+        return method->GetFunction()(method->GetThis(), arguments);
     }
 
     return errors.MakeErrorObject(i18n::MessageId::kNotFunction, object->GetType());
@@ -594,6 +607,73 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const 
         return errors.MakeErrorObject(i18n::MessageId::kIndexAssignmentNotSupported, left->Inspect());
     }
     return value;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto left = Eval(propertyAccessExpression->GetLeft(), environment);
+    if (IsErrorObject(left)) {
+        return left;
+    }
+
+    auto name = propertyAccessExpression->GetName()->GetValue();
+
+    switch (left->GetType()) {
+
+        case object::ObjectType::kString:
+            return EvalStringProperty(left, name);
+
+        case object::ObjectType::kArray:
+            return EvalArrayProperty(left, name);
+
+        case object::ObjectType::kHash:
+            return EvalHashProperty(left, name);
+
+        default:
+            return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, TT("property access"));
+    }
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalStringProperty(std::shared_ptr<object::IObject> object, const tstring& name) const {
+
+    auto str = static_cast<object::StringObject*>(object.get());
+
+    if (name == TT("length")) {
+        return std::make_shared<object::IntegerObject>(str->GetValue().size());
+    } else if (name == TT("test")) {
+        return std::make_shared<object::BuiltinMethodObject>(
+            [](auto thisObject, const std::vector<std::shared_ptr<object::IObject>>& arguments) {
+                auto str = static_cast<object::StringObject*>(thisObject.get());
+                return std::make_shared<object::StringObject>(str->GetValue().substr(0, 1));
+            }, object
+        );
+    }
+
+    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalArrayProperty(std::shared_ptr<object::IObject> object, const tstring& name) const {
+
+    auto array = static_cast<object::ArrayObject*>(object.get());
+    auto& elements = array->GetElements();
+
+    if (name == TT("length")) {
+        return std::make_shared<object::IntegerObject>(elements.size());
+    }
+
+    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalHashProperty(std::shared_ptr<object::IObject> object, const tstring& name) const {
+
+    auto hash = static_cast<object::HashObject*>(object.get());
+    auto& pairs = hash->GetPairs();
+
+    if (name == TT("length")) {
+        return std::make_shared<object::IntegerObject>(pairs.size());
+    }
+
+    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {

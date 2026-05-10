@@ -20,6 +20,7 @@ namespace tsumugi::script::ast::expression { class AssignmentExpression; }
 namespace tsumugi::script::ast::expression { class Identifier; }
 namespace tsumugi::script::ast::statement { class FunctionStatement; }
 namespace tsumugi::script::ast::expression { class IndexAssignmentExpression; }
+namespace tsumugi::script::ast::expression { class PropertyAccessExpression; }
 namespace tsumugi::script::ast::statement { class ForStatement; }
 
 namespace tsumugi::script::evaluator {
@@ -46,6 +47,12 @@ public:
     std::shared_ptr<object::IObject> EvalAssignmentExpression(const ast::expression::AssignmentExpression* assignmentExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIndexAssignmentExpression(const ast::expression::IndexAssignmentExpression* indexAssignmentExpression, const std::shared_ptr<object::Environment>& environment) const;
+    std::shared_ptr<object::IObject> EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const;
+
+private:
+    std::shared_ptr<object::IObject> EvalStringProperty(std::shared_ptr<object::IObject> object, const tstring& name) const;
+    std::shared_ptr<object::IObject> EvalArrayProperty(std::shared_ptr<object::IObject> object, const tstring& name) const;
+    std::shared_ptr<object::IObject> EvalHashProperty(std::shared_ptr<object::IObject> object, const tstring& name) const;
 
 private:
     bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;

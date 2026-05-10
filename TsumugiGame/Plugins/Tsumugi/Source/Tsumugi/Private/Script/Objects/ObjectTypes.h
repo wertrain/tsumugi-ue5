@@ -18,7 +18,8 @@ enum class ObjectType : int32_t {
     kBreak,
     kContinue,
     kFunction,
-    kBuiltin,
+    kBuiltinFunction,
+    kBuiltinMethod,
     kError,
     kNum
 };

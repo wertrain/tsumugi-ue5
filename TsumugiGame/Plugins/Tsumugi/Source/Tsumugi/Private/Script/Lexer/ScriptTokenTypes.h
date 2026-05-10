@@ -126,6 +126,11 @@ enum class TokenType : int32_t {
     /// </summary>
     kOr,
 
+    /// <summary>
+    /// ドット演算子
+    /// </summary>
+    kDot,
+
     /// --------- デリミタ --------- 
     /// 
     /// <summary>

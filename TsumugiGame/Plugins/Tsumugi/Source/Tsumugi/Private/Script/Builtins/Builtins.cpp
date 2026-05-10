@@ -10,7 +10,7 @@
 
 namespace tsumugi::script {
 
-static std::unordered_map<tstring, std::shared_ptr<object::BuiltinObject>> g_builtinFunctions;
+static std::unordered_map<tstring, std::shared_ptr<object::BuiltinFunctionObject>> g_builtinFunctions;
 static common::ErrorReporter g_errors;
 
 std::once_flag g_builtinInitialized;
@@ -20,7 +20,7 @@ void InitializeBuiltinFunctions() {
     std::call_once(g_builtinInitialized, []() {
 
     g_builtinFunctions[TT("keys")] =
-        std::make_shared<object::BuiltinObject>(
+        std::make_shared<object::BuiltinFunctionObject>(
             [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
@@ -41,7 +41,7 @@ void InitializeBuiltinFunctions() {
         );
 
     g_builtinFunctions[TT("values")] =
-        std::make_shared<object::BuiltinObject>(
+        std::make_shared<object::BuiltinFunctionObject>(
             [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
@@ -61,7 +61,7 @@ void InitializeBuiltinFunctions() {
         );
 
     g_builtinFunctions[TT("len")] =
-        std::make_shared<object::BuiltinObject>(
+        std::make_shared<object::BuiltinFunctionObject>(
             [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
@@ -100,7 +100,7 @@ void InitializeBuiltinFunctions() {
         );
 
     g_builtinFunctions[TT("has")] =
-        std::make_shared<object::BuiltinObject>(
+        std::make_shared<object::BuiltinFunctionObject>(
             [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 2) {
@@ -121,7 +121,7 @@ void InitializeBuiltinFunctions() {
         );
 
     g_builtinFunctions[TT("range")] =
-        std::make_shared<object::BuiltinObject>(
+        std::make_shared<object::BuiltinFunctionObject>(
             [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
@@ -149,7 +149,7 @@ void InitializeBuiltinFunctions() {
     });
 }
 
-std::shared_ptr<object::BuiltinObject> GetBuiltinByName(const tstring& name) {
+std::shared_ptr<object::BuiltinFunctionObject> GetBuiltinFunctionByName(const tstring& name) {
 
     auto it = g_builtinFunctions.find(name);
     if (it != g_builtinFunctions.end()) {
