@@ -1,4 +1,4 @@
-#include "Script/Builtins/Builtins.h"
+#include "Script/Builtins/BuiltinFunctions.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/StringObject.h"

@@ -50,11 +50,6 @@ public:
     std::shared_ptr<object::IObject> EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const;
 
 private:
-    std::shared_ptr<object::IObject> EvalStringProperty(std::shared_ptr<object::IObject> object, const tstring& name) const;
-    std::shared_ptr<object::IObject> EvalArrayProperty(std::shared_ptr<object::IObject> object, const tstring& name) const;
-    std::shared_ptr<object::IObject> EvalHashProperty(std::shared_ptr<object::IObject> object, const tstring& name) const;
-
-private:
     bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;
     bool IsErrorObject(const std::shared_ptr<object::IObject>& object) const;
     std::shared_ptr<object::BooleanObject> ToBooleanObject(bool value) const;

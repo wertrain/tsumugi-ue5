@@ -24,6 +24,7 @@ public:
     explicit HashObject(std::unordered_map<HashKey, HashPair>&& pairs);
 
     const std::unordered_map<HashKey, HashPair>& GetPairs() const { return pairs_; }
+    std::unordered_map<HashKey, HashPair>& GetPairs() { return pairs_; }
     void SetPair(const HashKey& key, std::shared_ptr<IObject> keyObject, std::shared_ptr<IObject> ValueObject) { pairs_[key] = HashPair{ keyObject, ValueObject }; }
     tstring Inspect() const override;
     ObjectType GetType() const override;

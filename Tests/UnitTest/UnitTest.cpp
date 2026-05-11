@@ -22,6 +22,7 @@
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/ErrorObject.h"
+#include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/FunctionObject.h"
 #include "Script/Lexer/ScriptLexer.h"
@@ -983,8 +984,44 @@ namespace UnitTest
 				tstring expected_;
 			};
 			std::vector<EvalFuncSet> tests = {
-				{ TT("\"test\""),  TT("test")},
-				{ TT("\"test\"*3"),  TT("testtesttest")}
+				{ TT("\"test\""),  TT("test") },
+				{ TT("\"test\"*3"),  TT("testtesttest") },
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+				_TestStringObject(evaluated.get(), test.expected_);
+			}
+		}
+
+		TEST_METHOD(TestStringMethod)
+		{
+			struct EvalFuncSet {
+				tstring code_;
+				tstring expected_;
+			};
+			std::vector<EvalFuncSet> tests = {
+				// --- substr ---
+				{ TT("\"abcdef\".substr(1, 3)"), TT("bcd") },
+				{ TT("\"abcdef\".substr(2)"), TT("cdef") },
+
+				// --- upper / lower ---
+				{ TT("\"abc\".upper()"), TT("ABC") },
+				{ TT("\"ABC\".lower()"), TT("abc") },
+
+				// --- slice ---
+				{ TT("\"abcdef\".slice(1, 4)"), TT("bcd") },
+
+				// --- startsWith / endsWith ---
+				//{ TT("\"hello\".startsWith(\"he\")"), TT("true") },
+				//{ TT("\"hello\".endsWith(\"lo\")"), TT("true") },
 			};
 
 			for (auto& test : tests) {
@@ -1074,6 +1111,223 @@ namespace UnitTest
 			_TestInfixExpression(index->GetIndex(), 1, TT("+"), 2);
 		}
 
+		TEST_METHOD(TestArrayMethods)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				{
+					TT("[1, 2, 3].length"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 3);
+					}
+				},
+
+				{
+					TT("let a = [1, 2]; a.push(3); a.length"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 3);
+					}
+				},
+
+				{
+					TT("let a = [10, 20, 30]; a.pop()"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 30);
+					}
+				},
+
+				{
+					TT("let a = []; a.pop()"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestNullObject(obj);
+					}
+				},
+
+				{
+					TT("[1,2,3,4].slice(1,3)"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						auto arr = dynamic_cast<tsumugi::script::object::ArrayObject*>(obj);
+						Assert::IsNotNull(arr);
+						_TestIntegerObject(arr->GetElements()[0].get(), 2);
+						_TestIntegerObject(arr->GetElements()[1].get(), 3);
+					}
+				},
+
+				{
+					TT("[1,2,3].slice(1)"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						auto arr = dynamic_cast<tsumugi::script::object::ArrayObject*>(obj);
+						Assert::IsNotNull(arr);
+						_TestIntegerObject(arr->GetElements()[0].get(), 2);
+						_TestIntegerObject(arr->GetElements()[1].get(), 3);
+					}
+				},
+
+				{
+					TT("[1,2,3].join(\"-\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestStringObject(obj, TT("1-2-3"));
+					}
+				},
+
+				{
+					TT("[1,2,3].join()"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestStringObject(obj, TT("1,2,3"));
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(tt.input.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestHashMethods)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// size
+				{
+					TT("let h = {\"a\": 1, \"b\": 2}; h.size"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 2);
+					}
+				},
+
+				// keys()
+				{
+					TT("let h = {\"a\": 1, \"b\": 2}; h.keys()"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						auto arr = dynamic_cast<tsumugi::script::object::ArrayObject*>(obj);
+						Assert::IsNotNull(arr, MSG("result is not ArrayObject."));
+
+						const auto& elems = arr->GetElements();
+
+						// サイズチェックは IsTrue にしておく（AreEqual の型問題を避ける）
+						Assert::IsTrue(elems.size() == 2, MSG("keys().length is not 2."));
+
+						auto strip_quotes = [](const tstring& s) {
+							if (s.size() >= 2 && s.front() == '"' && s.back() == '"')
+								return s.substr(1, s.size() - 2);
+							return s;
+							};
+
+						tstring k1 = strip_quotes(elems[0]->Inspect());
+						tstring k2 = strip_quotes(elems[1]->Inspect());
+
+						Logger::WriteMessage((TT("k1 = ") + k1 + TT(", k2 = ") + k2 + TT("\n")).c_str());
+
+						// 順不同なのでどちらの並びも許容
+						const bool pattern1 = (k1 == TT("a") && k2 == TT("b"));
+						const bool pattern2 = (k1 == TT("b") && k2 == TT("a"));
+
+						Assert::IsTrue(pattern1 || pattern2, MSG("keys() are not [\"a\",\"b\"] in any order."));
+					}
+				},
+
+				// values()
+				{
+					TT("let h = {\"a\": 1, \"b\": 2}; h.values()"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						auto arr = dynamic_cast<tsumugi::script::object::ArrayObject*>(obj);
+						Assert::IsNotNull(arr);
+
+						auto& elems = arr->GetElements();
+						Assert::AreEqual((size_t)2, elems.size());
+
+						int v1 = dynamic_cast<tsumugi::script::object::IntegerObject*>(elems[0].get())->GetValue();
+						int v2 = dynamic_cast<tsumugi::script::object::IntegerObject*>(elems[1].get())->GetValue();
+
+						Assert::IsTrue(
+							(v1 == 1 && v2 == 2) ||
+							(v1 == 2 && v2 == 1)
+						);
+					}
+				},
+
+				// has(key)
+				{
+					TT("let h = {\"a\": 1}; h.has(\"a\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestBooleanObject(obj, true);
+					}
+				},
+				{
+					TT("let h = {\"a\": 1}; h.has(\"b\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestBooleanObject(obj, false);
+					}
+				},
+
+				// get(key)
+				{
+					TT("let h = {\"a\": 10}; h.get(\"a\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 10);
+					}
+				},
+				{
+					TT("let h = {\"a\": 10}; h.get(\"b\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestNullObject(obj);
+					}
+				},
+
+				// set(key, value)
+				{
+					TT("let h = {\"a\": 1}; h.set(\"b\", 20); h.get(\"b\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 20);
+					}
+				},
+
+				// delete(key)
+				{
+					TT("let h = {\"a\": 1, \"b\": 2}; h.delete(\"b\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestIntegerObject(obj, 2);
+					}
+				},
+				{
+					TT("let h = {\"a\": 1}; h.delete(\"x\")"),
+					[](tsumugi::script::object::IObject* obj) -> void {
+						_TestNullObject(obj);
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(tt.input.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+				tt.tester(evaluated.get());
+			}
+		}
+
 		TEST_METHOD(LiteralFunctionDeclaration)
 		{
 			tstring code = TT("let add = function(x, y) { return x + y; };");
@@ -1130,40 +1384,62 @@ namespace UnitTest
 			}
 		}
 
-		void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
+		static void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::IntegerObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not IntegerObject."));
 			Assert::AreEqual(expected, result->GetValue());
 		}
-		void _TestBooleanObject(tsumugi::script::object::IObject* obj, bool expected)
+		static void _TestBooleanObject(tsumugi::script::object::IObject* obj, bool expected)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::BooleanObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not BooleanObject."));
 			Assert::AreEqual(expected, result->GetValue());
 		}
-		void _TestNullObject(tsumugi::script::object::IObject* obj)
+		static void _TestNullObject(tsumugi::script::object::IObject* obj)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::NullObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not NullObject."));
 		}
-		void _TestErrorObject(tsumugi::script::object::IObject* obj, bool expected)
+		static void _TestErrorObject(tsumugi::script::object::IObject* obj, bool expected)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::ErrorObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not ErrorObject."));
 			Logger::WriteMessage((TT("message : ") + result->Inspect() + TT("\n")).c_str());
 		}
-		void _TestFunctionObject(tsumugi::script::object::IObject* obj)
+		static void _TestFunctionObject(tsumugi::script::object::IObject* obj)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::FunctionObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not FunctionObject."));
 			Logger::WriteMessage((TT("message : ") + result->Inspect() + TT("\n")).c_str());
 		}
-		void _TestStringObject(tsumugi::script::object::IObject* obj, tstring expected)
+		static void _TestStringObject(tsumugi::script::object::IObject* obj, tstring expected)
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::StringObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not StringObject."));
 			Assert::IsTrue(expected == result->GetValue());
+		}
+		static void _TestArrayObject(tsumugi::script::object::IObject* obj, size_t expectedSize)
+		{
+			const auto* result = dynamic_cast<const tsumugi::script::object::ArrayObject*>(obj);
+			Assert::IsNotNull(result, MSG("result is not ArrayObject."));
+
+			const auto& elems = result->GetElements();
+			Assert::AreEqual(expectedSize, elems.size(), MSG("Array size mismatch."));
+		}
+		static void _TestArrayObject(
+			tsumugi::script::object::IObject* obj,
+			const std::vector<std::function<void(tsumugi::script::object::IObject*)>>& testers)
+		{
+			const auto* result = dynamic_cast<const tsumugi::script::object::ArrayObject*>(obj);
+			Assert::IsNotNull(result, MSG("result is not ArrayObject."));
+
+			const auto& elems = result->GetElements();
+			Assert::AreEqual(testers.size(), elems.size(), MSG("Array size mismatch."));
+
+			for (size_t i = 0; i < testers.size(); ++i) {
+				testers[i](elems[i].get());
+			}
 		}
 private:
 		// ヘルパー関数群

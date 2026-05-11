@@ -15,7 +15,9 @@ public:
         static auto instance = std::make_shared<BooleanObject>(false);
         return instance;
     }
-
+    static std::shared_ptr<BooleanObject> FromBool(const bool value) {
+        return value ? True() : False();
+    }
 public:
     explicit BooleanObject(bool value);
     bool GetValue() const;

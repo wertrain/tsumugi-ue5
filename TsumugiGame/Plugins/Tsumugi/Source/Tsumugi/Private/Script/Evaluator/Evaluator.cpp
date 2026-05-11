@@ -40,7 +40,10 @@
 #include "Script/Objects/ContinueObject.h"
 #include "Script/Objects/ObjectHash.h"
 #include "Script/Objects/BuiltinMethodObject.h"
-#include "Script/Builtins/Builtins.h"
+#include "Script/Objects/StringMethods.h"
+#include "Script/Objects/ArrayMethods.h"
+#include "Script/Objects/HashMethods.h"
+#include "Script/Builtins/BuiltinFunctions.h"
 
 namespace tsumugi::script::evaluator {
 
@@ -619,61 +622,12 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
     auto name = propertyAccessExpression->GetName()->GetValue();
 
     switch (left->GetType()) {
-
-        case object::ObjectType::kString:
-            return EvalStringProperty(left, name);
-
-        case object::ObjectType::kArray:
-            return EvalArrayProperty(left, name);
-
-        case object::ObjectType::kHash:
-            return EvalHashProperty(left, name);
-
-        default:
-            return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, TT("property access"));
+    case object::ObjectType::kString: return object::GetStringProperty(left, name, errors);
+    case object::ObjectType::kArray: return object::GetArrayProperty(left, name, errors);
+    case object::ObjectType::kHash: return object::GetHashProperty(left, name, errors);
+    default:
+        return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, TT("property access"));
     }
-}
-
-std::shared_ptr<object::IObject> Evaluator::EvalStringProperty(std::shared_ptr<object::IObject> object, const tstring& name) const {
-
-    auto str = static_cast<object::StringObject*>(object.get());
-
-    if (name == TT("length")) {
-        return std::make_shared<object::IntegerObject>(str->GetValue().size());
-    } else if (name == TT("test")) {
-        return std::make_shared<object::BuiltinMethodObject>(
-            [](auto thisObject, const std::vector<std::shared_ptr<object::IObject>>& arguments) {
-                auto str = static_cast<object::StringObject*>(thisObject.get());
-                return std::make_shared<object::StringObject>(str->GetValue().substr(0, 1));
-            }, object
-        );
-    }
-
-    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
-}
-
-std::shared_ptr<object::IObject> Evaluator::EvalArrayProperty(std::shared_ptr<object::IObject> object, const tstring& name) const {
-
-    auto array = static_cast<object::ArrayObject*>(object.get());
-    auto& elements = array->GetElements();
-
-    if (name == TT("length")) {
-        return std::make_shared<object::IntegerObject>(elements.size());
-    }
-
-    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
-}
-
-std::shared_ptr<object::IObject> Evaluator::EvalHashProperty(std::shared_ptr<object::IObject> object, const tstring& name) const {
-
-    auto hash = static_cast<object::HashObject*>(object.get());
-    auto& pairs = hash->GetPairs();
-
-    if (name == TT("length")) {
-        return std::make_shared<object::IntegerObject>(pairs.size());
-    }
-
-    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {
