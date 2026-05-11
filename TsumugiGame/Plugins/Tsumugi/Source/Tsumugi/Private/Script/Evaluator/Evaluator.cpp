@@ -75,7 +75,7 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kBooleanLiteral: {
             auto* booleanLiteral = static_cast<const ast::expression::BooleanLiteral*>(node);
-            return ToBooleanObject(booleanLiteral->GetValue());
+            return object::BooleanObject::FromBool(booleanLiteral->GetValue());
         }
         case ast::NodeType::kArrayLiteral: {
             auto* arrayLiteral = static_cast<const ast::expression::ArrayLiteral*>(node);
@@ -372,9 +372,9 @@ std::shared_ptr<object::IObject> Evaluator::EvalInfixExpression(const tstring& o
     }
 
     if (op == TT("==")) {
-        return ToBooleanObject(left == right);
+        return object::BooleanObject::FromBool(left == right);
     } else if (op == TT("!=")) {
-        return ToBooleanObject(left != right);
+        return object::BooleanObject::FromBool(left != right);
     }
 
     if (left->GetType() != right->GetType()) {
@@ -397,17 +397,17 @@ std::shared_ptr<object::IObject> Evaluator::EvalIntegerInfixExpression(const tst
     } else if (op == TT("/")) {
         return std::make_shared<object::IntegerObject>(leftValue / rightValue);
     } else if (op == TT("<")) {
-        return ToBooleanObject(leftValue < rightValue);
+        return object::BooleanObject::FromBool(leftValue < rightValue);
     } else if (op == TT(">")) {
-        return ToBooleanObject(leftValue > rightValue);
+        return object::BooleanObject::FromBool(leftValue > rightValue);
     } else if (op == TT("<=")) {
-        return ToBooleanObject(leftValue <= rightValue);
+        return object::BooleanObject::FromBool(leftValue <= rightValue);
     } else if (op == TT(">=")) {
-        return ToBooleanObject(leftValue >= rightValue);
+        return object::BooleanObject::FromBool(leftValue >= rightValue);
     } else if (op == TT("==")) {
-        return ToBooleanObject(leftValue == rightValue);
+        return object::BooleanObject::FromBool(leftValue == rightValue);
     } else if (op == TT("!=")) {
-        return ToBooleanObject(leftValue != rightValue);
+        return object::BooleanObject::FromBool(leftValue != rightValue);
     }
     return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kInteger, op, object::ObjectType::kInteger);
 }
@@ -420,17 +420,17 @@ std::shared_ptr<object::IObject> Evaluator::EvalStringInfixExpression(const tstr
     if (op == TT("+")) {
         return std::make_shared<object::StringObject>(leftValue + rightValue);
     } else if (op == TT("<")) {
-        return ToBooleanObject(leftValue < rightValue);
+        return object::BooleanObject::FromBool(leftValue < rightValue);
     } else if (op == TT(">")) {
-        return ToBooleanObject(leftValue > rightValue);
+        return object::BooleanObject::FromBool(leftValue > rightValue);
     } else if (op == TT("<=")) {
-        return ToBooleanObject(leftValue <= rightValue);
+        return object::BooleanObject::FromBool(leftValue <= rightValue);
     } else if (op == TT(">=")) {
-        return ToBooleanObject(leftValue >= rightValue);
+        return object::BooleanObject::FromBool(leftValue >= rightValue);
     } else if (op == TT("==")) {
-        return ToBooleanObject(leftValue == rightValue);
+        return object::BooleanObject::FromBool(leftValue == rightValue);
     } else if (op == TT("!=")) {
-        return ToBooleanObject(leftValue != rightValue);
+        return object::BooleanObject::FromBool(leftValue != rightValue);
     }
     return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kString, op, object::ObjectType::kString);
 }
@@ -648,11 +648,6 @@ bool Evaluator::IsErrorObject(const std::shared_ptr<object::IObject>& object) co
         return object->GetType() == object::ObjectType::kError;
     }
     return false;
-}
-
-std::shared_ptr<object::BooleanObject> Evaluator::ToBooleanObject(bool value) const {
-
-    return (value) ? object::BooleanObject::True() : object::BooleanObject::False();
 }
 
 }

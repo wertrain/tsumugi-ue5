@@ -52,7 +52,6 @@ public:
 private:
     bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;
     bool IsErrorObject(const std::shared_ptr<object::IObject>& object) const;
-    std::shared_ptr<object::BooleanObject> ToBooleanObject(bool value) const;
 
 private:
     common::ErrorReporter errors;
