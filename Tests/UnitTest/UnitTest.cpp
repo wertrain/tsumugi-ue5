@@ -24,7 +24,7 @@
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/Environment.h"
-#include "Script/Objects/FunctionObject.h"
+#include "Script/Objects/UserFunctionObject.h"
 #include "Script/Lexer/ScriptLexer.h"
 #include "Script/Lexer/ScriptToken.h"
 #include "Script/Parser/ScriptParser.h"
@@ -942,7 +942,7 @@ namespace UnitTest
 				auto evaluated = evaluator->Eval(root.get(), environment);
 				_TestFunctionObject(evaluated.get());
 
-				const auto* result = dynamic_cast<const tsumugi::script::object::FunctionObject*>(evaluated.get());
+				const auto* result = dynamic_cast<const tsumugi::script::object::UserFunctionObject*>(evaluated.get());
 				Assert::AreEqual(test.params_, result->GetParameters().size());
 				Assert::AreEqual(test.name_, result->GetParameters().at(0)->ToCode());
 				Assert::AreEqual(test.bodycode_, result->GetBody()->ToCode());
@@ -961,7 +961,9 @@ namespace UnitTest
 				{ TT("let double = function(x) { x * 2; }; double(10);"), 20},
 				{ TT("let add = function(x, y) { x + y; }; add(10, 20);"), 30},
 				{ TT("let add = function(x, y) { x + y; }; add(add(10, 20), 30 + 40);"), 100},
-				{ TT("function(x) { x; }(10);"), 10}
+				{ TT("function(x) { x; }(10);"), 10},
+				{ TT("let f = function(x) { if (x > 0) { return x; } x * 10;} f(5);"), 5},
+				{ TT("let f = function(x) { return x; }; f(5) + 10;"), 15}
 			};
 
 			for (auto& test : tests) {
@@ -1409,8 +1411,8 @@ namespace UnitTest
 		}
 		static void _TestFunctionObject(tsumugi::script::object::IObject* obj)
 		{
-			const auto* result = dynamic_cast<const tsumugi::script::object::FunctionObject*>(obj);
-			Assert::IsNotNull(result, MSG("result is not FunctionObject."));
+			const auto* result = dynamic_cast<const tsumugi::script::object::UserFunctionObject*>(obj);
+			Assert::IsNotNull(result, MSG("result is not UserFunctionObject."));
 			Logger::WriteMessage((TT("message : ") + result->Inspect() + TT("\n")).c_str());
 		}
 		static void _TestStringObject(tsumugi::script::object::IObject* obj, tstring expected)

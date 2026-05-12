@@ -4,6 +4,7 @@
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/ObjectHash.h"
 #include <unordered_map>
+#include <optional>
 
 // unordered_map のキーにするための std::hash の特殊化
 /*namespace std {
@@ -28,6 +29,8 @@ public:
     void SetPair(const HashKey& key, std::shared_ptr<IObject> keyObject, std::shared_ptr<IObject> ValueObject) { pairs_[key] = HashPair{ keyObject, ValueObject }; }
     tstring Inspect() const override;
     ObjectType GetType() const override;
+
+    std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name);
 
 private:
     std::unordered_map<HashKey, HashPair> pairs_;

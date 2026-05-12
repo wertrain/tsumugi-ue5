@@ -5,42 +5,32 @@
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/NullObject.h"
-#include "Script/Objects/BuiltinMethodObject.h"
+#include "Script/Objects/BuiltinFunctionObject.h"
 #include "Script/Objects/ObjectHash.h"
 
 namespace tsumugi::script::object {
 
-std::shared_ptr<object::IObject> GetHashProperty(std::shared_ptr<object::IObject> object, const tstring& name, const common::ErrorReporter& errors) {
+std::optional<std::shared_ptr<object::IObject>> GetHashProperty(object::HashObject* hashObject, const tstring& name) {
 
-    auto hashObj = static_cast<object::HashObject*>(object.get());
-    auto& pairs = hashObj->GetPairs();
+    auto& pairs = hashObject->GetPairs();
 
     // -------------------------
     // プロパティ
     // -------------------------
     if (name == TT("size")) {
-        return std::make_shared<object::IntegerObject>(pairs.size());
+        return std::make_shared<object::IntegerObject>(static_cast<int>(pairs.size()));
     }
 
-    using MethodType = std::function<
-        std::shared_ptr<object::IObject>(
-            std::shared_ptr<object::IObject>,
-            const std::vector<std::shared_ptr<object::IObject>>&
-        )
-    >;
+    // -------------------------
+    // メソッド
+    // -------------------------
+    if (name == TT("keys")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto&) {
+                auto hash = std::static_pointer_cast<object::HashObject>(receiver);
+                auto& pairs = hash->GetPairs();
 
-    static const std::unordered_map<tstring, MethodType> methods = {
-
-        // keys()
-        {
-            TT("keys"),
-            [](auto thisObj, const auto&)
-                -> std::shared_ptr<object::IObject>
-            {
-                auto hashObj = static_cast<object::HashObject*>(thisObj.get());
-                auto& pairs = hashObj->GetPairs();
-
-                std::vector<std::shared_ptr<object::IObject>> keys;
+                std::vector<std::shared_ptr<IObject>> keys;
                 keys.reserve(pairs.size());
 
                 for (auto& [hkey, pair] : pairs) {
@@ -49,16 +39,14 @@ std::shared_ptr<object::IObject> GetHashProperty(std::shared_ptr<object::IObject
 
                 return std::make_shared<object::ArrayObject>(keys);
             }
-        },
+        );
+    }
 
-        // values()
-        {
-            TT("values"),
-            [](auto thisObj, const auto&)
-                -> std::shared_ptr<object::IObject>
-            {
-                auto hashObj = static_cast<object::HashObject*>(thisObj.get());
-                auto& pairs = hashObj->GetPairs();
+    if (name == TT("values")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto&) {
+                auto hash = std::static_pointer_cast<object::HashObject>(receiver);
+                auto& pairs = hash->GetPairs();
 
                 std::vector<std::shared_ptr<object::IObject>> values;
                 values.reserve(pairs.size());
@@ -69,135 +57,93 @@ std::shared_ptr<object::IObject> GetHashProperty(std::shared_ptr<object::IObject
 
                 return std::make_shared<object::ArrayObject>(values);
             }
-        },
+        );
+    }
 
-        // has(key)
-        {
-            TT("has"),
-            [](auto thisObj, const auto& args)
-                -> std::shared_ptr<object::IObject>
-            {
-                if (args.size() < 1) {
-                    return object::NullObject::Instance();
-                }
+    if (name == TT("has")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                if (args.size() < 1) return object::NullObject::Instance();
 
                 auto keyObj = args[0].get();
+                if (!IsHashable(keyObj)) return object::NullObject::Instance();
 
-                if (!object::IsHashable(keyObj)) {
-                    return object::NullObject::Instance();
-                }
+                auto hkey = MakeHashKey(keyObj);
 
-                auto hkey = object::MakeHashKey(keyObj);
-
-                auto hashObj = static_cast<object::HashObject*>(thisObj.get());
-                auto& pairs = hashObj->GetPairs();
+                auto hash = std::static_pointer_cast<object::HashObject>(receiver);
+                auto& pairs = hash->GetPairs();
 
                 bool exists = pairs.find(hkey) != pairs.end();
                 return object::BooleanObject::FromBool(exists);
             }
-        },
+        );
+    }
 
-        // get(key)
-        {
-            TT("get"),
-            [](auto thisObj, const auto& args)
-                -> std::shared_ptr<object::IObject>
-            {
-                if (args.size() < 1) {
-                    return object::NullObject::Instance();
-                }
+    if (name == TT("get")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                if (args.size() < 1) return object::NullObject::Instance();
 
                 auto keyObj = args[0].get();
+                if (!IsHashable(keyObj)) return object::NullObject::Instance();
 
-                if (!object::IsHashable(keyObj)) {
-                    return object::NullObject::Instance();
-                }
+                auto hkey = MakeHashKey(keyObj);
 
-                auto hkey = object::MakeHashKey(keyObj);
-
-                auto hashObj = static_cast<object::HashObject*>(thisObj.get());
-                auto& pairs = hashObj->GetPairs();
+                auto hash = std::static_pointer_cast<object::HashObject>(receiver);
+                auto& pairs = hash->GetPairs();
 
                 auto it = pairs.find(hkey);
-                if (it == pairs.end()) {
-                    return object::NullObject::Instance();
-                }
+                if (it == pairs.end()) return object::NullObject::Instance();
 
                 return it->second.value;
             }
-        },
+        );
+    }
 
-        // set(key, value)
-        {
-            TT("set"),
-            [](auto thisObj, const auto& args)
-                -> std::shared_ptr<object::IObject>
-            {
-                if (args.size() < 2) {
-                    return object::NullObject::Instance();
-                }
+    if (name == TT("set")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                if (args.size() < 2) return object::NullObject::Instance();
 
                 auto keyObj = args[0];
                 auto valObj = args[1];
 
-                if (!object::IsHashable(keyObj.get())) {
-                    return object::NullObject::Instance();
-                }
+                if (!IsHashable(keyObj.get())) return object::NullObject::Instance();
 
-                auto hkey = object::MakeHashKey(keyObj.get());
+                auto hkey = MakeHashKey(keyObj.get());
 
-                auto hashObj = static_cast<object::HashObject*>(thisObj.get());
-                hashObj->SetPair(hkey, keyObj, valObj);
+                auto hash = std::static_pointer_cast<object::HashObject>(receiver);
+                hash->SetPair(hkey, keyObj, valObj);
 
                 return valObj;
             }
-        },
+        );
+    }
 
-        // delete(key)
-        {
-            TT("delete"),
-            [](auto thisObj, const auto& args)
-                -> std::shared_ptr<object::IObject>
-            {
-                if (args.size() < 1) {
-                    return object::NullObject::Instance();
-                }
+    if (name == TT("delete")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                if (args.size() < 1) return object::NullObject::Instance();
 
                 auto keyObj = args[0].get();
+                if (!IsHashable(keyObj)) return object::NullObject::Instance();
 
-                if (!object::IsHashable(keyObj)) {
-                    return object::NullObject::Instance();
-                }
+                auto hkey = MakeHashKey(keyObj);
 
-                auto hkey = object::MakeHashKey(keyObj);
-
-                auto hashObj = static_cast<object::HashObject*>(thisObj.get());
-                auto& pairs = hashObj->GetPairs();
+                auto hash = std::static_pointer_cast<object::HashObject>(receiver);
+                auto& pairs = hash->GetPairs();
 
                 auto it = pairs.find(hkey);
-                if (it == pairs.end()) {
-                    return object::NullObject::Instance();
-                }
+                if (it == pairs.end()) return object::NullObject::Instance();
 
                 auto removed = it->second.value;
                 pairs.erase(it);
                 return removed;
             }
-        },
-    };
-
-    // -------------------------
-    // メソッド検索
-    // -------------------------
-    auto it = methods.find(name);
-    if (it != methods.end()) {
-        return std::make_shared<object::BuiltinMethodObject>(
-            it->second,
-            object
         );
     }
 
-    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+    return std::nullopt;
 }
 
 }

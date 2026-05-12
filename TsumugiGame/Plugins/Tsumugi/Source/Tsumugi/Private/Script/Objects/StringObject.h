@@ -2,6 +2,7 @@
 
 #include "Foundation/Types.h"
 #include "Script/Objects/IObject.h"
+#include <optional>
 
 namespace tsumugi::script::object {
 
@@ -13,6 +14,8 @@ public:
 
     tstring Inspect() const override;
     ObjectType GetType() const override;
+
+    std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name);
 
 private:
     tstring value_;

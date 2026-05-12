@@ -35,14 +35,15 @@
 #include "Script/Objects/ReturnValue.h"
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
-#include "Script/Objects/FunctionObject.h"
+#include "Script/Objects/UserFunctionObject.h"
 #include "Script/Objects/BreakObject.h"
 #include "Script/Objects/ContinueObject.h"
 #include "Script/Objects/ObjectHash.h"
-#include "Script/Objects/BuiltinMethodObject.h"
 #include "Script/Objects/StringMethods.h"
 #include "Script/Objects/ArrayMethods.h"
 #include "Script/Objects/HashMethods.h"
+#include "Script/Objects/PropertyReference.h"
+#include "Script/Objects/protocol/ObjectProtocolDispatcher.h"
 #include "Script/Builtins/BuiltinFunctions.h"
 
 namespace tsumugi::script::evaluator {
@@ -156,7 +157,7 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kFunctionLiteral: {
             auto* functionLiteral = static_cast<const ast::expression::FunctionLiteral*>(node);
-            auto functionObject = std::make_shared<object::FunctionObject>();
+            auto functionObject = std::make_shared<object::UserFunctionObject>();
             for (auto& param : functionLiteral->GetParameters()) {
                 functionObject->AddParameter(std::move(param));
             }
@@ -166,16 +167,7 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kCallExpression: {
             auto* callExpression = static_cast<const ast::expression::CallExpression*>(node);
-            auto function = Eval(callExpression->GetFunction(), environment);
-            if (IsErrorObject(function)) {
-                return function;
-            }
-            std::vector<std::shared_ptr<object::IObject>> arguments = EvalExpressions(callExpression->GetArguments(), environment);
-            if (arguments.size() > 0 && IsErrorObject(arguments.at(0))) {
-                return arguments.at(0);
-            }
-            // 通常の関数呼び出し
-            return ApplyFunction(function, arguments);
+            return EvalCallExpression(callExpression, environment);
         }
         case ast::NodeType::kIndexExpression: {
             auto* indexExpression = static_cast<const ast::expression::IndexExpression*>(node);
@@ -498,35 +490,31 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
     return errors.MakeErrorObject(i18n::MessageId::kIndexOperatorNotSupported, left->Inspect());
 }
 
-std::shared_ptr<object::IObject> Evaluator::ApplyFunction(const std::shared_ptr<object::IObject>& object, const std::vector<std::shared_ptr<object::IObject>> arguments) const {
+std::shared_ptr<object::IObject> Evaluator::EvalCallExpression(const ast::expression::CallExpression* callExpression, const std::shared_ptr<object::Environment>& environment) const {
 
-    if (object->GetType() == object::ObjectType::kFunction) {
-        auto functionObject = std::static_pointer_cast<const object::FunctionObject>(object);
-        if (functionObject->GetParameters().size() != arguments.size()) {
-            return errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, functionObject->GetParameters().size(), arguments.size());
-        }
-
-        auto functionEnvironment = std::make_shared<object::Environment>(functionObject->GetEnvironment());
-
-        for (size_t i = 0, num = arguments.size(); i < num; ++i) {
-            functionEnvironment->Set(functionObject->GetParameters()[i]->GetValue(), arguments[i]);
-        }
-        std::shared_ptr<object::IObject> evaluated = EvalBlockStatement(functionObject->GetBody()->GetStatements(), functionEnvironment);
-
-        if (evaluated->GetType() == object::ObjectType::kReturnValue) {
-            auto returnValue = std::static_pointer_cast<const object::ReturnValue>(evaluated);
-            return returnValue->GetValue();
-        }
-        return evaluated;
-    } else if (object->GetType() == object::ObjectType::kBuiltinFunction) {
-        auto builtin = static_cast<object::BuiltinFunctionObject*>(object.get());
-        return builtin->GetFunction()(arguments);
-    } else if (object->GetType() == object::ObjectType::kBuiltinMethod) {
-        auto method = static_cast<object::BuiltinMethodObject*>(object.get());
-        return method->GetFunction()(method->GetThis(), arguments);
+    auto callee = Eval(callExpression->GetFunction(), environment);
+    if (IsErrorObject(callee)) {
+        return callee;
+    }
+    std::vector<std::shared_ptr<object::IObject>> arguments = EvalExpressions(callExpression->GetArguments(), environment);
+    if (arguments.size() > 0 && IsErrorObject(arguments.at(0))) {
+        return arguments.at(0);
     }
 
-    return errors.MakeErrorObject(i18n::MessageId::kNotFunction, object->GetType());
+    if (callee->GetType() == object::ObjectType::kPropertyReference) {
+        auto property = std::static_pointer_cast<const object::PropertyReference>(callee);
+        auto function = property->GetValue();
+        auto receiver = property->GetReceiver();
+        if (!object::protocol::ObjectProtocolDispatcher::IsCallable(function)) {
+            return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, function->Inspect());
+        }
+        return InvokeFunction(function, receiver, arguments);
+    }
+
+    if (!object::protocol::ObjectProtocolDispatcher::IsCallable(callee)) {
+        return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, callee->Inspect());
+    }
+    return InvokeFunction(callee, nullptr, arguments);
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const {
@@ -569,7 +557,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalAssignmentExpression(const ast::
 
 std::shared_ptr<object::IObject> Evaluator::EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const {
 
-    auto functionObject = std::make_shared<object::FunctionObject>();
+    auto functionObject = std::make_shared<object::UserFunctionObject>();
     for (auto& param : functionStatement->GetParameters()) {
         functionObject->AddParameter(std::move(param));
     }
@@ -621,13 +609,47 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
 
     auto name = propertyAccessExpression->GetName()->GetValue();
 
-    switch (left->GetType()) {
-    case object::ObjectType::kString: return object::GetStringProperty(left, name, errors);
-    case object::ObjectType::kArray: return object::GetArrayProperty(left, name, errors);
-    case object::ObjectType::kHash: return object::GetHashProperty(left, name, errors);
-    default:
-        return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, TT("property access"));
+    auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(left, name);
+    if (!optValue.has_value()) {
+        return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
     }
+
+    auto value = optValue.value();
+
+    if (object::protocol::ObjectProtocolDispatcher::IsCallable(value)) {
+        return std::make_shared<object::PropertyReference>(left, name, value);
+    }
+
+    // プロパティ値を返す
+    return value;
+}
+
+std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<object::IObject> function, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
+
+    switch (function->GetType()) {
+
+        case object::ObjectType::kBuiltinFunction: {
+            auto builtin = static_cast<object::BuiltinFunctionObject*>(function.get());
+            return builtin->GetFunction()(receiver, arguments);
+        }
+        case object::ObjectType::kUserFunction: {
+            auto userFunction = static_cast<object::UserFunctionObject*>(function.get());
+            auto extended = std::make_shared<object::Environment>(userFunction->GetEnvironment());
+            if (receiver) {
+                extended->Set(TT("self"), receiver);
+            }
+            const auto& params = userFunction->GetParameters();
+            for (size_t i = 0; i < params.size(); ++i) {
+                extended->Set(params[i]->GetValue(), arguments[i]);
+            }
+            auto result = EvalBlockStatement(userFunction->GetBody()->GetStatements(), extended);
+            if (result->GetType() == object::ObjectType::kReturnValue) {
+                return std::static_pointer_cast<object::ReturnValue>(result)->GetValue();
+            }
+            return result;
+        }
+    }
+    return errors.MakeErrorObject(i18n::MessageId::kNotCallable, function->Inspect());
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {

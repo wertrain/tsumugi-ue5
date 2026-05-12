@@ -1,4 +1,5 @@
 #include "Script/Objects/StringObject.h"
+#include "Script/Objects/StringMethods.h"
 
 namespace tsumugi::script::object {
 
@@ -29,6 +30,11 @@ tstring StringObject::Inspect() const {
 ObjectType StringObject::GetType() const {
 
     return ObjectType::kString;
+}
+
+std::optional<std::shared_ptr<object::IObject>> StringObject::TryGetProperty(const tstring& name) {
+
+    return object::GetStringProperty(this, name);
 }
 
 }

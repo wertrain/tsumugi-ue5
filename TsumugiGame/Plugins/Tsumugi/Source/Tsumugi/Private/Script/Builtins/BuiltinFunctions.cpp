@@ -21,7 +21,7 @@ void InitializeBuiltinFunctions() {
 
     g_builtinFunctions[TT("keys")] =
         std::make_shared<object::BuiltinFunctionObject>(
-            [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
                     return g_errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, TT("1"), std::to_string(args.size()));
@@ -42,7 +42,7 @@ void InitializeBuiltinFunctions() {
 
     g_builtinFunctions[TT("values")] =
         std::make_shared<object::BuiltinFunctionObject>(
-            [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
                     return g_errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, TT("1"), std::to_string(args.size()));
@@ -62,7 +62,7 @@ void InitializeBuiltinFunctions() {
 
     g_builtinFunctions[TT("len")] =
         std::make_shared<object::BuiltinFunctionObject>(
-            [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
                     return g_errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, tstring(TT("1")), std::to_string(args.size()));
@@ -101,7 +101,7 @@ void InitializeBuiltinFunctions() {
 
     g_builtinFunctions[TT("has")] =
         std::make_shared<object::BuiltinFunctionObject>(
-            [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 2) {
                     return g_errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, tstring(TT("2")), std::to_string(args.size()));
@@ -122,7 +122,7 @@ void InitializeBuiltinFunctions() {
 
     g_builtinFunctions[TT("range")] =
         std::make_shared<object::BuiltinFunctionObject>(
-            [](const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
             {
                 if (args.size() != 1) {
                     return g_errors.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, tstring(TT("1")), std::to_string(args.size()));

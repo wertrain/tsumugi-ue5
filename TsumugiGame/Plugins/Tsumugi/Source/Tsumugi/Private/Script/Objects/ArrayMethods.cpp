@@ -3,42 +3,30 @@
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/NullObject.h"
-#include "Script/Objects/BuiltinMethodObject.h"
+#include "Script/Objects/BuiltinFunctionObject.h"
 
 namespace tsumugi::script::object {
 
-std::shared_ptr<object::IObject> GetArrayProperty(std::shared_ptr<object::IObject> object, const tstring& name, const common::ErrorReporter& errors) {
+std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayObject* arrayObject, const tstring& name) {
 
-    auto arr = static_cast<object::ArrayObject*>(object.get());
-    auto& elements = arr->GetElements();
+    auto& elems = arrayObject->GetElements();
 
     // -------------------------
     // プロパティ
     // -------------------------
     if (name == TT("length")) {
-        return std::make_shared<object::IntegerObject>(elements.size());
+        return std::make_shared<object::IntegerObject>(static_cast<int>(elems.size()));
     }
 
     // -------------------------
-    // メソッドテーブル
+    // メソッド
     // -------------------------
-    using MethodType = std::function<
-        std::shared_ptr<object::IObject>(
-            std::shared_ptr<object::IObject>,
-            const std::vector<std::shared_ptr<object::IObject>>&
-        )
-    >;
 
-    static const std::unordered_map<tstring, MethodType> methods = {
-
-        // -------------------------
-        // push(value)
-        // -------------------------
-        {
-            TT("push"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto arr = static_cast<object::ArrayObject*>(thisObj.get());
+    // push(value)
+    if (name == TT("push")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                auto arr = std::static_pointer_cast<object::ArrayObject>(receiver);
                 auto& elems = arr->GetElements();
 
                 for (auto& a : args) {
@@ -47,36 +35,32 @@ std::shared_ptr<object::IObject> GetArrayProperty(std::shared_ptr<object::IObjec
 
                 return std::make_shared<object::IntegerObject>(elems.size());
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // pop()
-        // -------------------------
-        {
-            TT("pop"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>&)
-            {
-                auto arr = static_cast<object::ArrayObject*>(thisObj.get());
+    // pop()
+    if (name == TT("pop")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto&) -> std::shared_ptr<object::IObject> {
+                auto arr = std::static_pointer_cast<object::ArrayObject>(receiver);
                 auto& elems = arr->GetElements();
 
                 if (elems.empty()) {
-                    return std::static_pointer_cast<object::IObject>(object::NullObject::Instance());
+                    return object::NullObject::Instance();
                 }
 
                 auto last = elems.back();
                 elems.pop_back();
                 return last;
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // slice(start, end?)
-        // -------------------------
-        {
-            TT("slice"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto arr = static_cast<object::ArrayObject*>(thisObj.get());
+    // slice(start, end?)
+    if (name == TT("slice")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                auto arr = std::static_pointer_cast<object::ArrayObject>(receiver);
                 auto& elems = arr->GetElements();
 
                 int start = (args.size() >= 1)
@@ -85,7 +69,7 @@ std::shared_ptr<object::IObject> GetArrayProperty(std::shared_ptr<object::IObjec
 
                 int end = (args.size() >= 2)
                     ? static_cast<object::IntegerObject*>(args[1].get())->GetValue()
-                    : elems.size();
+                    : (int)elems.size();
 
                 if (start < 0) start = 0;
                 if (end < start) end = start;
@@ -98,16 +82,14 @@ std::shared_ptr<object::IObject> GetArrayProperty(std::shared_ptr<object::IObjec
 
                 return std::make_shared<object::ArrayObject>(newElems);
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // join(sep?)
-        // -------------------------
-        {
-            TT("join"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto arr = static_cast<object::ArrayObject*>(thisObj.get());
+    // join(sep?)
+    if (name == TT("join")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                auto arr = std::static_pointer_cast<object::ArrayObject>(receiver);
                 auto& elems = arr->GetElements();
 
                 tstring sep = TT(",");
@@ -123,21 +105,10 @@ std::shared_ptr<object::IObject> GetArrayProperty(std::shared_ptr<object::IObjec
 
                 return std::make_shared<object::StringObject>(result);
             }
-        },
-    };
-
-    // -------------------------
-    // メソッド検索
-    // -------------------------
-    auto it = methods.find(name);
-    if (it != methods.end()) {
-        return std::make_shared<object::BuiltinMethodObject>(
-            it->second,
-            object
         );
     }
 
-    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+    return std::nullopt;
 }
 
 }

@@ -2,6 +2,7 @@
 
 #include "Foundation/Types.h"
 #include "Script/Objects/IObject.h"
+#include <optional>
 
 namespace tsumugi::script::object {
 
@@ -14,6 +15,8 @@ public:
     void SetElement(size_t index, std::shared_ptr<IObject> value) { elements_[index] = std::move(value); }
     tstring Inspect() const override;
     ObjectType GetType() const override;
+
+    std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name);
 
 private:
     std::vector<std::shared_ptr<IObject>> elements_;

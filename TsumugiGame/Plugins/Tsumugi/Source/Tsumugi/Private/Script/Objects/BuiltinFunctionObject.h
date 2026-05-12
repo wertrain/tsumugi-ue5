@@ -6,7 +6,7 @@
 
 namespace tsumugi::script::object {
 
-using BuiltinFunctionType = std::function<std::shared_ptr<object::IObject>(const std::vector<std::shared_ptr<object::IObject>>&)>;
+using BuiltinFunctionType = std::function<std::shared_ptr<object::IObject>(std::shared_ptr<object::IObject>, const std::vector<std::shared_ptr<object::IObject>>&)>;
 
 class BuiltinFunctionObject : public IObject {
 public:

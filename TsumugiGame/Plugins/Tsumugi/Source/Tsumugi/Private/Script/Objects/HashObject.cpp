@@ -1,4 +1,5 @@
 #include "Script/Objects/HashObject.h"
+#include "Script/Objects/HashMethods.h"
 
 namespace tsumugi::script::object {
 
@@ -29,6 +30,11 @@ tstring HashObject::Inspect() const {
 ObjectType HashObject::GetType() const {
 
     return ObjectType::kHash;
+}
+
+std::optional<std::shared_ptr<object::IObject>> HashObject::TryGetProperty(const tstring& name) {
+
+    return GetHashProperty(this, name);
 }
 
 }

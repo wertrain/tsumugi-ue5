@@ -31,6 +31,7 @@ enum class MessageId : uint32_t {
     kInvalidArgument,
     kInvalidStatement,
     kInvalidProperty,
+    kNotCallable,
 };
 
 class Localizer {

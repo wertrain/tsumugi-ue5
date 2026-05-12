@@ -2,7 +2,7 @@
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
-#include "Script/Objects/BuiltinMethodObject.h"
+#include "Script/Objects/BuiltinFunctionObject.h"
 #include <unordered_map>
 #include <algorithm>
 #include <cctype>
@@ -10,26 +10,25 @@
 
 namespace tsumugi::script::object {
 
-std::shared_ptr<object::IObject> GetStringProperty(std::shared_ptr<object::IObject> object, const tstring& name, const common::ErrorReporter& errors) {
+std::optional<std::shared_ptr<object::IObject>> GetStringProperty(object::StringObject* stringObject, const tstring& name) {
 
-    auto str = static_cast<object::StringObject*>(object.get());
-    const auto& s = str->GetValue();
+    const auto& s = stringObject->GetValue();
 
-    static const std::unordered_map<tstring,
-        std::function<std::shared_ptr<object::IObject>(
-            std::shared_ptr<object::IObject>,
-            const std::vector<std::shared_ptr<object::IObject>>&
-        )>
-    > methods = {
+    // -------------------------
+    // プロパティ
+    // -------------------------
+    if (name == TT("length")) {
+        return std::make_shared<object::IntegerObject>(static_cast<int>(s.size()));
+    }
 
-        // -------------------------
-        // substr(start, length?)
-        // -------------------------
-        {
-            TT("substr"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto s = static_cast<object::StringObject*>(thisObj.get())->GetValue();
+    // -------------------------
+    // メソッド
+    // -------------------------
+
+    if (name == TT("substr")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) -> std::shared_ptr<object::IObject> {
+                auto s = std::static_pointer_cast<object::StringObject>(receiver)->GetValue();
 
                 if (args.size() == 0) {
                     return std::make_shared<object::StringObject>(s);
@@ -41,49 +40,40 @@ std::shared_ptr<object::IObject> GetStringProperty(std::shared_ptr<object::IObje
                     : (int)s.size() - start;
 
                 if (start < 0) start = 0;
-                if (start > (int)s.size()) start = s.size();
+                if (start > static_cast<int>(s.size())) start = static_cast<int>(s.size());
                 if (length < 0) length = 0;
 
                 return std::make_shared<object::StringObject>(s.substr(start, length));
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // upper()
-        // -------------------------
-        {
-            TT("upper"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>&)
-            {
-                auto s = static_cast<object::StringObject*>(thisObj.get())->GetValue();
+    if (name == TT("upper")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto&) {
+                auto s = std::static_pointer_cast<object::StringObject>(receiver)->GetValue();
                 tstring out = s;
                 std::transform(out.begin(), out.end(), out.begin(), ::toupper);
                 return std::make_shared<object::StringObject>(out);
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // lower()
-        // -------------------------
-        {
-            TT("lower"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>&)
-            {
-                auto s = static_cast<object::StringObject*>(thisObj.get())->GetValue();
+    if (name == TT("lower")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto&) {
+                auto s = std::static_pointer_cast<object::StringObject>(receiver)->GetValue();
                 tstring out = s;
                 std::transform(out.begin(), out.end(), out.begin(), ::towlower);
                 return std::make_shared<object::StringObject>(out);
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // slice(start, end?)
-        // -------------------------
-        {
-            TT("slice"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto s = static_cast<object::StringObject*>(thisObj.get())->GetValue();
+    if (name == TT("slice")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) {
+                auto s = std::static_pointer_cast<object::StringObject>(receiver)->GetValue();
 
                 int start = (args.size() >= 1)
                     ? static_cast<object::IntegerObject*>(args[0].get())->GetValue()
@@ -91,39 +81,33 @@ std::shared_ptr<object::IObject> GetStringProperty(std::shared_ptr<object::IObje
 
                 int end = (args.size() >= 2)
                     ? static_cast<object::IntegerObject*>(args[1].get())->GetValue()
-                    : (int)s.size();
+                    : static_cast<int>(s.size());
 
                 if (start < 0) start = 0;
                 if (end < start) end = start;
-                if (end > (int)s.size()) end = s.size();
+                if (end > static_cast<int>(s.size())) end = static_cast<int>(s.size());
 
                 return std::make_shared<object::StringObject>(s.substr(start, end - start));
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // startsWith(prefix)
-        // -------------------------
-        {
-            TT("startsWith"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto s = static_cast<object::StringObject*>(thisObj.get())->GetValue();
+    if (name == TT("startsWith")) {
+        return std::make_shared<object::BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) {
+                auto s = std::static_pointer_cast<object::StringObject>(receiver)->GetValue();
                 auto prefix = static_cast<object::StringObject*>(args[0].get())->GetValue();
 
                 bool result = s.rfind(prefix, 0) == 0;
                 return object::BooleanObject::FromBool(result);
             }
-        },
+        );
+    }
 
-        // -------------------------
-        // endsWith(suffix)
-        // -------------------------
-        {
-            TT("endsWith"),
-            [](std::shared_ptr<object::IObject> thisObj, const std::vector<std::shared_ptr<object::IObject>>& args)
-            {
-                auto s = static_cast<object::StringObject*>(thisObj.get())->GetValue();
+    if (name == TT("endsWith")) {
+        return std::make_shared<BuiltinFunctionObject>(
+            [](auto receiver, const auto& args) {
+                auto s = std::static_pointer_cast<object::StringObject>(receiver)->GetValue();
                 auto suffix = static_cast<object::StringObject*>(args[0].get())->GetValue();
 
                 bool result =
@@ -132,24 +116,10 @@ std::shared_ptr<object::IObject> GetStringProperty(std::shared_ptr<object::IObje
 
                 return object::BooleanObject::FromBool(result);
             }
-        },
-    };
-
-    // プロパティ
-    if (name == TT("length")) {
-        return std::make_shared<object::IntegerObject>(s.size());
-    }
-
-    // メソッド
-    auto it = methods.find(name);
-    if (it != methods.end()) {
-        return std::make_shared<object::BuiltinMethodObject>(
-            it->second,
-            object
         );
     }
 
-    return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+    return std::nullopt;
 }
 
 }

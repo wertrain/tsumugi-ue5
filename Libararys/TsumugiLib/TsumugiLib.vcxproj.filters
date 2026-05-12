@@ -55,6 +55,9 @@
     <Filter Include="Tsumugi\Private\Script\Builtins">
       <UniqueIdentifier>{6c35b43e-d84d-45c9-a9bb-363679afa7e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Objects\Protocol">
+      <UniqueIdentifier>{98a08907-0bab-4d49-bbdf-64c28bf88cda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -91,9 +94,6 @@
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ErrorObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\FunctionObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\IntegerObject.h">
@@ -228,9 +228,6 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PropertyAccessExpression.h">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinMethodObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinFunctionObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
@@ -245,6 +242,15 @@
     </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.h">
       <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\PropertyReference.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.h">
+      <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -282,9 +288,6 @@
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ErrorObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\FunctionObject.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\IntegerObject.cpp">
@@ -419,9 +422,6 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PropertyAccessExpression.cpp">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinMethodObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinFunctionObject.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
@@ -436,6 +436,15 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.cpp">
       <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\PropertyReference.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.cpp">
+      <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

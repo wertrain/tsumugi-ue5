@@ -21,6 +21,7 @@ namespace tsumugi::script::ast::expression { class Identifier; }
 namespace tsumugi::script::ast::statement { class FunctionStatement; }
 namespace tsumugi::script::ast::expression { class IndexAssignmentExpression; }
 namespace tsumugi::script::ast::expression { class PropertyAccessExpression; }
+namespace tsumugi::script::ast::expression { class CallExpression; }
 namespace tsumugi::script::ast::statement { class ForStatement; }
 
 namespace tsumugi::script::evaluator {
@@ -42,12 +43,13 @@ public:
     std::shared_ptr<object::IObject> EvalIfExpression(const ast::expression::IfExpression* ifExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIdentifier(const ast::expression::Identifier* identifier, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIndexExpression(const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& index, const std::shared_ptr<object::Environment>& environment) const;
-    std::shared_ptr<object::IObject> ApplyFunction(const std::shared_ptr<object::IObject>& object, const std::vector<std::shared_ptr<object::IObject>> arguments) const;
+    std::shared_ptr<object::IObject> EvalCallExpression(const ast::expression::CallExpression* callExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalAssignmentExpression(const ast::expression::AssignmentExpression* assignmentExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIndexAssignmentExpression(const ast::expression::IndexAssignmentExpression* indexAssignmentExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const;
+    std::shared_ptr<object::IObject> InvokeFunction(std::shared_ptr<object::IObject> function, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const;
 
 private:
     bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;

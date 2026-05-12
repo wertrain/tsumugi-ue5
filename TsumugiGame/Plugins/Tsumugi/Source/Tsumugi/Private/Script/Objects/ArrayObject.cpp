@@ -1,4 +1,5 @@
 #include "Script/Objects/ArrayObject.h"
+#include "Script/Objects/ArrayMethods.h"
 
 namespace tsumugi::script::object {
 
@@ -24,6 +25,11 @@ tstring ArrayObject::Inspect() const {
 ObjectType ArrayObject::GetType() const {
 
     return ObjectType::kArray;
+}
+
+std::optional<std::shared_ptr<object::IObject>> ArrayObject::TryGetProperty(const tstring& name) {
+
+    return object::GetArrayProperty(this, name);
 }
 
 }
