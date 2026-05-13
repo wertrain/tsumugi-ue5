@@ -26,6 +26,9 @@ namespace tsumugi::script::ast::statement { class ForStatement; }
 
 namespace tsumugi::script::evaluator {
 
+// Evaluator は AST を実行し、tsumugi の実行モデルを司る中心的なクラス。
+// 詳細な実装意図や Monkey からの拡張点は Evaluator.cpp を参照。
+
 class Evaluator {
 public:
     Evaluator();

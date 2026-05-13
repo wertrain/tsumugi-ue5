@@ -490,6 +490,16 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
     return errors.MakeErrorObject(i18n::MessageId::kIndexOperatorNotSupported, left->Inspect());
 }
 
+// EvalCallExpression
+// -----------------------------------------------------------------------------
+// CallExpression（f(x, y)）を評価する。
+// tsumugi では、関数呼び出しは必ず InvokeFunction に委譲される。
+// これにより：
+//   - self の注入
+//   - BoundMethod の解釈（将来）
+//   - ReturnValue unwrap
+// などの共通処理を一箇所に集約できる。
+// -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::EvalCallExpression(const ast::expression::CallExpression* callExpression, const std::shared_ptr<object::Environment>& environment) const {
 
     auto callee = Eval(callExpression->GetFunction(), environment);
@@ -600,6 +610,12 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const 
     return value;
 }
 
+// EvalPropertyAccessExpression
+// -----------------------------------------------------------------------------
+// obj.x を評価する。
+// 実際のプロパティ取得は ObjectProtocolDispatcher に委譲する。
+// 将来的には、関数が返された場合に BoundMethod にラップする処理もここに入る。
+// -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const {
 
     auto left = Eval(propertyAccessExpression->GetLeft(), environment);
@@ -624,6 +640,18 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
     return value;
 }
 
+// InvokeFunction
+// -----------------------------------------------------------------------------
+// tsumugi の関数呼び出しモデルの中心となる関数。
+// Monkey の ApplyFunction を拡張し、以下の責務を持つ：
+//
+// 1. BoundMethod（将来）を解釈し、receiver（self）を注入する
+// 2. UserFunctionObject の定義時環境をベースに新しい環境を作る
+// 3. 引数をパラメータに束縛する
+// 4. 組み込み関数（BuiltinFunction）との分岐
+// 5. ReturnValue の unwrap（Monkey 互換）
+//
+// tsumugi の「関数呼び出しの哲学」がすべてここに集約されている。
 std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<object::IObject> function, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
 
     switch (function->GetType()) {

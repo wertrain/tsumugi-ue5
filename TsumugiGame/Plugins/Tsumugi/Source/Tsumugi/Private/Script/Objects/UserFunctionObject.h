@@ -10,8 +10,19 @@ namespace tsumugi::script::object { class Environment; }
 
 namespace tsumugi::script::object {
 
+// UserFunctionObject は Monkey の FunctionObject に相当するが、
+// tsumugi では「将来的にメソッド化（BoundMethod 化）される可能性」を考慮している。
+// そのため、Function 自体は receiver を持たず、
+// 「定義時の環境（Environment）」だけを保持する純粋な関数オブジェクトとして設計している。
+// 
+// メソッド呼び出し時には、PropertyAccess や BoundMethodObject が
+// この UserFunctionObject をラップし、receiver（self）を注入する。
+// → これにより Function 自体を汚さず、Monkey の “wrap, don’t reinvent” の思想を維持できる。
+
 class UserFunctionObject : public IObject {
 public:
+    // parameters + body + environment の組み合わせは Monkey と同じ。
+    // environment は「定義時のスコープ」を保持するためのクロージャ環境。
     explicit UserFunctionObject();
     explicit UserFunctionObject(std::vector<std::shared_ptr<ast::expression::Identifier>> parameters, std::shared_ptr<ast::statement::BlockStatement> body, std::shared_ptr<object::Environment> environment);
 

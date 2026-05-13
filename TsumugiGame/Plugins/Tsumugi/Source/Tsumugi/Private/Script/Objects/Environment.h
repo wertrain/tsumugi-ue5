@@ -2,6 +2,32 @@
 #include "Foundation/Types.h"
 #include <unordered_map>
 
+// Environment
+// -----------------------------------------------------------------------------
+// tsumugi の Environment は Monkey の Environment と同じく、
+// 「変数名 → 値（IObject）」の束縛を保持する辞書であり、
+// クロージャ（関数が定義されたときのスコープ）を実現するための中核となる。
+//
+// 【Monkey との共通点】
+// - store_ にローカル変数を保持する
+// - outer_ に親スコープを保持する（レキシカルスコープ）
+// - Get(name) は現在のスコープから親スコープへと順に探索する
+//
+// 【tsumugi 独自の拡張点】
+// - メソッド呼び出し時に「self（receiver）」を注入するためのスコープとしても使われる
+// - BoundMethod（将来）と組み合わせて「定義時環境 + 実行時環境」を構築する
+// - PropertyAccess / InvokeFunction と密接に連携する
+//
+// 【循環参照について】
+// - UserFunctionObject は Environment を保持し、Environment は IObject を保持するため、
+//   循環参照が発生する可能性がある。
+// - Clear() を呼ぶことで store_ を破棄し、循環参照を解消する。
+//   （REPL 終了時などに必ず呼ぶ必要がある）
+//
+// tsumugi の実行モデルにおいて Environment は「関数の定義時スコープ」と
+// 「関数の実行時スコープ」をつなぐ最重要コンポーネントである。
+// -----------------------------------------------------------------------------
+
 namespace tsumugi::script::object { class IObject; }
 
 namespace tsumugi::script::object {
