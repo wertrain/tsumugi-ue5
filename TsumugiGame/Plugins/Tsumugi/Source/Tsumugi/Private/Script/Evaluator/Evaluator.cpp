@@ -493,12 +493,16 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
 // EvalCallExpression
 // -----------------------------------------------------------------------------
 // CallExpression（f(x, y)）を評価する。
-// tsumugi では、関数呼び出しは必ず InvokeFunction に委譲される。
-// これにより：
-//   - self の注入
-//   - BoundMethod の解釈（将来）
-//   - ReturnValue unwrap
-// などの共通処理を一箇所に集約できる。
+// tsumugi では、関数呼び出しの意味論はすべて InvokeFunction に委譲される。
+// 
+// 【InvokeFunction に集約される処理】
+// - BoundMethodObject の receiver 注入（self の設定）
+// - BuiltinFunctionObject への receiver の受け渡し
+// - UserFunctionObject のパラメータ束縛と定義時環境の拡張
+// - ReturnValue の unwrap（Monkey 互換）
+// 
+// これにより、CallExpression 自体は「callable と引数を評価して渡す」
+// という最小限の責務に限定され、関数呼び出しモデル全体の一貫性が保たれる。
 // -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::EvalCallExpression(const ast::expression::CallExpression* callExpression, const std::shared_ptr<object::Environment>& environment) const {
 
@@ -602,9 +606,17 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const 
 // EvalPropertyAccessExpression
 // -----------------------------------------------------------------------------
 // obj.x を評価する。
-// 実際のプロパティ取得は ObjectProtocolDispatcher に委譲する。
-// 関数が返された場合は、UserFunctionObject を BoundMethodObject にラップし、
-// obj.method() のようなメソッド呼び出しを実現する。
+// 実際のプロパティ取得は ObjectProtocolDispatcher に委譲し、
+// Dispatcher は「プロパティ値を返すだけ」を担当する。
+// 
+// 【メソッド化の処理】
+// - 取得した値が UserFunctionObject の場合：
+//       BoundMethodObject(receiver=obj, function=value) にラップする。
+// - 取得した値が BuiltinFunctionObject の場合：
+//       receiver をセットして返す（BoundMethodObject にはしない）。
+// 
+// これにより、obj.method() のようなメソッド呼び出しが自然に動作し、
+// UserFunctionObject / BuiltinFunctionObject の両方で統一的なメソッドモデルが成立する。
 // -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const {
 
@@ -636,15 +648,22 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
 // InvokeFunction
 // -----------------------------------------------------------------------------
 // tsumugi の関数呼び出しモデルの中心となる関数。
-// Monkey の ApplyFunction を拡張し、以下の責務を持つ：
+// Monkey の ApplyFunction を拡張し、関数呼び出しの意味論をすべてここに集約する。
 //
-// 1. BoundMethod（将来）を解釈し、receiver（self）を注入する
-// 2. UserFunctionObject の定義時環境をベースに新しい環境を作る
-// 3. 引数をパラメータに束縛する
-// 4. 組み込み関数（BuiltinFunction）との分岐
-// 5. ReturnValue の unwrap（Monkey 互換）
-//
-// tsumugi の「関数呼び出しの哲学」がすべてここに集約されている。
+// 【InvokeFunction の責務】
+// 1. BoundMethodObject の解釈
+//    - receiver（self）を実行時環境に注入する。
+// 2. BuiltinFunctionObject の呼び出し
+//    - receiver を BuiltinFunctionObject に保持させ、Apply に渡す。
+// 3. UserFunctionObject の呼び出し
+//    - 定義時環境をベースに新しい Environment を作成し、
+//      パラメータ束縛と self の注入を行う。
+// 4. ReturnValue の unwrap（Monkey 互換）
+//    - return 文が返す ReturnValueObject を中身の値に変換する。
+// 
+// これにより、CallExpression は「callable と引数を評価して渡す」だけに専念でき、
+// tsumugi の関数・メソッド呼び出しモデル全体の一貫性が保たれる。
+// -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<object::IObject> callable, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
 
     switch (callable->GetType()) {

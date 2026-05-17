@@ -10,14 +10,22 @@ namespace tsumugi::script::object { class Environment; }
 
 namespace tsumugi::script::object {
 
-// UserFunctionObject は Monkey の FunctionObject に相当するが、
-// tsumugi では「将来的にメソッド化（BoundMethod 化）される可能性」を考慮している。
-// そのため、Function 自体は receiver を持たず、
-// 「定義時の環境（Environment）」だけを保持する純粋な関数オブジェクトとして設計している。
+// UserFunctionObject は Monkey の FunctionObject に相当する。
+// tsumugi では、UserFunctionObject は「純粋な関数」を表し、receiver（self）は保持しない。
 // 
-// メソッド呼び出し時には、PropertyAccess や BoundMethodObject が
-// この UserFunctionObject をラップし、receiver（self）を注入する。
-// → これにより Function 自体を汚さず、Monkey の “wrap, don’t reinvent” の思想を維持できる。
+// 【設計上の意図】
+// - UserFunctionObject は「定義時の環境（Environment）」だけを保持し、
+//   メソッドとしての振る舞いは一切持たない。
+// - メソッド呼び出しが必要な場合は、PropertyAccess や Evaluator によって
+//   BoundMethodObject(receiver=self, function=this) にラップされる。
+// 
+// 【メリット】
+// - 関数オブジェクト自体を汚さず、関数とメソッドの責務を明確に分離できる。
+// - Monkey の “wrap, don’t reinvent” の思想を維持しつつ、
+//   メソッドモデル（self の注入）を自然に拡張できる。
+// 
+// これにより、UserFunctionObject は「定義時スコープを持つ純粋な関数」として
+// tsumugi の関数・メソッドモデルの基盤となる。
 
 class UserFunctionObject : public IObject {
 public:

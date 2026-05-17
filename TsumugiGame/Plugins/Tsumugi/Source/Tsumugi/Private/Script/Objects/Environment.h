@@ -15,7 +15,7 @@
 //
 // 【tsumugi 独自の拡張点】
 // - メソッド呼び出し時に「self（receiver）」を注入するためのスコープとしても使われる
-// - BoundMethod（将来）と組み合わせて「定義時環境 + 実行時環境」を構築する
+// - BoundMethodObject と組み合わせて「定義時環境 + 実行時環境」を構築する
 // - PropertyAccess / InvokeFunction と密接に連携する
 //
 // 【循環参照について】
