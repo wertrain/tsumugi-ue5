@@ -52,7 +52,7 @@ public:
     std::shared_ptr<object::IObject> EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIndexAssignmentExpression(const ast::expression::IndexAssignmentExpression* indexAssignmentExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const;
-    std::shared_ptr<object::IObject> InvokeFunction(std::shared_ptr<object::IObject> function, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const;
+    std::shared_ptr<object::IObject> InvokeFunction(std::shared_ptr<object::IObject> callee, const std::vector<std::shared_ptr<object::IObject>>& arguments) const;
 
 private:
     bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;

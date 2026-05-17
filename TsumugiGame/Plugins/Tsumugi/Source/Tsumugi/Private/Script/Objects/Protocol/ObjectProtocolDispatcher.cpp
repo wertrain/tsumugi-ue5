@@ -19,6 +19,17 @@ std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TryGet
     }
 }
 
+std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value) {
+
+    switch (object->GetType()) {
+        case ObjectType::kHash:   return static_cast<object::HashObject*>(object.get())->TryGetProperty(name);
+        case ObjectType::kArray:  return static_cast<object::ArrayObject*>(object.get())->TryGetProperty(name);
+        case ObjectType::kString: return static_cast<object::StringObject*>(object.get())->TryGetProperty(name);
+        default:
+            return std::nullopt;
+    }
+}
+
 bool ObjectProtocolDispatcher::IsCallable(const std::shared_ptr<object::IObject>& object) {
 
     switch (object->GetType()) {

@@ -27,8 +27,8 @@ public:
     // 将来的には「関数を返す場合は BoundMethod にラップする」処理もここに入る。
     static std::optional<std::shared_ptr<object::IObject>> TryGetProperty(std::shared_ptr<object::IObject> object, const tstring& name);
     // プロパティ設定
-    // obj.x = value のような代入に対応する（将来）。
-    static bool TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value);
+    // obj.x = value のような代入に対応する。
+    static std::optional<std::shared_ptr<object::IObject>> TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value);
     // 呼び出し可能かどうか（関数・メソッド・組み込み関数など）
     // InvokeFunction が呼び出し前に利用する。
     static bool IsCallable(const std::shared_ptr<object::IObject>& object);

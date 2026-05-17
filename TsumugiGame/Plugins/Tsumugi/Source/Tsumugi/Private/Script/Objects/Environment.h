@@ -34,6 +34,12 @@ namespace tsumugi::script::object {
 
 class Environment {
 public:
+    /// <summary>
+    /// メソッドのレシーバー名としてセットする文字列
+    /// </summary>
+    static const tstring kSelf;
+
+public:
     explicit Environment();
     Environment(std::shared_ptr<Environment> outer);
 

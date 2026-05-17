@@ -14,6 +14,9 @@
 
 namespace tsumugi::script::object {
 
+// メソッドのレシーバー名としてセットする文字列
+const tstring Environment::kSelf = TT("self");
+
 // Environment()
 // -----------------------------------------------------------------------------
 // グローバルスコープや最初のローカルスコープを作るときに使う。

@@ -17,10 +17,10 @@ enum class ObjectType : int32_t {
     kReturnValue,
     kBreak,
     kContinue,
-    kFunction,
     kPropertyReference,
     kBuiltinFunction,
     kUserFunction,
+    kBoundMethod,
     kError,
     kNum
 };

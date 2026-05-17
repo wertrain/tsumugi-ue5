@@ -16,9 +16,10 @@ const tchar* ObjectTypeToTString(const ObjectType objectType) {
         { object::ObjectType::kReturnValue, TT("kReturnValue") },
         { object::ObjectType::kBreak, TT("kBreak") },
         { object::ObjectType::kContinue, TT("kContinue") },
-        { object::ObjectType::kFunction, TT("kFunction") },
+        { object::ObjectType::kPropertyReference, TT("kPropertyReference") },
         { object::ObjectType::kBuiltinFunction, TT("kBuiltinFunction") },
         { object::ObjectType::kUserFunction, TT("kUserFunction") },
+        { object::ObjectType::kBoundMethod, TT("kBoundMethod") },
         { object::ObjectType::kError, TT("kError") },
     };
 
@@ -40,9 +41,10 @@ const char* ObjectTypeToString(const ObjectType objectType) {
         { object::ObjectType::kReturnValue, ("kReturnValue") },
         { object::ObjectType::kBreak, ("kBreak") },
         { object::ObjectType::kContinue, ("kContinue") },
-        { object::ObjectType::kFunction, ("kFunction") },
+        { object::ObjectType::kPropertyReference, ("kPropertyReference") },
         { object::ObjectType::kBuiltinFunction, ("kBuiltinFunction") },
         { object::ObjectType::kUserFunction, ("kUserFunction") },
+        { object::ObjectType::kBoundMethod, ("kBoundMethod") },
         { object::ObjectType::kError, ("kError") },
     };
 

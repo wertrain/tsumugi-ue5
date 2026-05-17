@@ -243,13 +243,13 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.h">
       <Filter>Tsumugi\Private\Script\Builtins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\PropertyReference.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.h">
       <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BoundMethodObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -437,13 +437,13 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.cpp">
       <Filter>Tsumugi\Private\Script\Builtins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\PropertyReference.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.cpp">
       <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BoundMethodObject.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
   </ItemGroup>

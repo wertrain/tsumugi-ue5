@@ -36,13 +36,13 @@
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/UserFunctionObject.h"
+#include "Script/Objects/BoundMethodObject.h"
 #include "Script/Objects/BreakObject.h"
 #include "Script/Objects/ContinueObject.h"
 #include "Script/Objects/ObjectHash.h"
 #include "Script/Objects/StringMethods.h"
 #include "Script/Objects/ArrayMethods.h"
 #include "Script/Objects/HashMethods.h"
-#include "Script/Objects/PropertyReference.h"
 #include "Script/Objects/protocol/ObjectProtocolDispatcher.h"
 #include "Script/Builtins/BuiltinFunctions.h"
 
@@ -510,21 +510,10 @@ std::shared_ptr<object::IObject> Evaluator::EvalCallExpression(const ast::expres
     if (arguments.size() > 0 && IsErrorObject(arguments.at(0))) {
         return arguments.at(0);
     }
-
-    if (callee->GetType() == object::ObjectType::kPropertyReference) {
-        auto property = std::static_pointer_cast<const object::PropertyReference>(callee);
-        auto function = property->GetValue();
-        auto receiver = property->GetReceiver();
-        if (!object::protocol::ObjectProtocolDispatcher::IsCallable(function)) {
-            return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, function->Inspect());
-        }
-        return InvokeFunction(function, receiver, arguments);
-    }
-
     if (!object::protocol::ObjectProtocolDispatcher::IsCallable(callee)) {
         return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, callee->Inspect());
     }
-    return InvokeFunction(callee, nullptr, arguments);
+    return InvokeFunction(callee, arguments);
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const {
@@ -614,7 +603,8 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const 
 // -----------------------------------------------------------------------------
 // obj.x を評価する。
 // 実際のプロパティ取得は ObjectProtocolDispatcher に委譲する。
-// 将来的には、関数が返された場合に BoundMethod にラップする処理もここに入る。
+// 関数が返された場合は、UserFunctionObject を BoundMethodObject にラップし、
+// obj.method() のようなメソッド呼び出しを実現する。
 // -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const {
 
@@ -631,11 +621,14 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
     }
 
     auto value = optValue.value();
-
-    if (object::protocol::ObjectProtocolDispatcher::IsCallable(value)) {
-        return std::make_shared<object::PropertyReference>(left, name, value);
+    switch (value->GetType()) {
+        case object::ObjectType::kUserFunction:
+            return std::make_shared<object::BoundMethodObject>(left, std::static_pointer_cast<object::UserFunctionObject>(value));
+        case object::ObjectType::kBuiltinFunction:
+            auto builtin = std::static_pointer_cast<object::BuiltinFunctionObject>(value);
+            builtin->SetReceiver(left);
+            return builtin;
     }
-
     // プロパティ値を返す
     return value;
 }
@@ -652,23 +645,23 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
 // 5. ReturnValue の unwrap（Monkey 互換）
 //
 // tsumugi の「関数呼び出しの哲学」がすべてここに集約されている。
-std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<object::IObject> function, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
+std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<object::IObject> callable, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
 
-    switch (function->GetType()) {
+    switch (callable->GetType()) {
 
         case object::ObjectType::kBuiltinFunction: {
-            auto builtin = static_cast<object::BuiltinFunctionObject*>(function.get());
-            return builtin->GetFunction()(receiver, arguments);
+            auto builtin = static_cast<object::BuiltinFunctionObject*>(callable.get());
+            return builtin->GetFunction()(builtin->GetReceiver(), arguments);
         }
         case object::ObjectType::kUserFunction: {
-            auto userFunction = static_cast<object::UserFunctionObject*>(function.get());
+            auto userFunction = static_cast<object::UserFunctionObject*>(callable.get());
             auto extended = std::make_shared<object::Environment>(userFunction->GetEnvironment());
-            if (receiver) {
-                extended->Set(TT("self"), receiver);
-            }
+
             const auto& params = userFunction->GetParameters();
             for (size_t i = 0; i < params.size(); ++i) {
-                extended->Set(params[i]->GetValue(), arguments[i]);
+                auto name = params[i]->GetValue();
+                auto value = (i < arguments.size()) ? arguments[i] : object::NullObject::Instance();
+                extended->Set(name, value);
             }
             auto result = EvalBlockStatement(userFunction->GetBody()->GetStatements(), extended);
             if (result->GetType() == object::ObjectType::kReturnValue) {
@@ -676,8 +669,30 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
             }
             return result;
         }
+        case object::ObjectType::kBoundMethod: {
+            auto bound = static_cast<object::BoundMethodObject*>(callable.get());
+            auto receiver = bound->GetReceiver();
+            auto function = bound->GetFunction();
+
+            auto extended = std::make_shared<object::Environment>(function->GetEnvironment());
+
+            extended->Set(object::Environment::kSelf, receiver);
+            const auto& params = function->GetParameters();
+            for (size_t i = 0; i < params.size(); ++i) {
+                auto name = params[i]->GetValue();
+                auto value = (i < arguments.size()) ? arguments[i] : object::NullObject::Instance();
+                extended->Set(name, value);
+            }
+
+            auto result = EvalBlockStatement(function->GetBody()->GetStatements(), extended);
+            if (result->GetType() == object::ObjectType::kReturnValue) {
+                return std::static_pointer_cast<object::ReturnValue>(result)->GetValue();
+            }
+            return result;
+
+        }
     }
-    return errors.MakeErrorObject(i18n::MessageId::kNotCallable, function->Inspect());
+    return errors.MakeErrorObject(i18n::MessageId::kNotCallable, callable->Inspect());
 }
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {

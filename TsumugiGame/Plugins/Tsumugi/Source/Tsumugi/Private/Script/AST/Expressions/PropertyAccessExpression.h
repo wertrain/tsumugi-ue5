@@ -8,6 +8,28 @@ namespace tsumugi::script::ast::expression { class Identifier; }
 
 namespace tsumugi::script::ast::expression {
 
+// PropertyAccessExpression
+// -----------------------------------------------------------------------------
+// Monkey には存在しない、tsumugi 独自の構文要素。
+// 
+//   obj.x
+// 
+// のような「ドットによるプロパティアクセス」を表す。
+// 
+// 【構文上の位置づけ】
+// - obj["x"] を表す IndexExpression とは別の AST ノード。
+// - つまり糖衣構文ではなく、構文レベルで明確に区別される。
+// 
+// 【意味論上の扱い】
+// - 実際のプロパティ取得は ObjectProtocolDispatcher に委譲される。
+// - Dispatcher 側で obj.x と obj["x"] の意味論を統一的に扱う。
+// 
+// 【将来の拡張】
+// - obj.method の評価時に BoundMethodObject を返す（ユーザー定義メソッド化）。
+// - UserObject のプロパティモデル（クラス/インスタンス）と自然に統合される。
+// 
+// tsumugi のプロパティアクセスモデルの中心となる AST ノード。
+// -----------------------------------------------------------------------------
 class PropertyAccessExpression : public IExpression {
 public:
     PropertyAccessExpression(std::shared_ptr<lexer::Token> token, std::unique_ptr<ast::IExpression> left);
