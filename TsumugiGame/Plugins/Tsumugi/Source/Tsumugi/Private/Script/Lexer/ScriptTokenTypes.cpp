@@ -19,6 +19,7 @@ const TokenType LookupIdentifier(const tstring& identifier) {
         { TT("return"), tsumugi::script::lexer::TokenType::kReturn },
         { TT("true"), tsumugi::script::lexer::TokenType::kTrue },
         { TT("false"), tsumugi::script::lexer::TokenType::kFalse },
+        { TT("null"), tsumugi::script::lexer::TokenType::kNull },
     };
     auto it = Keywords.find(identifier);
     return it != Keywords.end() ? it->second : TokenType::kIdentifier;
@@ -52,6 +53,7 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kOr, TT("kOr") },
         { tsumugi::script::lexer::TokenType::kComma, TT("kComma") },
         { tsumugi::script::lexer::TokenType::kSemicolon, TT("kSemicolon") },
+        { tsumugi::script::lexer::TokenType::kColon, TT("kColon") },
         { tsumugi::script::lexer::TokenType::kLeftParenthesis, TT("kLeftParenthesis") },
         { tsumugi::script::lexer::TokenType::kRightParenthesis, TT("kRightParenthesis") },
         { tsumugi::script::lexer::TokenType::kLeftBraces, TT("kLeftBraces") },
@@ -59,6 +61,7 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kLeftBrackets, TT("kLeftBrackets") },
         { tsumugi::script::lexer::TokenType::kRightBrackets, TT("kRightBrackets") },
         { tsumugi::script::lexer::TokenType::kStraightQuotes, TT("kStraightQuotes") },
+        { tsumugi::script::lexer::TokenType::kSharp, TT("kSharp") },
         { tsumugi::script::lexer::TokenType::kFunction, TT("kFunction") },
         { tsumugi::script::lexer::TokenType::kLet, TT("kLet") },
         { tsumugi::script::lexer::TokenType::kIf, TT("kIf") },
@@ -69,7 +72,8 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kContinue, TT("kContinue") },
         { tsumugi::script::lexer::TokenType::kReturn, TT("kReturn") },
         { tsumugi::script::lexer::TokenType::kTrue, TT("kTrue") },
-        { tsumugi::script::lexer::TokenType::kFalse, TT("kFalse") }
+        { tsumugi::script::lexer::TokenType::kFalse, TT("kFalse") },
+        { tsumugi::script::lexer::TokenType::kNull, TT("kNull") }
     };
 
     if (Table.find(token_type) != Table.end()) {
@@ -106,6 +110,7 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kOr, ("kOr") },
         { tsumugi::script::lexer::TokenType::kComma, ("kComma") },
         { tsumugi::script::lexer::TokenType::kSemicolon, ("kSemicolon") },
+        { tsumugi::script::lexer::TokenType::kColon, ("kColon") },
         { tsumugi::script::lexer::TokenType::kLeftParenthesis, ("kLeftParenthesis") },
         { tsumugi::script::lexer::TokenType::kRightParenthesis, ("kRightParenthesis") },
         { tsumugi::script::lexer::TokenType::kLeftBraces, ("kLeftBraces") },
@@ -113,6 +118,7 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kLeftBrackets, ("kLeftBrackets") },
         { tsumugi::script::lexer::TokenType::kRightBrackets, ("kRightBrackets") },
         { tsumugi::script::lexer::TokenType::kStraightQuotes, ("kStraightQuotes") },
+        { tsumugi::script::lexer::TokenType::kSharp, ("kSharp") },
         { tsumugi::script::lexer::TokenType::kFunction, ("kFunction") },
         { tsumugi::script::lexer::TokenType::kLet, ("kLet") },
         { tsumugi::script::lexer::TokenType::kIf, ("kIf") },
@@ -123,7 +129,8 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kContinue, ("kContinue") },
         { tsumugi::script::lexer::TokenType::kReturn, ("kReturn") },
         { tsumugi::script::lexer::TokenType::kTrue, ("kTrue") },
-        { tsumugi::script::lexer::TokenType::kFalse, ("kFalse") }
+        { tsumugi::script::lexer::TokenType::kFalse, ("kFalse") },
+        { tsumugi::script::lexer::TokenType::kNull, ("kNull") }
     };
 
     if (Table.find(token_type) != Table.end()) {

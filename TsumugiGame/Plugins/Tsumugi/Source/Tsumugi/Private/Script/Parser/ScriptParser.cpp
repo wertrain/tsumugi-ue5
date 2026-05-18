@@ -14,6 +14,7 @@
 #include "Script/AST/Expressions/IntegerLiteral.h"
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
+#include "Script/AST/Expressions/NullLiteral.h"
 #include "Script/AST/Expressions/ArrayLiteral.h"
 #include "Script/AST/Expressions/UserObjectLiteral.h"
 #include "Script/AST/Expressions/HashLiteral.h"
@@ -127,10 +128,11 @@ std::unique_ptr<ast::statement::LetStatement> Parser::ParseLetStatement() {
     ReadToken();
 
     auto expression = ParseExpression(Precedence::kLowest);
+    if (!expression) return nullptr;
     statement->SetValue(std::move(expression));
 
     // セミコロンは必須ではない
-    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+    if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
         ReadToken();
     }
 
@@ -148,7 +150,7 @@ std::unique_ptr<ast::statement::ReturnStatement> Parser::ParseReturnStatement() 
     statement->SetValue(std::move(expression));
 
     // セミコロンは必須ではない
-    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+    if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
         ReadToken();
     }
 
@@ -165,7 +167,7 @@ std::unique_ptr<ast::statement::ExpressionStatement> Parser::ParseExpressionStat
     statement->SetExpression(std::move(expression));
 
     // セミコロンは必須ではない
-    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+    if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
         ReadToken();
     }
 
@@ -265,7 +267,7 @@ std::unique_ptr<script::ast::statement::BreakStatement> Parser::ParseBreakStatem
     ReadToken();
 
     // セミコロンは必須ではない
-    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+    if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
         ReadToken();
     }
 
@@ -278,7 +280,7 @@ std::unique_ptr<script::ast::statement::ContinueStatement> Parser::ParseContinue
     ReadToken();
 
     // セミコロンは必須ではない
-    if (nextToken_->GetTokenType() == lexer::TokenType::kSemicolon) {
+    if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
         ReadToken();
     }
 
@@ -345,6 +347,11 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseBooleanLiteral() {
     return std::make_unique<ast::expression::BooleanLiteral>(currentToken_, currentToken_->GetTokenType() == lexer::TokenType::kTrue);
 }
 
+std::unique_ptr<script::ast::IExpression> Parser::ParseNullLiteral() {
+
+    return std::make_unique<ast::expression::NullLiteral>(currentToken_);
+}
+
 std::unique_ptr<script::ast::IExpression> Parser::ParseArrayLiteral() {
 
     std::vector<std::unique_ptr<ast::IExpression>> list;
@@ -407,8 +414,17 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseUserObjectLiteral() {
                 key = std::make_unique<ast::expression::StringLiteral>(stringLiteral->GetTokenShared(), stringLiteral->GetValue());
                 break;
             }
-            default:
+            default: {
+                while (!(GetCurrentToken()->GetTokenType() == lexer::TokenType::kRightBraces) &&
+                       !(GetCurrentToken()->GetTokenType() == lexer::TokenType::kEOF)) {
+                    ReadToken();
+                }
+                // セミコロンは必須ではない
+                if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
+                    ReadToken();
+                }
                 return nullptr;
+            }
         }
 
         if (!ExpectPeekRequiredTokenType(lexer::TokenType::kColon, ":")) {
@@ -828,6 +844,7 @@ void Parser::RegisterPrefixParseFunctions() {
     prefixParseFunctions_.emplace(lexer::TokenType::kLeftBrackets, [this] { return ParseArrayLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kLeftBraces, [this] { return ParseUserObjectLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kSharp, [this] { return ParseHashLiteral(); });
+    prefixParseFunctions_.emplace(lexer::TokenType::kNull, [this] { return ParseNullLiteral(); });
 }
 
 void Parser::RegisterInfixParseFunctions() {

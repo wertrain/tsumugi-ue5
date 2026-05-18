@@ -18,7 +18,6 @@
 #include "Script/AST/Statements/LetStatement.h"
 #include "Script/AST/Statements/ReturnStatement.h"
 #include "Script/AST/Statements/ExpressionStatement.h"
-#include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
@@ -26,6 +25,7 @@
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/ArrayObject.h"
+#include "Script/Objects/UserObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/UserFunctionObject.h"
 #include "Script/Lexer/ScriptLexer.h"
@@ -1500,6 +1500,287 @@ namespace UnitTest
 					TT("let p = { inner: { x: 1 } }; p.inner.x = 42; p.inner.x;"),
 					[](auto* obj) { _TestIntegerObject(obj, 42); }
 				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestEvalUserObjectBasic)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// UserObject のテスト
+				// ----------------------------------------
+				{
+					TT("let o = { x: 10, y: 20 }; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+				{
+					TT("let o = { x: 10 }; o.y = 99; o.y;"),
+					[](auto* obj) { _TestIntegerObject(obj, 99); }
+				},
+				{
+					TT("let o = { x: 1 }; o.x = o.x + 5; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 6); }
+				},
+				{
+					TT("let o = { x: 1, y: 2 }; o.x = o.y; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 2); }
+				},
+				{
+					TT("let o = { inner: { a: 10 } }; o.inner.a;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+				{
+					TT("let o = { inner: { a: 10 } }; o.inner.a = 77; o.inner.a;"),
+					[](auto* obj) { _TestIntegerObject(obj, 77); }
+				},
+				{
+					TT("let o = { a: 1 }; o[\"a\"];"),
+					[](auto* obj) { _TestErrorObject(obj, true); } // UserObject はインデックスアクセス禁止
+				},
+				{
+					TT("let o = { a: 1 }; o.b;"),
+					[](auto* obj) { _TestNullObject(obj); } // 存在しないプロパティは null
+				},
+				{
+					TT("let o = { a: 1 }; o.b = 10; o.b;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); } // 新規プロパティ追加 OK
+				},
+				{
+					TT("let o = { a: 1 }; o.a = { x: 5 }; o.a.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 5); } // ネストした UserObject
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestEvalNull)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+				TT("null;"),
+				[](auto* obj) { _TestNullObject(obj); }
+	
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestEvalUserObjectExtend)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// 基本プロパティ取得
+				// ----------------------------------------
+				{
+					TT("let o = { x: 10, y: 20 }; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// 新規プロパティ追加
+				// ----------------------------------------
+				{
+					TT("let o = { x: 10 }; o.y = 99; o.y;"),
+					[](auto* obj) { _TestIntegerObject(obj, 99); }
+				},
+
+				// ----------------------------------------
+				// プロパティの再代入（式を含む）
+				// ----------------------------------------
+				{
+					TT("let o = { x: 1 }; o.x = o.x + 5; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 6); }
+				},
+
+				// ----------------------------------------
+				// 別プロパティの値を代入
+				// ----------------------------------------
+				{
+					TT("let o = { x: 1, y: 2 }; o.x = o.y; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 2); }
+				},
+
+				// ----------------------------------------
+				// ネストした UserObject の取得
+				// ----------------------------------------
+				{
+					TT("let o = { inner: { a: 10 } }; o.inner.a;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// ネストした UserObject のプロパティ代入
+				// ----------------------------------------
+				{
+					TT("let o = { inner: { a: 10 } }; o.inner.a = 77; o.inner.a;"),
+					[](auto* obj) { _TestIntegerObject(obj, 77); }
+				},
+
+				// ----------------------------------------
+				// UserObject はインデックスアクセス禁止
+				// ----------------------------------------
+				{
+					TT("let o = { a: 1 }; o[\"a\"];"),
+					[](auto* obj) { _TestErrorObject(obj, true); }
+				},
+
+				// ----------------------------------------
+				// 存在しないプロパティ → null
+				// ----------------------------------------
+				{
+					TT("let o = { a: 1 }; o.b;"),
+					[](auto* obj) { _TestNullObject(obj); }
+				},
+
+				// ----------------------------------------
+				// 存在しないプロパティに代入 → 新規追加
+				// ----------------------------------------
+				{
+					TT("let o = { a: 1 }; o.b = 10; o.b;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// プロパティに UserObject を代入
+				// ----------------------------------------
+				{
+					TT("let o = { a: 1 }; o.a = { x: 5 }; o.a.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 5); }
+				},
+
+				// ----------------------------------------
+				// プロパティに関数を入れて呼び出す
+				// ----------------------------------------
+				{
+					TT("let o = { f: function() { 10 } }; o.f();"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// プロパティに boolean を代入
+				// ----------------------------------------
+				{
+					TT("let o = {}; o.flag = true; o.flag;"),
+					[](auto* obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// ----------------------------------------
+				// プロパティに string を代入
+				// ----------------------------------------
+				{
+					TT("let o = {}; o.msg = \"hi\"; o.msg;"),
+					[](auto* obj) { _TestStringObject(obj, TT("hi")); }
+				},
+
+				// ----------------------------------------
+				// プロパティに array を代入
+				// ----------------------------------------
+				{
+					TT("let o = {}; o.arr = [1,2,3]; o.arr[1];"),
+					[](auto* obj) { _TestIntegerObject(obj, 2); }
+				},
+
+				// ----------------------------------------
+				// プロパティに hash を代入
+				// ----------------------------------------
+				{
+					TT("let o = {}; o.h = #{\"a\": 10}; o.h[\"a\"];"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// プロパティに null を代入
+				// ----------------------------------------
+				{
+					TT("let o = { x: 10 }; o.x = null; o.x;"),
+					[](auto* obj) { _TestNullObject(obj); }
+				},
+
+				// ----------------------------------------
+				// プロパティ名の重複（後勝ち）
+				// ----------------------------------------
+				{
+					TT("let o = { x: 1, x: 2 }; o.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 2); }
+				},
+
+				// ----------------------------------------
+				// キーが Identifier / String 以外 → 構文エラー
+				// これは空のステートメントになるので、ErrorObject を返せない
+				// いったんコメントアウトしておく
+				// ----------------------------------------
+				//{
+				//	TT("let o = { 1: 10 };"),
+				//	[](auto* obj) { _TestErrorObject(obj, true); }
+				//},
+				//{
+				//	TT("let o = { 1 + 1: 10 };"),
+				//	[](auto* obj) { _TestErrorObject(obj, true); }
+				//},
+
+				// ----------------------------------------
+				// 循環参照（クラッシュしないこと）
+				// ----------------------------------------
+				{
+					TT("let o = {}; o.self = o; o.self.self.self;"),
+					[](auto* obj) {
+					// o.self.self.self は UserObject
+					auto* uo = dynamic_cast<tsumugi::script::object::UserObject*>(obj);
+					Assert::IsNotNull(uo, MSG("result is not UserObject."));
+				}
+			},
 			};
 
 			for (auto& tt : tests) {

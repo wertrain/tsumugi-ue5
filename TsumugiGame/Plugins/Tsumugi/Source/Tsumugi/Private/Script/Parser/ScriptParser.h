@@ -68,6 +68,7 @@ public:
     std::unique_ptr<script::ast::IExpression> ParseIntegerLiteral();
     std::unique_ptr<script::ast::IExpression> ParseStringLiteral();
     std::unique_ptr<script::ast::IExpression> ParseBooleanLiteral();
+    std::unique_ptr<script::ast::IExpression> ParseNullLiteral();
     std::unique_ptr<script::ast::IExpression> ParseArrayLiteral();
     std::unique_ptr<script::ast::IExpression> ParseUserObjectLiteral();
     std::unique_ptr<script::ast::IExpression> ParseHashLiteral();

@@ -9,6 +9,7 @@ enum class NodeType {
     kIntegerLiteral,
     kStringLiteral,
     kBooleanLiteral,
+    kNullLiteral,
     kIdentifier,
     kPrefixExpression,
     kInfixExpression,

@@ -6,6 +6,7 @@
 #include "Script/AST/Expressions/IntegerLiteral.h"
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
+#include "Script/AST/Expressions/NullLiteral.h"
 #include "Script/AST/Expressions/ArrayLiteral.h"
 #include "Script/AST/Expressions/HashLiteral.h"
 #include "Script/AST/Expressions/PrefixExpression.h"
@@ -80,6 +81,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         case ast::NodeType::kBooleanLiteral: {
             auto* booleanLiteral = static_cast<const ast::expression::BooleanLiteral*>(node);
             return object::BooleanObject::FromBool(booleanLiteral->GetValue());
+        }
+        case ast::NodeType::kNullLiteral: {
+            auto* nullLiteral = static_cast<const ast::expression::NullLiteral*>(node);
+            return object::NullObject::Instance();
         }
         case ast::NodeType::kArrayLiteral: {
             auto* arrayLiteral = static_cast<const ast::expression::ArrayLiteral*>(node);
@@ -679,7 +684,8 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
     auto value = optValue.value();
     switch (value->GetType()) {
         case object::ObjectType::kUserFunction:
-            return std::make_shared<object::BoundMethodObject>(left, std::static_pointer_cast<object::UserFunctionObject>(value));
+            //return std::make_shared<object::BoundMethodObject>(left, std::static_pointer_cast<object::UserFunctionObject>(value));
+            return value;
         case object::ObjectType::kBuiltinFunction:
             auto builtin = std::static_pointer_cast<object::BuiltinFunctionObject>(value);
             builtin->SetReceiver(left);

@@ -2,6 +2,7 @@
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/StringObject.h"
+#include "Script/Objects/NullObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
 #include "Script/Objects/UserFunctionObject.h"
@@ -19,7 +20,7 @@ std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TryGet
             auto u = std::static_pointer_cast<object::UserObject > (object);
             auto v = u->Get(name);
             if (v) return v;
-            break;
+            return object::NullObject::Instance();
         }
         default:
             return std::nullopt;
@@ -56,6 +57,7 @@ bool ObjectProtocolDispatcher::IsCallable(const std::shared_ptr<object::IObject>
 
         case ObjectType::kBuiltinFunction: return true;
         case ObjectType::kUserFunction: return true;
+        case ObjectType::kUserObject: return true;
 
         default: return false;
     }

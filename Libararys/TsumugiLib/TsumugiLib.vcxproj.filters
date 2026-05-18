@@ -258,6 +258,9 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\UserObjectLiteral.h">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\NullLiteral.h">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -456,6 +459,9 @@
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\UserObjectLiteral.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\NullLiteral.cpp">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
