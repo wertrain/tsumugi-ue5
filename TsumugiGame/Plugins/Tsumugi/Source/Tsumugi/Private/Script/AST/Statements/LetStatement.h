@@ -19,6 +19,7 @@ public:
     ~LetStatement() override;
 
     const lexer::Token* GetToken() const { return token_.get(); }
+    std::shared_ptr<lexer::Token> GetTokenShared() const { return token_; }
     void SetToken(std::shared_ptr<lexer::Token> token) { token_ = std::move(token); }
     const expression::Identifier* GetName() const { return name_.get(); }
     void SetName(std::unique_ptr<expression::Identifier> name) { name_ = std::move(name); }

@@ -7,10 +7,10 @@ namespace tsumugi::script::lexer { class Token; }
 
 namespace tsumugi::script::ast::expression {
 
-class HashLiteral : public IExpression {
+class UserObjectLiteral : public IExpression {
 public:
-    HashLiteral(std::shared_ptr<lexer::Token> token, std::vector<std::pair<std::unique_ptr<ast::IExpression>, std::unique_ptr<ast::IExpression>>> pairs);
-    ~HashLiteral() override;
+    UserObjectLiteral(std::shared_ptr<lexer::Token> token, std::vector<std::pair<std::unique_ptr<ast::IExpression>, std::unique_ptr<ast::IExpression>>> pairs);
+    ~UserObjectLiteral() override;
 
     const lexer::Token* GetToken() const { return token_.get(); }
     std::shared_ptr<lexer::Token> GetTokenShared() const { return token_; }
@@ -19,7 +19,7 @@ public:
     void AddPair(std::unique_ptr<ast::IExpression> key, std::unique_ptr<ast::IExpression> value) { pairs_.push_back({ std::move(key), std::move(value) }); }
     const auto& GetPairs() const { return pairs_; }
 
-    NodeType GetNodeType() const final override { return NodeType::kHashLiteral; }
+    NodeType GetNodeType() const final override { return NodeType::kUserObjectLiteral; }
     tstring TokenLiteral() const final override;
     tstring ToCode() const final override;
 

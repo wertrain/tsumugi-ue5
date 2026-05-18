@@ -13,6 +13,7 @@ public:
     ~CallExpression() override;
 
     const lexer::Token* GetToken() const { return token_.get(); }
+    std::shared_ptr<lexer::Token> GetTokenShared() const { return token_; }
     void SetToken(std::shared_ptr<lexer::Token> token) { token_ = std::move(token); }
     const ast::IExpression* GetFunction() const { return function_.get(); }
     void SetFunction(std::unique_ptr<ast::IExpression> function) { function_ = std::move(function); }

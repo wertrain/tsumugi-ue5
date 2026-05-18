@@ -15,6 +15,21 @@ std::optional<std::shared_ptr<object::IObject>> GetHashProperty(object::HashObje
     auto& pairs = hashObject->GetPairs();
 
     // -------------------------
+    // ユーザーオブジェクト（内部実体はハッシュ）としての振る舞いを可能にするため、
+    // ドット記法（o.x）によるアクセスを、文字列キー（o["x"]）の検索にマッピングする。
+    // -------------------------
+    {
+        auto keyObject = std::make_shared<object::StringObject>(name);
+        if (IsHashable(keyObject.get())) {
+            auto hk = object::MakeHashKey(keyObject.get());
+            auto it = pairs.find(hk);
+            if (it != pairs.end()) {
+                return it->second.value;
+            }
+        }
+    }
+
+    // -------------------------
     // プロパティ
     // -------------------------
     if (name == TT("size")) {

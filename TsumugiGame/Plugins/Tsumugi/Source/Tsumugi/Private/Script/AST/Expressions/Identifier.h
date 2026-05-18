@@ -14,6 +14,7 @@ public:
     ~Identifier() override;
 
     const lexer::Token* GetToken() const { return token_.get(); }
+    std::shared_ptr<lexer::Token> GetTokenShared() const { return token_; }
     void SetToken(std::shared_ptr<lexer::Token> token) { token_ = std::move(token); }
     const tstring& GetValue() const { return value_; }
     void SetValue(const tstring& value) { value_ = value; }

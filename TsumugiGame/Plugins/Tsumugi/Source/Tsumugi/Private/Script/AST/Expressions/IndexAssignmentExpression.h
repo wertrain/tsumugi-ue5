@@ -14,6 +14,7 @@ public:
     ~IndexAssignmentExpression() override;
 
     const lexer::Token* GetToken() const { return token_.get(); }
+    std::shared_ptr<lexer::Token> GetTokenShared() const { return token_; }
     void SetToken(std::shared_ptr<lexer::Token> token) { token_ = std::move(token); }
     const ast::IExpression* GetLeft() const { return left_.get(); }
     void SetLeft(std::unique_ptr<ast::IExpression> value) { left_ = std::move(value); }

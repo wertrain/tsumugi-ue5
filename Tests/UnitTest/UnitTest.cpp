@@ -13,8 +13,11 @@
 #include "Script/AST/Expressions/CallExpression.h"
 #include "Script/AST/Expressions/ArrayLiteral.h"
 #include "Script/AST/Expressions/WhileExpression.h"
+#include "Script/AST/Expressions/AssignmentExpression.h"
+#include "Script/AST/Expressions/PropertyAccessExpression.h"
 #include "Script/AST/Statements/LetStatement.h"
 #include "Script/AST/Statements/ReturnStatement.h"
+#include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/Objects/IntegerObject.h"
@@ -1207,7 +1210,7 @@ namespace UnitTest
 
 				// size
 				{
-					TT("let h = {\"a\": 1, \"b\": 2}; h.size"),
+					TT("let h = #{\"a\": 1, \"b\": 2}; h.size"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestIntegerObject(obj, 2);
 					}
@@ -1215,7 +1218,7 @@ namespace UnitTest
 
 				// keys()
 				{
-					TT("let h = {\"a\": 1, \"b\": 2}; h.keys()"),
+					TT("let h = #{\"a\": 1, \"b\": 2}; h.keys()"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						auto arr = dynamic_cast<tsumugi::script::object::ArrayObject*>(obj);
 						Assert::IsNotNull(arr, MSG("result is not ArrayObject."));
@@ -1246,7 +1249,7 @@ namespace UnitTest
 
 				// values()
 				{
-					TT("let h = {\"a\": 1, \"b\": 2}; h.values()"),
+					TT("let h = #{\"a\": 1, \"b\": 2}; h.values()"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						auto arr = dynamic_cast<tsumugi::script::object::ArrayObject*>(obj);
 						Assert::IsNotNull(arr);
@@ -1266,13 +1269,13 @@ namespace UnitTest
 
 				// has(key)
 				{
-					TT("let h = {\"a\": 1}; h.has(\"a\")"),
+					TT("let h = #{\"a\": 1}; h.has(\"a\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestBooleanObject(obj, true);
 					}
 				},
 				{
-					TT("let h = {\"a\": 1}; h.has(\"b\")"),
+					TT("let h = #{\"a\": 1}; h.has(\"b\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestBooleanObject(obj, false);
 					}
@@ -1280,13 +1283,13 @@ namespace UnitTest
 
 				// get(key)
 				{
-					TT("let h = {\"a\": 10}; h.get(\"a\")"),
+					TT("let h = #{\"a\": 10}; h.get(\"a\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestIntegerObject(obj, 10);
 					}
 				},
 				{
-					TT("let h = {\"a\": 10}; h.get(\"b\")"),
+					TT("let h = #{\"a\": 10}; h.get(\"b\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestNullObject(obj);
 					}
@@ -1294,7 +1297,7 @@ namespace UnitTest
 
 				// set(key, value)
 				{
-					TT("let h = {\"a\": 1}; h.set(\"b\", 20); h.get(\"b\")"),
+					TT("let h = #{\"a\": 1}; h.set(\"b\", 20); h.get(\"b\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestIntegerObject(obj, 20);
 					}
@@ -1302,13 +1305,13 @@ namespace UnitTest
 
 				// delete(key)
 				{
-					TT("let h = {\"a\": 1, \"b\": 2}; h.delete(\"b\")"),
+					TT("let h = #{\"a\": 1, \"b\": 2}; h.delete(\"b\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestIntegerObject(obj, 2);
 					}
 				},
 				{
-					TT("let h = {\"a\": 1}; h.delete(\"x\")"),
+					TT("let h = #{\"a\": 1}; h.delete(\"x\")"),
 					[](tsumugi::script::object::IObject* obj) -> void {
 						_TestNullObject(obj);
 					}
@@ -1385,6 +1388,136 @@ namespace UnitTest
 				_TestIntegerObject(evaluated.get(), test.expected_);
 			}
 		}
+
+		TEST_METHOD(ParseAssignmentWithPropertyAccess)
+		{
+			tstring code = TT("p.x = 10;");
+
+			auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(code.c_str());
+			auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+			parser->GetLogger().SetLogConsole(&s_Console);
+
+			auto root = parser->ParseProgram();
+			Assert::AreEqual(size_t{ 1 }, root->GetStatementCount());
+
+			const auto* exprStmt =
+				dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
+			Assert::IsNotNull(exprStmt, MSG("stmt is not ExpressionStatement."));
+
+			const tsumugi::script::ast::expression::AssignmentExpression* assign =
+				dynamic_cast<const tsumugi::script::ast::expression::AssignmentExpression*>(exprStmt->GetExpression());
+			Assert::IsNotNull(assign, MSG("expr is not AssignmentExpression."));
+
+			const auto* left = assign->GetLeft();
+			Logger::WriteMessage((TT("left.ToCode = ") + left->ToCode() + TT("\n")).c_str());
+
+			Assert::AreEqual(
+				(int)tsumugi::script::ast::NodeType::kPropertyAccessExpression,
+				(int)left->GetNodeType(),
+				MSG("left is not PropertyAccessExpression.")
+			);
+
+			const auto* prop =
+				dynamic_cast<const tsumugi::script::ast::expression::PropertyAccessExpression*>(left);
+			Assert::IsNotNull(prop, MSG("left is not PropertyAccessExpression."));
+
+			const auto* objIdent =
+				dynamic_cast<const tsumugi::script::ast::expression::Identifier*>(prop->GetLeft());
+			Assert::IsNotNull(objIdent, MSG("object is not Identifier."));
+			Assert::AreEqual(tstring(TT("p")), objIdent->GetValue(), MSG("object identifier is not 'p'."));
+
+			Assert::AreEqual(tstring(TT("x")), prop->GetName()->GetValue(), MSG("property name is not 'x'."));
+		}
+
+		TEST_METHOD(TestAssignmentExpression)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// 1. 通常の変数代入
+				// ----------------------------------------
+				{
+					TT("let x = 10; x = 20; x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 20); }
+				},
+
+				// ----------------------------------------
+				// 2. UserObject のプロパティ代入
+				// ----------------------------------------
+				{
+					TT("let p = { x: 1, y: 2 }; p.x = 10; p.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// 3. Array のプロパティ代入 → エラー
+				// ----------------------------------------
+				{
+					TT("let a = [1,2,3]; a.x = 10;"),
+					[](auto* obj) { _TestErrorObject(obj, true); }
+				},
+
+				// ----------------------------------------
+				// 4. String のプロパティ代入 → エラー
+				// ----------------------------------------
+				{
+					TT("let s = \"hello\"; s.x = 10;"),
+					[](auto* obj) { _TestErrorObject(obj, true); }
+				},
+
+				// ----------------------------------------
+				// 5. Hash のプロパティ代入 → OK
+				// （hash[\"x\"] = 10 は OK だが hash.x = 10 は NG）
+				// ----------------------------------------
+				{
+					TT("let h = #{\"a\": 1}; h.x = 10; h.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 10); }
+				},
+
+				// ----------------------------------------
+				// 6. 無効な左辺
+				// ----------------------------------------
+				{
+					TT("(1 + 2) = 10;"),
+					[](auto* obj) { _TestErrorObject(obj, true); }
+				},
+
+				// ----------------------------------------
+				// 7. プロパティ代入後の取得
+				// ----------------------------------------
+				{
+					TT("let p = { x: 1 }; p.x = 99; p.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 99); }
+				},
+
+				// ----------------------------------------
+				// 8. ネストしたプロパティ代入
+				// ----------------------------------------
+				{
+					TT("let p = { inner: { x: 1 } }; p.inner.x = 42; p.inner.x;"),
+					[](auto* obj) { _TestIntegerObject(obj, 42); }
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
 
 		static void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{

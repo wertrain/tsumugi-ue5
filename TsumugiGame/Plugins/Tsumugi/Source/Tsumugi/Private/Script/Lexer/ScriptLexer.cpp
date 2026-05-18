@@ -121,6 +121,9 @@ Token* Lexer::NextToken() {
             case TT('.'):
                 token = CreateToken(TokenType::kDot, tstring(1, c));
                 break;
+            case TT('#'):
+                token = CreateToken(TokenType::kSharp, tstring(1, c));
+                break;
             default:
                 if (IsDigit(c)) {
                     token = CreateAsNumericToken();

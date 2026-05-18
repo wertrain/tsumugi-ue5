@@ -13,6 +13,7 @@
 #include "Script/AST/Expressions/IfExpression.h"
 #include "Script/AST/Expressions/WhileExpression.h"
 #include "Script/AST/Expressions/Identifier.h"
+#include "Script/AST/Expressions/UserObjectLiteral.h"
 #include "Script/AST/Expressions/FunctionLiteral.h"
 #include "Script/AST/Expressions/CallExpression.h"
 #include "Script/AST/Expressions/IndexExpression.h"
@@ -43,8 +44,10 @@
 #include "Script/Objects/StringMethods.h"
 #include "Script/Objects/ArrayMethods.h"
 #include "Script/Objects/HashMethods.h"
+#include "Script/Objects/UserObject.h"
 #include "Script/Objects/protocol/ObjectProtocolDispatcher.h"
 #include "Script/Builtins/BuiltinFunctions.h"
+#include <cassert>
 
 namespace tsumugi::script::evaluator {
 
@@ -91,6 +94,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
                 elements.push_back(evaluated);
             }
             return std::make_shared<object::ArrayObject>(std::move(elements));
+        }
+        case ast::NodeType::kUserObjectLiteral: {
+            auto* userObjectLiteral = static_cast<const ast::expression::UserObjectLiteral*>(node);
+            return EvalUserObjectLiteral(userObjectLiteral, environment);
         }
         case ast::NodeType::kHashLiteral: {
             auto* hashLiteral = static_cast<const ast::expression::HashLiteral*>(node);
@@ -453,6 +460,25 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
     return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
 }
 
+std::shared_ptr<object::IObject> Evaluator::EvalUserObjectLiteral(const ast::expression::UserObjectLiteral* literal, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto object = std::make_shared<object::UserObject>();
+
+    for (const auto& pair : literal->GetPairs()) {
+        const auto* keyExpression = pair.first.get();
+        const auto* valueExpression = pair.second.get();
+        // パーサー側でキーは StringLiteral にしている
+        assert(keyExpression->GetNodeType() == ast::NodeType::kStringLiteral);
+        tstring key = static_cast<const ast::expression::StringLiteral*>(keyExpression)->GetValue();
+        auto value = Eval(valueExpression, environment);
+        if (IsErrorObject(value)) {
+            return value;
+        }
+        object->Set(key, value);
+    }
+    return object;
+}
+
 std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& index, const std::shared_ptr<object::Environment>& environment) const {
 
     if (left->GetType() == object::ObjectType::kArray && index->GetType() == object::ObjectType::kInteger) {
@@ -553,9 +579,27 @@ std::shared_ptr<object::IObject> Evaluator::EvalAssignmentExpression(const ast::
     if (IsErrorObject(value)) {
         return value;
     }
-    auto identifier = static_cast<const ast::expression::Identifier*>(assignmentExpression->GetLeft());
-    environment->Set(identifier->GetValue(), value);
-    return value;
+    auto left = assignmentExpression->GetLeft();
+
+    if (left->GetNodeType() == ast::NodeType::kPropertyAccessExpression) {
+        auto property = static_cast<const ast::expression::PropertyAccessExpression*>(left);
+        auto object = Eval(property->GetLeft(), environment);
+        if (IsErrorObject(object)) {
+            return object;
+        }
+        auto result = object::protocol::ObjectProtocolDispatcher::TrySetProperty(object, property->GetName()->GetValue(), value);
+        if (!result.has_value()) {
+            return errors.MakeErrorObject(i18n::MessageId::kPropertyAssignmentNotSupported, property->GetName()->GetValue(), object->Inspect());
+        }
+        return result.value();
+    }
+
+    if (left->GetNodeType() == ast::NodeType::kIdentifier) {
+        auto identifier = static_cast<const ast::expression::Identifier*>(assignmentExpression->GetLeft());
+        environment->Set(identifier->GetValue(), value);
+        return value;
+    }
+    return errors.MakeErrorObject(i18n::MessageId::kInvalidAssignmentTarget, left->ToCode());
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const {

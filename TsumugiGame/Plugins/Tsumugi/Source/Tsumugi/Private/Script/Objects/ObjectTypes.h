@@ -21,6 +21,7 @@ enum class ObjectType : int32_t {
     kBuiltinFunction,
     kUserFunction,
     kBoundMethod,
+    kUserObject,
     kError,
     kNum
 };

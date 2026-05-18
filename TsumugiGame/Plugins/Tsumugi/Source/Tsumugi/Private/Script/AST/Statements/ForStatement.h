@@ -20,6 +20,7 @@ public:
     ~ForStatement() override;
 
     const lexer::Token* GetToken() const { return token_.get(); }
+    std::shared_ptr<lexer::Token> GetTokenShared() const { return token_; }
     void SetToken(std::shared_ptr<lexer::Token> token) { token_ = std::move(token); }
     const expression::Identifier* GetIdentifier() const { return identifier_.get(); }
     void SetIdentifier(std::unique_ptr<expression::Identifier> value) { identifier_ = std::move(value); }

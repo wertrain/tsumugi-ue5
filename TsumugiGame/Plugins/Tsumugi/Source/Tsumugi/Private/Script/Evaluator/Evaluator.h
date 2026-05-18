@@ -18,6 +18,7 @@ namespace tsumugi::script::ast::expression { class IfExpression; }
 namespace tsumugi::script::ast::expression { class WhileExpression; }
 namespace tsumugi::script::ast::expression { class AssignmentExpression; }
 namespace tsumugi::script::ast::expression { class Identifier; }
+namespace tsumugi::script::ast::expression { class UserObjectLiteral; }
 namespace tsumugi::script::ast::statement { class FunctionStatement; }
 namespace tsumugi::script::ast::expression { class IndexAssignmentExpression; }
 namespace tsumugi::script::ast::expression { class PropertyAccessExpression; }
@@ -45,6 +46,7 @@ public:
     std::shared_ptr<object::IObject> EvalStringInfixExpression(const tstring& op, const std::shared_ptr<object::StringObject>& left, const std::shared_ptr<object::StringObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIfExpression(const ast::expression::IfExpression* ifExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIdentifier(const ast::expression::Identifier* identifier, const std::shared_ptr<object::Environment>& environment) const;
+    std::shared_ptr<object::IObject> EvalUserObjectLiteral(const ast::expression::UserObjectLiteral* userObject, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIndexExpression(const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& index, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalCallExpression(const ast::expression::CallExpression* callExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const;

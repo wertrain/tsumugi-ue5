@@ -185,6 +185,13 @@ enum class TokenType : int32_t {
     /// </summary>
     kStraightQuotes,
 
+    /// --------- その他 ---------
+
+    /// <summary>
+    /// # 記号
+    /// </summary>
+    kSharp,
+
     /// --------- キーワード --------- 
 
     /// <summary>
