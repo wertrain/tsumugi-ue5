@@ -20,6 +20,8 @@ const tchar* ObjectTypeToTString(const ObjectType objectType) {
         { object::ObjectType::kBuiltinFunction, TT("kBuiltinFunction") },
         { object::ObjectType::kUserFunction, TT("kUserFunction") },
         { object::ObjectType::kBoundMethod, TT("kBoundMethod") },
+        { object::ObjectType::kUserObject, TT("kUserObject") },
+        { object::ObjectType::kClass, TT("kClass") },
         { object::ObjectType::kError, TT("kError") },
     };
 
@@ -45,6 +47,8 @@ const char* ObjectTypeToString(const ObjectType objectType) {
         { object::ObjectType::kBuiltinFunction, ("kBuiltinFunction") },
         { object::ObjectType::kUserFunction, ("kUserFunction") },
         { object::ObjectType::kBoundMethod, ("kBoundMethod") },
+        { object::ObjectType::kUserObject, ("kUserObject") },
+        { object::ObjectType::kClass, ("kClass") },
         { object::ObjectType::kError, ("kError") },
     };
 

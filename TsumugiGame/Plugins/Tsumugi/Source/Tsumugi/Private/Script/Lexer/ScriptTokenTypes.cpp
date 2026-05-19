@@ -20,6 +20,7 @@ const TokenType LookupIdentifier(const tstring& identifier) {
         { TT("true"), tsumugi::script::lexer::TokenType::kTrue },
         { TT("false"), tsumugi::script::lexer::TokenType::kFalse },
         { TT("null"), tsumugi::script::lexer::TokenType::kNull },
+        { TT("class"), tsumugi::script::lexer::TokenType::kClass },
     };
     auto it = Keywords.find(identifier);
     return it != Keywords.end() ? it->second : TokenType::kIdentifier;
@@ -73,7 +74,8 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kReturn, TT("kReturn") },
         { tsumugi::script::lexer::TokenType::kTrue, TT("kTrue") },
         { tsumugi::script::lexer::TokenType::kFalse, TT("kFalse") },
-        { tsumugi::script::lexer::TokenType::kNull, TT("kNull") }
+        { tsumugi::script::lexer::TokenType::kNull, TT("kNull") },
+        { tsumugi::script::lexer::TokenType::kClass, TT("kClass") }
     };
 
     if (Table.find(token_type) != Table.end()) {
@@ -130,7 +132,8 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kReturn, ("kReturn") },
         { tsumugi::script::lexer::TokenType::kTrue, ("kTrue") },
         { tsumugi::script::lexer::TokenType::kFalse, ("kFalse") },
-        { tsumugi::script::lexer::TokenType::kNull, ("kNull") }
+        { tsumugi::script::lexer::TokenType::kNull, ("kNull") },
+        { tsumugi::script::lexer::TokenType::kClass, ("kClass") }
     };
 
     if (Table.find(token_type) != Table.end()) {

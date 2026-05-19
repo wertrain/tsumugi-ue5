@@ -27,6 +27,7 @@
 #include "Script/AST/Statements/LetStatement.h"
 #include "Script/AST/Statements/FunctionStatement.h"
 #include "Script/AST/Statements/ForStatement.h"
+#include "Script/AST/Statements/ClassStatement.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
@@ -46,6 +47,7 @@
 #include "Script/Objects/ArrayMethods.h"
 #include "Script/Objects/HashMethods.h"
 #include "Script/Objects/UserObject.h"
+#include "Script/Objects/ClassObject.h"
 #include "Script/Objects/protocol/ObjectProtocolDispatcher.h"
 #include "Script/Builtins/BuiltinFunctions.h"
 #include <cassert>
@@ -216,6 +218,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         case ast::NodeType::kForStatement: {
             auto* forStatement = static_cast<const ast::statement::ForStatement*>(node);
             return EvalForStatement(forStatement, environment);
+        }
+        case ast::NodeType::kClassStatement: {
+            auto* classStatement = static_cast<const ast::statement::ClassStatement*>(node);
+            return EvalClassStatement(classStatement, environment);
         }
         case ast::NodeType::kBreakStatement: {
             return std::make_shared<object::BreakObject>();
@@ -418,8 +424,8 @@ std::shared_ptr<object::IObject> Evaluator::EvalIntegerInfixExpression(const tst
 
 std::shared_ptr<object::IObject> Evaluator::EvalStringInfixExpression(const tstring& op, const std::shared_ptr<object::StringObject>& left, const std::shared_ptr<object::StringObject>& right, const std::shared_ptr<object::Environment>& environment) const {
 
-    auto leftValue = left->GetValue();
-    auto rightValue = right->GetValue();
+    auto& leftValue = left->GetValue();
+    auto& rightValue = right->GetValue();
 
     if (op == TT("+")) {
         return std::make_shared<object::StringObject>(leftValue + rightValue);
@@ -463,6 +469,30 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
         return builtin;
     }
     return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statement::ClassStatement* statement, const std::shared_ptr<object::Environment>& environment) const {
+
+    tstring name = statement->GetName()->GetValue();
+
+    // プロトタイプ用の UserObject
+    auto prototype = std::make_shared<object::UserObject>();
+
+    // メソッドを集める
+    std::unordered_map<tstring, std::shared_ptr<object::IObject>> methods;
+
+    for (auto& m : statement->GetMethods()) {
+        auto fn = std::make_shared<object::UserFunctionObject>(m->GetParameters(), m->GetBody(), environment);
+        tstring methodName = m->GetName()->GetValue();
+        methods[methodName] = fn;
+
+        // プロトタイプにも載せておく（インスタンスから見えるように）
+        prototype->Set(methodName, fn);
+    }
+
+    auto classObject = std::make_shared<object::ClassObject>(name, std::move(methods), prototype);
+    environment->Set(name, classObject);
+    return classObject;
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalUserObjectLiteral(const ast::expression::UserObjectLiteral* literal, const std::shared_ptr<object::Environment>& environment) const {
@@ -674,18 +704,17 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
         return left;
     }
 
-    auto name = propertyAccessExpression->GetName()->GetValue();
+    auto& name = propertyAccessExpression->GetName()->GetValue();
 
     auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(left, name);
     if (!optValue.has_value()) {
         return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
     }
 
-    auto value = optValue.value();
+    auto& value = optValue.value();
     switch (value->GetType()) {
         case object::ObjectType::kUserFunction:
-            //return std::make_shared<object::BoundMethodObject>(left, std::static_pointer_cast<object::UserFunctionObject>(value));
-            return value;
+            return std::make_shared<object::BoundMethodObject>(left, std::static_pointer_cast<object::UserFunctionObject>(value));
         case object::ObjectType::kBuiltinFunction:
             auto builtin = std::static_pointer_cast<object::BuiltinFunctionObject>(value);
             builtin->SetReceiver(left);
@@ -718,6 +747,18 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
 
     switch (callable->GetType()) {
 
+        case object::ObjectType::kClass: {
+            auto klass = std::static_pointer_cast<object::ClassObject>(callable);
+
+            auto instance = std::make_shared<object::UserObject>();
+            instance->SetPrototype(klass->GetPrototype());
+            // Constructor があれば呼び出し
+            if (auto constructor = klass->TryGetMethod(object::ClassObject::kConstructorName, instance)) {
+                auto& constructorFunction = constructor.value();
+                return InvokeFunction(constructorFunction, arguments);
+            }
+            return instance;
+        }
         case object::ObjectType::kBuiltinFunction: {
             auto builtin = static_cast<object::BuiltinFunctionObject*>(callable.get());
             return builtin->GetFunction()(builtin->GetReceiver(), arguments);
@@ -728,7 +769,7 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
 
             const auto& params = userFunction->GetParameters();
             for (size_t i = 0; i < params.size(); ++i) {
-                auto name = params[i]->GetValue();
+                auto& name = params[i]->GetValue();
                 auto value = (i < arguments.size()) ? arguments[i] : object::NullObject::Instance();
                 extended->Set(name, value);
             }
@@ -740,15 +781,15 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
         }
         case object::ObjectType::kBoundMethod: {
             auto bound = static_cast<object::BoundMethodObject*>(callable.get());
-            auto receiver = bound->GetReceiver();
-            auto function = bound->GetFunction();
+            auto& receiver = bound->GetReceiver();
+            auto& function = bound->GetFunction();
 
             auto extended = std::make_shared<object::Environment>(function->GetEnvironment());
 
-            extended->Set(object::Environment::kSelf, receiver);
+            extended->Set(object::Environment::kThis, receiver);
             const auto& params = function->GetParameters();
             for (size_t i = 0; i < params.size(); ++i) {
-                auto name = params[i]->GetValue();
+                auto& name = params[i]->GetValue();
                 auto value = (i < arguments.size()) ? arguments[i] : object::NullObject::Instance();
                 extended->Set(name, value);
             }

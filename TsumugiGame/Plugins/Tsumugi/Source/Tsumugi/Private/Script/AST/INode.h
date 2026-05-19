@@ -32,6 +32,7 @@ enum class NodeType {
     kBreakStatement,
     kContinueStatement,
     kPropertyAccessExpression,
+    kClassStatement,
     Num
 };
 

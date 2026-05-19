@@ -8,6 +8,7 @@
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/AST/Statements/FunctionStatement.h"
 #include "Script/AST/Statements/ForStatement.h"
+#include "Script/AST/Statements/ClassStatement.h"
 #include "Script/AST/Statements/BreakStatement.h"
 #include "Script/AST/Statements/ContinueStatement.h"
 #include "Script/AST/Expressions/Identifier.h"
@@ -86,6 +87,8 @@ std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
     switch (currentToken_.get()->GetTokenType()) {
     case lexer::TokenType::kLet:
         return ParseLetStatement();
+    case lexer::TokenType::kClass:
+        return ParseClassStatement();
     case lexer::TokenType::kReturn :
         return ParseReturnStatement();
     case lexer::TokenType::kFor:
@@ -261,6 +264,41 @@ std::unique_ptr<script::ast::statement::ForStatement> Parser::ParseForStatement(
     return statement;
 }
 
+std::unique_ptr<script::ast::statement::ClassStatement> Parser::ParseClassStatement() {
+
+    auto statement = std::make_unique<ast::statement::ClassStatement>(currentToken_);
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
+        return nullptr;
+    }
+
+    auto name = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
+    statement->SetName(std::move(name));
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kLeftBraces, "{")) {
+        return nullptr;
+    }
+
+    while (!PeekTokenIs(lexer::TokenType::kRightBraces) && !PeekTokenIs(lexer::TokenType::kEOF)) {
+        auto method = ParseFunctionStatement();
+        if (method != nullptr) {
+            statement->AddMethod(std::move(method));
+        }
+    };
+
+    // } を消費
+    if (currentToken_->GetTokenType() == lexer::TokenType::kRightBraces) {
+        ReadToken();
+    }
+
+    // セミコロンは必須ではない
+    if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
+        ReadToken();
+    }
+
+    return statement;
+}
+
 std::unique_ptr<script::ast::statement::BreakStatement> Parser::ParseBreakStatement() {
 
     auto statement = std::make_unique<ast::statement::BreakStatement>(currentToken_);
@@ -395,7 +433,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseUserObjectLiteral() {
 
     std::vector<std::pair<std::unique_ptr<ast::IExpression>, std::unique_ptr<ast::IExpression>>> pairs;
 
-    while (!PeekTokenIs(lexer::TokenType::kRightBraces)) {
+    while (!PeekTokenIs(lexer::TokenType::kRightBraces) && !PeekTokenIs(lexer::TokenType::kEOF)) {
 
         ReadToken(); // key
         auto keyExpression = ParseExpression(Precedence::kLowest);
@@ -458,7 +496,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseHashLiteral() {
 
     std::vector<std::pair<std::unique_ptr<ast::IExpression>, std::unique_ptr<ast::IExpression>>> pairs;
 
-    while (!PeekTokenIs(lexer::TokenType::kRightBraces)) {
+    while (!PeekTokenIs(lexer::TokenType::kRightBraces) && !PeekTokenIs(lexer::TokenType::kEOF)) {
 
         ReadToken(); // key
         auto key = ParseExpression(Precedence::kLowest);

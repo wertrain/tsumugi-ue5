@@ -15,7 +15,7 @@
 namespace tsumugi::script::object {
 
 // メソッドのレシーバー名としてセットする文字列
-const tstring Environment::kSelf = TT("self");
+const tstring Environment::kThis = TT("this");
 
 // Environment()
 // -----------------------------------------------------------------------------

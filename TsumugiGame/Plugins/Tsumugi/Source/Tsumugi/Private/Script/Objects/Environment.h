@@ -37,7 +37,7 @@ public:
     /// <summary>
     /// メソッドのレシーバー名としてセットする文字列
     /// </summary>
-    static const tstring kSelf;
+    static const tstring kThis;
 
 public:
     explicit Environment();

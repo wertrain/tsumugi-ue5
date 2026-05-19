@@ -17,10 +17,11 @@ std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TryGet
         case ObjectType::kArray:  return static_cast<object::ArrayObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kString: return static_cast<object::StringObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kUserObject: {
-            auto u = std::static_pointer_cast<object::UserObject > (object);
-            auto v = u->Get(name);
-            if (v) return v;
-            return object::NullObject::Instance();
+            auto property = static_cast<object::UserObject*>(object.get())->TryGetProperty(name);
+            if (!property.has_value()) {
+                return object::NullObject::Instance();
+            }
+            return property;
         }
         default:
             return std::nullopt;
@@ -58,6 +59,8 @@ bool ObjectProtocolDispatcher::IsCallable(const std::shared_ptr<object::IObject>
         case ObjectType::kBuiltinFunction: return true;
         case ObjectType::kUserFunction: return true;
         case ObjectType::kUserObject: return true;
+        case ObjectType::kBoundMethod: return true;
+        case ObjectType::kClass: return true;
 
         default: return false;
     }

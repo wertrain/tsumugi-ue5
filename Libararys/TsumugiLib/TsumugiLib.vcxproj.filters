@@ -261,6 +261,12 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\NullLiteral.h">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ClassObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ClassStatement.h">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -463,6 +469,12 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\NullLiteral.cpp">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ClassObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ClassStatement.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
