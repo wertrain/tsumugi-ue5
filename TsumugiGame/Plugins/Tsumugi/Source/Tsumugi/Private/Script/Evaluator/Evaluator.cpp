@@ -21,6 +21,7 @@
 #include "Script/AST/Expressions/AssignmentExpression.h"
 #include "Script/AST/Expressions/IndexAssignmentExpression.h"
 #include "Script/AST/Expressions/PropertyAccessExpression.h"
+#include "Script/AST/Expressions/SuperExpression.h"
 #include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/AST/Statements/ReturnStatement.h"
@@ -475,24 +476,60 @@ std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statem
 
     tstring name = statement->GetName()->GetValue();
 
-    // プロトタイプ用の UserObject
+    // 親クラスを探す
+    std::shared_ptr<object::ClassObject> parentClass = nullptr;
+    if (statement->GetParentName()) {
+        tstring parentName = statement->GetParentName()->GetValue();
+        auto object = environment->Get(parentName);
+        if (!object || object->GetType() != object::ObjectType::kClass) {
+            return errors.MakeErrorObject(i18n::MessageId::kInvalidClassParent, parentName);
+        }
+        parentClass = std::static_pointer_cast<object::ClassObject>(object);
+    }
+    auto classObject = std::make_shared<object::ClassObject>(name);
+    classObject->SetParent(parentClass);
+
+    environment->Set(name, classObject);
+
+    // プロトタイプ作成  親クラスがあるなら prototype チェーンを繋ぐ
     auto prototype = std::make_shared<object::UserObject>();
+    if (parentClass) {
+        prototype->SetPrototype(parentClass->GetPrototype());
+    }
 
     // メソッドを集める
     std::unordered_map<tstring, std::shared_ptr<object::IObject>> methods;
 
     for (auto& m : statement->GetMethods()) {
-        auto fn = std::make_shared<object::UserFunctionObject>(m->GetParameters(), m->GetBody(), environment);
+        auto fn = std::make_shared<object::UserFunctionObject>(
+            m->GetParameters(), m->GetBody(), environment
+        );
+        // OwnerClass をセット（super 解決に必須）
+        fn->SetOwnerClass(classObject);
         tstring methodName = m->GetName()->GetValue();
         methods[methodName] = fn;
-
         // プロトタイプにも載せておく（インスタンスから見えるように）
         prototype->Set(methodName, fn);
     }
 
-    auto classObject = std::make_shared<object::ClassObject>(name, std::move(methods), prototype);
-    environment->Set(name, classObject);
+    classObject->SetMethods(std::move(methods));
+    classObject->SetPrototype(prototype);
+
     return classObject;
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalSuperExpression(const ast::expression::SuperExpression* expression, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto fn = environment->GetCurrentFunction();
+    //if (!fn) return errors.MakeErrorObject(i18n::MessageId::kSuperOutsideMethod);
+
+    auto owner = fn->GetOwnerClass();
+    //if (!owner) return errors.MakeErrorObject(i18n::MessageId::kSuperOutsideMethod);
+
+    auto parent = owner->GetParent();
+    //if (!parent) return errors.MakeErrorObject(i18n::MessageId::kNoSuperClass);
+
+    return parent->GetPrototype();
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalUserObjectLiteral(const ast::expression::UserObjectLiteral* literal, const std::shared_ptr<object::Environment>& environment) const {
@@ -706,6 +743,25 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
 
     auto& name = propertyAccessExpression->GetName()->GetValue();
 
+    if (propertyAccessExpression->GetLeft()->GetNodeType() == ast::NodeType::kSuperExpression) {
+        const auto superExpr = static_cast<const ast::expression::SuperExpression*>(propertyAccessExpression->GetLeft());
+        auto proto = EvalSuperExpression(superExpr, environment);
+
+        auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(proto, name);
+        if (!optValue.has_value()) {
+            return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+        }
+
+        auto method = optValue.value();
+
+        // super.foo のレシーバは this
+        auto thisObj = environment->Get(TT("this"));
+        return std::make_shared<object::BoundMethodObject>(
+            thisObj,
+            std::static_pointer_cast<object::UserFunctionObject>(method)
+        );
+    }
+
     auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(left, name);
     if (!optValue.has_value()) {
         return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
@@ -755,7 +811,7 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
             // Constructor があれば呼び出し
             if (auto constructor = klass->TryGetMethod(object::ClassObject::kConstructorName, instance)) {
                 auto& constructorFunction = constructor.value();
-                return InvokeFunction(constructorFunction, arguments);
+                InvokeFunction(constructorFunction, arguments);
             }
             return instance;
         }
@@ -777,6 +833,7 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
             if (result->GetType() == object::ObjectType::kReturnValue) {
                 return std::static_pointer_cast<object::ReturnValue>(result)->GetValue();
             }
+            extended->SetCurrentFunction(userFunction);
             return result;
         }
         case object::ObjectType::kBoundMethod: {
@@ -785,7 +842,7 @@ std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<objec
             auto& function = bound->GetFunction();
 
             auto extended = std::make_shared<object::Environment>(function->GetEnvironment());
-
+            extended->SetCurrentFunction(function.get());
             extended->Set(object::Environment::kThis, receiver);
             const auto& params = function->GetParameters();
             for (size_t i = 0; i < params.size(); ++i) {

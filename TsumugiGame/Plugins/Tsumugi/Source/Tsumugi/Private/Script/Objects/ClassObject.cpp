@@ -5,10 +5,18 @@
 
 namespace tsumugi::script::object {
 
-ClassObject::ClassObject(const tstring& name, std::unordered_map<tstring, std::shared_ptr<IObject>> methods, std::shared_ptr<UserObject> prototype)
+ClassObject::ClassObject(const tstring& name, std::unordered_map<tstring, std::shared_ptr<IObject>> methods, std::shared_ptr<UserObject> prototype, std::shared_ptr<ClassObject> parent)
     : name_(name)
     , methods_(std::move(methods))
-    , prototype_(std::move(prototype)) {
+    , prototype_(std::move(prototype))
+    , parent_(std::move(parent)) {
+}
+
+ClassObject::ClassObject(const tstring& name)
+    : name_(name)
+    , methods_()
+    , prototype_()
+    , parent_() {
 }
 
 std::optional<std::shared_ptr<IObject>> ClassObject::TryGetMethod(const tstring& name, std::shared_ptr<IObject> receiver) const {

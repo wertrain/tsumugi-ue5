@@ -33,6 +33,7 @@ enum class NodeType {
     kContinueStatement,
     kPropertyAccessExpression,
     kClassStatement,
+    kSuperExpression,
     Num
 };
 

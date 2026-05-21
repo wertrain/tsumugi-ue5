@@ -16,6 +16,7 @@
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/AST/Expressions/NullLiteral.h"
+#include "Script/AST/Expressions/SuperExpression.h"
 #include "Script/AST/Expressions/ArrayLiteral.h"
 #include "Script/AST/Expressions/UserObjectLiteral.h"
 #include "Script/AST/Expressions/HashLiteral.h"
@@ -275,6 +276,18 @@ std::unique_ptr<script::ast::statement::ClassStatement> Parser::ParseClassStatem
     auto name = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
     statement->SetName(std::move(name));
 
+    // entends で継承元があるかどうか確認
+    if (PeekTokenIs(lexer::TokenType::kExtends)) {
+        ReadToken();
+
+        // 継承クラスの名前があるか
+        if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
+            return nullptr;
+        }
+        auto parentName = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
+        statement->SetParentName(std::move(parentName));
+    }
+
     if (!ExpectPeekRequiredTokenType(lexer::TokenType::kLeftBraces, "{")) {
         return nullptr;
     }
@@ -287,7 +300,7 @@ std::unique_ptr<script::ast::statement::ClassStatement> Parser::ParseClassStatem
     };
 
     // } を消費
-    if (currentToken_->GetTokenType() == lexer::TokenType::kRightBraces) {
+    if (PeekTokenIs(lexer::TokenType::kRightBraces)) {
         ReadToken();
     }
 
@@ -388,6 +401,11 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseBooleanLiteral() {
 std::unique_ptr<script::ast::IExpression> Parser::ParseNullLiteral() {
 
     return std::make_unique<ast::expression::NullLiteral>(currentToken_);
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseSuperExpression() {
+
+    return std::make_unique<ast::expression::SuperExpression>(currentToken_);
 }
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseArrayLiteral() {
@@ -883,6 +901,7 @@ void Parser::RegisterPrefixParseFunctions() {
     prefixParseFunctions_.emplace(lexer::TokenType::kLeftBraces, [this] { return ParseUserObjectLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kSharp, [this] { return ParseHashLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kNull, [this] { return ParseNullLiteral(); });
+    prefixParseFunctions_.emplace(lexer::TokenType::kSuper, [this] { return ParseSuperExpression(); });
 }
 
 void Parser::RegisterInfixParseFunctions() {

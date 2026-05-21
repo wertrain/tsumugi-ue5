@@ -28,6 +28,8 @@ public:
     void SetToken(std::shared_ptr<lexer::Token> token) { token_ = std::move(token); }
     const expression::Identifier* GetName() const { return name_.get(); }
     void SetName(std::unique_ptr<expression::Identifier> name) { name_ = std::move(name); }
+    const expression::Identifier* GetParentName() const { return parentName_.get(); }
+    void SetParentName(std::unique_ptr<expression::Identifier> name) { parentName_ = std::move(name); }
     const statement::FunctionStatement* GetMethod(int index) const { return methods_.at(index).get(); }
     const std::vector<std::unique_ptr<statement::FunctionStatement>>& GetMethods() const { return methods_; }
     void AddMethod(std::unique_ptr<statement::FunctionStatement> method) { methods_.push_back(std::move(method)); }
@@ -40,6 +42,7 @@ private:
     std::shared_ptr<lexer::Token> token_;
     std::unique_ptr<ast::expression::Identifier> name_;
     std::vector<std::unique_ptr<statement::FunctionStatement>> methods_;
+    std::unique_ptr<ast::expression::Identifier> parentName_;
 };
 
 }

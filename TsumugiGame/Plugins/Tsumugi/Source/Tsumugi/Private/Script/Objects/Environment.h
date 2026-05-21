@@ -29,6 +29,7 @@
 // -----------------------------------------------------------------------------
 
 namespace tsumugi::script::object { class IObject; }
+namespace tsumugi::script::object { class UserFunctionObject; }
 
 namespace tsumugi::script::object {
 
@@ -55,9 +56,15 @@ public:
     /// </summary>
     void Clear();
 
+    // super 解決のための現在実行中の関数（循環参照防止のため生ポインタ）
+    void SetCurrentFunction(UserFunctionObject* fn) { currentFunction_ = fn; }
+    UserFunctionObject* GetCurrentFunction() const { return currentFunction_; }
+
 private:
     std::unordered_map<tstring, std::shared_ptr<object::IObject>> store_;
     std::weak_ptr<Environment> outer_; // 親スコープ
+
+    object::UserFunctionObject* currentFunction_; // ★ weak_ptr ではなく生ポインタ
 };
 
 }

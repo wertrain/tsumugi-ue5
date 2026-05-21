@@ -6,7 +6,10 @@
 namespace tsumugi::script::ast::statement {
 
 ClassStatement::ClassStatement(std::shared_ptr<lexer::Token> token)
-    : token_(std::move(token)) {
+    : token_(std::move(token))
+    , name_()
+    , methods_()
+    , parentName_() {
 }
 
 ClassStatement::~ClassStatement() = default;

@@ -267,6 +267,9 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ClassStatement.h">
       <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\SuperExpression.h">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -475,6 +478,9 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ClassStatement.cpp">
       <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\SuperExpression.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

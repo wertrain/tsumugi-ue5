@@ -263,6 +263,16 @@ enum class TokenType : int32_t {
     /// class キーワード
     /// </summary>
     kClass,
+
+    /// <summary>
+    /// Extends キーワード
+    /// </summary>
+    kExtends,
+
+    /// <summary>
+    /// Super キーワード
+    /// </summary>
+    kSuper,
 };
 
 /// <summary>

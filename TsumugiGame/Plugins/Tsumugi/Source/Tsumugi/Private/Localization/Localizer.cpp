@@ -34,6 +34,7 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidProperty, TT("無効なプロパティです: {0}") },
     { tsumugi::i18n::MessageId::kNotCallable, TT("{0} は呼び出し可能ではありません。") },
     { tsumugi::i18n::MessageId::kPropertyAssignmentNotSupported,  TT("プロパティ '{0}' はこのオブジェクト（型: {1}）に設定できません。") },
+    { tsumugi::i18n::MessageId::kInvalidClassParent, TT("継承元クラス '{0}' が見つからないか、クラスではありません。") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -58,6 +59,7 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidProperty, TT("Invalid property: {0}") },
     { tsumugi::i18n::MessageId::kNotCallable, TT("{0} is not callable.") },
     { tsumugi::i18n::MessageId::kPropertyAssignmentNotSupported, TT("Property '{0}' cannot be assigned on this object (type: {1}).") },
+    { tsumugi::i18n::MessageId::kInvalidClassParent, TT("Invalid parent class: '{0}' is not a class or does not exist.") },
 
 };
 

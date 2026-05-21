@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PrefixExpression.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PropertyAccessExpression.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\StringLiteral.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\SuperExpression.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\UserObjectLiteral.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\WhileExpression.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IExpression.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PrefixExpression.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PropertyAccessExpression.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\StringLiteral.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\SuperExpression.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\UserObjectLiteral.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\WhileExpression.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IExpression.cpp" />
