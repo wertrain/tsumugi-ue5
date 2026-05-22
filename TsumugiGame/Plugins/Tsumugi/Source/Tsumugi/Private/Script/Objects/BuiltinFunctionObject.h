@@ -12,14 +12,11 @@ class BuiltinFunctionObject : public IObject {
 public:
     explicit BuiltinFunctionObject(BuiltinFunctionType fn);
     BuiltinFunctionType GetFunction() const { return function_; }
-    void SetReceiver(std::shared_ptr<IObject> receiver) { receiver_ = std::move(receiver); }
-    std::shared_ptr<IObject> GetReceiver() const { return receiver_; }
     tstring Inspect() const override;
     ObjectType GetType() const override;
 
 private:
     BuiltinFunctionType function_;
-    std::shared_ptr<IObject> receiver_;
 };
 
 }

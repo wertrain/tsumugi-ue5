@@ -249,9 +249,6 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BoundMethodObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
@@ -459,9 +456,6 @@
       <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BoundMethodObject.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserObject.cpp">

@@ -2,37 +2,38 @@
 #include "Foundation/Types.h"
 #include <unordered_map>
 
-// Environment
-// -----------------------------------------------------------------------------
-// tsumugi の Environment は Monkey の Environment と同じく、
-// 「変数名 → 値（IObject）」の束縛を保持する辞書であり、
-// クロージャ（関数が定義されたときのスコープ）を実現するための中核となる。
-//
-// 【Monkey との共通点】
-// - store_ にローカル変数を保持する
-// - outer_ に親スコープを保持する（レキシカルスコープ）
-// - Get(name) は現在のスコープから親スコープへと順に探索する
-//
-// 【tsumugi 独自の拡張点】
-// - メソッド呼び出し時に「self（receiver）」を注入するためのスコープとしても使われる
-// - BoundMethodObject と組み合わせて「定義時環境 + 実行時環境」を構築する
-// - PropertyAccess / InvokeFunction と密接に連携する
-//
-// 【循環参照について】
-// - UserFunctionObject は Environment を保持し、Environment は IObject を保持するため、
-//   循環参照が発生する可能性がある。
-// - Clear() を呼ぶことで store_ を破棄し、循環参照を解消する。
-//   （REPL 終了時などに必ず呼ぶ必要がある）
-//
-// tsumugi の実行モデルにおいて Environment は「関数の定義時スコープ」と
-// 「関数の実行時スコープ」をつなぐ最重要コンポーネントである。
-// -----------------------------------------------------------------------------
-
 namespace tsumugi::script::object { class IObject; }
 namespace tsumugi::script::object { class UserFunctionObject; }
 
 namespace tsumugi::script::object {
 
+// Environment
+// -----------------------------------------------------------------------------
+// tsumugi の Environment は、Monkey と同様に
+// 「変数名 → 値（IObject）」の束縛を保持する辞書であり、
+// レキシカルスコープとクロージャを実現する中核コンポーネントである。
+//
+// 【Monkey と共通する点】
+// - store_ にローカル変数を保持する
+// - outer_ に親スコープを保持し、レキシカルスコープを形成する
+// - Get(name) は現在のスコープから親スコープへと順に探索する
+//
+// 【tsumugi 独自の拡張点】
+// - メソッド呼び出し時の「this（receiver）」の束縛も Environment が担当する
+//   （this は Invoke によって実行時スコープへ注入される）
+// - super 呼び出しのために「現在実行中の関数（currentFunction）」を保持する
+//   → currentFunction.ownerClass / parentClass を辿ることで super を解決する
+// - PropertyAccess は値を返すだけとし、this の注入は CallExpression → Invoke に集約
+//
+// 【循環参照について】
+// - UserFunctionObject は Environment を保持し、Environment は IObject を保持するため
+//   循環参照が発生し得る。
+// - Clear() によって store_ を破棄することで循環参照を解消できる。
+//   （REPL 終了時などに必ず呼ぶ必要がある）
+//
+// tsumugi の実行モデルにおいて Environment は、
+// 「関数の定義時スコープ」と「関数の実行時スコープ」をつなぐ最重要コンポーネントである。
+// -----------------------------------------------------------------------------
 class Environment {
 public:
     /// <summary>

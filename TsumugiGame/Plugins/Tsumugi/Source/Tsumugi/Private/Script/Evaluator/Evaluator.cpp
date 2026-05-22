@@ -40,7 +40,6 @@
 #include "Script/Objects/ErrorObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/UserFunctionObject.h"
-#include "Script/Objects/BoundMethodObject.h"
 #include "Script/Objects/BreakObject.h"
 #include "Script/Objects/ContinueObject.h"
 #include "Script/Objects/ObjectHash.h"
@@ -521,13 +520,13 @@ std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statem
 std::shared_ptr<object::IObject> Evaluator::EvalSuperExpression(const ast::expression::SuperExpression* expression, const std::shared_ptr<object::Environment>& environment) const {
 
     auto fn = environment->GetCurrentFunction();
-    //if (!fn) return errors.MakeErrorObject(i18n::MessageId::kSuperOutsideMethod);
+    if (!fn) return errors.MakeErrorObject(i18n::MessageId::kSuperOutsideMethod,  object::ClassObject::kSuperKeyword);
 
     auto owner = fn->GetOwnerClass();
-    //if (!owner) return errors.MakeErrorObject(i18n::MessageId::kSuperOutsideMethod);
+    if (!owner) return errors.MakeErrorObject(i18n::MessageId::kSuperOutsideMethod, object::ClassObject::kSuperKeyword);
 
-    auto parent = owner->GetParent();
-    //if (!parent) return errors.MakeErrorObject(i18n::MessageId::kNoSuperClass);
+    auto parent = owner->GetParentClass();
+    if (!parent) return errors.MakeErrorObject(i18n::MessageId::kNoSuperClass, object::ClassObject::kSuperKeyword);
 
     return parent->GetPrototype();
 }
@@ -590,32 +589,83 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexExpression(const std::share
 
 // EvalCallExpression
 // -----------------------------------------------------------------------------
-// CallExpression（f(x, y)）を評価する。
-// tsumugi では、関数呼び出しの意味論はすべて InvokeFunction に委譲される。
+// CallExpression（f(x, y), obj.foo(), super.foo()）を評価する。
+// tsumugi では、関数呼び出し時の「レシーバ（this）」の決定も含めて、
+// 呼び出しの意味論は Invoke に委譲する。
 // 
-// 【InvokeFunction に集約される処理】
-// - BoundMethodObject の receiver 注入（self の設定）
-// - BuiltinFunctionObject への receiver の受け渡し
-// - UserFunctionObject のパラメータ束縛と定義時環境の拡張
-// - ReturnValue の unwrap（Monkey 互換）
-// 
-// これにより、CallExpression 自体は「callable と引数を評価して渡す」
-// という最小限の責務に限定され、関数呼び出しモデル全体の一貫性が保たれる。
+// 【EvalCallExpression の責務（改訂版）】
+// - 呼び出し対象（function 部分）の AST を解析し、callee / receiver を決定する
+//   - foo()          → callee = foo の評価結果, receiver = null
+//   - obj.foo()      → callee = obj.foo のプロパティ値, receiver = obj
+//   - super.foo()    → callee = 親クラス prototype 上の foo, receiver = this
+// - 引数を評価し、Invoke(callee, receiver, args) に渡す
 // -----------------------------------------------------------------------------
 std::shared_ptr<object::IObject> Evaluator::EvalCallExpression(const ast::expression::CallExpression* callExpression, const std::shared_ptr<object::Environment>& environment) const {
 
-    auto callee = Eval(callExpression->GetFunction(), environment);
-    if (IsErrorObject(callee)) {
-        return callee;
+    auto fnExpr = callExpression->GetFunction();
+
+    std::shared_ptr<object::IObject> callee;
+    std::shared_ptr<object::IObject> receiver = nullptr;
+
+    // obj.foo() / super.foo() のケース
+    if (fnExpr->GetNodeType() == ast::NodeType::kPropertyAccessExpression)  {
+        const auto prop = static_cast<const ast::expression::PropertyAccessExpression*>(fnExpr);
+
+        // super.foo() のケース
+        if (prop->GetLeft()->GetNodeType() == ast::NodeType::kSuperExpression) {
+
+            auto superExpr = static_cast<const ast::expression::SuperExpression*>(prop->GetLeft());
+
+            // 親クラスの prototype を取得
+            auto proto = EvalSuperExpression(superExpr, environment);
+            if (IsErrorObject(proto)) {
+                return proto;
+            }
+
+            auto& name = prop->GetName()->GetValue();
+            auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(proto, name);
+            if (!optValue.has_value()) {
+                return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+            }
+
+            callee = optValue.value();
+            // super.foo() のレシーバは this
+            receiver = environment->Get(object::Environment::kThis);
+        }
+        // 通常の obj.foo() のケース
+        else {
+            receiver = Eval(prop->GetLeft(), environment);
+            if (IsErrorObject(receiver)) {
+                return receiver;
+            }
+            auto& name = prop->GetName()->GetValue();
+            auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(receiver, name);
+            if (!optValue.has_value()) {
+                return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
+            }
+            callee = optValue.value();
+        }
     }
-    std::vector<std::shared_ptr<object::IObject>> arguments = EvalExpressions(callExpression->GetArguments(), environment);
-    if (arguments.size() > 0 && IsErrorObject(arguments.at(0))) {
+    // foo() のケース
+    else {
+        callee = Eval(fnExpr, environment);
+        if (IsErrorObject(callee)) {
+            return callee;
+        }
+        receiver = nullptr;
+    }
+
+    // 引数を評価
+    auto arguments = EvalExpressions(callExpression->GetArguments(), environment);
+    if (!arguments.empty() && IsErrorObject(arguments.at(0))) {
         return arguments.at(0);
     }
+
     if (!object::protocol::ObjectProtocolDispatcher::IsCallable(callee)) {
         return errors.MakeErrorObject(i18n::MessageId::kInvalidStatement, callee->Inspect());
     }
-    return InvokeFunction(callee, arguments);
+
+    return Invoke(callee, receiver, arguments);
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expression::WhileExpression* whileExpression, const std::shared_ptr<object::Environment>& environment) const {
@@ -729,7 +779,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalIndexAssignmentExpression(const 
 // - 取得した値が UserFunctionObject の場合：
 //       BoundMethodObject(receiver=obj, function=value) にラップする。
 // - 取得した値が BuiltinFunctionObject の場合：
-//       receiver をセットして返す（BoundMethodObject にはしない）。
+//       receiver をセットして返す。
 // 
 // これにより、obj.method() のようなメソッド呼び出しが自然に動作し、
 // UserFunctionObject / BuiltinFunctionObject の両方で統一的なメソッドモデルが成立する。
@@ -743,124 +793,91 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
 
     auto& name = propertyAccessExpression->GetName()->GetValue();
 
-    if (propertyAccessExpression->GetLeft()->GetNodeType() == ast::NodeType::kSuperExpression) {
-        const auto superExpr = static_cast<const ast::expression::SuperExpression*>(propertyAccessExpression->GetLeft());
-        auto proto = EvalSuperExpression(superExpr, environment);
-
-        auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(proto, name);
-        if (!optValue.has_value()) {
-            return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
-        }
-
-        auto method = optValue.value();
-
-        // super.foo のレシーバは this
-        auto thisObj = environment->Get(TT("this"));
-        return std::make_shared<object::BoundMethodObject>(
-            thisObj,
-            std::static_pointer_cast<object::UserFunctionObject>(method)
-        );
-    }
-
     auto optValue = object::protocol::ObjectProtocolDispatcher::TryGetProperty(left, name);
     if (!optValue.has_value()) {
         return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
     }
-
-    auto& value = optValue.value();
-    switch (value->GetType()) {
-        case object::ObjectType::kUserFunction:
-            return std::make_shared<object::BoundMethodObject>(left, std::static_pointer_cast<object::UserFunctionObject>(value));
-        case object::ObjectType::kBuiltinFunction:
-            auto builtin = std::static_pointer_cast<object::BuiltinFunctionObject>(value);
-            builtin->SetReceiver(left);
-            return builtin;
-    }
-    // プロパティ値を返す
-    return value;
+    return optValue.value();
 }
 
-// InvokeFunction
+// Invoke
 // -----------------------------------------------------------------------------
 // tsumugi の関数呼び出しモデルの中心となる関数。
 // Monkey の ApplyFunction を拡張し、関数呼び出しの意味論をすべてここに集約する。
 //
-// 【InvokeFunction の責務】
-// 1. BoundMethodObject の解釈
-//    - receiver（self）を実行時環境に注入する。
+// 【Invoke の責務】
+// 1. ClassObject の呼び出し
+//    - インスタンスを生成し、コンストラクタ（init）があれば
+//      receiver = 生成したインスタンスとして呼び出す。
 // 2. BuiltinFunctionObject の呼び出し
-//    - receiver を BuiltinFunctionObject に保持させ、Apply に渡す。
+//    - receiver（this 相当）と引数をそのまま組み込み関数に渡す。
 // 3. UserFunctionObject の呼び出し
 //    - 定義時環境をベースに新しい Environment を作成し、
-//      パラメータ束縛と self の注入を行う。
+//      currentFunction_ と this（必要なら）とパラメータ束縛を行う。
 // 4. ReturnValue の unwrap（Monkey 互換）
 //    - return 文が返す ReturnValueObject を中身の値に変換する。
-// 
-// これにより、CallExpression は「callable と引数を評価して渡す」だけに専念でき、
-// tsumugi の関数・メソッド呼び出しモデル全体の一貫性が保たれる。
 // -----------------------------------------------------------------------------
-std::shared_ptr<object::IObject> Evaluator::InvokeFunction(std::shared_ptr<object::IObject> callable, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
+std::shared_ptr<object::IObject> Evaluator::Invoke(std::shared_ptr<object::IObject> callable, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
 
     switch (callable->GetType()) {
 
+        // class 呼び出し：コンストラクタ付きインスタンス生成
         case object::ObjectType::kClass: {
             auto klass = std::static_pointer_cast<object::ClassObject>(callable);
 
             auto instance = std::make_shared<object::UserObject>();
             instance->SetPrototype(klass->GetPrototype());
-            // Constructor があれば呼び出し
-            if (auto constructor = klass->TryGetMethod(object::ClassObject::kConstructorName, instance)) {
-                auto& constructorFunction = constructor.value();
-                InvokeFunction(constructorFunction, arguments);
+
+            // 子クラスが init を持つか？
+            auto ownInit = klass->TryGetMethod(object::ClassObject::kConstructorName);
+
+            if (ownInit.has_value()) {
+                // 子クラスが init を持つ → 自動呼び出ししない
+                Invoke(ownInit.value(), instance, arguments);
+            } else {
+                // 子クラスが init を持たない → 親 init を自動で呼ぶ
+                auto parent = klass->GetParentClass();
+                if (parent) {
+                    auto parentInit = parent->TryGetMethod(object::ClassObject::kConstructorName);
+                    if (parentInit.has_value()) {
+                        Invoke(parentInit.value(), instance, arguments);
+                    }
+                }
             }
             return instance;
         }
+        // 組み込み関数
         case object::ObjectType::kBuiltinFunction: {
             auto builtin = static_cast<object::BuiltinFunctionObject*>(callable.get());
-            return builtin->GetFunction()(builtin->GetReceiver(), arguments);
+            return builtin->GetFunction()(receiver, arguments);
         }
+        // ユーザー定義関数
         case object::ObjectType::kUserFunction: {
-            auto userFunction = static_cast<object::UserFunctionObject*>(callable.get());
-            auto extended = std::make_shared<object::Environment>(userFunction->GetEnvironment());
-
-            const auto& params = userFunction->GetParameters();
-            for (size_t i = 0; i < params.size(); ++i) {
-                auto& name = params[i]->GetValue();
-                auto value = (i < arguments.size()) ? arguments[i] : object::NullObject::Instance();
-                extended->Set(name, value);
-            }
-            auto result = EvalBlockStatement(userFunction->GetBody()->GetStatements(), extended);
-            if (result->GetType() == object::ObjectType::kReturnValue) {
-                return std::static_pointer_cast<object::ReturnValue>(result)->GetValue();
-            }
-            extended->SetCurrentFunction(userFunction);
-            return result;
-        }
-        case object::ObjectType::kBoundMethod: {
-            auto bound = static_cast<object::BoundMethodObject*>(callable.get());
-            auto& receiver = bound->GetReceiver();
-            auto& function = bound->GetFunction();
-
+            auto function = static_cast<object::UserFunctionObject*>(callable.get());
             auto extended = std::make_shared<object::Environment>(function->GetEnvironment());
-            extended->SetCurrentFunction(function.get());
-            extended->Set(object::Environment::kThis, receiver);
+            extended->SetCurrentFunction(function); // super 解決用
+
+            // メソッド呼び出しなら this を束縛
+            if (receiver) {
+                extended->Set(object::Environment::kThis, receiver);
+            }
             const auto& params = function->GetParameters();
             for (size_t i = 0; i < params.size(); ++i) {
                 auto& name = params[i]->GetValue();
                 auto value = (i < arguments.size()) ? arguments[i] : object::NullObject::Instance();
                 extended->Set(name, value);
             }
-
             auto result = EvalBlockStatement(function->GetBody()->GetStatements(), extended);
             if (result->GetType() == object::ObjectType::kReturnValue) {
                 return std::static_pointer_cast<object::ReturnValue>(result)->GetValue();
             }
             return result;
-
         }
     }
+
     return errors.MakeErrorObject(i18n::MessageId::kNotCallable, callable->Inspect());
 }
+
 
 bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {
 

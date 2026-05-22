@@ -1,0 +1,22 @@
+class animal {
+    init(name) {
+        this.name = name
+    }
+
+    speak() {
+        return this.name + " makes a sound"
+    }
+}
+
+class dog extends animal {
+    init(name) {
+        this.name = name
+    }
+
+    speak() {
+        return this.name + " barks"
+    }
+}
+
+let d = dog("pochi")
+d.speak()

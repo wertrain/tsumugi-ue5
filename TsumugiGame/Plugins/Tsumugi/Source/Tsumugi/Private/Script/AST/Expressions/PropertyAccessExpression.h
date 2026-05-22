@@ -10,31 +10,31 @@ namespace tsumugi::script::ast::expression {
 
 // PropertyAccessExpression
 // -----------------------------------------------------------------------------
-// Monkey には存在しない、tsumugi 独自の構文要素。
-//
-//   obj.x
-//
-// のような「ドットによるプロパティアクセス」を表す。
+// tsumugi における「ドットによるプロパティアクセス」を表す AST ノード。
+// 
+//     obj.x
+// 
+// のような構文を扱う。Monkey には存在しない、tsumugi 独自の構文要素。
 //
 // 【構文上の位置づけ】
-// - obj["x"] を表す IndexExpression とは別の AST ノード。
+// - obj["x"] を表す IndexExpression とは別ノードとして定義される。
 // - つまり糖衣構文ではなく、構文レベルで明確に区別される。
 //
 // 【意味論上の扱い】
-// - 実際のプロパティ取得は ObjectProtocolDispatcher に委譲される。
-// - Dispatcher は「値を返すだけ」で、メソッド化は行わない。
-// - Evaluator::EvalPropertyAccessExpression 側で、
-//     - UserFunctionObject → BoundMethodObject にラップ
-//     - BuiltinFunctionObject → receiver をセット
-//   することで obj.method() が自然に動作する。
-//
+// - プロパティの取得そのものは ObjectProtocolDispatcher に委譲され、
+//   Dispatcher は「値を返すだけ」を担当する。
+// - メソッド化（this の注入）は PropertyAccess では行わない。
+// - obj.foo() / super.foo() のような「呼び出し時のレシーバ決定」は
+//   EvalCallExpression 側で行われ、Invoke が receiver を受け取って実行する。
+// 
 // 【拡張性】
-// - UserObject（将来のクラス/インスタンス）とも自然に統合される。
-// - obj.method のようなメソッド呼び出しモデルの基盤となる。
-//
-// tsumugi のプロパティアクセスモデルの中心となる AST ノード。
+// - UserObject（クラス/インスタンス）とも自然に統合され、
+//   obj.method() / super.method() のようなメソッド呼び出しモデルの基盤となる。
+// - プロパティアクセスは「値を取るだけ」に徹するため、
+//   呼び出しモデルの一貫性と拡張性が高い。
+// 
+// tsumugi のオブジェクトモデルにおける、最も基本的な構文ノードのひとつ。
 // -----------------------------------------------------------------------------
-
 class PropertyAccessExpression : public IExpression {
 public:
     PropertyAccessExpression(std::shared_ptr<lexer::Token> token, std::unique_ptr<ast::IExpression> left);
