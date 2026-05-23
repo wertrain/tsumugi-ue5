@@ -4,6 +4,7 @@
 #include "Script/AST/Root.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
+#include "Script/AST/Expressions/FloatLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/AST/Expressions/PrefixExpression.h"
 #include "Script/AST/Expressions/IfExpression.h"
@@ -20,6 +21,7 @@
 #include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/Objects/IntegerObject.h"
+#include "Script/Objects/FloatObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/StringObject.h"
@@ -394,6 +396,30 @@ namespace UnitTest
 			Assert::AreEqual(integer->GetValue() == 123, true, MSG("integer.Value is incorrect."));
 		}
 
+		TEST_METHOD(TestFloatExpression)
+		{
+			tstring code =
+				TT("12.3;");
+
+			auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(code.c_str()));
+			auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+			parser->GetLogger().SetLogConsole(&s_Console);
+			auto root = parser->ParseProgram();
+
+			Assert::AreEqual(root->GetStatementCount() == 1, true,
+				MSG("The number of Root.Statements is incorrect."));
+
+			//Assert::AreEqual(typeid(root->GetStatement(0)) == typeid(tsumugi::script::ast::statement::ExpressionStatement), true,
+			//	MSG("Root.Statements(0) is not ExpressionStatement."));
+
+			auto* statement = static_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
+			//Assert::AreEqual(typeid(statement->GetExpression()) == typeid(tsumugi::script::ast::expression::IntegerLiteral), true,
+			//	MSG("Statements.Expression is not Identifier."));
+
+			const tsumugi::script::ast::expression::FloatLiteral* floatLiteral = static_cast<const tsumugi::script::ast::expression::FloatLiteral*>(statement->GetExpression());
+			Assert::AreEqual(floatLiteral->GetValue() == 12.3, true, MSG("floatLiteral.Value is incorrect."));
+		}
+
 		TEST_METHOD(TestPrefixExpressions)
 		{
 			struct PrefixExpressionSet {
@@ -740,6 +766,42 @@ namespace UnitTest
 				auto environment = std::make_shared<tsumugi::script::object::Environment>();
 				auto evaluated = evaluator->Eval(root.get(), environment);
 				_TestIntegerObject(evaluated.get(), test.expected_);
+			}
+		}
+
+		TEST_METHOD(TestEvalFloatExpression)
+		{
+			struct EvalFloatSet {
+				tstring code_;
+				double expected_;
+			};
+			std::vector<EvalFloatSet> tests = {
+				{ TT("1.0"), 1.0 },
+				{ TT("12.5"), 12.5 },
+				{ TT("-1.25"), -1.25 },
+				{ TT("1.5 + 2.25"), 3.75 },
+				{ TT("2.0 * 3.5"), 7.0 },
+				{ TT("10.0 / 4.0"), 2.5 },
+				{ TT("(1.5 + 2.5) * 2.0"), 8.0 },
+				{ TT("3.0 * 4.0 / 2.0 + 10.0 - 8.0"), 8.0 },
+				{ TT("1.2 + 3"), 4.2 },          // int + float
+				{ TT("3 + 1.2"), 4.2 },          // float + int
+				{ TT("3 * 1.5"), 4.5 },          // int * float
+				{ TT("1.5 * 3"), 4.5 },          // float * int
+				{ TT("10 / 4.0"), 2.5 },         // int / float
+				{ TT("10.0 / 4"), 2.5 },         // float / int
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+				auto root = parser->ParseProgram();
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
+				_TestFloatObject(evaluated.get(), test.expected_);
 			}
 		}
 
@@ -1926,6 +1988,12 @@ namespace UnitTest
 		{
 			const auto* result = dynamic_cast<const tsumugi::script::object::IntegerObject*>(obj);
 			Assert::IsNotNull(result, MSG("result is not IntegerObject."));
+			Assert::AreEqual(expected, result->GetValue());
+		}
+		static void _TestFloatObject(tsumugi::script::object::IObject* obj, double expected)
+		{
+			const auto* result = dynamic_cast<const tsumugi::script::object::FloatObject*>(obj);
+			Assert::IsNotNull(result, MSG("result is not FloatObject."));
 			Assert::AreEqual(expected, result->GetValue());
 		}
 		static void _TestBooleanObject(tsumugi::script::object::IObject* obj, bool expected)

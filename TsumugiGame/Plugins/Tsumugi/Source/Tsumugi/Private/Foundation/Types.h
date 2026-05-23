@@ -55,6 +55,7 @@ bool FromChars(const tstring_view string, double& result);
 std::string TStringToString(const tstring_view string);
 tstring StringToTString(std::string_view string);
 tstring IntegerToTString(const int value);
+tstring DoubleToTString(const double value);
 
 }
 

@@ -13,6 +13,7 @@
 #include "Script/AST/Statements/ContinueStatement.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
+#include "Script/AST/Expressions/FloatLiteral.h"
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/AST/Expressions/NullLiteral.h"
@@ -382,6 +383,22 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIntegerLiteral() {
         std::unordered_map<std::string, tstring> placeholders = {
             {"0", currentToken_->GetLiteral()},
             {"1", tstring(TT("Integer"))}
+        };
+        logger_.Log(log::TextLogger::Categories::Error, localizer.GetMessage(i18n::MessageId::kConversionFailed, placeholders));
+        return nullptr;
+    }
+}
+
+std::unique_ptr<script::ast::IExpression> Parser::ParseFloatLiteral() {
+
+    double result = 0;
+    if (type::convert::FromChars(currentToken_->GetLiteral(), result)) {
+        return std::make_unique<ast::expression::FloatLiteral>(currentToken_, result);
+    }
+    else {
+        std::unordered_map<std::string, tstring> placeholders = {
+            {"0", currentToken_->GetLiteral()},
+            {"1", tstring(TT("Float"))}
         };
         logger_.Log(log::TextLogger::Categories::Error, localizer.GetMessage(i18n::MessageId::kConversionFailed, placeholders));
         return nullptr;
@@ -888,6 +905,7 @@ void Parser::RegisterPrefixParseFunctions() {
 
     prefixParseFunctions_.emplace(lexer::TokenType::kIdentifier, [this] { return ParseIdentifier(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kInteger, [this] { return ParseIntegerLiteral(); });
+    prefixParseFunctions_.emplace(lexer::TokenType::kFloat, [this] { return ParseFloatLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kString, [this] { return ParseStringLiteral(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kBang, [this] { return ParsePrefixExpression(); });
     prefixParseFunctions_.emplace(lexer::TokenType::kMinus, [this] { return ParsePrefixExpression(); });

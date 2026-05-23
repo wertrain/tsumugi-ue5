@@ -93,4 +93,15 @@ tstring IntegerToTString(const int value) {
 #endif
 }
 
+tstring DoubleToTString(const double value) {
+#if defined (TSUMUGI_SUPPORT_U8STRING)
+    std::string s = std::to_string(value);
+    return tstring(reinterpret_cast<const char8_t*>(s.c_str()));
+#elif (TSUMUGI_SUPPORT_WCHAR)
+    return std::to_wstring(value);
+#else
+    return std::to_string(value);
+#endif
+}
+
 }

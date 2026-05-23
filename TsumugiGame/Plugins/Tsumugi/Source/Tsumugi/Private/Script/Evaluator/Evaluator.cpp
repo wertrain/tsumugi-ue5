@@ -4,6 +4,7 @@
 #include "Script/AST/IStatement.h"
 #include "Script/AST/IExpression.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
+#include "Script/AST/Expressions/FloatLiteral.h"
 #include "Script/AST/Expressions/StringLiteral.h"
 #include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/AST/Expressions/NullLiteral.h"
@@ -31,6 +32,7 @@
 #include "Script/AST/Statements/ClassStatement.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/IntegerObject.h"
+#include "Script/Objects/FloatObject.h"
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/ArrayObject.h"
@@ -75,6 +77,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         case ast::NodeType::kIntegerLiteral: {
             auto* integerLiteral = static_cast<const ast::expression::IntegerLiteral*>(node);
             return std::make_shared<object::IntegerObject>(integerLiteral->GetValue());
+        }
+        case ast::NodeType::kFloatLiteral: {
+            auto* floatLiteral = static_cast<const ast::expression::FloatLiteral*>(node);
+            return std::make_shared<object::FloatObject>(floatLiteral->GetValue());
         }
         case ast::NodeType::kStringLiteral: {
             auto* stringLiteral = static_cast<const ast::expression::StringLiteral*>(node);
@@ -351,20 +357,38 @@ std::shared_ptr<object::IObject> Evaluator::EvalBangOperator(const std::shared_p
 
 std::shared_ptr<object::IObject> Evaluator::EvalMinusPrefixOperatorExpression(const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const {
 
-    if (right->GetType() != object::ObjectType::kInteger) {
-        return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, "-", right->GetType());
+    switch (right->GetType()) {
+        case object::ObjectType::kInteger: {
+            auto value = static_cast<object::IntegerObject*>(right.get())->GetValue();
+            return std::make_shared<object::IntegerObject>(-value);
+        }
+        case object::ObjectType::kFloat: {
+            auto value = static_cast<object::FloatObject*>(right.get())->GetValue();
+            return std::make_shared<object::FloatObject>(-value);
+        }
     }
-
-    auto value = static_cast<object::IntegerObject*>(right.get())->GetValue();
-    return std::make_shared<object::IntegerObject>(-value);
+    return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, "-", right->GetType());
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalInfixExpression(const tstring& op, const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const {
 
-    if (left->GetType() == object::ObjectType::kInteger && right->GetType() == object::ObjectType::kInteger) {
+    if ((left->GetType() == object::ObjectType::kInteger && right->GetType() == object::ObjectType::kFloat) ||
+        (left->GetType() == object::ObjectType::kFloat   && right->GetType() == object::ObjectType::kInteger)) {
+        double l = (left->GetType() == object::ObjectType::kInteger)
+        ? static_cast<object::IntegerObject*>(left.get())->GetValue()
+        : static_cast<object::FloatObject*>(left.get())->GetValue();
+        double r = (right->GetType() == object::ObjectType::kInteger)
+            ? static_cast<object::IntegerObject*>(right.get())->GetValue()
+            : static_cast<object::FloatObject*>(right.get())->GetValue();
+         return EvalFloatInfixExpression(op, std::make_shared<object::FloatObject>(l), std::make_shared<object::FloatObject>(r), environment);
+    } else if (left->GetType() == object::ObjectType::kInteger && right->GetType() == object::ObjectType::kInteger) {
         auto leftIntegerObject = std::static_pointer_cast<object::IntegerObject>(left);
         auto rightIntegerObject = std::static_pointer_cast<object::IntegerObject>(right);
         return EvalIntegerInfixExpression(op, leftIntegerObject, rightIntegerObject, environment);
+    } else if (left->GetType() == object::ObjectType::kFloat && right->GetType() == object::ObjectType::kFloat) {
+        auto leftFloatObject = std::static_pointer_cast<object::FloatObject>(left);
+        auto rightFloatObject = std::static_pointer_cast<object::FloatObject>(right);
+        return EvalFloatInfixExpression(op, leftFloatObject, rightFloatObject, environment);
     } else if (left->GetType() == object::ObjectType::kString && right->GetType() == object::ObjectType::kString) {
         auto leftStringObject = std::static_pointer_cast<object::StringObject>(left);
         auto rightStringObject = std::static_pointer_cast<object::StringObject>(right);
@@ -424,6 +448,35 @@ std::shared_ptr<object::IObject> Evaluator::EvalIntegerInfixExpression(const tst
         return object::BooleanObject::FromBool(leftValue != rightValue);
     }
     return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kInteger, op, object::ObjectType::kInteger);
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalFloatInfixExpression(const tstring& op, const std::shared_ptr<object::FloatObject>& left, const std::shared_ptr<object::FloatObject>& right, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto leftValue = left->GetValue();
+    auto rightValue = right->GetValue();
+
+    if (op == TT("+")) {
+        return std::make_shared<object::FloatObject>(leftValue + rightValue);
+    } else if (op == TT("-")) {
+        return std::make_shared<object::FloatObject>(leftValue - rightValue);
+    } else if (op == TT("*")) {
+        return std::make_shared<object::FloatObject>(leftValue * rightValue);
+    } else if (op == TT("/")) {
+        return std::make_shared<object::FloatObject>(leftValue / rightValue);
+    } else if (op == TT("<")) {
+        return object::BooleanObject::FromBool(leftValue < rightValue);
+    } else if (op == TT(">")) {
+        return object::BooleanObject::FromBool(leftValue > rightValue);
+    } else if (op == TT("<=")) {
+        return object::BooleanObject::FromBool(leftValue <= rightValue);
+    } else if (op == TT(">=")) {
+        return object::BooleanObject::FromBool(leftValue >= rightValue);
+    } else if (op == TT("==")) {
+        return object::BooleanObject::FromBool(leftValue == rightValue);
+    } else if (op == TT("!=")) {
+        return object::BooleanObject::FromBool(leftValue != rightValue);
+    }
+    return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kFloat, op, object::ObjectType::kFloat);
 }
 
 std::shared_ptr<object::IObject> Evaluator::EvalStringInfixExpression(const tstring& op, const std::shared_ptr<object::StringObject>& left, const std::shared_ptr<object::StringObject>& right, const std::shared_ptr<object::Environment>& environment) const {
