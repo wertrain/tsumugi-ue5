@@ -63,9 +63,8 @@ public:
 
 private:
     std::unordered_map<tstring, std::shared_ptr<object::IObject>> store_;
-    std::weak_ptr<Environment> outer_; // 親スコープ
-
-    object::UserFunctionObject* currentFunction_; // ★ weak_ptr ではなく生ポインタ
+    std::weak_ptr<Environment> outer_;
+    object::UserFunctionObject* currentFunction_;
 };
 
 }

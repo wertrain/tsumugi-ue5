@@ -24,7 +24,8 @@ const tstring Environment::kThis = TT("this");
 // -----------------------------------------------------------------------------
 Environment::Environment()
     : store_()
-    , outer_() {
+    , outer_()
+    , currentFunction_() {
 
 }
 
@@ -40,7 +41,8 @@ Environment::Environment()
 // -----------------------------------------------------------------------------
 Environment::Environment(std::shared_ptr<object::Environment> outer)
     : store_()
-    , outer_(std::move(outer)) {
+    , outer_(std::move(outer))
+    , currentFunction_() {
 
 }
 
