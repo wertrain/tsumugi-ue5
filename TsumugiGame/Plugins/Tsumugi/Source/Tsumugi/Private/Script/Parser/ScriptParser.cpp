@@ -297,6 +297,9 @@ std::unique_ptr<script::ast::statement::ClassStatement> Parser::ParseClassStatem
         auto method = ParseFunctionStatement();
         if (method != nullptr) {
             statement->AddMethod(std::move(method));
+        } else {
+            // class a { x: 0 } のように書いていた時（メソッド以外を定義しようとした時）の対応でトークンは読み進める
+            ReadToken();
         }
     };
 

@@ -1,4 +1,5 @@
 #include "Script/Objects/UserObject.h"
+#include "Script/Objects/ClassObject.h"
 
 namespace tsumugi::script::object {
 
@@ -29,7 +30,27 @@ void UserObject::SetPrototype(std::shared_ptr<UserObject> proto) {
 tstring UserObject::Inspect() const {
 
     tstring result;
-    result.append(TT("[UserObject]"));
+
+    // クラス名を表示（ownerClass がある場合）
+    if (auto klass = ownerClass_.lock()) {
+        result.append(klass->GetName());
+        result.append(TT(" "));
+    }
+
+    // プロパティを表示
+    result.append(TT("{ "));
+
+    bool first = true;
+    for (auto& [key, value] : properties_) {
+        if (!first) result.append(TT(", "));
+        first = false;
+
+        result.append(key);
+        result.append(TT(": "));
+        result.append(value ? value->Inspect() : TT("null"));
+    }
+
+    result.append(TT(" }"));
     return result;
 }
 

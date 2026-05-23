@@ -925,6 +925,7 @@ std::shared_ptr<object::IObject> Evaluator::Invoke(std::shared_ptr<object::IObje
 
             auto instance = std::make_shared<object::UserObject>();
             instance->SetPrototype(klass->GetPrototype());
+            instance->SetOwnerClass(klass);
 
             // 子クラスが init を持つか？
             auto ownInit = klass->TryGetMethod(object::ClassObject::kConstructorName);

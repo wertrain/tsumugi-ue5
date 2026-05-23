@@ -9,6 +9,21 @@ namespace tsumugi::script::object { class UserObject; }
 
 namespace tsumugi::script::object {
 
+// ClassObject は「ユーザー定義クラス」を表すオブジェクト。
+// 
+// - `class Foo {}` を定義すると ClassObject が生成される。
+// - `Foo()` を呼ぶと UserObject（インスタンス）が生成される。
+// - prototype ベースのメソッド解決や継承（parent_）をサポートする。
+// 
+// ※注意：Random, Math, Vector2 などの「組み込みクラス」には使用しない。
+//   組み込みクラスは BuiltinClassObject / BuiltinInstanceObject を使う。
+//   UserObject はユーザー定義クラス専用のインスタンス表現であり、
+//   組み込み構造体（Vector2 など）には適さない。
+
+// prototype_ はユーザー定義クラスのインスタンス（UserObject）が
+// メソッドを探索する際のプロトタイプチェーンの起点となる。
+// JavaScript の Foo.prototype に相当する。
+
 class ClassObject : public IObject {
 public:
     static constexpr const tchar* kConstructorName = TT("init");

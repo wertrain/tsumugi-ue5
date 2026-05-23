@@ -824,6 +824,12 @@ namespace UnitTest
 				{ TT("(1 > 2) != true"), true },
 				{ TT("(1 >= 2) != true"), true },
 				{ TT("(1 >= 2) == true"), false },
+				{ TT("1 < 2.5"), true },
+				{ TT("3.0 > 1"), true },
+				{ TT("1.5 == 1.5"), true },
+				{ TT("1.5 != 1"), true },
+				{ TT("1.0 <= 1.0"), true },
+				{ TT("2.0 >= 3.0"), false },
 			};
 
 			for (auto& test : tests) {
