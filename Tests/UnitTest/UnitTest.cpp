@@ -1095,6 +1095,128 @@ namespace UnitTest
 			_TestIntegerLiteral(array->GetElements()[2].get(), 3);
 		}
 
+		TEST_METHOD(TestArrayDeepEquality)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// 1. 基本の深い比較
+				{
+					TT("[1,2,3] == [1,2,3]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[1,2,3] != [1,2,3]"),
+					[](auto obj) { _TestBooleanObject(obj, false); }
+				},
+				{
+					TT("[1,2,3] == [1,2,4]"),
+					[](auto obj) { _TestBooleanObject(obj, false); }
+				},
+
+				// 2. 長さが違う
+				{
+					TT("[1] == [1,2]"),
+					[](auto obj) { _TestBooleanObject(obj, false); }
+				},
+				{
+					TT("[1,2] != [1]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// 3. ネストした配列
+				{
+					TT("[1,[2,3]] == [1,[2,3]]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[1,[2,3]] != [1,[2,4]]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[[1],[2,[3]]] == [[1],[2,[3]]]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// 4. 空配列
+				{
+					TT("[] == []"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[] != [1]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[[]] == [[]]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// 5. 参照が違っても内容が同じなら true
+				{
+					TT("let a = [1,2,3]; let b = [1,2,3]; a == b"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// 6. 同じ参照なら true
+				{
+					TT("let a = [1,2]; let b = a; a == b"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// 7. 多段ネスト
+				{
+					TT("[1,[2,[3,[4]]]] == [1,[2,[3,[4]]]]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[1,[2,[3,[4]]]] != [1,[2,[3,[5]]]]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+
+				// 8. 型が違う場合
+				{
+					TT("[1,2] == 123"),
+					[](auto obj) { _TestBooleanObject(obj, false); }
+				},
+				{
+					TT("[1,2] == \"abc\""),
+					[](auto obj) { _TestBooleanObject(obj, false); }
+				},
+				{
+					TT("[1,2] == true"),
+					[](auto obj) { _TestBooleanObject(obj, false); }
+				},
+
+				// 9. null を含む配列
+				{
+					TT("[1,null] == [1,null]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+				{
+					TT("[1,null] != [1,2]"),
+					[](auto obj) { _TestBooleanObject(obj, true); }
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+				tt.tester(evaluated.get());
+			}
+		}
+
+
 		TEST_METHOD(LiteralIndexExpression)
 		{
 			tstring code = TT("arr[1 + 2];");

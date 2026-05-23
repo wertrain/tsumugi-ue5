@@ -9,6 +9,7 @@ namespace tsumugi::script::object { class IObject; }
 namespace tsumugi::script::object { class BooleanObject; }
 namespace tsumugi::script::object { class IntegerObject; }
 namespace tsumugi::script::object { class StringObject; }
+namespace tsumugi::script::object { class ArrayObject; }
 namespace tsumugi::script::object { class NullObject; }
 namespace tsumugi::script::object { class Environment; }
 namespace tsumugi::script::ast { class INode; }
@@ -46,6 +47,7 @@ public:
     std::shared_ptr<object::IObject> EvalInfixExpression(const tstring& op, const std::shared_ptr<object::IObject>& left, const std::shared_ptr<object::IObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIntegerInfixExpression(const tstring& op, const std::shared_ptr<object::IntegerObject>& left, const std::shared_ptr<object::IntegerObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalStringInfixExpression(const tstring& op, const std::shared_ptr<object::StringObject>& left, const std::shared_ptr<object::StringObject>& right, const std::shared_ptr<object::Environment>& environment) const;
+    std::shared_ptr<object::IObject> EvalArrayInfixExpression(const tstring& op, const std::shared_ptr<object::ArrayObject>& left, const std::shared_ptr<object::ArrayObject>& right, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIfExpression(const ast::expression::IfExpression* ifExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIdentifier(const ast::expression::Identifier* identifier, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalClassStatement(const ast::statement::ClassStatement* statement, const std::shared_ptr<object::Environment>& environment) const;
@@ -61,7 +63,7 @@ public:
     std::shared_ptr<object::IObject> Invoke(std::shared_ptr<object::IObject> callable, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const;
 
 private:
-    bool IsTruthly(const std::shared_ptr<object::IObject>& object) const;
+    bool IsTruthy(const std::shared_ptr<object::IObject>& object) const;
     bool IsErrorObject(const std::shared_ptr<object::IObject>& object) const;
 
 private:

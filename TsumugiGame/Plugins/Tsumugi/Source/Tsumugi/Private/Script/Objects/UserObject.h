@@ -22,7 +22,7 @@ public:
 
 private:
     std::unordered_map<tstring, std::shared_ptr<IObject>> properties_;
-    std::shared_ptr<UserObject> prototype_;   // ★ 追加
+    std::shared_ptr<UserObject> prototype_;
 };
 
 }

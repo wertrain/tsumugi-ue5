@@ -369,6 +369,10 @@ std::shared_ptr<object::IObject> Evaluator::EvalInfixExpression(const tstring& o
         auto leftStringObject = std::static_pointer_cast<object::StringObject>(left);
         auto rightStringObject = std::static_pointer_cast<object::StringObject>(right);
         return EvalStringInfixExpression(op, leftStringObject, rightStringObject, environment);
+    } else if (left->GetType() == object::ObjectType::kArray && right->GetType() == object::ObjectType::kArray) {
+        auto leftArrayObject = std::static_pointer_cast<object::ArrayObject>(left);
+        auto rightArrayObject = std::static_pointer_cast<object::ArrayObject>(right);
+        return EvalArrayInfixExpression(op, leftArrayObject, rightArrayObject, environment);
     } else if (left->GetType() == object::ObjectType::kString && right->GetType() == object::ObjectType::kInteger && op == TT("*")) {
         auto leftStringObject = std::static_pointer_cast<object::StringObject>(left);
         auto rightIntegerObject = std::static_pointer_cast<object::IntegerObject>(right);
@@ -445,13 +449,54 @@ std::shared_ptr<object::IObject> Evaluator::EvalStringInfixExpression(const tstr
     return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kString, op, object::ObjectType::kString);
 }
 
+std::shared_ptr<object::IObject> Evaluator::EvalArrayInfixExpression(const tstring& op, const std::shared_ptr<object::ArrayObject>& left, const std::shared_ptr<object::ArrayObject>& right, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto& leftElements = left->GetElements();
+    auto& rightElements = right->GetElements();
+
+    if (op == TT("+")) {
+        std::vector<std::shared_ptr<object::IObject>> result;
+        result.reserve(leftElements.size() + rightElements.size());
+        for (auto& elem : leftElements) {
+            result.push_back(elem);
+        }
+        for (auto& elem : rightElements) {
+            result.push_back(elem);
+        }
+        return std::make_shared<object::ArrayObject>(result);
+    } else if (op == TT("<")) {
+        return object::BooleanObject::FromBool(leftElements.size() < rightElements.size());
+    } else if (op == TT(">")) {
+        return object::BooleanObject::FromBool(leftElements.size() > rightElements.size());
+    } else if (op == TT("<=")) {
+        return object::BooleanObject::FromBool(leftElements.size() <= rightElements.size());
+    } else if (op == TT(">=")) {
+        return object::BooleanObject::FromBool(leftElements.size() >= rightElements.size());
+    } else if (op == TT("==")) {
+        if (leftElements.size() != rightElements.size()) {
+            return object::BooleanObject::FromBool(false);
+        }
+        for (size_t i = 0; i < leftElements.size(); ++i) {
+            auto eq = EvalInfixExpression(TT("=="), leftElements[i], rightElements[i], environment);
+            if (!IsTruthy(eq)) {
+                return object::BooleanObject::FromBool(false);
+            }
+        }
+        return object::BooleanObject::FromBool(true);
+    } else if (op == TT("!=")) {
+        auto eq = EvalArrayInfixExpression(TT("=="), left, right, environment);
+        return object::BooleanObject::FromBool(!IsTruthy(eq));
+    }
+    return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, object::ObjectType::kArray, op, object::ObjectType::kArray);
+}
+
 std::shared_ptr<object::IObject> Evaluator::EvalIfExpression(const ast::expression::IfExpression* ifExpression, const std::shared_ptr<object::Environment>& environment) const {
 
     auto condition = Eval(ifExpression->GetCondition().get(), environment);
     if (IsErrorObject(condition)) {
         return condition;
     }
-    if (IsTruthly(condition)) {
+    if (IsTruthy(condition)) {
         auto blockEnvironment = std::make_shared<object::Environment>(environment);
         return EvalBlockStatement(ifExpression->GetConsequence()->GetStatements(), blockEnvironment);
     } else if (ifExpression->GetAlternative() != nullptr) {
@@ -678,7 +723,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalWhileExpression(const ast::expre
         if (IsErrorObject(condition)) {
             return condition;
         }
-        if (!IsTruthly(condition)) {
+        if (!IsTruthy(condition)) {
             break;
         }
 
@@ -878,8 +923,7 @@ std::shared_ptr<object::IObject> Evaluator::Invoke(std::shared_ptr<object::IObje
     return errors.MakeErrorObject(i18n::MessageId::kNotCallable, callable->Inspect());
 }
 
-
-bool Evaluator::IsTruthly(const std::shared_ptr<object::IObject>& object) const {
+bool Evaluator::IsTruthy(const std::shared_ptr<object::IObject>& object) const {
 
     if (object == object::BooleanObject::True()) {
         return true;
