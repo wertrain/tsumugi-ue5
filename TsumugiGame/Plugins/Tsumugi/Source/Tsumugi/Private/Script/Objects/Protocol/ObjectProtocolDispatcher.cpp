@@ -8,6 +8,8 @@
 #include "Script/Objects/BuiltinFunctionObject.h"
 #include "Script/Objects/UserFunctionObject.h"
 #include "Script/Objects/UserObject.h"
+#include "Script/Objects/BuiltinClassObject.h"
+#include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::object::protocol {
 
@@ -18,6 +20,8 @@ std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TryGet
         case ObjectType::kArray:  return static_cast<object::ArrayObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kString: return static_cast<object::StringObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kClass: return static_cast<object::ClassObject*>(object.get())->TryGetProperty(name);
+        case ObjectType::kBuiltinClass: return static_cast<object::BuiltinClassObject*>(object.get())->TryGetProperty(name);
+        case ObjectType::kBuiltinInstance: return static_cast<object::BuiltinInstanceObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kUserObject: {
             auto property = static_cast<object::UserObject*>(object.get())->TryGetProperty(name);
             if (!property.has_value()) {
@@ -63,6 +67,7 @@ bool ObjectProtocolDispatcher::IsCallable(const std::shared_ptr<object::IObject>
         case ObjectType::kUserObject: return true;
         case ObjectType::kBoundMethod: return true;
         case ObjectType::kClass: return true;
+        case ObjectType::kBuiltinClass: return true;
 
         default: return false;
     }

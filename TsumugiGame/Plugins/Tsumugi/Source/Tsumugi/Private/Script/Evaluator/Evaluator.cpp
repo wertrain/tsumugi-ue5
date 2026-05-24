@@ -51,6 +51,7 @@
 #include "Script/Objects/HashMethods.h"
 #include "Script/Objects/UserObject.h"
 #include "Script/Objects/ClassObject.h"
+#include "Script/Objects/BuiltinClassObject.h"
 #include "Script/Objects/protocol/ObjectProtocolDispatcher.h"
 #include "Script/Builtins/BuiltinFunctions.h"
 #include <cassert>
@@ -376,6 +377,15 @@ std::shared_ptr<object::IObject> Evaluator::EvalMinusPrefixOperatorExpression(co
             return std::make_shared<object::FloatObject>(-value);
         }
     }
+
+    // 演算子オーバーロード
+    // 主に Vector3 など、組み込みクラスが使用する想定
+    tstring methodName = TT("unary-");
+    auto methodObj = object::protocol::ObjectProtocolDispatcher::TryGetProperty(right, methodName);
+    if (methodObj.has_value() && methodObj.value()) {
+        return Invoke(methodObj.value(), right, {});
+    }
+
     return errors.MakeErrorObject(i18n::MessageId::kUnknownOperator, "-", right->GetType());
 }
 
@@ -416,6 +426,17 @@ std::shared_ptr<object::IObject> Evaluator::EvalInfixExpression(const tstring& o
             result += leftStringObject->GetValue();
         }
         return std::make_shared<object::StringObject>(result);
+    }
+
+    // 演算子オーバーロード
+    // 主に Vector3 など、組み込みクラスが使用する想定
+    tstring methodName = op;
+    if (!methodName.empty()) {
+        // 左辺（Vector3Instanceなど）が演算子と同名のプロパティ/メソッドを持っているか確認
+        auto methodObj = object::protocol::ObjectProtocolDispatcher::TryGetProperty(left, methodName);
+        if (methodObj.has_value() && methodObj.value()) {
+            return Invoke(methodObj.value(), left, { right });
+        }
     }
 
     if (op == TT("==")) {
@@ -964,7 +985,6 @@ std::shared_ptr<object::IObject> Evaluator::EvalInstanceOfExpression(const ast::
 std::shared_ptr<object::IObject> Evaluator::Invoke(std::shared_ptr<object::IObject> callable, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const {
 
     switch (callable->GetType()) {
-
         // class 呼び出し：コンストラクタ付きインスタンス生成
         case object::ObjectType::kClass: {
             auto klass = std::static_pointer_cast<object::ClassObject>(callable);
@@ -990,6 +1010,20 @@ std::shared_ptr<object::IObject> Evaluator::Invoke(std::shared_ptr<object::IObje
                 }
             }
             return instance;
+        }
+        // 組み込みクラス 呼び出し：インスタンス生成
+        case object::ObjectType::kBuiltinClass: {
+            auto klass = std::static_pointer_cast<object::BuiltinClassObject>(callable);
+            // インスタンス生成できないクラス（static-only）はエラー
+            if (!klass->CanInstantiate()) {
+                return errors.MakeErrorObject(i18n::MessageId::kNotCallable, klass->Inspect());
+            }
+            // インスタンス生成
+            auto instanceOpt = klass->Instantiate(arguments);
+            if (!instanceOpt.has_value()) {
+                return errors.MakeErrorObject(i18n::MessageId::kNotCallable, klass->Inspect());
+            }
+            return instanceOpt.value();
         }
         // 組み込み関数
         case object::ObjectType::kBuiltinFunction: {

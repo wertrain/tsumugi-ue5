@@ -1,6 +1,11 @@
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/IObject.h"
 
+// 以下は CreateGlobalEnvironment() のため
+#include "Script/Builtins/Vector/Vector3Class.h"
+#include "Script/Objects/BuiltinClassObject.h"
+
+
 // 【定義時環境（definition environment）】
 // 関数が定義されたときの Environment。
 // UserFunctionObject が保持する。
@@ -134,6 +139,11 @@ std::shared_ptr<object::IObject> Environment::Set(const tstring& name, std::shar
 void Environment::Clear() {
 
     store_.clear();
+}
+
+void Environment::CreateGlobalEnvironment() {
+
+    Set(TT("Vector3"), tsumugi::script::builtins::vector::CreateVector3Class());
 }
 
 }

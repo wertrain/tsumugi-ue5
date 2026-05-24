@@ -58,6 +58,9 @@
     <Filter Include="Tsumugi\Private\Script\Objects\Protocol">
       <UniqueIdentifier>{98a08907-0bab-4d49-bbdf-64c28bf88cda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Builtins\Vector">
+      <UniqueIdentifier>{77c14ad7-64c4-4651-977a-3f25ce83622b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -276,6 +279,18 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\InstanceOfExpression.h">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinClassObject.h">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinInstanceObject.h">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Instance.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -493,6 +508,18 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\InstanceOfExpression.cpp">
       <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinClassObject.cpp">
+      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinInstanceObject.cpp">
+      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Instance.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

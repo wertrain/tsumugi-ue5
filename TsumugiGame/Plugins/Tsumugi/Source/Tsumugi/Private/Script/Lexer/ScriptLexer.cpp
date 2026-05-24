@@ -188,7 +188,7 @@ void Lexer::ReadIdentifier(tstring& outIdentifier) {
     tstring identifier;
     identifier.push_back(reader_->Read());
 
-    while (IsLetter(reader_->Peek())) {
+    while (IsLetter(reader_->Peek()) || IsDigit(reader_->Peek())) {
         identifier.push_back(reader_->Read());
     }
     reader_->Seek(-1, script::lexer::LexingStringReader::SeekOrigin::kCurrent);

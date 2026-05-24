@@ -61,6 +61,11 @@ public:
     void SetCurrentFunction(UserFunctionObject* fn) { currentFunction_ = fn; }
     UserFunctionObject* GetCurrentFunction() const { return currentFunction_; }
 
+    /// <summary>
+    /// 組み込みクラスを Environment に登録する
+    /// </summary>
+    void CreateGlobalEnvironment();
+
 private:
     std::unordered_map<tstring, std::shared_ptr<object::IObject>> store_;
     std::weak_ptr<Environment> outer_;
