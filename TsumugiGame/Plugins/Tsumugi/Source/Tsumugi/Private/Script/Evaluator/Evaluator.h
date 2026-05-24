@@ -28,6 +28,7 @@ namespace tsumugi::script::ast::expression { class CallExpression; }
 namespace tsumugi::script::ast::statement { class ForStatement; }
 namespace tsumugi::script::ast::statement { class ClassStatement; }
 namespace tsumugi::script::ast::expression { class SuperExpression; }
+namespace tsumugi::script::ast::expression { class InstanceOfExpression; }
 
 namespace tsumugi::script::evaluator {
 
@@ -62,6 +63,7 @@ public:
     std::shared_ptr<object::IObject> EvalFunctionStatement(const ast::statement::FunctionStatement* functionStatement, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalIndexAssignmentExpression(const ast::expression::IndexAssignmentExpression* indexAssignmentExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> EvalPropertyAccessExpression(const ast::expression::PropertyAccessExpression* propertyAccessExpression, const std::shared_ptr<object::Environment>& environment) const;
+    std::shared_ptr<object::IObject> EvalInstanceOfExpression(const ast::expression::InstanceOfExpression* instanceOfExpression, const std::shared_ptr<object::Environment>& environment) const;
     std::shared_ptr<object::IObject> Invoke(std::shared_ptr<object::IObject> callable, std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& arguments) const;
 
 private:

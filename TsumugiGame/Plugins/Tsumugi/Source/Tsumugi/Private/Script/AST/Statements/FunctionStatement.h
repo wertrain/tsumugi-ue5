@@ -29,6 +29,8 @@ public:
     void AddParameter(std::shared_ptr<expression::Identifier> parameter) { parameters_.push_back(std::move(parameter)); }
     const std::shared_ptr<statement::BlockStatement>& GetBody() const { return body_; }
     void SetBody(std::shared_ptr<BlockStatement> value) { body_ = std::move(value); }
+    const bool IsStatic() const { return static_; }
+    void SetStatic(bool value) { static_ = value; }
 
     NodeType GetNodeType() const final override { return NodeType::kFunctionStatement; }
     tstring TokenLiteral() const override final;
@@ -39,6 +41,7 @@ private:
     std::unique_ptr<ast::expression::Identifier> name_;
     std::vector<std::shared_ptr<expression::Identifier>> parameters_;
     std::shared_ptr<BlockStatement> body_;
+    bool static_;
 };
 
 }

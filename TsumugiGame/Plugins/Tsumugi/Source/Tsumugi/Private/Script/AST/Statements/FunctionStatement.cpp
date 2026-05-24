@@ -6,7 +6,11 @@
 namespace tsumugi::script::ast::statement {
 
 FunctionStatement::FunctionStatement(std::shared_ptr<lexer::Token> token)
-    : token_(std::move(token)) {
+    : token_(std::move(token))
+    , name_()
+    , parameters_()
+    , body_()
+    , static_(false) {
 }
 
 FunctionStatement::~FunctionStatement() = default;

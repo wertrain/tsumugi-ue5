@@ -1989,6 +1989,148 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestEvalInstanceOfExpression)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				{
+					TT("class A{}; let a=A(); a instanceof A"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				{
+					TT("class A{}; class B extends A{}; let b=B(); b instanceof A"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				{
+					TT("class A{}; class B{}; let a=A(); a instanceof B"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestBooleanObject(obj, false);
+					}
+				},
+
+				{
+					TT("class A{}; 10 instanceof A"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestBooleanObject(obj, false);
+					}
+				},
+
+				{
+					TT("let x=10; 10 instanceof x"),
+					[](tsumugi::script::object::IObject* obj) {
+						auto err = dynamic_cast<tsumugi::script::object::ErrorObject*>(obj);
+						Assert::IsNotNull(err);
+						Assert::IsTrue(err->Inspect().find(TT("instanceof")) != tstring::npos);
+					}
+				},
+
+				{
+					TT("class A{init(){this.x=1}}; let a=A(); a instanceof A"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				{
+					TT("class A{}; class B extends A{}; class C extends B{}; let c=C(); c instanceof A"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestSuperExpression)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// 1. 基本的な super 呼び出し
+				{
+					TT("class A{ foo(){1} } class B extends A{ foo(){ super.foo() } } let b=B(); b.foo()"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestIntegerObject(obj, 1);
+					}
+				},
+
+				// 2. override + super
+				{
+					TT("class A{ foo(){10} } class B extends A{ foo(){ super.foo() + 5 } } let b=B(); b.foo()"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestIntegerObject(obj, 15);
+					}
+				},
+
+				// 3. super.init() の呼び出し
+				{
+					TT("class A{ init(){ this.x = 3 } } class B extends A{ init(){ super.init(); this.y = 7 } } let b=B(); b.x + b.y"),
+					[](tsumugi::script::object::IObject* obj) {
+						_TestIntegerObject(obj, 10);
+					}
+				},
+
+				// 4. メソッド外で super を使った場合 → エラー
+				{
+					TT("super.foo()"),
+					[](tsumugi::script::object::IObject* obj) {
+						auto err = dynamic_cast<tsumugi::script::object::ErrorObject*>(obj);
+						Assert::IsNotNull(err);
+						Assert::IsTrue(err->Inspect().find(TT("super")) != tstring::npos);
+					}
+				},
+
+				// 5. 親クラスが存在しないのに super を使った場合 → エラー
+				{
+					TT("class A{ foo(){ super.foo() } } let a=A(); a.foo()"),
+					[](tsumugi::script::object::IObject* obj) {
+						auto err = dynamic_cast<tsumugi::script::object::ErrorObject*>(obj);
+						Assert::IsNotNull(err);
+						Assert::IsTrue(err->Inspect().find(TT("super")) != tstring::npos);
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+					auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
 
 		static void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{

@@ -37,6 +37,7 @@ enum class MessageId : uint32_t {
     kSuperOutsideMethod,
     kNoSuperClass,
     kSuperConstructorNotFound,
+    kInstanceOfRightMustBeClass,
 };
 
 class Localizer {

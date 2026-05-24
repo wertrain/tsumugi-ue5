@@ -2,6 +2,7 @@
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/StringObject.h"
+#include "Script/Objects/ClassObject.h"
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
@@ -16,6 +17,7 @@ std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TryGet
         case ObjectType::kHash:   return static_cast<object::HashObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kArray:  return static_cast<object::ArrayObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kString: return static_cast<object::StringObject*>(object.get())->TryGetProperty(name);
+        case ObjectType::kClass: return static_cast<object::ClassObject*>(object.get())->TryGetProperty(name);
         case ObjectType::kUserObject: {
             auto property = static_cast<object::UserObject*>(object.get())->TryGetProperty(name);
             if (!property.has_value()) {

@@ -31,6 +31,7 @@
 #include "Script/AST/Expressions/AssignmentExpression.h"
 #include "Script/AST/Expressions/IndexAssignmentExpression.h"
 #include "Script/AST/Expressions/PropertyAccessExpression.h"
+#include "Script/AST/Expressions/InstanceOfExpression.h"
 #include <cassert>
 #include <unordered_map>
 
@@ -51,6 +52,7 @@ const std::unordered_map<tsumugi::script::lexer::TokenType, Precedence> Parser::
     { lexer::TokenType::kLeftParenthesis, Precedence::kCall },
     { lexer::TokenType::kLeftBrackets, Precedence::kCall },
     { lexer::TokenType::kDot, Precedence::kCall },
+    { lexer::TokenType::kInstanceOf, Precedence::kInstanceOf },
 };
 
 Parser::Parser(lexer::Lexer* lexer)
@@ -203,6 +205,11 @@ std::shared_ptr<script::ast::statement::BlockStatement> Parser::ParseBlockStatem
 std::unique_ptr<script::ast::statement::FunctionStatement> Parser::ParseFunctionStatement() {
 
     auto statement = std::make_unique<ast::statement::FunctionStatement>(currentToken_);
+
+    if (PeekTokenIs(lexer::TokenType::kStatic)) {
+        statement->SetStatic(true);
+        ReadToken();
+    }
 
     if (!ExpectPeek(lexer::TokenType::kIdentifier)) {
         return nullptr;
@@ -775,6 +782,17 @@ std::unique_ptr<script::ast::IExpression> Parser::ParsePropertyAccessExpression(
     return expression;
 }
 
+std::unique_ptr<script::ast::IExpression> Parser::ParseInstanceOfExpression(std::unique_ptr<script::ast::IExpression> left) {
+
+    auto expression = std::make_unique<ast::expression::InstanceOfExpression>(currentToken_, std::move(left));
+    ReadToken();
+
+    auto right = ParseExpression(Precedence::kInstanceOf);
+    expression->SetRight(std::move(right));
+
+    return expression;
+}
+
 bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters) {
 
     parameters.clear();
@@ -941,6 +959,7 @@ void Parser::RegisterInfixParseFunctions() {
     infixParseFunctions_.emplace(lexer::TokenType::kLeftBrackets, [this](auto left) { return ParseIndexExpression(std::move(left)); });
     infixParseFunctions_.emplace(lexer::TokenType::kAssign, [this](auto left) { return ParseAssignmentExpression(std::move(left)); });
     infixParseFunctions_.emplace(lexer::TokenType::kDot, [this](auto left) { return ParsePropertyAccessExpression(std::move(left)); });
+    infixParseFunctions_.emplace(lexer::TokenType::kInstanceOf, [this](auto left) { return ParseInstanceOfExpression(std::move(left)); });
 }
 
 bool Parser::ExpectPeekRequiredTokenType(const tsumugi::script::lexer::TokenType tokenType, const std::string& symbol) {

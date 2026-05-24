@@ -10,7 +10,6 @@ struct MessageEntry {
     tsumugi::i18n::MessageId id;
     const tchar* message;
 };
-
 // 言語ごとのテーブル
 static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kInvalidInputFormat, TT("{0} ではなく {1} が来なければなりません。") },
@@ -38,6 +37,7 @@ static constexpr MessageEntry s_ja_messages[] = {
     { tsumugi::i18n::MessageId::kSuperOutsideMethod, TT("{0} はメソッド内でのみ使用できます。") },
     { tsumugi::i18n::MessageId::kNoSuperClass, TT("{0} を使用できる親クラスが存在しません。") },
     { tsumugi::i18n::MessageId::kSuperConstructorNotFound, TT("親クラスに {1} が存在しないため、{0}.{1}() を呼び出せません。") },
+    { tsumugi::i18n::MessageId::kInstanceOfRightMustBeClass, TT("{0} の右辺はクラスでなければなりません。") },
 };
 
 static constexpr MessageEntry s_en_messages[] = {
@@ -66,7 +66,9 @@ static constexpr MessageEntry s_en_messages[] = {
     { tsumugi::i18n::MessageId::kSuperOutsideMethod, TT("{0} can only be used inside a method.") },
     { tsumugi::i18n::MessageId::kNoSuperClass, TT("No parent class exists for {0}.") },
     { tsumugi::i18n::MessageId::kSuperConstructorNotFound, TT("Parent class has no {1} method, so {0}.{1}() cannot be called.") },
+    { tsumugi::i18n::MessageId::kInstanceOfRightMustBeClass, TT("Right-hand side of {0} must be a class.") },
 };
+
 
 }
 

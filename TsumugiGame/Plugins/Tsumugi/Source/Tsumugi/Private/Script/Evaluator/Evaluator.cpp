@@ -22,6 +22,7 @@
 #include "Script/AST/Expressions/AssignmentExpression.h"
 #include "Script/AST/Expressions/IndexAssignmentExpression.h"
 #include "Script/AST/Expressions/PropertyAccessExpression.h"
+#include "Script/AST/Expressions/InstanceOfExpression.h"
 #include "Script/AST/Expressions/SuperExpression.h"
 #include "Script/AST/Statements/ExpressionStatement.h"
 #include "Script/AST/Statements/BlockStatement.h"
@@ -221,6 +222,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
             auto* propertyAccessExpression = static_cast<const ast::expression::PropertyAccessExpression*>(node);
             return EvalPropertyAccessExpression(propertyAccessExpression, environment);
         }
+        case ast::NodeType::kInstanceOfExpression: {
+            auto* instanceOfExpression = static_cast<const ast::expression::InstanceOfExpression*>(node);
+            return EvalInstanceOfExpression(instanceOfExpression, environment);
+        }
         case ast::NodeType::kForStatement: {
             auto* forStatement = static_cast<const ast::statement::ForStatement*>(node);
             return EvalForStatement(forStatement, environment);
@@ -234,6 +239,10 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kContinueStatement: {
             return std::make_shared<object::ContinueObject>();
+        }
+        case ast::NodeType::kSuperExpression: {
+            auto* superExpression = static_cast<const ast::expression::SuperExpression*>(node);
+            return EvalSuperExpression(superExpression, environment);
         }
     }
     return nullptr;
@@ -605,8 +614,14 @@ std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statem
         fn->SetOwnerClass(classObject);
         tstring methodName = m->GetName()->GetValue();
         methods[methodName] = fn;
-        // プロトタイプにも載せておく（インスタンスから見えるように）
-        prototype->Set(methodName, fn);
+
+        if (m->IsStatic()) {
+            // static はクラスオブジェクトに登録
+            classObject->SetStaticMethod(methodName, fn);
+        } else {
+            // プロトタイプにも載せておく（インスタンスから見えるように）
+            prototype->Set(methodName, fn);
+        }
     }
 
     classObject->SetMethods(std::move(methods));
@@ -896,6 +911,37 @@ std::shared_ptr<object::IObject> Evaluator::EvalPropertyAccessExpression(const a
         return errors.MakeErrorObject(i18n::MessageId::kInvalidProperty, name);
     }
     return optValue.value();
+}
+
+std::shared_ptr<object::IObject> Evaluator::EvalInstanceOfExpression(const ast::expression::InstanceOfExpression* instanceOfExpression, const std::shared_ptr<object::Environment>& environment) const {
+
+    auto right = Eval(instanceOfExpression->GetRight(), environment);
+    if (IsErrorObject(right)) {
+        return right;
+    }
+    if (right->GetType() != object::ObjectType::kClass) {
+        return errors.MakeErrorObject(i18n::MessageId::kInstanceOfRightMustBeClass, instanceOfExpression->TokenLiteral());
+    }
+    auto klass = std::static_pointer_cast<object::ClassObject>(right);
+
+    auto left = Eval(instanceOfExpression->GetLeft(), environment);
+    if (IsErrorObject(left)) {
+        return left;
+    }
+    if (left->GetType() != object::ObjectType::kUserObject) {
+        return object::BooleanObject::FromBool(false);
+    }
+    auto object = std::static_pointer_cast<object::UserObject>(left);
+
+    auto current = object->GetOwnerClass();
+    while (current) {
+        if (current.get() == klass.get()) {
+            return object::BooleanObject::FromBool(true);
+        }
+        current = current->GetParentClass();
+    }
+
+    return object::BooleanObject::FromBool(false);
 }
 
 // Invoke

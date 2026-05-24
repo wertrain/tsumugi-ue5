@@ -23,6 +23,8 @@ const TokenType LookupIdentifier(const tstring& identifier) {
         { TT("class"), tsumugi::script::lexer::TokenType::kClass },
         { TT("extends"), tsumugi::script::lexer::TokenType::kExtends },
         { TT("super"), tsumugi::script::lexer::TokenType::kSuper },
+        { TT("instanceof"), tsumugi::script::lexer::TokenType::kInstanceOf },
+        { TT("static"), tsumugi::script::lexer::TokenType::kStatic },
     };
     auto it = Keywords.find(identifier);
     return it != Keywords.end() ? it->second : TokenType::kIdentifier;
@@ -79,7 +81,9 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kNull, TT("kNull") },
         { tsumugi::script::lexer::TokenType::kClass, TT("kClass") },
         { tsumugi::script::lexer::TokenType::kExtends, TT("kExtends") },
-        { tsumugi::script::lexer::TokenType::kSuper, TT("kSuper") }
+        { tsumugi::script::lexer::TokenType::kSuper, TT("kSuper") },
+        { tsumugi::script::lexer::TokenType::kInstanceOf, TT("kInstanceOf") },
+        { tsumugi::script::lexer::TokenType::kStatic, TT("kStatic") },
     };
 
     if (Table.find(token_type) != Table.end()) {
@@ -139,7 +143,9 @@ const char* TokenTypeToString(const TokenType token_type) {
         { tsumugi::script::lexer::TokenType::kNull, ("kNull") },
         { tsumugi::script::lexer::TokenType::kClass, ("kClass") },
         { tsumugi::script::lexer::TokenType::kExtends, ("kExtends") },
-        { tsumugi::script::lexer::TokenType::kSuper, ("kSuper") }
+        { tsumugi::script::lexer::TokenType::kSuper, ("kSuper") },
+        { tsumugi::script::lexer::TokenType::kInstanceOf, ("kInstanceOf") },
+        { tsumugi::script::lexer::TokenType::kStatic, ("kStatic") },
     };
 
     if (Table.find(token_type) != Table.end()) {
