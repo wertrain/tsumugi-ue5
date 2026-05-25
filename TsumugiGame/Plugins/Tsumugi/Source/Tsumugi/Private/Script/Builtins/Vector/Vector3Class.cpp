@@ -66,7 +66,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
     klass->SetInstanceMethod(
         TT("normalize"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject> self,
+            [weakClass](std::shared_ptr<object::IObject> self,
                 const std::vector<std::shared_ptr<object::IObject>>&)
             -> std::shared_ptr<object::IObject>
             {
@@ -74,11 +74,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                 double len = std::sqrt(v->X() * v->X() + v->Y() * v->Y() + v->Z() * v->Z());
                 if (len == 0) return std::make_shared<Vector3Instance>(0, 0, 0);
 
-                return std::make_shared<Vector3Instance>(
-                    v->X() / len,
-                    v->Y() / len,
-                    v->Z() / len
-                );
+                if (auto classPtr = weakClass.lock()) {
+                    return classPtr->CreateInstance<Vector3Instance>(v->X() / len, v->Y() / len, v->Z() / len);
+                }
+                return nullptr;
             }
         )
     );
@@ -106,7 +105,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
     klass->SetInstanceMethod(
         TT("cross"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject> self,
+            [weakClass](std::shared_ptr<object::IObject> self,
                 const std::vector<std::shared_ptr<object::IObject>>& args)
             -> std::shared_ptr<object::IObject>
             {
@@ -116,28 +115,34 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                 auto a = std::static_pointer_cast<Vector3Instance>(self);
                 auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
-                return std::make_shared<Vector3Instance>(
-                    a->Y() * b->Z() - a->Z() * b->Y(),
-                    a->Z() * b->X() - a->X() * b->Z(),
-                    a->X() * b->Y() - a->Y() * b->X()
-                );
+                if (auto classPtr = weakClass.lock()) {
+                    return classPtr->CreateInstance<Vector3Instance>(
+                        a->Y() * b->Z() - a->Z() * b->Y(),
+                        a->Z() * b->X() - a->X() * b->Z(),
+                        a->X() * b->Y() - a->Y() * b->X()
+                    );
+                }
+                return nullptr;
             }
         )
     );
 
     // add(v)
     auto addBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [](std::shared_ptr<object::IObject> self, const std::vector<std::shared_ptr<object::IObject>>& args)
+        [weakClass](std::shared_ptr<object::IObject> self, const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
             auto a = std::static_pointer_cast<Vector3Instance>(self);
             auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
-            return std::make_shared<Vector3Instance>(
-                a->X() + b->X(),
-                a->Y() + b->Y(),
-                a->Z() + b->Z()
-            );
+            if (auto classPtr = weakClass.lock()) {
+                return classPtr->CreateInstance<Vector3Instance>(
+                    a->X() + b->X(),
+                    a->Y() + b->Y(),
+                    a->Z() + b->Z()
+                );
+            }
+            return nullptr;
         }
     );
     klass->SetInstanceMethod(TT("add"), addBuiltin);
@@ -145,18 +150,21 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
     // sub(v)
     auto subBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [](std::shared_ptr<object::IObject> self,
+        [weakClass](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
             auto a = std::static_pointer_cast<Vector3Instance>(self);
             auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
-            return std::make_shared<Vector3Instance>(
-                a->X() - b->X(),
-                a->Y() - b->Y(),
-                a->Z() - b->Z()
-            );
+            if (auto classPtr = weakClass.lock()) {
+                return classPtr->CreateInstance<Vector3Instance>(
+                    a->X() - b->X(),
+                    a->Y() - b->Y(),
+                    a->Z() - b->Z()
+                );
+            }
+            return nullptr;
         }
     );
     klass->SetInstanceMethod(TT("sub"), subBuiltin);
@@ -164,7 +172,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
     // mul(scalar)
     auto mulBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [](std::shared_ptr<object::IObject> self,
+        [weakClass](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
@@ -178,11 +186,14 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                     s = static_cast<double>(std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue());
             }
 
-            return std::make_shared<Vector3Instance>(
-                a->X() * s,
-                a->Y() * s,
-                a->Z() * s
-            );
+            if (auto classPtr = weakClass.lock()) {
+                return classPtr->CreateInstance<Vector3Instance>(
+                    a->X() * s,
+                    a->Y() * s,
+                    a->Z() * s
+                );
+            }
+            return nullptr;
         }
     );
     klass->SetInstanceMethod(TT("mul"), mulBuiltin);
@@ -190,7 +201,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
     // div(scalar)
     auto divBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [](std::shared_ptr<object::IObject> self,
+        [weakClass](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
@@ -206,14 +217,19 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
             // 0 除算はどうする？ → とりあえず 0 ベクトル返すのが無難
             if (s == 0.0) {
-                return std::make_shared<Vector3Instance>(0, 0, 0);
+                if (auto classPtr = weakClass.lock()) {
+                    return classPtr->CreateInstance<Vector3Instance>(0, 0, 0);
+                }
             }
 
-            return std::make_shared<Vector3Instance>(
-                a->X() / s,
-                a->Y() / s,
-                a->Z() / s
-            );
+            if (auto classPtr = weakClass.lock()) {
+                return classPtr->CreateInstance<Vector3Instance>(
+                    a->X() / s,
+                    a->Y() / s,
+                    a->Z() / s
+                );
+            }
+            return nullptr;
         }
     );
 
@@ -263,17 +279,20 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
     // unary -(v)
     auto unaryMinusBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [](std::shared_ptr<object::IObject> self,
+        [weakClass](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>&)
         -> std::shared_ptr<object::IObject>
         {
             auto a = std::static_pointer_cast<Vector3Instance>(self);
 
-            return std::make_shared<Vector3Instance>(
-                -a->X(),
-                -a->Y(),
-                -a->Z()
-            );
+            if (auto classPtr = weakClass.lock()) {
+                return classPtr->CreateInstance<Vector3Instance>(
+                    -a->X(),
+                    -a->Y(),
+                    -a->Z()
+                );
+            }
+            return nullptr;
         }
     );
 

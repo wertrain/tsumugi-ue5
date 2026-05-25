@@ -30,6 +30,7 @@
 #include "Script/Objects/UserObject.h"
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/UserFunctionObject.h"
+#include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Lexer/ScriptLexer.h"
 #include "Script/Lexer/ScriptToken.h"
 #include "Script/Parser/ScriptParser.h"
@@ -2131,6 +2132,163 @@ namespace UnitTest
 				tt.tester(evaluated.get());
 			}
 		}
+		TEST_METHOD(TestEvalVector3Basic)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// Vector3.one()
+				// ----------------------------------------
+				{
+					TT("Vector3.one();"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(1.0, v->X());
+						Assert::AreEqual(1.0, v->Y());
+						Assert::AreEqual(1.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// 加算 (+)
+				// ----------------------------------------
+				{
+					TT("let a = Vector3.one(); let b = Vector3.one(); a + b;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(2.0, v->X());
+						Assert::AreEqual(2.0, v->Y());
+						Assert::AreEqual(2.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// 減算 (-)
+				// ----------------------------------------
+				{
+					TT("let a = Vector3(5,5,5); let b = Vector3(2,2,2); a - b;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(3.0, v->X());
+						Assert::AreEqual(3.0, v->Y());
+						Assert::AreEqual(3.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// スカラー乗算 (*)
+				// ----------------------------------------
+				{
+					TT("let a = Vector3.one(); a * 3;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(3.0, v->X());
+						Assert::AreEqual(3.0, v->Y());
+						Assert::AreEqual(3.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// スカラー除算 (/)
+				// ----------------------------------------
+				{
+					TT("let a = Vector3(6,6,6); a / 2;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(3.0, v->X());
+						Assert::AreEqual(3.0, v->Y());
+						Assert::AreEqual(3.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// 単項マイナス (-v)
+				// ----------------------------------------
+				{
+					TT("let a = Vector3(1,2,3); -a;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(-1.0, v->X());
+						Assert::AreEqual(-2.0, v->Y());
+						Assert::AreEqual(-3.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// 比較 ==
+				// ----------------------------------------
+				{
+					TT("Vector3.one() == Vector3.one();"),
+					[](auto* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				// ----------------------------------------
+				// 比較 !=
+				// ----------------------------------------
+				{
+					TT("Vector3.one() != Vector3(9,9,9);"),
+					[](auto* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				// ----------------------------------------
+				// メソッド呼び出し add()
+				// ----------------------------------------
+				{
+					TT("let a = Vector3.one(); a.add(Vector3.one());"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(2.0, v->X());
+						Assert::AreEqual(2.0, v->Y());
+						Assert::AreEqual(2.0, v->Z());
+					}
+				},
+
+				// ----------------------------------------
+				// メソッド呼び出し neg()
+				// ----------------------------------------
+				{
+					TT("let a = Vector3(1,2,3); a.neg();"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(-1.0, v->X());
+						Assert::AreEqual(-2.0, v->Y());
+						Assert::AreEqual(-3.0, v->Z());
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				environment->CreateGlobalEnvironment(); // ← Vector3Class を登録
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
 
 		static void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{
