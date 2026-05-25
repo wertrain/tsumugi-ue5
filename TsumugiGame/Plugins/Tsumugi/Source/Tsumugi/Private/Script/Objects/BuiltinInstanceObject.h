@@ -30,14 +30,47 @@ class BuiltinInstanceObject : public IObject {
 public:
     explicit BuiltinInstanceObject();
 
+    /// <summary>
+    /// 自身のプロパティからメンバーを取得します
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     std::shared_ptr<IObject> Get(const tstring& name) const;
+    /// <summary>
+    /// 自身のプロパティにメンバーを登録します
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
     void Set(const tstring& name, std::shared_ptr<IObject> value);
+    /// <summary>
+    /// プロトタイプを取得します
+    /// </summary>
+    /// <returns></returns>
     std::shared_ptr<BuiltinInstanceObject> GetPrototype() const;
+    /// <summary>
+    /// プロトタイプを設定します
+    /// </summary>
+    /// <param name="proto"></param>
     void SetPrototype(std::shared_ptr<BuiltinInstanceObject> proto);
+
     tstring Inspect() const override;
     ObjectType GetType() const override;
 
+    /// <summary>
+    /// プロパティを取得します
+    /// 自身のプロパティとプロトタイプから検索します
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name);
+    /// <summary>
+    /// 自身のプロパティにプロパティに値を設定します
+    /// このメソッドを使用した場合、型は問わずに設定できるため
+    /// 基本的には派生先で意図した型かチェック、もしくは変換してセットすることを推奨します
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     virtual bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value);
 
 private:

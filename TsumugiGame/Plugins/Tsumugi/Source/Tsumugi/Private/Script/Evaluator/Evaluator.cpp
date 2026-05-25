@@ -624,9 +624,6 @@ std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statem
         prototype->SetPrototype(parentClass->GetPrototype());
     }
 
-    // メソッドを集める
-    std::unordered_map<tstring, std::shared_ptr<object::IObject>> methods;
-
     for (auto& m : statement->GetMethods()) {
         auto fn = std::make_shared<object::UserFunctionObject>(
             m->GetParameters(), m->GetBody(), environment
@@ -634,7 +631,6 @@ std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statem
         // OwnerClass をセット（super 解決に必須）
         fn->SetOwnerClass(classObject);
         tstring methodName = m->GetName()->GetValue();
-        methods[methodName] = fn;
 
         if (m->IsStatic()) {
             // static はクラスオブジェクトに登録
@@ -645,7 +641,6 @@ std::shared_ptr<object::IObject> Evaluator::EvalClassStatement(const ast::statem
         }
     }
 
-    classObject->SetMethods(std::move(methods));
     classObject->SetPrototype(prototype);
 
     return classObject;
@@ -994,13 +989,14 @@ std::shared_ptr<object::IObject> Evaluator::Invoke(std::shared_ptr<object::IObje
             instance->SetOwnerClass(klass);
 
             // 子クラスが init を持つか？
-            auto ownInit = klass->TryGetMethod(object::ClassObject::kConstructorName);
+            auto ownInit = klass->TryGetOwnMethod(object::ClassObject::kConstructorName);
 
             if (ownInit.has_value()) {
-                // 子クラスが init を持つ → 自動呼び出ししない
+                // 子クラス自身が init を持つなら、それをそのまま実行
                 Invoke(ownInit.value(), instance, arguments);
-            } else {
-                // 子クラスが init を持たない → 親 init を自動で呼ぶ
+            }
+            else {
+                // 子クラス自身に無いなら、親クラスを遡って（TryGetMethod）最初に見つかった init を実行
                 auto parent = klass->GetParentClass();
                 if (parent) {
                     auto parentInit = parent->TryGetMethod(object::ClassObject::kConstructorName);

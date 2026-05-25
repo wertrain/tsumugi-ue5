@@ -12,7 +12,8 @@ namespace tsumugi::script::ast::statement {
 
 /// <summary>
 /// Function 文
-/// 定義：function <identifier> (<identifier>, ...);
+/// 定義：(static) function <identifier> (<identifier>, ...);
+/// 通常の関数宣言とまたクラス内のメソッド文両方で使用する
 /// </summary>
 class FunctionStatement : public IStatement {
 public:

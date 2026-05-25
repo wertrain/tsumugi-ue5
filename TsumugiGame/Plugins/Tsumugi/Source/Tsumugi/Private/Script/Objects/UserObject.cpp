@@ -31,13 +31,11 @@ tstring UserObject::Inspect() const {
 
     tstring result;
 
-    // クラス名を表示（ownerClass がある場合）
     if (auto klass = ownerClass_.lock()) {
         result.append(klass->GetName());
         result.append(TT(" "));
     }
 
-    // プロパティを表示
     result.append(TT("{ "));
 
     bool first = true;
@@ -48,6 +46,25 @@ tstring UserObject::Inspect() const {
         result.append(key);
         result.append(TT(": "));
         result.append(value ? value->Inspect() : TT("null"));
+    }
+
+    if (auto klass = ownerClass_.lock()) {
+        auto proto = klass->GetPrototype();
+        if (proto) {
+            if (!first) result.append(TT(", "));
+            first = false;
+
+            result.append(TT("methods: ["));
+
+            bool firstMethod = true;
+            for (auto& [key, _] : proto->GetProperties()) {
+                if (!firstMethod) result.append(TT(", "));
+                firstMethod = false;
+                result.append(key);
+            }
+
+            result.append(TT("]"));
+        }
     }
 
     result.append(TT(" }"));

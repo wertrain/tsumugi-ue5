@@ -11,33 +11,38 @@ namespace tsumugi::script::object { class ClassObject; }
 
 namespace tsumugi::script::object {
 
-// UserFunctionObject は Monkey の FunctionObject に相当する。
-// tsumugi では「純粋な関数」を表し、receiver（this/self）は保持しない。
+// UserFunctionObject は Monkey の FunctionObject に相当し、
+// tsumugi における「純粋な関数」を表す。
 // 
 // 【設計上の意図】
 // - UserFunctionObject は「定義時の環境（Environment）」だけを保持し、
-//   メソッドとしての振る舞い（this の注入や super 解決）は一切持たない。
-// - メソッド呼び出し時には Evaluator 側で
-//     BoundMethodObject(receiver=this, function=UserFunctionObject)
-//   にラップすることで “メソッドとしての意味” を付与する。
+//   this/self の概念を内部には持たない。
+// - メソッド呼び出し時の this の注入は Evaluator 側で行われ、
+//   UserFunctionObject 自体は “関数としての本体” のみを担当する。
+// 
+// 【メソッドとして使われる場合】
+// - ClassObject に登録された UserFunctionObject は「メソッド本体」として扱われる。
+// - 呼び出し時には Evaluator が receiver（this）を新しい Environment に束縛し、
+//   その環境で UserFunctionObject の body を実行する。
+// - つまり、UserFunctionObject は「メソッド化の仕組み」を持たず、
+//   Evaluator が関数を “メソッドとして実行する” 役割を担う。
 // 
 // 【super 対応のための拡張】
 // - メソッドがどのクラスに属しているかを知る必要があるため、
 //   UserFunctionObject は ownerClass_ を保持する。
 // - super.foo() の解決は Evaluator 側で行われ、
-//   「現在実行中の関数の ownerClass → 親クラス → prototype」
-//   という階層を辿ってメソッドを取得する。
+//   「現在実行中のメソッドの ownerClass → 親クラス → prototype」
+//   という階層を辿ってメソッドを検索する。
 // - UserFunctionObject 自体は super の解決ロジックを持たず、
 //   あくまで “定義時スコープを持つ純粋な関数” として振る舞う。
 // 
 // 【メリット】
 // - 関数オブジェクトを汚さず、関数とメソッドの責務を明確に分離できる。
-// - super の仕組みを ClassObject / Evaluator 側に閉じ込められるため、
-//   言語仕様としての一貫性が保たれる。
-// - Monkey の「関数はただの値」という哲学を維持しつつ、
-//   クラスベース OOP の機能（this / super / 継承）を自然に拡張できる。
+// - this / super / 継承といった OOP の仕組みを Evaluator と ClassObject に閉じ込められる。
+// - Monkey の「関数はただの値」という哲学を保ちつつ、
+//   クラスベース OOP を自然に拡張できる。
 // 
-// これにより、UserFunctionObject は
+// これにより UserFunctionObject は、
 // 「定義時スコープを持つ純粋な関数」
 // かつ
 // 「クラス階層に属するメソッドの本体」

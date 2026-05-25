@@ -33,6 +33,8 @@ public:
     void Set(const tstring& name, std::shared_ptr<IObject> value);
     std::shared_ptr<UserObject> GetPrototype() const;
     void SetPrototype(std::shared_ptr<UserObject> proto);
+    const std::unordered_map<tstring, std::shared_ptr<IObject>>& GetProperties() const { return properties_; }
+
     tstring Inspect() const override;
     ObjectType GetType() const override;
 
