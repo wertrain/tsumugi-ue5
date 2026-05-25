@@ -289,7 +289,7 @@ std::vector<std::shared_ptr<object::IObject>> Evaluator::EvalExpressions(const s
 
 std::shared_ptr<object::IObject> Evaluator::EvalBlockStatement(const tarray<std::unique_ptr<ast::IStatement>>& statements, const std::shared_ptr<object::Environment>& environment) const {
 
-    std::shared_ptr<object::IObject> result;
+    std::shared_ptr<object::IObject> result = object::NullObject::Instance();
     for (const auto& statement : statements) {
         result = Eval(statement.get(), environment);
         if (result->GetType() == object::ObjectType::kReturnValue ||
