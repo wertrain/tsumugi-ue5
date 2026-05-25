@@ -48,7 +48,7 @@ public:
     // プロパティ設定
     // obj.x = value のような代入に対応する。
     // UserObject のように「プロパティを持つ型」のみが対応し、組み込み型（Array, String など）は通常は設定不可。
-    static std::optional<std::shared_ptr<object::IObject>> TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value);
+    static bool TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value);
     // 呼び出し可能かどうか（関数・メソッド・組み込み関数など）
     // Invoke が呼び出し前に利用する。
     static bool IsCallable(const std::shared_ptr<object::IObject>& object);

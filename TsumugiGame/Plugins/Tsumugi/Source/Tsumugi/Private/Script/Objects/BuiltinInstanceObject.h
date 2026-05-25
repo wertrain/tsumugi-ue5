@@ -38,6 +38,7 @@ public:
     ObjectType GetType() const override;
 
     std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name);
+    virtual bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value);
 
 private:
     std::unordered_map<tstring, std::shared_ptr<IObject>> properties_;

@@ -52,4 +52,15 @@ std::optional<std::shared_ptr<object::IObject>> BuiltinInstanceObject::TryGetPro
     return std::nullopt;
 }
 
+bool BuiltinInstanceObject::TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) {
+
+    // 自分自身のプロパティ
+    auto it = properties_.find(name);
+    if (it != properties_.end()) {
+        it->second = value;
+        return true;
+    }
+    return false;
+}
+
 }

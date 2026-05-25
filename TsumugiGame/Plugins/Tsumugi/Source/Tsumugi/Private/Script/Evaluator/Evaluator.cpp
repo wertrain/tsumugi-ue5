@@ -844,10 +844,10 @@ std::shared_ptr<object::IObject> Evaluator::EvalAssignmentExpression(const ast::
             return object;
         }
         auto result = object::protocol::ObjectProtocolDispatcher::TrySetProperty(object, property->GetName()->GetValue(), value);
-        if (!result.has_value()) {
+        if (!result) {
             return errors.MakeErrorObject(i18n::MessageId::kPropertyAssignmentNotSupported, property->GetName()->GetValue(), object->Inspect());
         }
-        return result.value();
+        return value;
     }
 
     if (left->GetNodeType() == ast::NodeType::kIdentifier) {

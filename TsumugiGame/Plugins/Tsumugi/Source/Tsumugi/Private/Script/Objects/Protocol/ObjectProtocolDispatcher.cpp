@@ -35,26 +35,30 @@ std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TryGet
     return std::nullopt;
 }
 
-std::optional<std::shared_ptr<object::IObject>> ObjectProtocolDispatcher::TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value) {
+bool ObjectProtocolDispatcher::TrySetProperty(std::shared_ptr<object::IObject> object, const tstring& name, std::shared_ptr<object::IObject> value) {
 
     switch (object->GetType()) {
         case ObjectType::kHash: {
             auto hash = std::static_pointer_cast<HashObject>(object);
             auto keyObject = std::make_shared<object::StringObject>(name);
             if (!object::IsHashable(keyObject.get())) {
-                return std::nullopt;
+                return false;
             }
             auto key = object::MakeHashKey(keyObject.get());
             hash->SetPair(key, keyObject, value);
-            return value;
+            return true;
         }
         case ObjectType::kUserObject: {
             auto u = std::static_pointer_cast<UserObject>(object);
             u->Set(name, value);
-            return value;
+            return true;
+        }
+        case ObjectType::kBuiltinInstance: {
+            auto bi = std::static_pointer_cast<BuiltinInstanceObject>(object);
+            return bi->TrySetProperty(name, value);
         }
         default:
-            return std::nullopt;
+            return false;
     }
 }
 

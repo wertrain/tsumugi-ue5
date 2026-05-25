@@ -14,6 +14,11 @@ public:
     double Y() const;
     double Z() const;
     tstring Inspect() const override;
+
+    bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) override;
+
+private:
+    double GetValue(tstring name) const;
 };
 
 }
