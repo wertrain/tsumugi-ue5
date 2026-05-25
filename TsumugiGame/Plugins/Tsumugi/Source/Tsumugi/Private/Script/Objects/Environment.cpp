@@ -3,6 +3,7 @@
 
 // 以下は CreateGlobalEnvironment() のため
 #include "Script/Builtins/Vector/Vector3Class.h"
+#include "Script/Builtins/Random/RandomClass.h"
 #include "Script/Objects/BuiltinClassObject.h"
 
 
@@ -144,6 +145,7 @@ void Environment::Clear() {
 void Environment::CreateGlobalEnvironment() {
 
     Set(TT("Vector3"), tsumugi::script::builtins::vector::CreateVector3Class());
+    Set(TT("Random"), tsumugi::script::builtins::random::CreateRandomClass());
 }
 
 }

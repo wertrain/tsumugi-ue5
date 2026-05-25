@@ -183,6 +183,8 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\LetStatement.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ReturnStatement.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomInstance.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Instance.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Evaluator\Evaluator.h" />
@@ -261,6 +263,8 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\LetStatement.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ReturnStatement.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomInstance.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Instance.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Evaluator\Evaluator.cpp" />

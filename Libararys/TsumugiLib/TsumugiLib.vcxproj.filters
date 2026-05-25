@@ -61,6 +61,9 @@
     <Filter Include="Tsumugi\Private\Script\Builtins\Vector">
       <UniqueIdentifier>{77c14ad7-64c4-4651-977a-3f25ce83622b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Builtins\Random">
+      <UniqueIdentifier>{c2fd6328-51dc-4dcf-88e3-1b548423b71a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -291,6 +294,12 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.h">
       <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomInstance.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -520,6 +529,12 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.cpp">
       <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomInstance.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
