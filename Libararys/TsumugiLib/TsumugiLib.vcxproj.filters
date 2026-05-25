@@ -64,6 +64,9 @@
     <Filter Include="Tsumugi\Private\Script\Builtins\Random">
       <UniqueIdentifier>{c2fd6328-51dc-4dcf-88e3-1b548423b71a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Builtins\Quaternion">
+      <UniqueIdentifier>{70c7c89e-5f99-4861-bb1a-4f2237a17d3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -300,6 +303,18 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.h">
       <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Instance.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Class.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionClass.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionInstance.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -535,6 +550,18 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.cpp">
       <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Class.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Instance.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionClass.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionInstance.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

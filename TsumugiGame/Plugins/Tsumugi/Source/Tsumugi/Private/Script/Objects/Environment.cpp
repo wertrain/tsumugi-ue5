@@ -3,7 +3,9 @@
 
 // 以下は CreateGlobalEnvironment() のため
 #include "Script/Builtins/Vector/Vector3Class.h"
+#include "Script/Builtins/Vector/Vector2Class.h"
 #include "Script/Builtins/Random/RandomClass.h"
+#include "Script/Builtins/Quaternion/QuaternionClass.h"
 #include "Script/Objects/BuiltinClassObject.h"
 
 
@@ -145,7 +147,9 @@ void Environment::Clear() {
 void Environment::CreateGlobalEnvironment() {
 
     Set(TT("Vector3"), tsumugi::script::builtins::vector::CreateVector3Class());
+    Set(TT("Vector2"), tsumugi::script::builtins::vector::CreateVector2Class());
     Set(TT("Random"), tsumugi::script::builtins::random::CreateRandomClass());
+    Set(TT("Quaternion"), tsumugi::script::builtins::quaternion::CreateQuaternionClass());
 }
 
 }

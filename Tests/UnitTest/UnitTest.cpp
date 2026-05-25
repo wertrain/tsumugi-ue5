@@ -31,6 +31,8 @@
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/UserFunctionObject.h"
 #include "Script/Builtins/Vector/Vector3Instance.h"
+#include "Script/Builtins/Vector/Vector2Instance.h"
+#include "Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "Script/Lexer/ScriptLexer.h"
 #include "Script/Lexer/ScriptToken.h"
 #include "Script/Parser/ScriptParser.h"
@@ -2283,6 +2285,344 @@ namespace UnitTest
 				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
 				auto environment = std::make_shared<tsumugi::script::object::Environment>();
 				environment->CreateGlobalEnvironment(); // Å© Vector3Class Çìoò^
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestEvalVector2Basic)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// Vector2.one()
+				// ----------------------------------------
+				{
+					TT("Vector2.one();"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(1.0, v->X());
+						Assert::AreEqual(1.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// â¡éZ (+)
+				// ----------------------------------------
+				{
+					TT("let a = Vector2.one(); let b = Vector2.one(); a + b;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(2.0, v->X());
+						Assert::AreEqual(2.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// å∏éZ (-)
+				// ----------------------------------------
+				{
+					TT("let a = Vector2(5,5); let b = Vector2(2,2); a - b;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(3.0, v->X());
+						Assert::AreEqual(3.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// ÉXÉJÉâÅ[èÊéZ (*)
+				// ----------------------------------------
+				{
+					TT("let a = Vector2.one(); a * 3;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(3.0, v->X());
+						Assert::AreEqual(3.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// ÉXÉJÉâÅ[èúéZ (/)
+				// ----------------------------------------
+				{
+					TT("let a = Vector2(6,6); a / 2;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(3.0, v->X());
+						Assert::AreEqual(3.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// íPçÄÉ}ÉCÉiÉX (-v)
+				// ----------------------------------------
+				{
+					TT("let a = Vector2(1,2); -a;"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(-1.0, v->X());
+						Assert::AreEqual(-2.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// î‰är ==
+				// ----------------------------------------
+				{
+					TT("Vector2.one() == Vector2.one();"),
+					[](auto* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				// ----------------------------------------
+				// î‰är !=
+				// ----------------------------------------
+				{
+					TT("Vector2.one() != Vector2(9,9);"),
+					[](auto* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				// ----------------------------------------
+				// ÉÅÉ\ÉbÉhåƒÇ—èoÇµ add()
+				// ----------------------------------------
+				{
+					TT("let a = Vector2.one(); a.add(Vector2.one());"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(2.0, v->X());
+						Assert::AreEqual(2.0, v->Y());
+					}
+				},
+
+				// ----------------------------------------
+				// ÉÅÉ\ÉbÉhåƒÇ—èoÇµ neg()
+				// ----------------------------------------
+				{
+					TT("let a = Vector2(1,2); a.neg();"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						Assert::IsNotNull(v);
+						Assert::AreEqual(-1.0, v->X());
+						Assert::AreEqual(-2.0, v->Y());
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				environment->CreateGlobalEnvironment(); // Vector2Class Çìoò^
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestEvalQuaternionBasic)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// identity()
+				// ----------------------------------------
+				{
+					TT("Quaternion.identity();"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+						Assert::AreEqual(0.0, q->X());
+						Assert::AreEqual(0.0, q->Y());
+						Assert::AreEqual(0.0, q->Z());
+						Assert::AreEqual(1.0, q->W());
+					}
+				},
+
+				// ----------------------------------------
+				// fromEuler(0,0,0) Å® identity
+				// ----------------------------------------
+				{
+					TT("Quaternion.fromEuler(0,0,0);"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+						Assert::AreEqual(0.0, q->X());
+						Assert::AreEqual(0.0, q->Y());
+						Assert::AreEqual(0.0, q->Z());
+						Assert::AreEqual(1.0, q->W());
+					}
+				},
+
+				// ----------------------------------------
+				// fromAxisAngle(Vector3(0,1,0), 3.14159)
+				// 180Åã Y âÒì] Å® (0,1,0) é≤
+				// ----------------------------------------
+				{
+					TT("Quaternion.fromAxisAngle(Vector3(0,1,0), 3.1415926535);"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+
+						// 180ÅãâÒì] Å® sin(90Åã)=1, cos(90Åã)=0
+						Assert::AreEqual(0.0, q->X(), 1e-6);
+						Assert::AreEqual(1.0, q->Y(), 1e-6);
+						Assert::AreEqual(0.0, q->Z(), 1e-6);
+						Assert::AreEqual(0.0, q->W(), 1e-6);
+					}
+				},
+
+				// ----------------------------------------
+				// conjugate
+				// ----------------------------------------
+				{
+					TT("Quaternion(1,2,3,4).conjugate();"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+						Assert::AreEqual(-1.0, q->X());
+						Assert::AreEqual(-2.0, q->Y());
+						Assert::AreEqual(-3.0, q->Z());
+						Assert::AreEqual(4.0, q->W());
+					}
+				},
+
+				// ----------------------------------------
+				// inverse
+				// ----------------------------------------
+				{
+					TT("Quaternion(1,2,3,4).inverse();"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+
+						double len2 = 1 * 1 + 2 * 2 + 3 * 3 + 4 * 4; // 30
+
+						Assert::AreEqual(-1.0 / 30.0, q->X(), 1e-6);
+						Assert::AreEqual(-2.0 / 30.0, q->Y(), 1e-6);
+						Assert::AreEqual(-3.0 / 30.0, q->Z(), 1e-6);
+						Assert::AreEqual(4.0 / 30.0, q->W(), 1e-6);
+					}
+				},
+
+				// ----------------------------------------
+				// scalar multiply
+				// ----------------------------------------
+				{
+					TT("Quaternion(1,2,3,4) * 2;"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+						Assert::AreEqual(2.0, q->X());
+						Assert::AreEqual(4.0, q->Y());
+						Assert::AreEqual(6.0, q->Z());
+						Assert::AreEqual(8.0, q->W());
+					}
+				},
+
+				// ----------------------------------------
+				// quaternion multiply (Hamilton product)
+				// ----------------------------------------
+				{
+					TT("Quaternion(1,0,0,0) * Quaternion(0,1,0,0);"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+
+						// (1,0,0,0) * (0,1,0,0) = (0,0,1,0)
+						Assert::AreEqual(0.0, q->X());
+						Assert::AreEqual(0.0, q->Y());
+						Assert::AreEqual(1.0, q->Z());
+						Assert::AreEqual(0.0, q->W());
+					}
+				},
+
+				// ----------------------------------------
+				// eq
+				// ----------------------------------------
+				{
+					TT("Quaternion(1,2,3,4) == Quaternion(1,2,3,4);"),
+					[](auto* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				// ----------------------------------------
+				// neq
+				// ----------------------------------------
+				{
+					TT("Quaternion(1,2,3,4) != Quaternion(9,9,9,9);"),
+					[](auto* obj) {
+						_TestBooleanObject(obj, true);
+					}
+				},
+
+				// ----------------------------------------
+				// unary -
+				// ----------------------------------------
+				{
+					TT("let q = Quaternion(1,2,3,4); -q;"),
+					[](auto* obj) {
+						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						Assert::IsNotNull(q);
+						Assert::AreEqual(-1.0, q->X());
+						Assert::AreEqual(-2.0, q->Y());
+						Assert::AreEqual(-3.0, q->Z());
+						Assert::AreEqual(-4.0, q->W());
+					}
+				},
+
+				// ----------------------------------------
+				// rotate(Vector3)
+				// 90Åã Y âÒì]Ç≈ (1,0,0) Å® (0,0,-1)
+				// ----------------------------------------
+				{
+					TT("Quaternion.fromAxisAngle(Vector3(0,1,0), 1.57079632679).rotate(Vector3(1,0,0));"),
+					[](auto* obj) {
+						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						Assert::IsNotNull(v);
+
+						Assert::AreEqual(0.0, v->X(), 1e-6);
+						Assert::AreEqual(0.0, v->Y(), 1e-6);
+						Assert::AreEqual(-1.0, v->Z(), 1e-6);
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				environment->CreateGlobalEnvironment(); // Quaternion Çìoò^
 				auto evaluated = evaluator->Eval(root.get(), environment);
 
 				tt.tester(evaluated.get());
