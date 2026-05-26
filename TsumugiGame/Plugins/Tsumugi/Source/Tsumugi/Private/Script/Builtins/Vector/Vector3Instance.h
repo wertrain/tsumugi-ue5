@@ -9,6 +9,9 @@ namespace tsumugi::script::builtins::vector {
 
 class Vector3Instance : public object::BuiltinInstanceObject {
 public:
+    DEFINE_BUILTIN_CLASS("Vector3");
+
+public:
     Vector3Instance(double x, double y, double z);
     double X() const;
     double Y() const;

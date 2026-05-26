@@ -9,6 +9,9 @@ namespace tsumugi::script::builtins::random {
 
 class RandomInstance : public object::BuiltinInstanceObject {
 public:
+    static constexpr const tchar* StaticClassName = TT("Random");
+
+public:
     RandomInstance();
 
     tstring Inspect() const override;

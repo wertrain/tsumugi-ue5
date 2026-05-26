@@ -9,6 +9,9 @@ namespace tsumugi::script::builtins::quaternion {
 
 class QuaternionInstance : public object::BuiltinInstanceObject {
 public:
+    DEFINE_BUILTIN_CLASS("Quaternion");
+
+public:
     QuaternionInstance(double x, double y, double z, double w);
     double X() const;
     double Y() const;

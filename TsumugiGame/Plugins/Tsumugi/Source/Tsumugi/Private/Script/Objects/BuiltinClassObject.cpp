@@ -3,7 +3,7 @@
 
 namespace tsumugi::script::object {
 
-BuiltinClassObject::BuiltinClassObject(const tstring& name)
+BuiltinClassObject::BuiltinClassObject(const tstring_view& name)
     : name_(name)
     , staticMethods_()
     , prototype_()

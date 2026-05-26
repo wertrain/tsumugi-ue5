@@ -31,6 +31,16 @@ public:
     explicit BuiltinInstanceObject();
 
     /// <summary>
+    /// 型判定に使用するため、必須とします
+    /// 派生クラスでは DEFINE_BUILTIN_CLASS マクロを使用して定義してください
+    /// </summary>
+    /// <returns></returns>
+    static inline constexpr tstring_view StaticClassName = TT("BuiltinInstance");
+    virtual tstring_view GetClassName() const {
+        return StaticClassName;
+    }
+
+    /// <summary>
     /// 自身のプロパティからメンバーを取得します
     /// </summary>
     /// <param name="name"></param>
@@ -77,5 +87,18 @@ private:
     std::unordered_map<tstring, std::shared_ptr<IObject>> properties_;
     std::shared_ptr<BuiltinInstanceObject> prototype_;
 };
+
+#define DEFINE_BUILTIN_CLASS(name) \
+    static inline constexpr tstring_view StaticClassName = TT(name); \
+    tstring_view GetClassName() const override { return StaticClassName; } \
+
+template <typename T>
+bool IsInstanceOf(const std::shared_ptr<object::IObject>& object) {
+    if (!object) return false;
+    if (object->GetType() != object::ObjectType::kBuiltinInstance) return false;
+
+    auto inst = std::static_pointer_cast<object::BuiltinInstanceObject>(object);
+    return inst->GetClassName() == T::StaticClassName;
+}
 
 }

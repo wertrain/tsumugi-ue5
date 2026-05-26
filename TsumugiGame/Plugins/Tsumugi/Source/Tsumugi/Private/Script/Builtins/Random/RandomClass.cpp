@@ -14,7 +14,7 @@ static std::mt19937 g_rng(std::random_device{}());
 
 std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
 
-    auto klass = std::make_shared<object::BuiltinClassObject>(TT("Random"));
+    auto klass = std::make_shared<object::BuiltinClassObject>(RandomInstance::StaticClassName);
 
     // ラムダ内での循環参照を防ぐために weak_ptr を作成
     //std::weak_ptr<object::BuiltinClassObject> weakClass = klass;
@@ -47,7 +47,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
     klass->SetStaticMethod(
         TT("int"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject>, const auto& args)
+            [](std::shared_ptr<object::IObject>, const std::vector<std::shared_ptr<object::IObject>>& args)
             -> std::shared_ptr<object::IObject>
             {
                 if (args.size() < 2 ||
@@ -74,7 +74,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
     klass->SetStaticMethod(
         TT("float"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject>, const auto&)
+            [](std::shared_ptr<object::IObject>, const std::vector<std::shared_ptr<object::IObject>>& args)
             -> std::shared_ptr<object::IObject>
             {
                 std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -89,7 +89,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
     klass->SetStaticMethod(
         TT("range"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject>, const auto& args)
+            [](std::shared_ptr<object::IObject>, const std::vector<std::shared_ptr<object::IObject>>& args)
             -> std::shared_ptr<object::IObject>
             {
                 if (args.size() < 1 ||
@@ -113,7 +113,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
     klass->SetStaticMethod(
         TT("choice"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject>, const auto& args)
+            [](std::shared_ptr<object::IObject>, const std::vector<std::shared_ptr<object::IObject>>& args)
             -> std::shared_ptr<object::IObject>
             {
                 if (args.size() < 1 ||
@@ -139,7 +139,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
     klass->SetStaticMethod(
         TT("seed"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject>, const auto& args)
+            [](std::shared_ptr<object::IObject>, const std::vector<std::shared_ptr<object::IObject>>& args)
             -> std::shared_ptr<object::IObject>
             {
                 if (args.size() < 1 ||

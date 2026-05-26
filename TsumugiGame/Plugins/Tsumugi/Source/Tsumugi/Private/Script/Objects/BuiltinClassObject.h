@@ -34,7 +34,7 @@ namespace tsumugi::script::object {
 
 class BuiltinClassObject : public IObject {
 public:
-    BuiltinClassObject(const tstring& name);
+    BuiltinClassObject(const tstring_view& name);
 
     const tstring& GetName() const { return name_; }
     void SetStaticMethod(const tstring& name, std::shared_ptr<IObject> fn) { staticMethods_[name] = fn; }

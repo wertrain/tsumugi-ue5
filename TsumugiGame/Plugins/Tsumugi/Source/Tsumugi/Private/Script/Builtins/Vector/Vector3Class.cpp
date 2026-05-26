@@ -10,7 +10,7 @@ namespace tsumugi::script::builtins::vector {
 
 std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
-    auto klass = std::make_shared<object::BuiltinClassObject>(TT("Vector3"));
+    auto klass = std::make_shared<object::BuiltinClassObject>(Vector3Instance::StaticClassName);
 
     // ラムダ内での循環参照を防ぐために weak_ptr を作成
     std::weak_ptr<object::BuiltinClassObject> weakClass = klass;

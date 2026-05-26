@@ -3,9 +3,13 @@
 
 // 以下は CreateGlobalEnvironment() のため
 #include "Script/Builtins/Vector/Vector3Class.h"
+#include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Builtins/Vector/Vector2Class.h"
+#include "Script/Builtins/Vector/Vector2Instance.h"
 #include "Script/Builtins/Random/RandomClass.h"
+#include "Script/Builtins/Random/RandomInstance.h"
 #include "Script/Builtins/Quaternion/QuaternionClass.h"
+#include "Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "Script/Objects/BuiltinClassObject.h"
 
 
@@ -146,10 +150,10 @@ void Environment::Clear() {
 
 void Environment::CreateGlobalEnvironment() {
 
-    Set(TT("Vector3"), tsumugi::script::builtins::vector::CreateVector3Class());
-    Set(TT("Vector2"), tsumugi::script::builtins::vector::CreateVector2Class());
-    Set(TT("Random"), tsumugi::script::builtins::random::CreateRandomClass());
-    Set(TT("Quaternion"), tsumugi::script::builtins::quaternion::CreateQuaternionClass());
+    RegisterBuiltin<builtins::vector::Vector3Instance>(builtins::vector::CreateVector3Class);
+    RegisterBuiltin<builtins::vector::Vector2Instance>(builtins::vector::CreateVector2Class);
+    RegisterBuiltin<builtins::random::RandomInstance>(builtins::random::CreateRandomClass);
+    RegisterBuiltin<builtins::quaternion::QuaternionInstance>(builtins::quaternion::CreateQuaternionClass);
 }
 
 }

@@ -60,6 +60,13 @@ std::string TStringToString(const tstring_view tstr) {
 #endif
 }
 
+tstring TStringViewToTString(const tstring_view tstr) {
+
+    // tstring と tstring_view は常に同じ文字コードなので
+    // 単純コピーでよい
+    return tstring(tstr.begin(), tstr.end());
+}
+
 tstring StringToTString(const std::string_view str) {
 #if defined (TSUMUGI_SUPPORT_U8STRING)
     // string から u8string への変換
