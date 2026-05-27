@@ -2,6 +2,7 @@
 
 #include "Foundation/Types.h"
 #include "Script/Objects/IObject.h"
+#include "Script/Builtins/BuiltinTypes.h"
 #include <unordered_map>
 #include <optional>
 
@@ -35,10 +36,7 @@ public:
     /// 派生クラスでは DEFINE_BUILTIN_CLASS マクロを使用して定義してください
     /// </summary>
     /// <returns></returns>
-    static inline constexpr tstring_view StaticClassName = TT("BuiltinInstance");
-    virtual tstring_view GetClassName() const {
-        return StaticClassName;
-    }
+    virtual builtin::BuiltinType GetBuiltinType() const { return builtin::BuiltinType::Num; }
 
     /// <summary>
     /// 自身のプロパティからメンバーを取得します
@@ -88,17 +86,17 @@ private:
     std::shared_ptr<BuiltinInstanceObject> prototype_;
 };
 
-#define DEFINE_BUILTIN_CLASS(name) \
-    static inline constexpr tstring_view StaticClassName = TT(name); \
-    tstring_view GetClassName() const override { return StaticClassName; } \
+#define DEFINE_BUILTIN_CLASS(builtinType) \
+    static inline constexpr builtin::BuiltinType StaticType = builtinType; \
+    builtin::BuiltinType GetBuiltinType() const override { return StaticType; } \
 
-template <typename T>
-bool IsInstanceOf(const std::shared_ptr<object::IObject>& object) {
-    if (!object) return false;
-    if (object->GetType() != object::ObjectType::kBuiltinInstance) return false;
+template <builtin::BuiltinType T>
+bool IsInstanceOf(const std::shared_ptr<IObject>& obj) {
+    if (!obj) return false;
+    if (obj->GetType() != ObjectType::kBuiltinInstance) return false;
 
-    auto inst = std::static_pointer_cast<object::BuiltinInstanceObject>(object);
-    return inst->GetClassName() == T::StaticClassName;
+    auto inst = std::static_pointer_cast<BuiltinInstanceObject>(obj);
+    return inst->GetBuiltinType() == T;
 }
 
 }

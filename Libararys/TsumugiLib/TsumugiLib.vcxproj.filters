@@ -67,6 +67,12 @@
     <Filter Include="Tsumugi\Private\Script\Builtins\Quaternion">
       <UniqueIdentifier>{70c7c89e-5f99-4861-bb1a-4f2237a17d3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Script\Builtins\Transform">
+      <UniqueIdentifier>{037eb67a-b9e8-4c56-94fd-f6dc085e2039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Foundation\Math">
+      <UniqueIdentifier>{aeb0aaff-2554-4a1a-82e9-a4dea0f848e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -315,6 +321,33 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinInstanceObject.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinTypes.h">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformClass.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformInstance.h">
+      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Matrix4x4.h">
+      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Quaternion.h">
+      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\TransformMath.h">
+      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector2.h">
+      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector3.h">
+      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector4.h">
+      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -562,6 +595,15 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinInstanceObject.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinTypes.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformClass.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformInstance.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

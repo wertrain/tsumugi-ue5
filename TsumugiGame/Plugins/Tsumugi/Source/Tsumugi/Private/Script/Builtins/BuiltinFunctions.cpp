@@ -8,7 +8,7 @@
 #include "Common/ErrorReporter.h"
 #include <unordered_map>
 
-namespace tsumugi::script {
+namespace tsumugi::script::builtin {
 
 static std::unordered_map<tstring, std::shared_ptr<object::BuiltinFunctionObject>> g_builtinFunctions;
 static common::ErrorReporter g_errors;

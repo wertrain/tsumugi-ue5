@@ -9,11 +9,11 @@
 #include "Script/Objects/NullObject.h"
 #include <array>
 
-namespace tsumugi::script::builtins::quaternion {
+namespace tsumugi::script::builtin::quaternion {
 
 std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
 
-    auto klass = std::make_shared<object::BuiltinClassObject>(QuaternionInstance::StaticClassName);
+    auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Quaternion));
 
     // ラムダ内での循環参照を防ぐために weak_ptr を作成
     std::weak_ptr<object::BuiltinClassObject> weakClass = klass;
@@ -157,7 +157,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
             [weakClass](auto self, const auto& args)
             -> std::shared_ptr<object::IObject>
             {
-                if (args.size() < 1 || !object::IsInstanceOf<vector::Vector3Instance>(args[0]))
+                if (args.size() < 1 || !object::IsInstanceOf<builtin::BuiltinType::Vector3>(args[0]))
                     return object::NullObject::Instance();
 
                 auto q = std::static_pointer_cast<QuaternionInstance>(self);
@@ -251,7 +251,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
             // ----------------------------------------
             // quaternion multiply (Hamilton product)
             // ----------------------------------------
-            if (type == object::ObjectType::kBuiltinInstance && object::IsInstanceOf<quaternion::QuaternionInstance>(args[0]))
+            if (type == object::ObjectType::kBuiltinInstance && object::IsInstanceOf<builtin::BuiltinType::Quaternion>(args[0]))
             {
                 auto b = std::static_pointer_cast<QuaternionInstance>(args[0]);
 
@@ -285,7 +285,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
             if (args.size() < 1) return object::BooleanObject::FromBool(false);
 
             // 型チェック
-            if (!object::IsInstanceOf<quaternion::QuaternionInstance>(args[0])) {
+            if (!object::IsInstanceOf<builtin::BuiltinType::Quaternion>(args[0])) {
                 return object::BooleanObject::FromBool(false);
             }
 
@@ -313,7 +313,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
             if (args.size() < 1) return object::BooleanObject::FromBool(true);
 
             // 型チェック
-            if (!object::IsInstanceOf<quaternion::QuaternionInstance>(args[0])) {
+            if (!object::IsInstanceOf<builtin::BuiltinType::Quaternion>(args[0])) {
                 return object::BooleanObject::FromBool(true);
             }
 
@@ -416,7 +416,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
             [weakClass](auto, const auto& args)
             -> std::shared_ptr<object::IObject>
             {
-                if (args.size() < 2 || !object::IsInstanceOf<vector::Vector3Instance>(args[0]))
+                if (args.size() < 2 || !object::IsInstanceOf<builtin::BuiltinType::Vector3>(args[0]))
                     return object::NullObject::Instance();
 
                 auto axis = std::static_pointer_cast<vector::Vector3Instance>(args[0]);
@@ -450,7 +450,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
             [weakClass](auto, const auto& args)
             -> std::shared_ptr<object::IObject>
             {
-                if (args.size() < 2 || !object::IsInstanceOf<vector::Vector3Instance>(args[0]) || !object::IsInstanceOf<vector::Vector3Instance>(args[1]))
+                if (args.size() < 2 || !object::IsInstanceOf<builtin::BuiltinType::Vector3>(args[0]) || !object::IsInstanceOf<builtin::BuiltinType::Vector3>(args[1]))
                     return object::NullObject::Instance();
 
                 auto f = std::static_pointer_cast<vector::Vector3Instance>(args[0]);

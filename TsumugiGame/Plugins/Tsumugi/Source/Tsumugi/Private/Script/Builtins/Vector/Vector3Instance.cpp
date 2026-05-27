@@ -2,38 +2,26 @@
 #include "Script/Objects/FloatObject.h"
 #include "Script/Objects/IntegerObject.h"
 
-namespace tsumugi::script::builtins::vector {
+namespace tsumugi::script::builtin::vector {
 
-Vector3Instance::Vector3Instance(double x, double y, double z) {
+Vector3Instance::Vector3Instance(double x, double y, double z)
+    : value_(x, y, z) {
 
     Set(TT("x"), std::make_shared<object::FloatObject>(x));
     Set(TT("y"), std::make_shared<object::FloatObject>(y));
     Set(TT("z"), std::make_shared<object::FloatObject>(z));
 }
 
-double Vector3Instance::X() const { return GetValue(TT("x")); }
-double Vector3Instance::Y() const { return GetValue(TT("y")); }
-double Vector3Instance::Z() const { return GetValue(TT("z")); }
+double Vector3Instance::X() const { return value_.x; }
+double Vector3Instance::Y() const { return value_.y; }
+double Vector3Instance::Z() const { return value_.z; }
 
 tstring Vector3Instance::Inspect() const {
 
     return TT("Vector3(") +
-        type::convert::DoubleToTString(X()) + TT(", ") +
-        type::convert::DoubleToTString(Y()) + TT(", ") +
-        type::convert::DoubleToTString(Z()) + TT(")");
-}
-
-double Vector3Instance::GetValue(tstring name) const {
-
-    auto object = Get(name);
-    switch (object->GetType()) {
-        case object::ObjectType::kFloat:
-            return std::static_pointer_cast<object::FloatObject>(object)->GetValue();
-        case object::ObjectType::kInteger:
-            return std::static_pointer_cast<object::IntegerObject>(object)->GetValue();
-        default:
-            return 0;
-    }
+        type::convert::DoubleToTString(value_.x) + TT(", ") +
+        type::convert::DoubleToTString(value_.y) + TT(", ") +
+        type::convert::DoubleToTString(value_.z) + TT(")");
 }
 
 bool Vector3Instance::TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) {
@@ -52,6 +40,11 @@ bool Vector3Instance::TrySetProperty(const tstring& name, std::shared_ptr<object
             default:
                 return false; // 数値以外は拒否
         }
+
+        // 内部 math::Vector3 を更新
+        if      (name == TT("x")) value_.x = v;
+        else if (name == TT("y")) value_.y = v;
+        else if (name == TT("z")) value_.z = v;
 
         Set(name, std::make_shared<object::FloatObject>(v));
         return true;

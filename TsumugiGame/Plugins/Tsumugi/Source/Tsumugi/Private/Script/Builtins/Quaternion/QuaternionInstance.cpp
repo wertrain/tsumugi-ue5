@@ -2,7 +2,7 @@
 #include "Script/Objects/FloatObject.h"
 #include "Script/Objects/IntegerObject.h"
 
-namespace tsumugi::script::builtins::quaternion {
+namespace tsumugi::script::builtin::quaternion {
 
 QuaternionInstance::QuaternionInstance(double x, double y, double z, double w) {
 

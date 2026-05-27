@@ -3,7 +3,7 @@
 #include "Foundation/Types.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
 
-namespace tsumugi::script {
+namespace tsumugi::script::builtin {
 
 void InitializeBuiltinFunctions();
 std::shared_ptr<object::BuiltinFunctionObject> GetBuiltinFunctionByName(const tstring& name);

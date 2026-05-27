@@ -4,7 +4,7 @@
 
 namespace tsumugi::script::object { class BuiltinClassObject; }
 
-namespace tsumugi::script::builtins::quaternion {
+namespace tsumugi::script::builtin::quaternion {
 
 std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass();
 

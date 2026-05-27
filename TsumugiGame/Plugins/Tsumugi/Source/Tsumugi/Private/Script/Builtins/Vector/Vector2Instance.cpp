@@ -2,7 +2,7 @@
 #include "Script/Objects/FloatObject.h"
 #include "Script/Objects/IntegerObject.h"
 
-namespace tsumugi::script::builtins::vector {
+namespace tsumugi::script::builtin::vector {
 
 Vector2Instance::Vector2Instance(double x, double y) {
 

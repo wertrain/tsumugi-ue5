@@ -5,11 +5,11 @@
 
 namespace tsumugi::script::object { class FloatObject; }
 
-namespace tsumugi::script::builtins::quaternion {
+namespace tsumugi::script::builtin::quaternion {
 
 class QuaternionInstance : public object::BuiltinInstanceObject {
 public:
-    DEFINE_BUILTIN_CLASS("Quaternion");
+    DEFINE_BUILTIN_CLASS(builtin::BuiltinType::Quaternion);
 
 public:
     QuaternionInstance(double x, double y, double z, double w);

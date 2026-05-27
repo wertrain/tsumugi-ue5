@@ -5,11 +5,11 @@
 
 namespace tsumugi::script::object { class FloatObject; }
 
-namespace tsumugi::script::builtins::random {
+namespace tsumugi::script::builtin::random {
 
 class RandomInstance : public object::BuiltinInstanceObject {
 public:
-    static constexpr const tchar* StaticClassName = TT("Random");
+    DEFINE_BUILTIN_CLASS(builtin::BuiltinType::Random);
 
 public:
     RandomInstance();

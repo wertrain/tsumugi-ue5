@@ -66,17 +66,6 @@ public:
     /// </summary>
     void CreateGlobalEnvironment();
 
-private:
-    /// <summary>
-    /// 組み込みクラスを追加するためのテンプレート
-    /// </summary>
-    /// <typeparam name="TInstance"></typeparam>
-    /// <typeparam name="TCreateFunc"></typeparam>
-    /// <param name="createFunc"></param>
-    template <typename TInstance, typename TCreateFunc>
-    void RegisterBuiltin(TCreateFunc createFunc) {
-        Set(type::convert::TStringViewToTString(TInstance::StaticClassName), createFunc());
-    }
 
 private:
     std::unordered_map<tstring, std::shared_ptr<object::IObject>> store_;

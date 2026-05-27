@@ -6,11 +6,11 @@
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
 
-namespace tsumugi::script::builtins::vector {
+namespace tsumugi::script::builtin::vector {
 
 std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
 
-    auto klass = std::make_shared<object::BuiltinClassObject>(Vector3Instance::StaticClassName);
+    auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Vector3));
 
     // ラムダ内での循環参照を防ぐために weak_ptr を作成
     std::weak_ptr<object::BuiltinClassObject> weakClass = klass;
@@ -56,8 +56,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
             -> std::shared_ptr<object::IObject>
             {
                 auto v = std::static_pointer_cast<Vector3Instance>(self);
-                double len = std::sqrt(v->X() * v->X() + v->Y() * v->Y() + v->Z() * v->Z());
-                return std::make_shared<object::FloatObject>(len);
+                return std::make_shared<object::FloatObject>(v->GetValue().Length());
             }
         )
     );
@@ -71,16 +70,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
             -> std::shared_ptr<object::IObject>
             {
                 auto v = std::static_pointer_cast<Vector3Instance>(self);
-                double len = std::sqrt(v->X() * v->X() + v->Y() * v->Y() + v->Z() * v->Z());
-                if (len == 0) {
-                    if (auto classPtr = weakClass.lock()) {
-                        return classPtr->CreateInstance<Vector3Instance>(0, 0, 0);
-                    }
-                    return nullptr;
-                }
+                auto n = v->GetValue().Normalized();
 
                 if (auto classPtr = weakClass.lock()) {
-                    return classPtr->CreateInstance<Vector3Instance>(v->X() / len, v->Y() / len, v->Z() / len);
+                    return classPtr->CreateInstance<Vector3Instance>(n.x, n.y, n.z);
                 }
                 return nullptr;
             }
@@ -100,8 +93,9 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                 auto a = std::static_pointer_cast<Vector3Instance>(self);
                 auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
-                double d = a->X() * b->X() + a->Y() * b->Y() + a->Z() * b->Z();
-                return std::make_shared<object::FloatObject>(d);
+                return std::make_shared<object::FloatObject>(
+                    a->GetValue().Dot(b->GetValue())
+                );
             }
         )
     );
@@ -124,12 +118,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                 auto a = std::static_pointer_cast<Vector3Instance>(self);
                 auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
+                math::Vector3 r = a->GetValue().Cross(b->GetValue());
+
                 if (auto classPtr = weakClass.lock()) {
-                    return classPtr->CreateInstance<Vector3Instance>(
-                        a->Y() * b->Z() - a->Z() * b->Y(),
-                        a->Z() * b->X() - a->X() * b->Z(),
-                        a->X() * b->Y() - a->Y() * b->X()
-                    );
+                    return classPtr->CreateInstance<Vector3Instance>(r.x, r.y, r.z);
                 }
                 return nullptr;
             }
@@ -144,12 +136,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
             auto a = std::static_pointer_cast<Vector3Instance>(self);
             auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
+            math::Vector3 r = a->GetValue() + b->GetValue();
+
             if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector3Instance>(
-                    a->X() + b->X(),
-                    a->Y() + b->Y(),
-                    a->Z() + b->Z()
-                );
+                return classPtr->CreateInstance<Vector3Instance>(r.x, r.y, r.z);
             }
             return nullptr;
         }
@@ -166,12 +156,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
             auto a = std::static_pointer_cast<Vector3Instance>(self);
             auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
+            math::Vector3 r = a->GetValue() - b->GetValue();
+
             if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector3Instance>(
-                    a->X() - b->X(),
-                    a->Y() - b->Y(),
-                    a->Z() - b->Z()
-                );
+                return classPtr->CreateInstance<Vector3Instance>(r.x, r.y, r.z);
             }
             return nullptr;
         }
@@ -195,12 +183,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                     s = static_cast<double>(std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue());
             }
 
+            math::Vector3 r = a->GetValue() * s;
+
             if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector3Instance>(
-                    a->X() * s,
-                    a->Y() * s,
-                    a->Z() * s
-                );
+                return classPtr->CreateInstance<Vector3Instance>(r.x, r.y, r.z);
             }
             return nullptr;
         }
@@ -224,19 +210,16 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
                     s = static_cast<double>(std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue());
             }
 
-            // 0 除算はどうする？ → とりあえず 0 ベクトル返すのが無難
             if (s == 0.0) {
                 if (auto classPtr = weakClass.lock()) {
                     return classPtr->CreateInstance<Vector3Instance>(0, 0, 0);
                 }
             }
 
+            math::Vector3 r = a->GetValue() / s;
+
             if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector3Instance>(
-                    a->X() / s,
-                    a->Y() / s,
-                    a->Z() / s
-                );
+                return classPtr->CreateInstance<Vector3Instance>(r.x, r.y, r.z);
             }
             return nullptr;
         }
@@ -256,9 +239,9 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
             auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
             bool same =
-                a->X() == b->X() &&
-                a->Y() == b->Y() &&
-                a->Z() == b->Z();
+                a->GetValue().x == b->GetValue().x &&
+                a->GetValue().y == b->GetValue().y &&
+                a->GetValue().z == b->GetValue().z;
 
             return object::BooleanObject::FromBool(same);
         }
@@ -276,9 +259,9 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
             auto b = std::static_pointer_cast<Vector3Instance>(args[0]);
 
             bool same =
-                a->X() == b->X() &&
-                a->Y() == b->Y() &&
-                a->Z() == b->Z();
+                a->GetValue().x == b->GetValue().x &&
+                a->GetValue().y == b->GetValue().y &&
+                a->GetValue().z == b->GetValue().z;
 
             return object::BooleanObject::FromBool(!same);
         }
@@ -294,12 +277,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
         {
             auto a = std::static_pointer_cast<Vector3Instance>(self);
 
+            math::Vector3 r = a->GetValue() * -1.0;
+
             if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector3Instance>(
-                    -a->X(),
-                    -a->Y(),
-                    -a->Z()
-                );
+                return classPtr->CreateInstance<Vector3Instance>(r.x, r.y, r.z);
             }
             return nullptr;
         }

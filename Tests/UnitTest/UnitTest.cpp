@@ -2147,7 +2147,7 @@ namespace UnitTest
 				{
 					TT("Vector3.one();"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(1.0, v->X());
 						Assert::AreEqual(1.0, v->Y());
@@ -2161,7 +2161,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3.one(); let b = Vector3.one(); a + b;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(2.0, v->X());
 						Assert::AreEqual(2.0, v->Y());
@@ -2175,7 +2175,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3(5,5,5); let b = Vector3(2,2,2); a - b;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(3.0, v->X());
 						Assert::AreEqual(3.0, v->Y());
@@ -2189,7 +2189,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3.one(); a * 3;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(3.0, v->X());
 						Assert::AreEqual(3.0, v->Y());
@@ -2203,7 +2203,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3(6,6,6); a / 2;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(3.0, v->X());
 						Assert::AreEqual(3.0, v->Y());
@@ -2217,7 +2217,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3(1,2,3); -a;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(-1.0, v->X());
 						Assert::AreEqual(-2.0, v->Y());
@@ -2251,7 +2251,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3.one(); a.add(Vector3.one());"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(2.0, v->X());
 						Assert::AreEqual(2.0, v->Y());
@@ -2265,7 +2265,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector3(1,2,3); a.neg();"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(-1.0, v->X());
 						Assert::AreEqual(-2.0, v->Y());
@@ -2304,7 +2304,7 @@ namespace UnitTest
 				{
 					TT("Vector2.one();"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(1.0, v->X());
 						Assert::AreEqual(1.0, v->Y());
@@ -2317,7 +2317,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2.one(); let b = Vector2.one(); a + b;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(2.0, v->X());
 						Assert::AreEqual(2.0, v->Y());
@@ -2330,7 +2330,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2(5,5); let b = Vector2(2,2); a - b;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(3.0, v->X());
 						Assert::AreEqual(3.0, v->Y());
@@ -2343,7 +2343,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2.one(); a * 3;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(3.0, v->X());
 						Assert::AreEqual(3.0, v->Y());
@@ -2356,7 +2356,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2(6,6); a / 2;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(3.0, v->X());
 						Assert::AreEqual(3.0, v->Y());
@@ -2369,7 +2369,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2(1,2); -a;"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(-1.0, v->X());
 						Assert::AreEqual(-2.0, v->Y());
@@ -2402,7 +2402,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2.one(); a.add(Vector2.one());"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(2.0, v->X());
 						Assert::AreEqual(2.0, v->Y());
@@ -2415,7 +2415,7 @@ namespace UnitTest
 				{
 					TT("let a = Vector2(1,2); a.neg();"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector2Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector2Instance*>(obj);
 						Assert::IsNotNull(v);
 						Assert::AreEqual(-1.0, v->X());
 						Assert::AreEqual(-2.0, v->Y());
@@ -2453,7 +2453,7 @@ namespace UnitTest
 				{
 					TT("Quaternion.identity();"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 						Assert::AreEqual(0.0, q->X());
 						Assert::AreEqual(0.0, q->Y());
@@ -2468,7 +2468,7 @@ namespace UnitTest
 				{
 					TT("Quaternion.fromEuler(0,0,0);"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 						Assert::AreEqual(0.0, q->X());
 						Assert::AreEqual(0.0, q->Y());
@@ -2484,7 +2484,7 @@ namespace UnitTest
 				{
 					TT("Quaternion.fromAxisAngle(Vector3(0,1,0), 3.1415926535);"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 
 						// 180ÅãâÒì] Å® sin(90Åã)=1, cos(90Åã)=0
@@ -2501,7 +2501,7 @@ namespace UnitTest
 				{
 					TT("Quaternion(1,2,3,4).conjugate();"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 						Assert::AreEqual(-1.0, q->X());
 						Assert::AreEqual(-2.0, q->Y());
@@ -2516,7 +2516,7 @@ namespace UnitTest
 				{
 					TT("Quaternion(1,2,3,4).inverse();"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 
 						double len2 = 1 * 1 + 2 * 2 + 3 * 3 + 4 * 4; // 30
@@ -2534,7 +2534,7 @@ namespace UnitTest
 				{
 					TT("Quaternion(1,2,3,4) * 2;"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 						Assert::AreEqual(2.0, q->X());
 						Assert::AreEqual(4.0, q->Y());
@@ -2549,7 +2549,7 @@ namespace UnitTest
 				{
 					TT("Quaternion(1,0,0,0) * Quaternion(0,1,0,0);"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 
 						// (1,0,0,0) * (0,1,0,0) = (0,0,1,0)
@@ -2586,7 +2586,7 @@ namespace UnitTest
 				{
 					TT("let q = Quaternion(1,2,3,4); -q;"),
 					[](auto* obj) {
-						auto q = dynamic_cast<tsumugi::script::builtins::quaternion::QuaternionInstance*>(obj);
+						auto q = dynamic_cast<tsumugi::script::builtin::quaternion::QuaternionInstance*>(obj);
 						Assert::IsNotNull(q);
 						Assert::AreEqual(-1.0, q->X());
 						Assert::AreEqual(-2.0, q->Y());
@@ -2602,7 +2602,7 @@ namespace UnitTest
 				{
 					TT("Quaternion.fromAxisAngle(Vector3(0,1,0), 1.57079632679).rotate(Vector3(1,0,0));"),
 					[](auto* obj) {
-						auto v = dynamic_cast<tsumugi::script::builtins::vector::Vector3Instance*>(obj);
+						auto v = dynamic_cast<tsumugi::script::builtin::vector::Vector3Instance*>(obj);
 						Assert::IsNotNull(v);
 
 						Assert::AreEqual(0.0, v->X(), 1e-6);

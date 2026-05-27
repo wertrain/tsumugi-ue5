@@ -6,11 +6,11 @@
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
 
-namespace tsumugi::script::builtins::vector {
+namespace tsumugi::script::builtin::vector {
 
 std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
 
-    auto klass = std::make_shared<object::BuiltinClassObject>(Vector2Instance::StaticClassName);
+    auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Vector2));
 
     // ラムダ内での循環参照を防ぐために weak_ptr を作成
     std::weak_ptr<object::BuiltinClassObject> weakClass = klass;

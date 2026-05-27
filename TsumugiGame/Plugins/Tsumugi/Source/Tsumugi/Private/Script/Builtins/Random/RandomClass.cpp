@@ -8,13 +8,13 @@
 #include "Script/Objects/ArrayObject.h"
 #include <random>
 
-namespace tsumugi::script::builtins::random {
+namespace tsumugi::script::builtin::random {
 
 static std::mt19937 g_rng(std::random_device{}());
 
 std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
 
-    auto klass = std::make_shared<object::BuiltinClassObject>(RandomInstance::StaticClassName);
+    auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Random));
 
     // ラムダ内での循環参照を防ぐために weak_ptr を作成
     //std::weak_ptr<object::BuiltinClassObject> weakClass = klass;

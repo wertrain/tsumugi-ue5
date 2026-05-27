@@ -2,14 +2,11 @@
 #include "Script/Objects/IObject.h"
 
 // 以下は CreateGlobalEnvironment() のため
+#include "Script/Builtins/BuiltinTypes.h"
 #include "Script/Builtins/Vector/Vector3Class.h"
-#include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Builtins/Vector/Vector2Class.h"
-#include "Script/Builtins/Vector/Vector2Instance.h"
 #include "Script/Builtins/Random/RandomClass.h"
-#include "Script/Builtins/Random/RandomInstance.h"
 #include "Script/Builtins/Quaternion/QuaternionClass.h"
-#include "Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "Script/Objects/BuiltinClassObject.h"
 
 
@@ -150,10 +147,10 @@ void Environment::Clear() {
 
 void Environment::CreateGlobalEnvironment() {
 
-    RegisterBuiltin<builtins::vector::Vector3Instance>(builtins::vector::CreateVector3Class);
-    RegisterBuiltin<builtins::vector::Vector2Instance>(builtins::vector::CreateVector2Class);
-    RegisterBuiltin<builtins::random::RandomInstance>(builtins::random::CreateRandomClass);
-    RegisterBuiltin<builtins::quaternion::QuaternionInstance>(builtins::quaternion::CreateQuaternionClass);
+    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Vector3), builtin::vector::CreateVector3Class());
+    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Vector2), builtin::vector::CreateVector2Class());
+    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Random), builtin::random::CreateRandomClass());
+    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Quaternion), builtin::quaternion::CreateQuaternionClass());
 }
 
 }

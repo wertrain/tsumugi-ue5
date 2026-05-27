@@ -61,7 +61,7 @@ namespace tsumugi::script::evaluator {
 Evaluator::Evaluator()
     : errors() {
 
-    InitializeBuiltinFunctions();
+    builtin::InitializeBuiltinFunctions();
 }
 
 std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const std::shared_ptr<object::Environment>& environment) const {
@@ -593,7 +593,7 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
 
     if (auto value = environment->Get(identifier->GetValue())) {
         return value;
-    } else if (auto builtin = GetBuiltinFunctionByName(identifier->GetValue())) {
+    } else if (auto builtin = builtin::GetBuiltinFunctionByName(identifier->GetValue())) {
         return builtin;
     }
     return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());

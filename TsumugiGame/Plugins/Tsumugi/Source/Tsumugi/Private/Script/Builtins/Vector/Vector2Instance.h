@@ -5,11 +5,11 @@
 
 namespace tsumugi::script::object { class FloatObject; }
 
-namespace tsumugi::script::builtins::vector {
+namespace tsumugi::script::builtin::vector {
 
 class Vector2Instance : public object::BuiltinInstanceObject {
 public:
-    DEFINE_BUILTIN_CLASS("Vector2");
+    DEFINE_BUILTIN_CLASS(builtin::BuiltinType::Vector2);
 
 public:
     Vector2Instance(double x, double y);

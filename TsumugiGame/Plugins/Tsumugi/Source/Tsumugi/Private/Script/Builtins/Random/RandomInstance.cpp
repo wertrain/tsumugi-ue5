@@ -2,7 +2,7 @@
 #include "Script/Objects/FloatObject.h"
 #include "Script/Objects/IntegerObject.h"
 
-namespace tsumugi::script::builtins::random {
+namespace tsumugi::script::builtin::random {
 
 RandomInstance::RandomInstance() {
 
