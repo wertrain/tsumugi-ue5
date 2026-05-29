@@ -2,6 +2,8 @@
 
 #include "Foundation/Types.h"
 #include "Foundation/Math/TransformMath.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Quaternion.h"
 #include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::builtin { class Vector3Instance; }
@@ -17,9 +19,12 @@ public:
 public:
     TransformInstance();
     const math::TransformMath& GetValue() const { return value_; }
-    std::shared_ptr<Vector3Instance> GetTranslate() const;
-    std::shared_ptr<QuaternionInstance> GetRotation() const;
-    std::shared_ptr<Vector3Instance> GetScale() const;
+    const math::Vector3& GetPosition() const;
+    const math::Quaternion& GetRotation() const;
+    const math::Vector3& GetScale() const;
+    void SetPosition(const math::Vector3& position);
+    void SetRotation(const math::Quaternion& rotation);
+    void SetScale(const math::Vector3& scale);
     tstring Inspect() const override;
 
     bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) override;

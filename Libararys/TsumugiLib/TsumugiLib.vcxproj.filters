@@ -255,9 +255,6 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\StringMethods.h">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.h">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.h">
       <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
     </ClInclude>
@@ -535,9 +532,6 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\StringMethods.cpp">
       <Filter>Tsumugi\Private\Script\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctions.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.cpp">
       <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
