@@ -43,7 +43,7 @@ int main()
 
         auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
         auto evaluated = evaluator->Eval(root.get(), environment);
-        if (evaluated != nullptr) {
+        if (evaluated != nullptr && evaluated->GetType() != tsumugi::script::object::ObjectType::kNull) {
             tout() << evaluated->Inspect() << tendl;
         }
     }
