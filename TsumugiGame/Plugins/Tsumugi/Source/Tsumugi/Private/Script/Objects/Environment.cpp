@@ -1,14 +1,6 @@
 #include "Script/Objects/Environment.h"
 #include "Script/Objects/IObject.h"
 
-// 以下は CreateGlobalEnvironment() のため
-#include "Script/Builtins/BuiltinTypes.h"
-#include "Script/Builtins/Vector/Vector3Class.h"
-#include "Script/Builtins/Vector/Vector2Class.h"
-#include "Script/Builtins/Random/RandomClass.h"
-#include "Script/Builtins/Quaternion/QuaternionClass.h"
-#include "Script/Objects/BuiltinClassObject.h"
-
 
 // 【定義時環境（definition environment）】
 // 関数が定義されたときの Environment。
@@ -143,14 +135,6 @@ std::shared_ptr<object::IObject> Environment::Set(const tstring& name, std::shar
 void Environment::Clear() {
 
     store_.clear();
-}
-
-void Environment::CreateGlobalEnvironment() {
-
-    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Vector3), builtin::vector::CreateVector3Class());
-    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Vector2), builtin::vector::CreateVector2Class());
-    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Random), builtin::random::CreateRandomClass());
-    Set(builtin::BuiltinTypeName(builtin::BuiltinType::Quaternion), builtin::quaternion::CreateQuaternionClass());
 }
 
 }

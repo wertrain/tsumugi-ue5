@@ -1,98 +1,93 @@
 #pragma once
 #include "Vector3.h"
+#include "Vector4.h"
 #include "Quaternion.h"
-#include "Matrix4x4.h"
 
 namespace tsumugi::math {
 
-struct TransformMath {
-    Vector3 position;
-    Quaternion rotation;
-    Vector3 scale;
+struct Matrix4x4 {
+    double m[16]; // 行優先
 
-    TransformMath()
-        : position(0,0,0), rotation(0,0,0,1), scale(1,1,1) {}
-
-    TransformMath(const Vector3& p, const Quaternion& r, const Vector3& s)
-        : position(p), rotation(r), scale(s) {}
-
-    // ---------------------------------------------------------
-    // Local → World 行列（高速版）
-    // ---------------------------------------------------------
-    Matrix4x4 LocalToWorldMatrix() const {
-        return Matrix4x4::Translate(position)
-             * Matrix4x4::Rotate(rotation)
-             * Matrix4x4::Scale(scale);
+    Matrix4x4() {
+        for (int i = 0; i < 16; i++) m[i] = 0;
+        m[0] = m[5] = m[10] = m[15] = 1;
     }
 
-    // ---------------------------------------------------------
-    // World → Local 行列（高速版）
-    // ---------------------------------------------------------
-    Matrix4x4 WorldToLocalMatrix() const {
-        Quaternion invRot = rotation.Inverse();
-        Vector3 invScale = {1.0 / scale.x, 1.0 / scale.y, 1.0 / scale.z};
+    static Matrix4x4 Identity() { return Matrix4x4(); }
 
-        // 位置の逆変換
-        Vector3 invPos = invRot.Rotate(position * -1.0);
-        invPos = {invPos.x * invScale.x, invPos.y * invScale.y, invPos.z * invScale.z};
-
-        return Matrix4x4::Scale(invScale)
-             * Matrix4x4::Rotate(invRot)
-             * Matrix4x4::Translate(invPos);
+    // 平行移動行列
+    static Matrix4x4 Translate(const Vector3& v) {
+        Matrix4x4 r;
+        r.m[12] = v.x;
+        r.m[13] = v.y;
+        r.m[14] = v.z;
+        return r;
     }
 
-    // ---------------------------------------------------------
-    // forward / right / up（高速版）
-    // ---------------------------------------------------------
-    Vector3 Forward() const { return rotation.Rotate({0,0,1}); }
-    Vector3 Right()   const { return rotation.Rotate({1,0,0}); }
-    Vector3 Up()      const { return rotation.Rotate({0,1,0}); }
+    // スケール行列
+    static Matrix4x4 Scale(const Vector3& v) {
+        Matrix4x4 r;
+        r.m[0] = v.x;
+        r.m[5] = v.y;
+        r.m[10] = v.z;
+        return r;
+    }
 
-    // ---------------------------------------------------------
-    // Transform の合成（高速版）
-    // A * B = A の空間で B を適用した結果
-    // ---------------------------------------------------------
-    TransformMath Combine(const TransformMath& b) const {
-        // 位置は A の回転・スケールを適用してから足す
-        Vector3 scaled = {b.position.x * scale.x,
-                          b.position.y * scale.y,
-                          b.position.z * scale.z};
+    // 回転行列（クォータニオン）
+    static Matrix4x4 Rotate(const Quaternion& q) {
+        Matrix4x4 r;
+        double x = q.x, y = q.y, z = q.z, w = q.w;
 
-        Vector3 rotated = rotation.Rotate(scaled);
+        r.m[0] = 1 - 2*y*y - 2*z*z;
+        r.m[1] = 2*x*y + 2*w*z;
+        r.m[2] = 2*x*z - 2*w*y;
 
+        r.m[4] = 2*x*y - 2*w*z;
+        r.m[5] = 1 - 2*x*x - 2*z*z;
+        r.m[6] = 2*y*z + 2*w*x;
+
+        r.m[8] = 2*x*z + 2*w*y;
+        r.m[9] = 2*y*z - 2*w*x;
+        r.m[10] = 1 - 2*x*x - 2*y*y;
+
+        return r;
+    }
+
+    // 行列乗算
+    Matrix4x4 operator*(const Matrix4x4& b) const {
+        Matrix4x4 r;
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 4; col++) {
+                r.m[row*4 + col] =
+                    m[row*4 + 0] * b.m[0*4 + col] +
+                    m[row*4 + 1] * b.m[1*4 + col] +
+                    m[row*4 + 2] * b.m[2*4 + col] +
+                    m[row*4 + 3] * b.m[3*4 + col];
+            }
+        }
+        return r;
+    }
+
+    // Vector4 との乗算
+    Vector4 operator*(const Vector4& v) const {
         return {
-            position + rotated,
-            rotation * b.rotation,
-            {scale.x * b.scale.x, scale.y * b.scale.y, scale.z * b.scale.z}
+            m[0] * v.x + m[4] * v.y + m[8]  * v.z + m[12] * v.w,
+            m[1] * v.x + m[5] * v.y + m[9]  * v.z + m[13] * v.w,
+            m[2] * v.x + m[6] * v.y + m[10] * v.z + m[14] * v.w,
+            m[3] * v.x + m[7] * v.y + m[11] * v.z + m[15] * v.w
         };
     }
 
-    // ---------------------------------------------------------
-    // 点の変換（Local → World）
-    // ---------------------------------------------------------
-    Vector3 TransformPoint(const Vector3& v) const {
-        return LocalToWorldMatrix().MultiplyPoint(v);
+    // Vector3 を同次座標として扱う（w=1）
+    Vector3 MultiplyPoint(const Vector3& v) const {
+        Vector4 r = (*this) * Vector4(v.x, v.y, v.z, 1.0);
+        return {r.x, r.y, r.z};
     }
 
-    // ---------------------------------------------------------
-    // 方向の変換（Local → World）
-    // ---------------------------------------------------------
-    Vector3 TransformDirection(const Vector3& v) const {
-        return LocalToWorldMatrix().MultiplyVector(v);
-    }
-
-    // ---------------------------------------------------------
-    // 点の逆変換（World → Local）
-    // ---------------------------------------------------------
-    Vector3 InverseTransformPoint(const Vector3& v) const {
-        return WorldToLocalMatrix().MultiplyPoint(v);
-    }
-
-    // ---------------------------------------------------------
-    // 方向の逆変換（World → Local）
-    // ---------------------------------------------------------
-    Vector3 InverseTransformDirection(const Vector3& v) const {
-        return WorldToLocalMatrix().MultiplyVector(v);
+    // Vector3 を方向ベクトルとして扱う（w=0）
+    Vector3 MultiplyVector(const Vector3& v) const {
+        Vector4 r = (*this) * Vector4(v.x, v.y, v.z, 0.0);
+        return {r.x, r.y, r.z};
     }
 };
 

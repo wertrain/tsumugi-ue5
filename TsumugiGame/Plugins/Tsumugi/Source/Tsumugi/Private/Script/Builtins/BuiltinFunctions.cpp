@@ -15,7 +15,7 @@ static common::ErrorReporter g_errors;
 
 std::once_flag g_builtinInitialized;
 
-void InitializeBuiltinFunctions() {
+void InitializeBuiltinFunctionsOld() {
 
     std::call_once(g_builtinInitialized, []() {
 

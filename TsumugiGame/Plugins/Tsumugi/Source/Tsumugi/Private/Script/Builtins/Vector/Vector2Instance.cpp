@@ -4,33 +4,21 @@
 
 namespace tsumugi::script::builtin::vector {
 
-Vector2Instance::Vector2Instance(double x, double y) {
+Vector2Instance::Vector2Instance(double x, double y)
+    : value_(x, y) {
 
     Set(TT("x"), std::make_shared<object::FloatObject>(x));
     Set(TT("y"), std::make_shared<object::FloatObject>(y));
 }
 
-double Vector2Instance::X() const { return GetValue(TT("x")); }
-double Vector2Instance::Y() const { return GetValue(TT("y")); }
+double Vector2Instance::X() const { return value_.x; }
+double Vector2Instance::Y() const { return value_.y; }
 
 tstring Vector2Instance::Inspect() const {
 
     return TT("Vector2(") +
-        type::convert::DoubleToTString(X()) + TT(", ") +
-        type::convert::DoubleToTString(Y()) + TT(", ");
-}
-
-double Vector2Instance::GetValue(tstring name) const {
-
-    auto object = Get(name);
-    switch (object->GetType()) {
-        case object::ObjectType::kFloat:
-            return std::static_pointer_cast<object::FloatObject>(object)->GetValue();
-        case object::ObjectType::kInteger:
-            return std::static_pointer_cast<object::IntegerObject>(object)->GetValue();
-        default:
-            return 0;
-    }
+        type::convert::DoubleToTString(value_.x) + TT(", ") +
+        type::convert::DoubleToTString(value_.y) + TT(")");
 }
 
 bool Vector2Instance::TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) {
@@ -49,6 +37,10 @@ bool Vector2Instance::TrySetProperty(const tstring& name, std::shared_ptr<object
             default:
                 return false; // 数値以外は拒否
         }
+
+        // 内部 math::Vector2 を更新
+        if (name == TT("x")) value_.x = v;
+        else if (name == TT("y")) value_.y = v;
 
         Set(name, std::make_shared<object::FloatObject>(v));
         return true;

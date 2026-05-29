@@ -41,6 +41,7 @@ public:
     void SetInstanceMethod(const tstring& name, std::shared_ptr<IObject> fn);
     void SetInstanceCreator(std::function<std::shared_ptr<IObject>(const std::vector<std::shared_ptr<IObject>>&)> creator);
     bool CanInstantiate() const;
+    std::shared_ptr<BuiltinInstanceObject> GetPrototype() const { return prototype_; }
     std::optional<std::shared_ptr<IObject>> Instantiate(const std::vector<std::shared_ptr<IObject>>& arguments) const;
     std::optional<std::shared_ptr<IObject>> TryGetProperty(const tstring& name) const;
     tstring Inspect() const override;
@@ -48,14 +49,14 @@ public:
 
 public:
     // 派生先のインスタンス生成に使用する（主に確実に SetPrototype させるためのもの）
-    template <typename T = object::BuiltinInstanceObject, typename... Args>
-    std::shared_ptr<T> CreateInstance(Args&&... args) const {
-        auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-        if (prototype_) {
-            instance->SetPrototype(prototype_);
-        }
-        return instance;
-    }
+    //template <typename T = object::BuiltinInstanceObject, typename... Args>
+    //std::shared_ptr<T> CreateInstance(Args&&... args) const {
+    //    auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+    //    if (prototype_) {
+    //        instance->SetPrototype(prototype_);
+    //    }
+    //    return instance;
+    //}
 
 private:
     void EnsurePrototype();

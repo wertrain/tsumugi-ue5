@@ -1,5 +1,6 @@
 #include "Script/Builtins/Vector/Vector2Class.h"
 #include "Script/Builtins/Vector/Vector2Instance.h"
+#include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Objects/BuiltinClassObject.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
 #include "Script/Objects/FloatObject.h"
@@ -12,14 +13,11 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
 
     auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Vector2));
 
-    // ラムダ内での循環参照を防ぐために weak_ptr を作成
-    std::weak_ptr<object::BuiltinClassObject> weakClass = klass;
-
     //
     // --- インスタンス生成 ---
     //
     klass->SetInstanceCreator(
-        [weakClass](const std::vector<std::shared_ptr<object::IObject>>& args)
+        [](const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
             auto CastDouble = [](std::shared_ptr<object::IObject> object) -> double {
@@ -31,14 +29,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
                     return static_cast<double>(std::static_pointer_cast<object::IntegerObject>(object)->GetValue());
                 }
                 return 0.0;
-            };
+                };
             double x = (args.size() > 0) ? CastDouble(args[0]) : 0.0;
             double y = (args.size() > 1) ? CastDouble(args[1]) : 0.0;
-
-            if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector2Instance>(x, y);
-            }
-            return nullptr;
+            return BuiltinClassRegistry::CreateInstance<Vector2Instance>(x, y);
         }
     );
 
@@ -55,8 +49,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
             -> std::shared_ptr<object::IObject>
             {
                 auto v = std::static_pointer_cast<Vector2Instance>(self);
-                double len = std::sqrt(v->X() * v->X() + v->Y() * v->Y());
-                return std::make_shared<object::FloatObject>(len);
+                return std::make_shared<object::FloatObject>(v->GetValue().Length());
             }
         )
     );
@@ -65,23 +58,14 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
     klass->SetInstanceMethod(
         TT("normalize"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [weakClass](std::shared_ptr<object::IObject> self,
+            [](std::shared_ptr<object::IObject> self,
                 const std::vector<std::shared_ptr<object::IObject>>&)
             -> std::shared_ptr<object::IObject>
             {
                 auto v = std::static_pointer_cast<Vector2Instance>(self);
-                double len = std::sqrt(v->X() * v->X() + v->Y() * v->Y());
-                if (len == 0) {
-                    if (auto classPtr = weakClass.lock()) {
-                        return classPtr->CreateInstance<Vector2Instance>(0, 0);
-                    }
-                    return nullptr;
-                }
+                auto n = v->GetValue().Normalized();
 
-                if (auto classPtr = weakClass.lock()) {
-                    return classPtr->CreateInstance<Vector2Instance>(v->X() / len, v->Y() / len);
-                }
-                return nullptr;
+                return BuiltinClassRegistry::CreateInstance<Vector2Instance>(n.x, n.y);
             }
         )
     );
@@ -99,27 +83,23 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
                 auto a = std::static_pointer_cast<Vector2Instance>(self);
                 auto b = std::static_pointer_cast<Vector2Instance>(args[0]);
 
-                double d = a->X() * b->X() + a->Y() * b->Y();
-                return std::make_shared<object::FloatObject>(d);
+                return std::make_shared<object::FloatObject>(
+                    a->GetValue().Dot(b->GetValue())
+                );
             }
         )
     );
 
     // add(v)
     auto addBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [weakClass](std::shared_ptr<object::IObject> self, const std::vector<std::shared_ptr<object::IObject>>& args)
+        [](std::shared_ptr<object::IObject> self, const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
             auto a = std::static_pointer_cast<Vector2Instance>(self);
             auto b = std::static_pointer_cast<Vector2Instance>(args[0]);
 
-            if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector2Instance>(
-                    a->X() + b->X(),
-                    a->Y() + b->Y()
-                );
-            }
-            return nullptr;
+            math::Vector2 r = a->GetValue() + b->GetValue();
+            return BuiltinClassRegistry::CreateInstance<Vector2Instance>(r.x, r.y);
         }
     );
     klass->SetInstanceMethod(TT("add"), addBuiltin);
@@ -127,20 +107,15 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
 
     // sub(v)
     auto subBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [weakClass](std::shared_ptr<object::IObject> self,
+        [](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
             auto a = std::static_pointer_cast<Vector2Instance>(self);
             auto b = std::static_pointer_cast<Vector2Instance>(args[0]);
 
-            if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector2Instance>(
-                    a->X() - b->X(),
-                    a->Y() - b->Y()
-                );
-            }
-            return nullptr;
+            math::Vector2 r = a->GetValue() - b->GetValue();
+            return BuiltinClassRegistry::CreateInstance<Vector2Instance>(r.x, r.y);
         }
     );
     klass->SetInstanceMethod(TT("sub"), subBuiltin);
@@ -148,7 +123,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
 
     // mul(scalar)
     auto mulBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [weakClass](std::shared_ptr<object::IObject> self,
+        [](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
@@ -162,13 +137,8 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
                     s = static_cast<double>(std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue());
             }
 
-            if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector2Instance>(
-                    a->X() * s,
-                    a->Y() * s
-                );
-            }
-            return nullptr;
+            math::Vector2 r = a->GetValue() * s;
+            return BuiltinClassRegistry::CreateInstance<Vector2Instance>(r.x, r.y);
         }
     );
     klass->SetInstanceMethod(TT("mul"), mulBuiltin);
@@ -176,7 +146,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
 
     // div(scalar)
     auto divBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [weakClass](std::shared_ptr<object::IObject> self,
+        [](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>& args)
         -> std::shared_ptr<object::IObject>
         {
@@ -190,24 +160,14 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
                     s = static_cast<double>(std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue());
             }
 
-            // 0 除算はどうする？ → とりあえず 0 ベクトル返すのが無難
             if (s == 0.0) {
-                if (auto classPtr = weakClass.lock()) {
-                    return classPtr->CreateInstance<Vector2Instance>(0, 0);
-                }
+                return BuiltinClassRegistry::CreateInstance<Vector2Instance>(0, 0);
             }
 
-            if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector2Instance>(
-                    a->X() / s,
-                    a->Y() / s
-                );
-            }
-            return nullptr;
+            math::Vector2 r = a->GetValue() / s;
+            return BuiltinClassRegistry::CreateInstance<Vector2Instance>(r.x, r.y);
         }
     );
-
-    // "div" と "/" の両方を登録
     klass->SetInstanceMethod(TT("div"), divBuiltin);
     klass->SetInstanceMethod(TT("/"), divBuiltin);
 
@@ -221,8 +181,8 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
             auto b = std::static_pointer_cast<Vector2Instance>(args[0]);
 
             bool same =
-                a->X() == b->X() &&
-                a->Y() == b->Y();
+                a->GetValue().x == b->GetValue().x &&
+                a->GetValue().y == b->GetValue().y;
 
             return object::BooleanObject::FromBool(same);
         }
@@ -240,8 +200,8 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
             auto b = std::static_pointer_cast<Vector2Instance>(args[0]);
 
             bool same =
-                a->X() == b->X() &&
-                a->Y() == b->Y();
+                a->GetValue().x == b->GetValue().x &&
+                a->GetValue().y == b->GetValue().y;
 
             return object::BooleanObject::FromBool(!same);
         }
@@ -251,23 +211,16 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
 
     // unary -(v)
     auto unaryMinusBuiltin = std::make_shared<object::BuiltinFunctionObject>(
-        [weakClass](std::shared_ptr<object::IObject> self,
+        [](std::shared_ptr<object::IObject> self,
             const std::vector<std::shared_ptr<object::IObject>>&)
         -> std::shared_ptr<object::IObject>
         {
             auto a = std::static_pointer_cast<Vector2Instance>(self);
 
-            if (auto classPtr = weakClass.lock()) {
-                return classPtr->CreateInstance<Vector2Instance>(
-                    -a->X(),
-                    -a->Y()
-                );
-            }
-            return nullptr;
+            math::Vector2 r = a->GetValue() * -1.0;
+            return BuiltinClassRegistry::CreateInstance<Vector2Instance>(r.x, r.y);
         }
     );
-
-    // "neg", "unary-" を登録
     klass->SetInstanceMethod(TT("neg"), unaryMinusBuiltin);
     klass->SetInstanceMethod(TT("unary-"), unaryMinusBuiltin);
 
@@ -278,13 +231,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
     klass->SetStaticMethod(
         TT("zero"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [weakClass](std::shared_ptr<object::IObject>, const auto&)
+            [](std::shared_ptr<object::IObject>, const auto&)
             -> std::shared_ptr<object::IObject>
             {
-                if (auto classPtr = weakClass.lock()) {
-                    return classPtr->CreateInstance<Vector2Instance>(0, 0);
-                }
-                return nullptr;
+                return BuiltinClassRegistry::CreateInstance<Vector2Instance>(0, 0);
             }
         )
     );
@@ -292,13 +242,10 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
     klass->SetStaticMethod(
         TT("one"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [weakClass](std::shared_ptr<object::IObject>, const auto&)
+            [](std::shared_ptr<object::IObject>, const auto&)
             -> std::shared_ptr<object::IObject>
             {
-                if (auto classPtr = weakClass.lock()) {
-                    return classPtr->CreateInstance<Vector2Instance>(1, 1);
-                }
-                return nullptr;
+                return BuiltinClassRegistry::CreateInstance<Vector2Instance>(1, 1);
             }
         )
     );

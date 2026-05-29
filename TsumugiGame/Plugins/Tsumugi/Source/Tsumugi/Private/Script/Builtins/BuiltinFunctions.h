@@ -5,7 +5,7 @@
 
 namespace tsumugi::script::builtin {
 
-void InitializeBuiltinFunctions();
+void InitializeBuiltinFunctionsOld();
 std::shared_ptr<object::BuiltinFunctionObject> GetBuiltinFunctionByName(const tstring& name);
 
 }

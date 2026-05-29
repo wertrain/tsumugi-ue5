@@ -21,7 +21,6 @@ int main()
     const char* PROMPT = ">> ";
 
     auto environment = std::make_shared<tsumugi::script::object::Environment>();
-    environment->CreateGlobalEnvironment();
 
     while (true)
     {

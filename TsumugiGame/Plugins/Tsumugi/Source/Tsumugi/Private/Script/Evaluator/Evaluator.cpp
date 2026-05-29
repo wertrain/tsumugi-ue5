@@ -53,7 +53,8 @@
 #include "Script/Objects/ClassObject.h"
 #include "Script/Objects/BuiltinClassObject.h"
 #include "Script/Objects/protocol/ObjectProtocolDispatcher.h"
-#include "Script/Builtins/BuiltinFunctions.h"
+#include "Script/Builtins/BuiltinFunctionRegistry.h"
+#include "Script/Builtins/BuiltinClassRegistry.h"
 #include <cassert>
 
 namespace tsumugi::script::evaluator {
@@ -62,6 +63,7 @@ Evaluator::Evaluator()
     : errors() {
 
     builtin::InitializeBuiltinFunctions();
+    builtin::InitializeBuiltinClasses();
 }
 
 std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const std::shared_ptr<object::Environment>& environment) const {
@@ -593,8 +595,10 @@ std::shared_ptr<object::IObject> Evaluator::EvalIdentifier(const ast::expression
 
     if (auto value = environment->Get(identifier->GetValue())) {
         return value;
-    } else if (auto builtin = builtin::GetBuiltinFunctionByName(identifier->GetValue())) {
-        return builtin;
+    } else if (auto builtinFunc = builtin::BuiltinFunctionRegistry::Get(identifier->GetValue())) {
+        return builtinFunc;
+    } else if (auto builtinClass = builtin::BuiltinClassRegistry::Get(identifier->GetValue())) {
+        return builtinClass;
     }
     return errors.MakeErrorObject(i18n::MessageId::kIdentifierNotFound, identifier->GetValue());
 }

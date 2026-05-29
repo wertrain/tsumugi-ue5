@@ -348,6 +348,12 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector4.h">
       <Filter>Tsumugi\Private\Foundation\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinClassRegistry.h">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctionRegistry.h">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -604,6 +610,12 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformInstance.cpp">
       <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinClassRegistry.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctionRegistry.cpp">
+      <Filter>Tsumugi\Private\Script\Builtins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

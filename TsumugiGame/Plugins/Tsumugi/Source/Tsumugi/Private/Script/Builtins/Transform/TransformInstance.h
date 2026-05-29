@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Types.h"
+#include "Foundation/Math/TransformMath.h"
 #include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::builtin { class Vector3Instance; }
@@ -15,6 +16,7 @@ public:
 
 public:
     TransformInstance();
+    const math::TransformMath& GetValue() const { return value_; }
     std::shared_ptr<Vector3Instance> GetTranslate() const;
     std::shared_ptr<QuaternionInstance> GetRotation() const;
     std::shared_ptr<Vector3Instance> GetScale() const;
@@ -23,9 +25,7 @@ public:
     bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) override;
 
 private:
-    std::shared_ptr<Vector3Instance> position_;
-    std::shared_ptr<QuaternionInstance> rotation_;
-    std::shared_ptr<Vector3Instance> scale_;
+    math::TransformMath value_;
 };
 
 }

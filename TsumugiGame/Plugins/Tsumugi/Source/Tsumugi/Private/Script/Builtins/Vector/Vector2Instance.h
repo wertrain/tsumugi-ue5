@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Types.h"
+#include "Foundation/Math/Vector2.h"
 #include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::object { class FloatObject; }
@@ -13,14 +14,14 @@ public:
 
 public:
     Vector2Instance(double x, double y);
+    const math::Vector2& GetValue() const { return value_; }
     double X() const;
     double Y() const;
     tstring Inspect() const override;
-
     bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) override;
 
 private:
-    double GetValue(tstring name) const;
+    math::Vector2 value_;
 };
 
 }

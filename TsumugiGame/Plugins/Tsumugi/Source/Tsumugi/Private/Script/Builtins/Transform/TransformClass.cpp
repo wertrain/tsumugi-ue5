@@ -1,5 +1,6 @@
 #include "Script/Builtins/Transform/TransformClass.h"
 #include "Script/Builtins/Transform/TransformInstance.h"
+#include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "Script/Objects/BuiltinClassObject.h"
@@ -33,11 +34,11 @@ std::shared_ptr<object::BuiltinClassObject> CreateTransformClass() {
     klass->SetStaticMethod(
         TT("identity"),
         std::make_shared<object::BuiltinFunctionObject>(
-            [](std::shared_ptr<object::IObject>,
+            [weakClass](std::shared_ptr<object::IObject>,
                 const std::vector<std::shared_ptr<object::IObject>>&)
             -> std::shared_ptr<object::IObject>
             {
-                return std::make_shared<transform::TransformInstance>();
+                return BuiltinClassRegistry::CreateInstance<TransformInstance>();
             }
         )
     );

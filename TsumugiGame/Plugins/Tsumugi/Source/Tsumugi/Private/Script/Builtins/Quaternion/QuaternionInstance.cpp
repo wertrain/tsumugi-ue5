@@ -4,7 +4,8 @@
 
 namespace tsumugi::script::builtin::quaternion {
 
-QuaternionInstance::QuaternionInstance(double x, double y, double z, double w) {
+QuaternionInstance::QuaternionInstance(double x, double y, double z, double w)
+    : value_(x, y, z, w) {
 
     Set(TT("x"), std::make_shared<object::FloatObject>(x));
     Set(TT("y"), std::make_shared<object::FloatObject>(y));
@@ -12,31 +13,18 @@ QuaternionInstance::QuaternionInstance(double x, double y, double z, double w) {
     Set(TT("w"), std::make_shared<object::FloatObject>(w));
 }
 
-double QuaternionInstance::X() const { return GetValue(TT("x")); }
-double QuaternionInstance::Y() const { return GetValue(TT("y")); }
-double QuaternionInstance::Z() const { return GetValue(TT("z")); }
-double QuaternionInstance::W() const { return GetValue(TT("w")); }
+double QuaternionInstance::X() const { return value_.x; }
+double QuaternionInstance::Y() const { return value_.y; }
+double QuaternionInstance::Z() const { return value_.z; }
+double QuaternionInstance::W() const { return value_.w; }
 
 tstring QuaternionInstance::Inspect() const {
 
     return TT("Quaternion(") +
-        type::convert::DoubleToTString(X()) + TT(", ") +
-        type::convert::DoubleToTString(Y()) + TT(", ") +
-        type::convert::DoubleToTString(Z()) + TT(", ") +
-        type::convert::DoubleToTString(W()) + TT(")");
-}
-
-double QuaternionInstance::GetValue(tstring name) const {
-
-    auto object = Get(name);
-    switch (object->GetType()) {
-        case object::ObjectType::kFloat:
-            return std::static_pointer_cast<object::FloatObject>(object)->GetValue();
-        case object::ObjectType::kInteger:
-            return std::static_pointer_cast<object::IntegerObject>(object)->GetValue();
-        default:
-            return 0;
-    }
+        type::convert::DoubleToTString(value_.x) + TT(", ") +
+        type::convert::DoubleToTString(value_.y) + TT(", ") +
+        type::convert::DoubleToTString(value_.z) + TT(", ") +
+        type::convert::DoubleToTString(value_.w) + TT(")");
 }
 
 bool QuaternionInstance::TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) {
@@ -55,7 +43,11 @@ bool QuaternionInstance::TrySetProperty(const tstring& name, std::shared_ptr<obj
             default:
                 return false; // 数値以外は拒否
         }
-
+        // 内部 math::Quaternion を更新
+        if (name == TT("x")) value_.x = v;
+        else if (name == TT("y")) value_.y = v;
+        else if (name == TT("z")) value_.z = v;
+        else if (name == TT("w")) value_.w = v;
         Set(name, std::make_shared<object::FloatObject>(v));
         return true;
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Types.h"
+#include "Foundation/Math/Quaternion.h"
 #include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::object { class FloatObject; }
@@ -13,6 +14,7 @@ public:
 
 public:
     QuaternionInstance(double x, double y, double z, double w);
+    const math::Quaternion& GetValue() const { return value_; }
     double X() const;
     double Y() const;
     double Z() const;
@@ -22,7 +24,7 @@ public:
     bool TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) override;
 
 private:
-    double GetValue(tstring name) const;
+    math::Quaternion value_;
 };
 
 }

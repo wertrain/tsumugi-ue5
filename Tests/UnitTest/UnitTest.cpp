@@ -2284,7 +2284,6 @@ namespace UnitTest
 
 				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
 				auto environment = std::make_shared<tsumugi::script::object::Environment>();
-				environment->CreateGlobalEnvironment(); // © Vector3Class ‚ð“o˜^
 				auto evaluated = evaluator->Eval(root.get(), environment);
 
 				tt.tester(evaluated.get());
@@ -2433,7 +2432,6 @@ namespace UnitTest
 
 				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
 				auto environment = std::make_shared<tsumugi::script::object::Environment>();
-				environment->CreateGlobalEnvironment(); // Vector2Class ‚ð“o˜^
 				auto evaluated = evaluator->Eval(root.get(), environment);
 
 				tt.tester(evaluated.get());
@@ -2622,7 +2620,6 @@ namespace UnitTest
 
 				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
 				auto environment = std::make_shared<tsumugi::script::object::Environment>();
-				environment->CreateGlobalEnvironment(); // Quaternion ‚ð“o˜^
 				auto evaluated = evaluator->Eval(root.get(), environment);
 
 				tt.tester(evaluated.get());
