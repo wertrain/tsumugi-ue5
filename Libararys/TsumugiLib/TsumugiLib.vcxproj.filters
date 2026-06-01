@@ -73,6 +73,15 @@
     <Filter Include="Tsumugi\Private\Foundation\Math">
       <UniqueIdentifier>{aeb0aaff-2554-4a1a-82e9-a4dea0f848e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Text\Parser">
+      <UniqueIdentifier>{c313082a-4e6a-4666-8091-d6b888bd2f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Text\AST">
+      <UniqueIdentifier>{b1a87a45-eb74-469c-9027-949b2b8e6a50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Text\AST\Statements">
+      <UniqueIdentifier>{e0d656f1-b922-4779-a507-2f5fd5697291}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -351,6 +360,24 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctionRegistry.h">
       <Filter>Tsumugi\Private\Script\Builtins</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextTokenTypes.h">
+      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\TextParser.h">
+      <Filter>Tsumugi\Private\Text\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextLabelStatement.h">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\TextProgram.h">
+      <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextStatement.h">
+      <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextNode.h">
+      <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -610,6 +637,24 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctionRegistry.cpp">
       <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextTokenTypes.cpp">
+      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\TextParser.cpp">
+      <Filter>Tsumugi\Private\Text\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextLabelStatement.cpp">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\TextProgram.cpp">
+      <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextStatement.cpp">
+      <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextNode.cpp">
+      <Filter>Tsumugi\Private\Text\AST</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

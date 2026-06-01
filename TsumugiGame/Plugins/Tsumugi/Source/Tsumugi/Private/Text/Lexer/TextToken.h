@@ -1,82 +1,36 @@
 #pragma once
 
 #include "Foundation/Types.h"
+#include "Text/Lexer/TextTokenTypes.h"
+#include "Script/Lexer/ScriptLexingTypes.h"
 
-namespace tsumugi::text::Lexer{
+namespace tsumugi::script::lexer { class LexingPosition; }
 
-    /// <summary>
-    /// トークン種類
-    /// </summary>
-    enum class TokenType {
+namespace tsumugi::text::lexer {
 
-        /// <summary>
-        /// 不正なトークン
-        /// </summary>
-        kIllegal,
+/// <summary>
+/// トークン
+/// </summary>
+class Token {
+public:
+    Token();
+    Token(const TokenType token_type, const tstring& literal_string, bool lineHead);
+    Token(const TokenType token_type, const tstring& literal_string, bool lineHead, const script::lexer::LexingPosition& position);
+    ~Token();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        kEOF,
-
-        /// <summary>
-        /// テキスト
-        /// </summary>
-        kText,
-
-        /// <summary>
-        /// タグ
-        /// </summary>
-        kTag,
-
-        /// <summary>
-        /// タグ終了
-        /// </summary>
-        kTagEnd,
-
-        /// <summary>
-        /// タグの属性名
-        /// </summary>
-        kTagAttributeName,
-
-        /// <summary>
-        /// タグの属性値
-        /// </summary>
-        kTagAttributeValue,
-
-        /// <summary>
-        /// ラベル
-        /// </summary>
-        kLabel,
-
-        /// <summary>
-        /// ラベルの見出し
-        /// </summary>
-        kLabelHeadline,
-
-        /// <summary>
-        /// 代入文字
-        /// </summary>
-        kAssign
-    };
-
-    /// <summary>
-    /// トークン
-    /// </summary>
-    class Token {
-    public:
-        Token();
-        Token(const TokenType token_type, const tstring& literal_string);
-        ~Token();
-
-        const TokenType GetTokenType() const;
-        void SetTokenType(const TokenType token_type);
+    const TokenType GetTokenType() const;
+    void SetTokenType(const TokenType token_type);
         
-        const tstring& GetLiteral() const;
-        void SetLiteral(const tstring& literal_string);
+    const tstring& GetLiteral() const;
+    void SetLiteral(const tstring& literal_string);
 
-    private:
-        TokenType token_type_;
-        tstring literal_;
-    };
+    bool IsLineHead() const { return isLineHead_; }
+
+private:
+    TokenType token_type_;
+    tstring literal_;
+    script::lexer::LexingPosition position_;
+    bool isLineHead_;
+};
+
 }

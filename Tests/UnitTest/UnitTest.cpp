@@ -39,6 +39,8 @@
 #include "Script/Lexer/LexingStringReader.h"
 #include "Script/Evaluator/Evaluator.h"
 #include "Log/TextLogger.h"
+#include "Text/Lexer/TextLexer.h"
+#include "Text/Lexer/TextToken.h"
 #include <vector>
 #include <variant>
 
@@ -147,6 +149,48 @@ namespace UnitTest
 				Assert::IsNotNull(nextToken);
 				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true, 
 					MSG("Expected " << tsumugi::script::lexer::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::script::lexer::TokenTypeToString(nextToken->GetTokenType())));
+				//Assert::AreEqual(testToken->GetLiteral().compare(nextToken->GetLiteral()), 0);
+				delete nextToken;
+			}
+			testTokens.clear();
+		}
+
+		TEST_METHOD(SimpleTextLexer)
+		{
+			auto input = 
+				TT("[wait time=200]\n")
+				TT("*start | スタート\r\n")
+				TT("[cm]\r\n")
+				TT("こんにちは。\n");
+			tsumugi::text::lexer::Lexer lexer(input);
+
+			std::vector<tsumugi::text::lexer::Token*> testTokens;
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagOpen, TT("["), true));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("wait"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("time"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kAssign, TT("="), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("200"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagClose, TT("]"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("\\n"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kAsterisk, TT("*"), true));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("start"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kPipe, TT("|"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("スタート"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("\\r\\n"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagOpen, TT("["), true));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("cm"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagClose, TT("]"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("\\r\\n"), false));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("こんにちは。"), true));
+			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("(\\n"), false));
+
+			for (const auto* testToken : testTokens)
+			{
+				const auto* nextToken = lexer.NextToken();
+				Logger::WriteMessage((TT("\nTesting code: ") + testToken->GetLiteral()).c_str());
+				Assert::IsNotNull(nextToken);
+				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true,
+					MSG("Expected " << tsumugi::text::lexer::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::text::lexer::TokenTypeToString(nextToken->GetTokenType())));
 				//Assert::AreEqual(testToken->GetLiteral().compare(nextToken->GetLiteral()), 0);
 				delete nextToken;
 			}
@@ -561,7 +605,7 @@ namespace UnitTest
 
 				this->_TestInfixExpression(expression->GetCondition().get(), TT("x"), TT("<"), TT("y"));
 
-				auto consequenceBlock = expression->GetConsequence();
+				auto& consequenceBlock = expression->GetConsequence();
 				Assert::AreEqual(size_t(1), consequenceBlock->GetStatements().size(), MSG("The number of sentences in Consequence is not 1."));
 
 				auto* consequenceStmt = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(consequenceBlock->GetStatements()[0].get());
@@ -598,7 +642,7 @@ namespace UnitTest
 
 				this->_TestInfixExpression(expression->GetCondition().get(), TT("x"), TT("<"), TT("y"));
 
-				auto consequenceBlock = expression->GetConsequence();
+				auto& consequenceBlock = expression->GetConsequence();
 				Assert::AreEqual(size_t(1), consequenceBlock->GetStatements().size(), MSG("The number of sentences in Consequence is not 1."));
 
 				auto* consequenceStmt = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(consequenceBlock->GetStatements()[0].get());

@@ -1,6 +1,6 @@
 #include "Text/Lexer/TextToken.h"
 
-namespace tsumugi::text::Lexer{
+namespace tsumugi::text::lexer {
 
 Token::Token() :
     token_type_(TokenType::kIllegal),
@@ -8,23 +8,41 @@ Token::Token() :
 
 }
 
-Token::Token(const TokenType token_type, const tstring& literal_string) :
+Token::Token(const TokenType token_type, const tstring& literal_string, bool lineHead) :
     token_type_(token_type),
-    literal_(literal_string) {
+    literal_(literal_string),
+    isLineHead_(lineHead),
+    position_() {
+
+}
+
+Token::Token(const TokenType token_type, const tstring& literal_string, bool lineHead, const script::lexer::LexingPosition& position) :
+    token_type_(token_type),
+    literal_(literal_string),
+    isLineHead_(lineHead),
+    position_(position) {
 
 }
 
 Token::~Token() = default;
 
+const TokenType Token::GetTokenType() const {
+
+    return token_type_;
+}
+
 void Token::SetTokenType(const TokenType token_type) {
+
     token_type_ = token_type;
 }
 
 const tstring& Token::GetLiteral() const {
+
     return literal_;
 }
 
 void Token::SetLiteral(const tstring& literal_string) {
+
     literal_ = literal_string;
 }
 

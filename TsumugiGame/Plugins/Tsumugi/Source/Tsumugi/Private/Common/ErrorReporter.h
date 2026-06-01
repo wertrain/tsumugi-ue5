@@ -23,7 +23,7 @@ public:
     }
     // ロガーに書き込む
     template <typename... Args>
-    void LogError(i18n::MessageId id, Args&&... args) const {
+    void LogError(i18n::MessageId id, Args&&... args) {
 
         auto msg = BuildMessage(id, std::forward<Args>(args)...);
         logger_.Log(log::TextLogger::Categories::Error, msg);

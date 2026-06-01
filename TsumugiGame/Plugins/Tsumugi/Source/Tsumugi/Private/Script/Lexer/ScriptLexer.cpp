@@ -21,7 +21,7 @@ Token* Lexer::NextToken() {
     } else {
         tchar c = next;
         switch (c) {
-            case '=':
+            case TT('='):
                 // 次の文字によって、トークンの意味が変わるのでチェックする
                 if (reader_->Peek(1) == TT('=')) {
                     // = が二回続けば比較演算子
