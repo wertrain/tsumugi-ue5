@@ -41,6 +41,11 @@
 #include "Log/TextLogger.h"
 #include "Text/Lexer/TextLexer.h"
 #include "Text/Lexer/TextToken.h"
+#include "Text/Parser/TextParser.h"
+#include "Text/AST/TextProgram.h"
+#include "Text/AST/Statements/LabelStatement.h"
+#include "Text/AST/Statements/TagStatement.h"
+#include "Text/AST/Statements/TextStatement.h"
 #include <vector>
 #include <variant>
 
@@ -195,6 +200,64 @@ namespace UnitTest
 				delete nextToken;
 			}
 			testTokens.clear();
+		}
+
+		TEST_METHOD(TextParserLabelStatement)
+		{
+			tstring testcode =
+				TT("*start | スタート");
+
+			auto lexer = std::make_unique<tsumugi::text::lexer::Lexer>(testcode.c_str());
+			auto parser = std::make_unique<tsumugi::text::parser::Parser>(lexer.get());
+			auto root = parser->ParseProgram();
+
+			Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
+			auto statement = dynamic_cast<const tsumugi::text::ast::statement::LabelStatement*>(root->GetStatement(0));
+			Assert::IsNotNull(statement);
+			Assert::AreEqual(statement->TokenLiteral().compare(TT("*")) == 0, true);
+			Assert::AreEqual(statement->GetLabelName().compare(TT("start")) == 0, true);
+			Assert::AreEqual(statement->GetLabelHeadline().compare(TT("スタート")) == 0, true);
+		}
+
+		TEST_METHOD(TextParserTagStatement)
+		{
+			std::vector<tstring> tests = {
+				TT("[wait time=200]"),
+				TT("@wait time=200"),
+			};
+
+			for (auto& testcode : tests) {
+				Logger::WriteMessage((TT("\nTesting code: ") + testcode + TT("\n")).c_str());
+				auto lexer = std::make_unique<tsumugi::text::lexer::Lexer>(testcode.c_str());
+				auto parser = std::make_unique<tsumugi::text::parser::Parser>(lexer.get());
+				auto root = parser->ParseProgram();
+
+				Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
+				auto statement = dynamic_cast<const tsumugi::text::ast::statement::TagStatement*>(root->GetStatement(0));
+				Assert::IsNotNull(statement);
+				Assert::AreEqual(statement->TokenLiteral().compare(TT("[")) == 0 || statement->TokenLiteral().compare(TT("@")) == 0, true);
+				Assert::AreEqual(statement->GetTagName().compare(TT("wait")) == 0, true);
+				Assert::AreEqual(statement->GetAttributes().at(TT("time")).compare(TT("200")) == 0, true);
+			}
+		}
+
+		TEST_METHOD(TextParserTagStatementMultiAttribute)
+		{
+			tstring testcode =
+				TT("[wait time=200 aaa=test]");
+				TT("@wait time=200 aaa=test");
+
+			auto lexer = std::make_unique<tsumugi::text::lexer::Lexer>(testcode.c_str());
+			auto parser = std::make_unique<tsumugi::text::parser::Parser>(lexer.get());
+			auto root = parser->ParseProgram();
+
+			Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
+			auto statement = dynamic_cast<const tsumugi::text::ast::statement::TagStatement*>(root->GetStatement(0));
+			Assert::IsNotNull(statement);
+			Assert::AreEqual(statement->TokenLiteral().compare(TT("[")) == 0, true);
+			Assert::AreEqual(statement->GetTagName().compare(TT("wait")) == 0, true);
+			Assert::AreEqual(statement->GetAttributes().at(TT("time")).compare(TT("200")) == 0, true);
+			Assert::AreEqual(statement->GetAttributes().at(TT("aaa")).compare(TT("test")) == 0, true);
 		}
 
 		TEST_METHOD(SimpleCode)

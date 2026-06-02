@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Text/Lexer/TextTokenTypes.h"
@@ -9,6 +9,8 @@ namespace tsumugi::text::lexer { class Token; }
 namespace tsumugi::text::ast { class Program; }
 namespace tsumugi::text::ast { class IStatement; }
 namespace tsumugi::text::ast::statement { class LabelStatement; }
+namespace tsumugi::text::ast::statement { class TagStatement; }
+namespace tsumugi::text::ast::statement { class TextStatement; }
 
 namespace tsumugi::text::parser {
 
@@ -25,6 +27,9 @@ class Parser {public:
 private:
     std::unique_ptr<text::ast::IStatement> ParseStatement();
     std::unique_ptr<text::ast::statement::LabelStatement> ParseLabelStatement();
+    std::unique_ptr<text::ast::statement::TagStatement> ParseTagStatement();
+    std::unique_ptr<text::ast::statement::TagStatement> ParseAtMarkTagStatement();
+    std::unique_ptr<text::ast::statement::TextStatement> ParseTextStatement();
 
     void ReadToken();
     bool CurrentTokenIs(const text::lexer::TokenType& type);

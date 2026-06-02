@@ -366,9 +366,6 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\TextParser.h">
       <Filter>Tsumugi\Private\Text\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextLabelStatement.h">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\TextProgram.h">
       <Filter>Tsumugi\Private\Text\AST</Filter>
     </ClInclude>
@@ -377,6 +374,15 @@
     </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextNode.h">
       <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\LabelStatement.h">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TagStatement.h">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextStatement.h">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -644,9 +650,6 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\TextParser.cpp">
       <Filter>Tsumugi\Private\Text\Parser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextLabelStatement.cpp">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\TextProgram.cpp">
       <Filter>Tsumugi\Private\Text\AST</Filter>
     </ClCompile>
@@ -655,6 +658,15 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextNode.cpp">
       <Filter>Tsumugi\Private\Text\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\LabelStatement.cpp">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TagStatement.cpp">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextStatement.cpp">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 
@@ -7,6 +7,8 @@ namespace tsumugi::text::ast {
 enum class NodeType {
     kProgram,
     kLabelStatement,
+    kTagStatement,
+    kTextStatement,
     Num
 };
 

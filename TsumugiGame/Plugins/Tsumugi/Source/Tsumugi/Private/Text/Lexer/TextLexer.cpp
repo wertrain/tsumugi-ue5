@@ -1,4 +1,4 @@
-#include "Text/Lexer/TextLexer.h"
+﻿#include "Text/Lexer/TextLexer.h"
 #include "Text/Lexer/TextToken.h"
 #include "Script/Lexer/ScriptLexingTypes.h"
 #include "Script/Lexer/LexingStringReader.h"
@@ -68,7 +68,7 @@ Token* Lexer::NextToken() {
     isLineHead_ = false;
 
     tchar next = reader_->Peek();
-    if (next < 0) {
+    if (next <= 0) {
         token = CreateToken(TokenType::kEOF, tstring(), currentIsLineHead);
     } else {
         tchar c = next;
