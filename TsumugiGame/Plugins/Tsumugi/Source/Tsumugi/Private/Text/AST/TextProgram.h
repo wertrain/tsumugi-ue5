@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Text/AST/ITextNode.h"
@@ -7,7 +7,7 @@
 namespace tsumugi::text::ast {
 
 /// <summary>
-/// 譛ｨ讒矩 Root
+/// 木構造 Root
 /// </summary>
 class Program : public INode {
 public:

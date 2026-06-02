@@ -1,4 +1,4 @@
-﻿#include "Text/Lexer/TextLexer.h"
+#include "Text/Lexer/TextLexer.h"
 #include "Text/Lexer/TextToken.h"
 #include "Script/Lexer/ScriptLexingTypes.h"
 #include "Script/Lexer/LexingStringReader.h"
@@ -6,47 +6,47 @@
 namespace tsumugi::text::lexer {
 
 /// <summary>
-/// 繧ｳ繝ｳ繝医Ο繝ｼ繝ｫ譁・ｭ励・螳夂ｾｩ
+/// コントロール文字の定義
 /// </summary>
 enum SyntaxSymbol : int {
 
     /// <summary>
-    /// 繝ｩ繝吶Ν縺ｮ髢句ｧ区枚蟄・
+    /// ラベルの開始文字
     /// </summary>
     Colon = ':',
 
     /// <summary>
-    /// 陦碁ｭ縺ｮ繝ｩ繝吶Ν螳夂ｾｩ繝槭・繧ｯ
+    /// 行頭のラベル定義マーク
     /// </summary>
     Asterisk = '*',
 
     /// <summary>
-    /// 陦碁ｭ縺ｮ繧ｳ繝槭Φ繝牙ｮ夂ｾｩ繝槭・繧ｯ
+    /// 行頭のコマンド定義マーク
     /// </summary>
     AtMark = '@',
 
     /// <summary>
-    /// 繝ｩ繝吶Ν縺ｮ隕句・縺励そ繝代Ξ繝ｼ繧ｿ繝ｼ
+    /// ラベルの見出しセパレーター
     /// </summary>
     HeadlineSeparator = '|',
 
     /// <summary>
-    /// 繧ｿ繧ｰ縺ｮ髢句ｧ九き繝・さ
+    /// タグの開始カッコ
     /// </summary>
     TagStart = '[',
 
     /// <summary>
-    /// 繧ｿ繧ｰ縺ｮ邨ゆｺ・き繝・さ
+    /// タグの終了カッコ
     /// </summary>
     TagEnd = ']',
 
     /// <summary>
-    /// 繧ｿ繧ｰ螻樊ｧ縺ｮ莉｣蜈･譁・ｭ・
+    /// タグ属性の代入文字
     /// </summary>
     Assignment = '=',
 
     /// <summary>
-    /// 陦碁ｭ縺ｮ繧ｳ繝｡繝ｳ繝医・繝ｼ繧ｯ
+    /// 行頭のコメントマーク
     /// </summary>
     SemiColon = ';',
 };
@@ -168,7 +168,7 @@ bool Lexer::IsDigit(const tchar c) const {
 
 bool Lexer::IsLetter(const tchar c) const {
 
-    /// 蠑墓焚縺鯉ｼ郁ｭ伜挨蟄舌→縺励※譛牙柑縺ｪ・画枚蟄励°繧偵メ繧ｧ繝・け縺吶ｋ
+    /// 引数が（識別子として有効な）文字かをチェックする
     return (TT('a') <= c && c <= TT('z'))
         || (TT('A') <= c && c <= TT('Z'))
         || c == TT('_');

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
 #include "Vector3.h"
 
@@ -20,7 +20,7 @@ struct Quaternion {
     static Quaternion Identity() { return { 0,0,0,1 }; }
 
     // ----------------------------------------
-    // 蝓ｺ譛ｬ
+    // 基本
     // ----------------------------------------
     double Length() const {
         return sqrt(x * x + y * y + z * z + w * w);
@@ -43,14 +43,14 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // 蜈ｱ蠖ｹ
+    // 共役
     // ----------------------------------------
     Quaternion Conjugate() const {
         return { -x, -y, -z, w };
     }
 
     // ----------------------------------------
-    // 騾・
+    // 逆
     // ----------------------------------------
     Quaternion Inverse() const {
         double len2 = LengthSquared();
@@ -59,14 +59,14 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // 蜀・ｩ・
+    // 内積
     // ----------------------------------------
     double Dot(const Quaternion& b) const {
         return x * b.x + y * b.y + z * b.z + w * b.w;
     }
 
     // ----------------------------------------
-    // 繧ｹ繧ｫ繝ｩ繝ｼ貍皮ｮ・
+    // スカラー演算
     // ----------------------------------------
     Quaternion operator*(double s) const {
         return { x * s, y * s, z * s, w * s };
@@ -77,7 +77,7 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // 繝上Α繝ｫ繝医Φ遨搾ｼ亥屓霆｢縺ｮ蜷域・・・
+    // ハミルトン積（回転の合成）
     // ----------------------------------------
     Quaternion operator*(const Quaternion& b) const {
         return {
@@ -89,7 +89,7 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // 繝吶け繝医Ν蝗櫁ｻ｢
+    // ベクトル回転
     // ----------------------------------------
     Vector3 Rotate(const Vector3& v) const {
         double ix = w * v.x + y * v.z - z * v.y;
@@ -109,7 +109,7 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // 霆ｸ縺ｨ隗貞ｺｦ
+    // 軸と角度
     // ----------------------------------------
     static Quaternion FromAxisAngle(const Vector3& axis, double angleRad) {
         Vector3 n = axis.Normalized();
@@ -130,7 +130,7 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // 繧ｪ繧､繝ｩ繝ｼ隗・
+    // オイラー角
     // ----------------------------------------
     static Quaternion FromEuler(double pitch, double yaw, double roll) {
         double cy = cos(yaw * 0.5);
@@ -167,21 +167,21 @@ struct Quaternion {
     }
 
     // ----------------------------------------
-    // Slerp・育帥髱｢邱壼ｽ｢陬憺俣・・
+    // Slerp（球面線形補間）
     // ----------------------------------------
     static Quaternion Slerp(const Quaternion& a, const Quaternion& b, double t) {
         double dot = a.Dot(b);
 
         Quaternion bb = b;
 
-        // 蜿崎ｻ｢縺励※譛遏ｭ邨瑚ｷｯ縺ｫ縺吶ｋ
+        // 反転して最短経路にする
         if (dot < 0.0) {
             bb = b * -1.0;
             dot = -dot;
         }
 
         if (dot > 0.9995) {
-            // 邱壼ｽ｢陬憺俣縺ｧ蜊∝・
+            // 線形補間で十分
             Quaternion r = a * (1.0 - t) + bb * t;
             return r.Normalized();
         }
@@ -195,7 +195,7 @@ struct Quaternion {
         return a * w1 + bb * w2;
     }
 
-    // 邱壼ｽ｢陬憺俣・郁｣懷勧・・
+    // 線形補間（補助）
     Quaternion operator+(const Quaternion& b) const {
         return { x + b.x, y + b.y, z + b.z, w + b.w };
     }

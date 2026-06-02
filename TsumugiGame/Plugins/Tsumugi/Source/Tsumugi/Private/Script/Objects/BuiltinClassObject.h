@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Objects/IObject.h"
@@ -10,27 +10,27 @@ namespace tsumugi::script::object { class BuiltinInstanceObject; }
 
 namespace tsumugi::script::object {
 
-// BuiltinClassObject 縺ｯ縲檎ｵ・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ縲阪ｒ陦ｨ縺吶が繝悶ず繧ｧ繧ｯ繝医・
+// BuiltinClassObject は「組み込みクラス」を表すオブジェクト。
 // 
-// - Random, Math 縺ｮ繧医≧縺ｪ static-only 繧ｯ繝ｩ繧ｹ
-// - Vector3, Transform 縺ｮ繧医≧縺ｪ instance-based 繧ｯ繝ｩ繧ｹ
+// - Random, Math のような static-only クラス
+// - Vector3, Transform のような instance-based クラス
 // 
-// 縺ｮ荳｡譁ｹ繧呈桶縺医ｋ繧医≧縺ｫ險ｭ險医＆繧後※縺・ｋ縲・
+// の両方を扱えるように設計されている。
 // 
-// 縲尽tatic-only 繝｢繝ｼ繝峨・
-//   - prototype 繧呈戟縺溘↑縺・
-//   - 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・荳榊庄・・andom(), Math() 縺ｯ繧ｨ繝ｩ繝ｼ・・
-//   - static 繝｡繧ｽ繝・ラ縺ｮ縺ｿ繧呈署萓帙☆繧・
+// 【static-only モード】
+//   - prototype を持たない
+//   - インスタンス生成不可（Random(), Math() はエラー）
+//   - static メソッドのみを提供する
 // 
-// 縲進nstance-based 繝｢繝ｼ繝峨・
-//   - prototype・・uiltinInstanceObject・峨ｒ謖√▽
-//   - 繧ｯ繝ｩ繧ｹ蜻ｼ縺ｳ蜃ｺ縺励〒繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ繧堤函謌舌〒縺阪ｋ・・ector3(1,2,3)・・
-//   - instance 繝｡繧ｽ繝・ラ縺ｨ static 繝｡繧ｽ繝・ラ縺ｮ荳｡譁ｹ繧呈戟縺ｦ繧・
+// 【instance-based モード】
+//   - prototype（BuiltinInstanceObject）を持つ
+//   - クラス呼び出しでインスタンスを生成できる（Vector3(1,2,3)）
+//   - instance メソッドと static メソッドの両方を持てる
 // 
-// 窶ｻ繝ｦ繝ｼ繧ｶ繝ｼ螳夂ｾｩ繧ｯ繝ｩ繧ｹ・・lass Foo {}・峨↓縺ｯ ClassObject 繧剃ｽｿ逕ｨ縺吶ｋ縲・
-//   BuiltinClassObject 縺ｯ邯呎価繝√ぉ繝ｼ繝ｳ縺ｫ縺ｯ蜿ょ刈縺励↑縺・ｼ育樟迥ｶ縺ｮ莉墓ｧ假ｼ峨・
-//   蟆・擂逧・↓邨・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ縺ｮ邯呎価繧偵し繝昴・繝医☆繧句ｴ蜷医・縲・
-//   ClassObject 縺ｨ讒矩繧堤ｵｱ蜷医☆繧句ｿ・ｦ√′縺ゅｋ縲・
+// ※ユーザー定義クラス（class Foo {}）には ClassObject を使用する。
+//   BuiltinClassObject は継承チェーンには参加しない（現状の仕様）。
+//   将来的に組み込みクラスの継承をサポートする場合は、
+//   ClassObject と構造を統合する必要がある。
 
 class BuiltinClassObject : public IObject {
 public:
@@ -48,7 +48,7 @@ public:
     ObjectType GetType() const override;
 
 public:
-    // 豢ｾ逕溷・縺ｮ繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・縺ｫ菴ｿ逕ｨ縺吶ｋ・井ｸｻ縺ｫ遒ｺ螳溘↓ SetPrototype 縺輔○繧九◆繧√・繧ゅ・・・
+    // 派生先のインスタンス生成に使用する（主に確実に SetPrototype させるためのもの）
     //template <typename T = object::BuiltinInstanceObject, typename... Args>
     //std::shared_ptr<T> CreateInstance(Args&&... args) const {
     //    auto instance = std::make_shared<T>(std::forward<Args>(args)...);
@@ -64,7 +64,7 @@ private:
 private:
     tstring name_;
     std::unordered_map<tstring, std::shared_ptr<IObject>> staticMethods_;
-    std::shared_ptr<BuiltinInstanceObject> prototype_; // null 縺ｮ蝣ｴ蜷医・ static-only 繝｢繝ｼ繝・
+    std::shared_ptr<BuiltinInstanceObject> prototype_; // null の場合は static-only モード
     std::function<std::shared_ptr<IObject>(const std::vector<std::shared_ptr<IObject>>&)> instanceCreator_;
 };
 

@@ -1,4 +1,4 @@
-﻿#include "Script/Lexer/ScriptLexer.h"
+#include "Script/Lexer/ScriptLexer.h"
 #include "Script/Lexer/ScriptToken.h"
 #include "Script/Lexer/ScriptLexingTypes.h"
 #include "Script/Lexer/LexingStringReader.h"
@@ -22,12 +22,12 @@ Token* Lexer::NextToken() {
         tchar c = next;
         switch (c) {
             case TT('='):
-                // 谺｡縺ｮ譁・ｭ励↓繧医▲縺ｦ縲√ヨ繝ｼ繧ｯ繝ｳ縺ｮ諢丞袖縺悟､峨ｏ繧九・縺ｧ繝√ぉ繝・け縺吶ｋ
+                // 次の文字によって、トークンの意味が変わるのでチェックする
                 if (reader_->Peek(1) == TT('=')) {
-                    // = 縺御ｺ悟屓邯壹￠縺ｰ豈碑ｼ・ｼ皮ｮ怜ｭ・
+                    // = が二回続けば比較演算子
                     token = CreateToken(TokenType::kEqual, TT("=="));
                     reader_->Read();
-                // 縺昴≧縺ｧ縺ｪ縺代ｌ縺ｰ莉｣蜈･貍皮ｮ怜ｭ・
+                // そうでなければ代入演算子
                 } else {
                     token = CreateToken(TokenType::kAssign, tstring(1, c));
                 }
@@ -131,7 +131,7 @@ Token* Lexer::NextToken() {
                     tstring identifier;
                     ReadIdentifier(identifier);
                     auto type = LookupIdentifier(identifier);
-                    // TODO: TokenType::kIdentifier 縺悟ｸｰ縺｣縺ｦ縺阪◆蝣ｴ蜷医・蜃ｦ逅・・螟ｧ荳亥､ｫ・・
+                    // TODO: TokenType::kIdentifier が帰ってきた場合の処理は大丈夫？
                     token = CreateToken(type, identifier);
                 } else {
                     token = CreateToken(TokenType::kIllegal, tstring(1, c));
@@ -164,7 +164,7 @@ bool Lexer::IsDigit(const tchar c) {
 }
 
 bool Lexer::IsLetter(const tchar c) {
-    /// 蠑墓焚縺鯉ｼ郁ｭ伜挨蟄舌→縺励※譛牙柑縺ｪ・画枚蟄励°繧偵メ繧ｧ繝・け縺吶ｋ
+    /// 引数が（識別子として有効な）文字かをチェックする
     return (TT('a') <= c && c <= TT('z'))
         || (TT('A') <= c && c <= TT('Z'))
         || c == TT('_');
@@ -230,16 +230,16 @@ Token* Lexer::CreateAsStringToken() {
         auto ch = reader_->Read();
 
         if (ch == 0) {
-            // 邨らｫｯ縺ｾ縺ｧ髢峨§繧ｯ繧ｩ繝ｼ繝医′辟｡縺・竊・繧ｨ繝ｩ繝ｼ
+            // 終端まで閉じクォートが無い → エラー
             return CreateToken(TokenType::kIllegal, str);
         }
 
         if (ch == quote) {
-            // 蜷後§繧ｯ繧ｩ繝ｼ繝医〒髢峨§繧・
+            // 同じクォートで閉じる
             break;
         }
 
-        // 繧ｨ繧ｹ繧ｱ繝ｼ繝怜ｯｾ蠢懊＠縺溘＞縺ｪ繧峨％縺薙〒蜃ｦ逅・
+        // エスケープ対応したいならここで処理
         if (ch == '\\') {
             auto next = reader_->Read();
             switch (next) {

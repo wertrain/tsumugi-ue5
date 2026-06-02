@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/IStatement.h"
@@ -9,8 +9,8 @@ namespace tsumugi::script::ast { class IExpression; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// Continue 譁・
-/// 螳夂ｾｩ・喞ontinue;
+/// Continue 文
+/// 定義：continue;
 /// </summary>
 class ContinueStatement : public IStatement {
 public:

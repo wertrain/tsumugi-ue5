@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 
@@ -16,21 +16,21 @@ public:
     virtual ~INode();
 
     /// <summary>
-    /// 繝弱・繝峨ち繧､繝励ｒ蜿門ｾ・
+    /// ノードタイプを取得
     /// </summary>
-    /// <returns>繝弱・繝峨ち繧､繝・/returns>
+    /// <returns>ノードタイプ</returns>
     virtual NodeType GetNodeType() const = 0;
 
     /// <summary>
-    /// 繝医・繧ｯ繝ｳ縺ｮ繝ｪ繝・Λ繝ｫ
+    /// トークンのリテラル
     /// </summary>
-    /// <returns>繝医・繧ｯ繝ｳ縺ｮ繝ｪ繝・Λ繝ｫ</returns>
+    /// <returns>トークンのリテラル</returns>
     virtual tstring TokenLiteral() const = 0;
 
     /// <summary>
-    /// 繧ｳ繝ｼ繝峨↓螟画鋤
+    /// コードに変換
     /// </summary>
-    /// <returns>繧ｳ繝ｼ繝・/returns>
+    /// <returns>コード</returns>
     virtual tstring ToCode() const = 0;
 };
 

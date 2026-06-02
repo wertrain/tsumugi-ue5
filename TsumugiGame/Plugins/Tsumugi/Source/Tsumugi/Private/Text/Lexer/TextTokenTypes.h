@@ -1,73 +1,73 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 
 namespace tsumugi::text::lexer {
 
 /// <summary>
-/// 繝医・繧ｯ繝ｳ遞ｮ鬘・
+/// トークン種類
 /// </summary>
 enum class TokenType : int32_t {
 
     /// <summary>
-    /// 荳肴ｭ｣縺ｪ繝医・繧ｯ繝ｳ
+    /// 不正なトークン
     /// </summary>
     kIllegal,
 
     /// <summary>
-    /// 邨らｫｯ繝弱・繝・(End of File)
+    /// 終端ノード (End of File)
     /// </summary>
     kEOF,
 
     /// <summary>
-    /// 險伜捷莉･螟悶・逕溘・譁・ｭ怜・繝ｻ隴伜挨蟄・
-    /// ・亥慍縺ｮ譁・√Λ繝吶Ν蜷阪∬ｦ句・縺怜錐縲√ち繧ｰ蜷阪∝ｱ樊ｧ蜷阪∝ｱ樊ｧ蛟､縺ｮ縺吶∋縺ｦ縺後％繧後↓縺ｪ繧翫∪縺呻ｼ・
+    /// 記号以外の生の文字列・識別子
+    /// （地の文、ラベル名、見出し名、タグ名、属性名、属性値のすべてがこれになります）
     /// </summary>
     kString,
 
     /// <summary>
-    /// 謾ｹ陦・
+    /// 改行
     /// </summary>
     kNewLine,
 
     /// <summary>
-    /// 陦碁ｭ縺ｮ繝ｩ繝吶Ν螳夂ｾｩ繝槭・繧ｯ (*)
+    /// 行頭のラベル定義マーク (*)
     /// </summary>
     kAsterisk,
 
     /// <summary>
-    /// 陦碁ｭ縺ｮ繧ｳ繝槭Φ繝牙ｮ夂ｾｩ繝槭・繧ｯ (@)
+    /// 行頭のコマンド定義マーク (@)
     /// </summary>
     kAtMark,
 
     /// <summary>
-    /// 繝ｩ繝吶Ν縺ｮ隕句・縺励そ繝代Ξ繝ｼ繧ｿ繝ｼ (|)
+    /// ラベルの見出しセパレーター (|)
     /// </summary>
     kPipe,
 
     /// <summary>
-    /// 繧ｿ繧ｰ縺ｮ髢句ｧ九き繝・さ ([)
+    /// タグの開始カッコ ([)
     /// </summary>
     kTagOpen,
 
     /// <summary>
-    /// 繧ｿ繧ｰ縺ｮ髢峨§繧ｫ繝・さ (])
+    /// タグの閉じカッコ (])
     /// </summary>
     kTagClose,
 
     /// <summary>
-    /// 繧ｿ繧ｰ螻樊ｧ縺ｮ莉｣蜈･譁・ｭ・(=)
+    /// タグ属性の代入文字 (=)
     /// </summary>
     kAssign,
 
     /// <summary>
-    /// 陦碁ｭ縺ｮ繧ｳ繝｡繝ｳ繝医・繝ｼ繧ｯ (;)
+    /// 行頭のコメントマーク (;)
     /// </summary>
     kSemiColon
 };
 
 /// <summary>
-/// 繝医・繧ｯ繝ｳ繧ｿ繧､繝励ｒ譁・ｭ怜・縺ｫ螟画峩縺吶ｋ
+/// トークンタイプを文字列に変更する
 /// </summary>
 /// <param name="token_type"></param>
 /// <returns></returns>

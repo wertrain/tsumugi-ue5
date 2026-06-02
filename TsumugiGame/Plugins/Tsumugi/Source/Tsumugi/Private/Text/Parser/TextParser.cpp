@@ -1,4 +1,4 @@
-﻿#include "Text/Parser/TextParser.h"
+#include "Text/Parser/TextParser.h"
 #include "Text/Lexer/TextLexer.h"
 #include "Text/Lexer/TextToken.h"
 #include "Text/AST/ITextStatement.h"
@@ -16,7 +16,7 @@ Parser::Parser(lexer::Lexer* lexer)
 
     assert(lexer != nullptr);
 
-    // 2縺､蛻・・繝医・繧ｯ繝ｳ繧定ｪｭ縺ｿ霎ｼ繧薙〒繧ｻ繝・ヨ縺励※縺翫￥
+    // 2つ分のトークンを読み込んでセットしておく
     currentToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
     nextToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
 }

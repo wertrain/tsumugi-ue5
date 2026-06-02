@@ -1,4 +1,4 @@
-﻿#include "Script/Lexer/LexingStringReader.h"
+#include "Script/Lexer/LexingStringReader.h"
 
 namespace tsumugi::script::lexer {
 
@@ -71,7 +71,7 @@ int LexingStringReader::Seek(int offset) {
 
 int LexingStringReader::Seek(int offset, SeekOrigin origin) {
     
-    // TODO: 陦梧焚縲∝・謨ｰ縺ｮ蜀崎ｨ育ｮ・
+    // TODO: 行数、列数の再計算
 
     switch (origin) {
     case SeekOrigin::kBegin:

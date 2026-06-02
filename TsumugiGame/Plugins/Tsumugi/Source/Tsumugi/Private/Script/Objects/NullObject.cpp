@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/NullObject.h"
+#include "Script/Objects/NullObject.h"
 
 namespace tsumugi::script::object {
 

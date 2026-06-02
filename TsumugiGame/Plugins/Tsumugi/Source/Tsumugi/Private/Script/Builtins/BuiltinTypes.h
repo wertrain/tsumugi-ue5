@@ -1,11 +1,11 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 
 namespace tsumugi::script::builtin {
 
 /// <summary>
-/// 邨・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ蝙・
+/// 組み込みクラス型
 /// </summary>
 enum class BuiltinType : int32_t {
     Vector2,
@@ -17,7 +17,7 @@ enum class BuiltinType : int32_t {
 };
 
 /// <summary>
-/// 邨・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ蜷阪ｒ蜿門ｾ励☆繧・
+/// 組み込みクラス名を取得する
 /// </summary>
 /// <param name="type"></param>
 /// <returns></returns>

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <string>
 #include <string_view>
@@ -6,11 +6,11 @@
 #include <vector>
 #include <iostream>
 
-// 蜀・Κ譁・ｭ怜・繧・char8_t/u8string 縺ｨ縺励※謇ｱ縺・∪縺吶ら樟蝨ｨ縺ｯ譛ｪ蟇ｾ蠢懊〒縺吶・
+// 内部文字列を char8_t/u8string として扱います。現在は未対応です。
 //#define TSUMUGI_SUPPORT_U8STRING (1)
-// 蜀・Κ譁・ｭ怜・繧・wchar_t/std::wstring 縺ｨ縺励※謇ｱ縺・∪縺吶・
+// 内部文字列を wchar_t/std::wstring として扱います。
 #define TSUMUGI_SUPPORT_WCHAR (1)
-// 縺ｩ縺｡繧峨ｂ螳夂ｾｩ縺輔ｌ縺ｦ縺・↑縺・→縺阪・縲∝・驛ｨ譁・ｭ怜・繧・char/std::string 縺ｨ縺励※謇ｱ縺・∪縺吶・
+// どちらも定義されていないときは、内部文字列を char/std::string として扱います。
 
 #if defined (TSUMUGI_SUPPORT_U8STRING)
 // TsumugiString / TsumugiChar

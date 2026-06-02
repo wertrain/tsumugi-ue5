@@ -1,4 +1,4 @@
-﻿#include "Log/LogConsole.h"
+#include "Log/LogConsole.h"
 
 namespace tsumugi::log {
 

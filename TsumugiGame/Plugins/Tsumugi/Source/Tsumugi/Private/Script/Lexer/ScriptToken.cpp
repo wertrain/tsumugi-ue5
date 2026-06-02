@@ -1,4 +1,4 @@
-﻿#include "Script/Lexer/ScriptToken.h"
+#include "Script/Lexer/ScriptToken.h"
 #include <map>
 
 namespace tsumugi::script::lexer{

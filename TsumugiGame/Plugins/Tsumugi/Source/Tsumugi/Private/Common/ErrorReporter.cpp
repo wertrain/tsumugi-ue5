@@ -1,4 +1,4 @@
-﻿#include "Common/ErrorReporter.h"
+#include "Common/ErrorReporter.h"
 
 namespace tsumugi::common {
 

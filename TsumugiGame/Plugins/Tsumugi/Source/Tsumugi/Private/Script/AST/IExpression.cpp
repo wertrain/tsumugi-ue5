@@ -1,4 +1,4 @@
-﻿#include "Script/AST/IExpression.h"
+#include "Script/AST/IExpression.h"
 
 namespace tsumugi::script::ast {
 

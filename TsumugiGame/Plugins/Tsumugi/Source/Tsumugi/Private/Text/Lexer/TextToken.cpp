@@ -1,4 +1,4 @@
-﻿#include "Text/Lexer/TextToken.h"
+#include "Text/Lexer/TextToken.h"
 
 namespace tsumugi::text::lexer {
 
@@ -11,16 +11,16 @@ Token::Token() :
 Token::Token(const TokenType token_type, const tstring& literal_string, bool lineHead) :
     token_type_(token_type),
     literal_(literal_string),
-    position_(),
-    isLineHead_(lineHead) {
+    isLineHead_(lineHead),
+    position_() {
 
 }
 
 Token::Token(const TokenType token_type, const tstring& literal_string, bool lineHead, const script::lexer::LexingPosition& position) :
     token_type_(token_type),
     literal_(literal_string),
-    position_(position),
-    isLineHead_(lineHead) {
+    isLineHead_(lineHead),
+    position_(position) {
 
 }
 

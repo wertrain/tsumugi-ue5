@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/HashMethods.h"
+#include "Script/Objects/HashMethods.h"
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/IntegerObject.h"
@@ -15,8 +15,8 @@ std::optional<std::shared_ptr<object::IObject>> GetHashProperty(object::HashObje
     auto& pairs = hashObject->GetPairs();
 
     // -------------------------
-    // 繝ｦ繝ｼ繧ｶ繝ｼ繧ｪ繝悶ず繧ｧ繧ｯ繝茨ｼ亥・驛ｨ螳滉ｽ薙・繝上ャ繧ｷ繝･・峨→縺励※縺ｮ謖ｯ繧玖・縺・ｒ蜿ｯ閭ｽ縺ｫ縺吶ｋ縺溘ａ縲・
-    // 繝峨ャ繝郁ｨ俶ｳ包ｼ・.x・峨↓繧医ｋ繧｢繧ｯ繧ｻ繧ｹ繧偵∵枚蟄怜・繧ｭ繝ｼ・・["x"]・峨・讀懃ｴ｢縺ｫ繝槭ャ繝斐Φ繧ｰ縺吶ｋ縲・
+    // ユーザーオブジェクト（内部実体はハッシュ）としての振る舞いを可能にするため、
+    // ドット記法（o.x）によるアクセスを、文字列キー（o["x"]）の検索にマッピングする。
     // -------------------------
     {
         auto keyObject = std::make_shared<object::StringObject>(name);
@@ -30,14 +30,14 @@ std::optional<std::shared_ptr<object::IObject>> GetHashProperty(object::HashObje
     }
 
     // -------------------------
-    // 繝励Ο繝代ユ繧｣
+    // プロパティ
     // -------------------------
     if (name == TT("size")) {
         return std::make_shared<object::IntegerObject>(static_cast<int>(pairs.size()));
     }
 
     // -------------------------
-    // 繝｡繧ｽ繝・ラ
+    // メソッド
     // -------------------------
     if (name == TT("keys")) {
         return std::make_shared<object::BuiltinFunctionObject>(

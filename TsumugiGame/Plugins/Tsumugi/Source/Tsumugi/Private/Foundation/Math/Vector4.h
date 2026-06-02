@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
 
 namespace tsumugi::math {
@@ -11,7 +11,7 @@ struct Vector4 {
         : x(x), y(y), z(z), w(w) {}
 
     // ----------------------------------------
-    // 蝓ｺ譛ｬ貍皮ｮ・
+    // 基本演算
     // ----------------------------------------
     Vector4 operator+(const Vector4& b) const { return {x + b.x, y + b.y, z + b.z, w + b.w}; }
     Vector4 operator-(const Vector4& b) const { return {x - b.x, y - b.y, z - b.z, w - b.w}; }
@@ -20,28 +20,28 @@ struct Vector4 {
     Vector4& operator-=(const Vector4& b) { x-=b.x; y-=b.y; z-=b.z; w-=b.w; return *this; }
 
     // ----------------------------------------
-    // 繧ｹ繧ｫ繝ｩ繝ｼ貍皮ｮ・
+    // スカラー演算
     // ----------------------------------------
     Vector4 operator*(double s) const { return {x * s, y * s, z * s, w * s}; }
     Vector4 operator/(double s) const { return {x / s, y / s, z / s, w / s}; }
 
-    // 隕∫ｴ縺斐→縺ｮ荵礼ｮ暦ｼ・atrix4x4 縺ｧ蠢・ｦ・ｼ・
+    // 要素ごとの乗算（Matrix4x4 で必要）
     Vector4 operator*(const Vector4& b) const { return {x * b.x, y * b.y, z * b.z, w * b.w}; }
 
     // ----------------------------------------
-    // 蜀・ｩ・
+    // 内積
     // ----------------------------------------
     double Dot(const Vector4& b) const { return x*b.x + y*b.y + z*b.z + w*b.w; }
 
     // ----------------------------------------
-    // 髟ｷ縺・
+    // 長さ
     // ----------------------------------------
     double Length() const { return std::sqrt(Dot(*this)); }
 
     double LengthSquared() const { return Dot(*this); }
 
     // ----------------------------------------
-    // 豁｣隕丞喧
+    // 正規化
     // ----------------------------------------
     Vector4 Normalized() const {
         double len = Length();
@@ -56,7 +56,7 @@ struct Vector4 {
     }
 
     // ----------------------------------------
-    // 陬懷勧髢｢謨ｰ
+    // 補助関数
     // ----------------------------------------
     static Vector4 Lerp(const Vector4& a, const Vector4& b, double t) {
         return {
@@ -68,7 +68,7 @@ struct Vector4 {
     }
 
     // ----------------------------------------
-    // 螳壽焚
+    // 定数
     // ----------------------------------------
     static Vector4 Zero() { return {0,0,0,0}; }
     static Vector4 One()  { return {1,1,1,1}; }

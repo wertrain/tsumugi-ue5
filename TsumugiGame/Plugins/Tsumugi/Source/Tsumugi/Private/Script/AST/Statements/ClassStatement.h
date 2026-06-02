@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/IStatement.h"
@@ -11,9 +11,9 @@ namespace tsumugi::script::ast::statement { class FunctionStatement; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// Class 譁・
-/// 螳夂ｾｩ・・
-/// class <class蜷・ {
+/// Class 文
+/// 定義：
+/// class <class名> {
 ///     init() {}
 ///     func() {}
 /// }

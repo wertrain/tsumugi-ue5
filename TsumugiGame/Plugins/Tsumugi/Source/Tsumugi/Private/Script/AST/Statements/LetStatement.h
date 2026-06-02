@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/IStatement.h"
@@ -10,8 +10,8 @@ namespace tsumugi::script::ast::expression { class Identifier; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// Let 譁・
-/// 螳夂ｾｩ・嗟et <identifier> = <expression>;
+/// Let 文
+/// 定義：let <identifier> = <expression>;
 /// </summary>
 class LetStatement : public IStatement {
 public:

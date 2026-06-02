@@ -1,9 +1,9 @@
-﻿#pragma once
+#pragma once
 
 namespace tsumugi::script::lexer {
 
 /// <summary>
-/// 隗｣譫蝉ｽ咲ｽｮ
+/// 解析位置
 /// </summary>
 class LexingPosition {
 public:

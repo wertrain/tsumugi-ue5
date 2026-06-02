@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/Protocol/ObjectProtocolDispatcher.h"
+#include "Script/Objects/Protocol/ObjectProtocolDispatcher.h"
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/StringObject.h"

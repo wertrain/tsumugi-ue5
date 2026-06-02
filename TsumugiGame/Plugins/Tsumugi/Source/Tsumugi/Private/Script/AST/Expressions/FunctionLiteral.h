@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/IExpression.h"
@@ -10,8 +10,8 @@ namespace tsumugi::script::ast::statement { class BlockStatement; }
 namespace tsumugi::script::ast::expression {
 
 /// <summary>
-/// 髢｢謨ｰ 蠑・
-/// 螳夂ｾｩ・喃unction (<parameters>) <block statement>
+/// 関数 式
+/// 定義：function (<parameters>) <block statement>
 /// </summary>
 class FunctionLiteral : public IExpression {
 public:

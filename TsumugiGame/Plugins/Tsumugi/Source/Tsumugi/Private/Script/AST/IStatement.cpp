@@ -1,4 +1,4 @@
-﻿#include "Script/AST/IStatement.h"
+#include "Script/AST/IStatement.h"
 
 namespace tsumugi::script::ast {
 

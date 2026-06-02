@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Text/AST/ITextStatement.h"
@@ -8,8 +8,8 @@ namespace tsumugi::text::lexer { class Token; }
 namespace tsumugi::text::ast::statement {
 
 /// <summary>
-/// Label 譁・
-/// *・医Λ繝吶Ν蜷搾ｼ榎・医Λ繝吶Ν隕句・縺暦ｼ・
+/// Label 文
+/// *（ラベル名）|（ラベル見出し）
 /// </summary>
 class LabelStatement : public IStatement {
 public:

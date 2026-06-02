@@ -1,4 +1,4 @@
-﻿#include "Text/AST/ITextStatement.h"
+#include "Text/AST/ITextStatement.h"
 
 namespace tsumugi::text::ast {
 

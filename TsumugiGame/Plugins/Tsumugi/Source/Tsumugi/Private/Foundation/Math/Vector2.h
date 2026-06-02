@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
 
 namespace tsumugi::math {
@@ -10,32 +10,32 @@ struct Vector2 {
     Vector2(double x, double y) : x(x), y(y) {}
 
     // ----------------------------------------
-    // 蝓ｺ譛ｬ貍皮ｮ・
+    // 基本演算
     // ----------------------------------------
     Vector2 operator+(const Vector2& b) const { return {x + b.x, y + b.y}; }
     Vector2 operator-(const Vector2& b) const { return {x - b.x, y - b.y}; }
 
-    // 繧ｹ繧ｫ繝ｩ繝ｼ貍皮ｮ・
+    // スカラー演算
     Vector2 operator*(double s) const { return {x * s, y * s}; }
     Vector2 operator/(double s) const { return {x / s, y / s}; }
 
-    // 隕∫ｴ縺斐→縺ｮ荵礼ｮ暦ｼ・D Transform 縺ｧ蠢・ｦ・ｼ・
+    // 要素ごとの乗算（2D Transform で必要）
     Vector2 operator*(const Vector2& b) const { return {x * b.x, y * b.y}; }
 
     // ----------------------------------------
-    // 蜀・ｩ・
+    // 内積
     // ----------------------------------------
     double Dot(const Vector2& b) const { return x * b.x + y * b.y; }
 
     // ----------------------------------------
-    // 髟ｷ縺・
+    // 長さ
     // ----------------------------------------
     double Length() const { return std::sqrt(x*x + y*y); }
 
     double LengthSquared() const { return x*x + y*y; }
 
     // ----------------------------------------
-    // 豁｣隕丞喧
+    // 正規化
     // ----------------------------------------
     Vector2 Normalized() const {
         double len = Length();
@@ -50,12 +50,12 @@ struct Vector2 {
     }
 
     // ----------------------------------------
-    // 蝙ら峩繝吶け繝医Ν・・D 縺ｧ縺ｯ繧医￥菴ｿ縺・ｼ・
+    // 垂直ベクトル（2D ではよく使う）
     // ----------------------------------------
     Vector2 Perp() const { return {-y, x}; }
 
     // ----------------------------------------
-    // 陬懷勧髢｢謨ｰ
+    // 補助関数
     // ----------------------------------------
     static Vector2 Lerp(const Vector2& a, const Vector2& b, double t) {
         return { a.x + (b.x - a.x) * t,
@@ -70,7 +70,7 @@ struct Vector2 {
     }
 
     // ----------------------------------------
-    // 螳壽焚
+    // 定数
     // ----------------------------------------
     static Vector2 Zero()  { return {0,0}; }
     static Vector2 One()   { return {1,1}; }

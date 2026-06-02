@@ -1,11 +1,11 @@
-﻿#include "Script/Lexer/ScriptTokenTypes.h"
+#include "Script/Lexer/ScriptTokenTypes.h"
 #include <unordered_map>
 
 namespace tsumugi::script::lexer{
 
 const TokenType LookupIdentifier(const tstring& identifier) {
 
-    /// 莠育ｴ・ｪ槭・霎樊嶌
+    /// 予約語の辞書
     static const std::unordered_map<tstring, tsumugi::script::lexer::TokenType> Keywords = {
         { TT("let"), tsumugi::script::lexer::TokenType::kLet },
         { TT("function"), tsumugi::script::lexer::TokenType::kFunction },
@@ -32,7 +32,7 @@ const TokenType LookupIdentifier(const tstring& identifier) {
 
 const tchar* TokenTypeToTString(const TokenType token_type) {
 
-    /// 繧ｿ繧､繝励・霎樊嶌
+    /// タイプの辞書
     static const std::unordered_map<tsumugi::script::lexer::TokenType, const tchar*> Table = {
         { tsumugi::script::lexer::TokenType::kIllegal, TT("kIllegal") },
         { tsumugi::script::lexer::TokenType::kEOF, TT("kEOF") },
@@ -94,7 +94,7 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
 
 const char* TokenTypeToString(const TokenType token_type) {
 
-    // 繝医・繧ｯ繝ｳ繧ｿ繧､繝励・霎樊嶌
+    // トークンタイプの辞書
     static const std::unordered_map<tsumugi::script::lexer::TokenType, const char*> Table = {
         { tsumugi::script::lexer::TokenType::kIllegal, ("kIllegal") },
         { tsumugi::script::lexer::TokenType::kEOF, ("kEOF") },

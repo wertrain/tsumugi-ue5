@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/IStatement.h"
@@ -11,8 +11,8 @@ namespace tsumugi::script::ast::statement { class BlockStatement; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// For 譁・
-/// 螳夂ｾｩ・喃or ( <identifier> in <expression> ) <BlockStatement>
+/// For 文
+/// 定義：for ( <identifier> in <expression> ) <BlockStatement>
 /// </summary>
 class ForStatement : public IStatement {
 public:

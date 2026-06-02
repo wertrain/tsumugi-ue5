@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/BooleanObject.h"
+#include "Script/Objects/BooleanObject.h"
 
 namespace tsumugi::script::object {
 

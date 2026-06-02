@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/ErrorObject.h"
+#include "Script/Objects/ErrorObject.h"
 
 namespace tsumugi::script::object {
 

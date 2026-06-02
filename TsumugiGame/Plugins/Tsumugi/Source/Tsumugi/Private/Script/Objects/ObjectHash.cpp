@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/ObjectHash.h"
+#include "Script/Objects/ObjectHash.h"
 #include "Script/Objects/ObjectTypes.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/IntegerObject.h"

@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/ObjectTypes.h"
+#include "Script/Objects/ObjectTypes.h"
 #include "Script/Objects/IObject.h"
 #include <unordered_map>
 

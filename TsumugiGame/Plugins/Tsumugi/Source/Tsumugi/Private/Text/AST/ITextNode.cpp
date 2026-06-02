@@ -1,4 +1,4 @@
-﻿#include "Text/AST/ITextNode.h"
+#include "Text/AST/ITextNode.h"
 
 namespace tsumugi::text::ast {
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Quaternion.h"
@@ -6,7 +6,7 @@
 namespace tsumugi::math {
 
 struct Matrix4x4 {
-    double m[16]; // 陦悟━蜈・
+    double m[16]; // 行優先
 
     Matrix4x4() {
         for (int i = 0; i < 16; i++) m[i] = 0;
@@ -15,7 +15,7 @@ struct Matrix4x4 {
 
     static Matrix4x4 Identity() { return Matrix4x4(); }
 
-    // 蟷ｳ陦檎ｧｻ蜍戊｡悟・
+    // 平行移動行列
     static Matrix4x4 Translate(const Vector3& v) {
         Matrix4x4 r;
         r.m[12] = v.x;
@@ -24,7 +24,7 @@ struct Matrix4x4 {
         return r;
     }
 
-    // 繧ｹ繧ｱ繝ｼ繝ｫ陦悟・
+    // スケール行列
     static Matrix4x4 Scale(const Vector3& v) {
         Matrix4x4 r;
         r.m[0] = v.x;
@@ -33,7 +33,7 @@ struct Matrix4x4 {
         return r;
     }
 
-    // 蝗櫁ｻ｢陦悟・・医け繧ｩ繝ｼ繧ｿ繝九が繝ｳ・・
+    // 回転行列（クォータニオン）
     static Matrix4x4 Rotate(const Quaternion& q) {
         Matrix4x4 r;
         double x = q.x, y = q.y, z = q.z, w = q.w;
@@ -53,7 +53,7 @@ struct Matrix4x4 {
         return r;
     }
 
-    // 陦悟・荵礼ｮ・
+    // 行列乗算
     Matrix4x4 operator*(const Matrix4x4& b) const {
         Matrix4x4 r;
         for (int row = 0; row < 4; row++) {
@@ -68,7 +68,7 @@ struct Matrix4x4 {
         return r;
     }
 
-    // Vector4 縺ｨ縺ｮ荵礼ｮ・
+    // Vector4 との乗算
     Vector4 operator*(const Vector4& v) const {
         return {
             m[0] * v.x + m[4] * v.y + m[8]  * v.z + m[12] * v.w,
@@ -78,13 +78,13 @@ struct Matrix4x4 {
         };
     }
 
-    // Vector3 繧貞酔谺｡蠎ｧ讓吶→縺励※謇ｱ縺・ｼ・=1・・
+    // Vector3 を同次座標として扱う（w=1）
     Vector3 MultiplyPoint(const Vector3& v) const {
         Vector4 r = (*this) * Vector4(v.x, v.y, v.z, 1.0);
         return {r.x, r.y, r.z};
     }
 
-    // Vector3 繧呈婿蜷代・繧ｯ繝医Ν縺ｨ縺励※謇ｱ縺・ｼ・=0・・
+    // Vector3 を方向ベクトルとして扱う（w=0）
     Vector3 MultiplyVector(const Vector3& v) const {
         Vector4 r = (*this) * Vector4(v.x, v.y, v.z, 0.0);
         return {r.x, r.y, r.z};

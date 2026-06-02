@@ -1,4 +1,4 @@
-﻿#include "Text/AST/Statements/TextLabelStatement.h"
+#include "Text/AST/Statements/TextLabelStatement.h"
 #include "Text/Lexer/TextToken.h"
 
 namespace tsumugi::text::ast::statement {

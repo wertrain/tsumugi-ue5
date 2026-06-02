@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Lexer/ScriptTokenTypes.h"
@@ -7,7 +7,7 @@
 namespace tsumugi::script::lexer{
 
 /// <summary>
-/// 繝医・繧ｯ繝ｳ
+/// トークン
 /// </summary>
 class Token {
 public:

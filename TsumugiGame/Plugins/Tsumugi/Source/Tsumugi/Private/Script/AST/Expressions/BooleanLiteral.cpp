@@ -1,4 +1,4 @@
-﻿#include "Script/AST/Expressions/BooleanLiteral.h"
+#include "Script/AST/Expressions/BooleanLiteral.h"
 #include "Script/Lexer/ScriptToken.h"
 
 namespace tsumugi::script::ast::expression {

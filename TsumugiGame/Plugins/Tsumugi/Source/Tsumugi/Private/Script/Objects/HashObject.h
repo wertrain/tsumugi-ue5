@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Objects/IObject.h"
@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <optional>
 
-// unordered_map 縺ｮ繧ｭ繝ｼ縺ｫ縺吶ｋ縺溘ａ縺ｮ std::hash 縺ｮ迚ｹ谿雁喧
+// unordered_map のキーにするための std::hash の特殊化
 /*namespace std {
     template <>
     struct hash<tsumugi::script::object::HashKey> {

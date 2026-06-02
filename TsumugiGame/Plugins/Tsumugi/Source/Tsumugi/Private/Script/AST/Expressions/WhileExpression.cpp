@@ -1,4 +1,4 @@
-﻿#include "Script/AST/Expressions/WhileExpression.h"
+#include "Script/AST/Expressions/WhileExpression.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/Lexer/ScriptToken.h"
 

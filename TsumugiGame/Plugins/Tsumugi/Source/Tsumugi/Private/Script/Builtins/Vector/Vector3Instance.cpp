@@ -1,4 +1,4 @@
-﻿#include "Script/Builtins/Vector/Vector3Instance.h"
+#include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Objects/FloatObject.h"
 #include "Script/Objects/IntegerObject.h"
 
@@ -38,10 +38,10 @@ bool Vector3Instance::TrySetProperty(const tstring& name, std::shared_ptr<object
                 v = static_cast<object::IntegerObject*>(value.get())->GetValue();
                 break;
             default:
-                return false; // 謨ｰ蛟､莉･螟悶・諡貞凄
+                return false; // 数値以外は拒否
         }
 
-        // 蜀・Κ math::Vector3 繧呈峩譁ｰ
+        // 内部 math::Vector3 を更新
         if      (name == TT("x")) value_.x = v;
         else if (name == TT("y")) value_.y = v;
         else if (name == TT("z")) value_.z = v;

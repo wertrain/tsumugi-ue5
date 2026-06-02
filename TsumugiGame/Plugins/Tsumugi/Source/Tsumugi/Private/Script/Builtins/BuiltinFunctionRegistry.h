@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
@@ -13,15 +13,15 @@ namespace tsumugi::script::builtin {
 class BuiltinFunctionRegistry {
 public:
     /// <summary>
-    /// 髢｢謨ｰ繧堤匳骭ｲ縺吶ｋ
+    /// 関数を登録する
     /// </summary>
     static void Register(const tstring& name, std::shared_ptr<object::BuiltinFunctionObject> fn);
     /// <summary>
-    /// 蜷榊燕縺九ｉ髢｢謨ｰ繧貞叙蠕励☆繧・
+    /// 名前から関数を取得する
     /// </summary>
     static std::shared_ptr<object::BuiltinFunctionObject> Get(const tstring& name);
     /// <summary>
-    /// 縺吶∋縺ｦ縺ｮ繝薙Ν繝医う繝ｳ髢｢謨ｰ繧貞・譛溷喧縺吶ｋ
+    /// すべてのビルトイン関数を初期化する
     /// </summary>
     static void Initialize();
 
@@ -36,7 +36,7 @@ private:
 };
 
 /// <summary>
-/// 縺吶∋縺ｦ縺ｮ髢｢謨ｰ繧堤匳骭ｲ縺吶ｋ
+/// すべての関数を登録する
 /// </summary>
 void InitializeBuiltinFunctions();
 

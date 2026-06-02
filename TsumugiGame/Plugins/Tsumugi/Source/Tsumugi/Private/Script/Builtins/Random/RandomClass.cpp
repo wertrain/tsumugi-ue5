@@ -1,4 +1,4 @@
-﻿#include "Script/Builtins/Random/RandomClass.h"
+#include "Script/Builtins/Random/RandomClass.h"
 #include "Script/Builtins/Random/RandomInstance.h"
 #include "Script/Objects/BuiltinClassObject.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
@@ -16,11 +16,11 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
 
     auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Random));
 
-    // 繝ｩ繝繝蜀・〒縺ｮ蠕ｪ迺ｰ蜿ら・繧帝亟縺舌◆繧√↓ weak_ptr 繧剃ｽ懈・
+    // ラムダ内での循環参照を防ぐために weak_ptr を作成
     //std::weak_ptr<object::BuiltinClassObject> weakClass = klass;
 
     //
-    // --- 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・ ---
+    // --- インスタンス生成 ---
     //
     //klass->SetInstanceCreator(
     //    [weakClass](const std::vector<std::shared_ptr<object::IObject>>& args)
@@ -34,11 +34,11 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
     //);
 
     //
-    // --- instance 繝｡繧ｽ繝・ラ ---
+    // --- instance メソッド ---
     //
 
     //
-    // --- static 繝｡繧ｽ繝・ラ ---
+    // --- static メソッド ---
     //
 
     //
@@ -127,7 +127,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
 
                 if (elems.empty()) return object::NullObject::Instance();
 
-                std::uniform_int_distribution<int> dist(0, static_cast<int>(elems.size()) - 1);
+                std::uniform_int_distribution<int> dist(0, elems.size() - 1);
                 return elems[dist(g_rng)];
             }
         )

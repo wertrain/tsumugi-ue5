@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/UserObject.h"
+#include "Script/Objects/UserObject.h"
 #include "Script/Objects/ClassObject.h"
 
 namespace tsumugi::script::object {
@@ -78,13 +78,13 @@ ObjectType UserObject::GetType() const {
 
 std::optional<std::shared_ptr<object::IObject>> UserObject::TryGetProperty(const tstring& name) {
 
-    // 閾ｪ蛻・・霄ｫ縺ｮ繝励Ο繝代ユ繧｣
+    // 自分自身のプロパティ
     auto it = properties_.find(name);
     if (it != properties_.end()) {
         return it->second;
     }
 
-    // 繝励Ο繝医ち繧､繝励ｒ霎ｿ繧・
+    // プロトタイプを辿る
     if (prototype_) {
         return prototype_->TryGetProperty(name);
     }

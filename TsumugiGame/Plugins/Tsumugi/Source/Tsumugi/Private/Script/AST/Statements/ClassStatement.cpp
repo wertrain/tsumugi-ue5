@@ -1,4 +1,4 @@
-﻿#include "Script/AST/Statements/ClassStatement.h"
+#include "Script/AST/Statements/ClassStatement.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Statements/FunctionStatement.h"
 #include "Script/Lexer/ScriptToken.h"

@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/BuiltinFunctionObject.h"
+#include "Script/Objects/BuiltinFunctionObject.h"
 
 namespace tsumugi::script::object {
 

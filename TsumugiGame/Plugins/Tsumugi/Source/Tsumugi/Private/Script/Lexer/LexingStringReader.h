@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Lexer/ScriptLexingTypes.h"
@@ -6,7 +6,7 @@
 namespace tsumugi::script::lexer {
 
 /// <summary>
-/// 蟄怜唱隗｣譫千畑縺ｮ StringReader 繧ｯ繝ｩ繧ｹ
+/// 字句解析用の StringReader クラス
 /// </summary>
 class LexingStringReader {
 public:

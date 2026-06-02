@@ -1,4 +1,4 @@
-﻿#include "Script/Objects/FloatObject.h"
+#include "Script/Objects/FloatObject.h"
 
 namespace tsumugi::script::object {
 
