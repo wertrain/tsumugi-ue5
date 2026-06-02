@@ -1,7 +1,7 @@
-#include "Script/Parser/ScriptParser.h"
+﻿#include "Script/Parser/ScriptParser.h"
 #include "Script/Lexer/ScriptLexer.h"
 #include "Script/Lexer/ScriptToken.h"
-#include "Script/AST/Root.h"
+#include "Script/AST/Program.h"
 #include "Script/AST/Statements/LetStatement.h"
 #include "Script/AST/Statements/ReturnStatement.h"
 #include "Script/AST/Statements/ExpressionStatement.h"
@@ -73,18 +73,6 @@ Parser::Parser(lexer::Lexer* lexer)
 }
 
 Parser::~Parser() = default;
-
-void Parser::ReadToken() {
-
-    currentToken_ = nextToken_;
-    nextToken_.reset();
-    nextToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
-}
-
-ast::Root* Parser::ParseRoot() {
-
-    return nullptr;
-}
 
 std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
 
@@ -189,8 +177,8 @@ std::shared_ptr<script::ast::statement::BlockStatement> Parser::ParseBlockStatem
     ReadToken();
 
     while (
-        currentToken_->GetTokenType() != lexer::TokenType::kRightBraces &&
-        currentToken_->GetTokenType() != lexer::TokenType::kEOF) {
+        !CurrentTokenIs(lexer::TokenType::kRightBraces) &&
+        !CurrentTokenIs(lexer::TokenType::kEOF)) {
 
         auto statement = ParseStatement();
         if (statement) {
@@ -364,7 +352,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseExpression(const Preceden
         return nullptr;
     }
 
-    while (nextToken_->GetTokenType() != lexer::TokenType::kSemicolon && precedence < GetNextPrecedence()) {
+    while (!PeekTokenIs(lexer::TokenType::kSemicolon) && precedence < GetNextPrecedence()) {
 
         if (auto it = infixParseFunctions_.find(nextToken_->GetTokenType()); it != infixParseFunctions_.end()) {
             auto [keyFound, value] = *it;
@@ -422,7 +410,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseStringLiteral() {
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseBooleanLiteral() {
 
-    return std::make_unique<ast::expression::BooleanLiteral>(currentToken_, currentToken_->GetTokenType() == lexer::TokenType::kTrue);
+    return std::make_unique<ast::expression::BooleanLiteral>(currentToken_, CurrentTokenIs(lexer::TokenType::kTrue));
 }
 
 std::unique_ptr<script::ast::IExpression> Parser::ParseNullLiteral() {
@@ -443,7 +431,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseArrayLiteral() {
     ReadToken();
 
     // 空の配列の場合
-    if (currentToken_->GetTokenType() == lexer::TokenType::kRightBrackets) {
+    if (CurrentTokenIs(lexer::TokenType::kRightBrackets)) {
         return std::make_unique<ast::expression::ArrayLiteral>(currentToken_, std::move(list));
     }
 
@@ -454,7 +442,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseArrayLiteral() {
     list.push_back(std::move(parameter));
 
     // カンマが続く限り読み続ける
-    while (nextToken_->GetTokenType() == lexer::TokenType::kComma) {
+    while (PeekTokenIs(lexer::TokenType::kComma)) {
 
         // カンマか読み込み済み識別子をスキップ
         ReadToken();
@@ -609,7 +597,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseIfExpression() {
     auto blockif = ParseBlockStatement();
     expression->SetConsequence(std::move(blockif));
 
-    if (nextToken_->GetTokenType() == lexer::TokenType::kElse) {
+    if (PeekTokenIs(lexer::TokenType::kElse)) {
         
         ReadToken();
 
@@ -798,7 +786,7 @@ bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::e
     parameters.clear();
 
     // 引数なしの関数の場合
-    if (nextToken_->GetTokenType() == lexer::TokenType::kRightParenthesis) {
+    if (PeekTokenIs(lexer::TokenType::kRightParenthesis)) {
         ReadToken(); 
         return true;
     }
@@ -807,7 +795,7 @@ bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::e
     auto first = std::make_shared<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
     parameters.push_back(first);
 
-    while (nextToken_->GetTokenType() == lexer::TokenType::kComma) {
+    while (PeekTokenIs(lexer::TokenType::kComma)) {
 
         // カンマか読み込み済み識別子をスキップ
         ReadToken();
@@ -833,7 +821,7 @@ bool Parser::ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast
     ReadToken();
 
     // 引数なしの関数呼び出しの場合
-    if (currentToken_->GetTokenType() == lexer::TokenType::kRightParenthesis) {
+    if (CurrentTokenIs(lexer::TokenType::kRightParenthesis)) {
         return true;
     }
 
@@ -845,7 +833,7 @@ bool Parser::ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast
     arguments.push_back(std::move(first_argument));
 
     // 2つ目以降の引数があればそれを解析
-    while (nextToken_->GetTokenType() == lexer::TokenType::kComma) {
+    while (PeekTokenIs(lexer::TokenType::kComma)) {
 
         // カンマか読み込み済み識別子をスキップ
         ReadToken();
@@ -866,9 +854,9 @@ bool Parser::ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast
     return true;
 }
 
-std::unique_ptr<ast::Root> Parser::ParseProgram() {
+std::unique_ptr<ast::Program> Parser::ParseProgram() {
 
-    auto root = std::make_unique<ast::Root>();
+    auto root = std::make_unique<ast::Program>();
     while (currentToken_.get()->GetTokenType() != lexer::TokenType::kEOF) {
         if (auto statement = ParseStatement()) {
             root->AddStatement(std::move(statement));
@@ -876,6 +864,21 @@ std::unique_ptr<ast::Root> Parser::ParseProgram() {
         ReadToken();
     }
     return root;
+}
+
+void Parser::ReadToken() {
+
+    currentToken_ = nextToken_;
+    nextToken_.reset();
+    nextToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
+}
+
+bool Parser::CurrentTokenIs(const lexer::TokenType& type) {
+
+    if (currentToken_->GetTokenType() == type) {
+        return true;
+    }
+    return false;
 }
 
 bool Parser::PeekTokenIs(const lexer::TokenType& type) {

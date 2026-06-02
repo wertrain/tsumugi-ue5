@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/INode.h"
@@ -7,14 +7,12 @@
 namespace tsumugi::script::ast {
 
 /// <summary>
-/// 木構造 Root
-/// TODO:
-///     リネーム > Program
+/// 木構造 Program
 /// </summary>
-class Root : public INode {
+class Program : public INode {
 public:
-    Root();
-    ~Root();
+    Program();
+    ~Program();
     NodeType GetNodeType() const final override { return NodeType::kProgram; }
     tstring TokenLiteral() const final override;
     tstring ToCode() const final override;

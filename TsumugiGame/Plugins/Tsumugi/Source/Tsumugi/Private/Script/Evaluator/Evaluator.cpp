@@ -1,6 +1,6 @@
-#include "Script/Evaluator/Evaluator.h"
+﻿#include "Script/Evaluator/Evaluator.h"
 #include "Script/AST/INode.h"
-#include "Script/AST/Root.h"
+#include "Script/AST/Program.h"
 #include "Script/AST/IStatement.h"
 #include "Script/AST/IExpression.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
@@ -70,7 +70,7 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
 
     switch (node->GetNodeType()) {
         case ast::NodeType::kProgram: {
-            auto* root = static_cast<const ast::Root*>(node);
+            auto* root = static_cast<const ast::Program*>(node);
             return EvalRootProgram(root->GetStatements(), environment);
 
         }

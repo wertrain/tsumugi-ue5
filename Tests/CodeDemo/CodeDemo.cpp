@@ -18,7 +18,7 @@
 
 #include "Script/Lexer/ScriptLexer.h"
 #include "Script/Parser/ScriptParser.h"
-#include "Script/AST/Root.h"
+#include "Script/AST/Program.h"
 #include "Script/Evaluator/Evaluator.h"
 #include "Script/Objects/Environment.h"
 

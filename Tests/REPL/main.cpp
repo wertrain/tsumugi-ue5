@@ -7,7 +7,7 @@
 #include "Script/Lexer/ScriptToken.h"
 #include "Script/Lexer/LexingStringReader.h"
 #include "Script/Evaluator/Evaluator.h"
-#include "Script/AST/Root.h"
+#include "Script/AST/Program.h"
 #include "Script/Objects/IObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/Environment.h"

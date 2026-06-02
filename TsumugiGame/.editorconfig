@@ -23,3 +23,5 @@ cpp_new_line_before_catch = true
 cpp_space_before_function_open_parenthesis = false
 cpp_space_within_parentheses = false
 cpp_space_pointer_reference_alignment = left
+
+charset = utf-8-bom

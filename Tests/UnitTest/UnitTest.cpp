@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "Foundation/Types.h"
-#include "Script/AST/Root.h"
+#include "Script/AST/Program.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Expressions/IntegerLiteral.h"
 #include "Script/AST/Expressions/FloatLiteral.h"

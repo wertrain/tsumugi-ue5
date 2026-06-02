@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Lexer/ScriptTokenTypes.h"
@@ -8,7 +8,7 @@
 
 namespace tsumugi::script::lexer{ class Lexer; }
 namespace tsumugi::script::lexer{ class Token; }
-namespace tsumugi::script::ast { class Root; }
+namespace tsumugi::script::ast { class Program; }
 namespace tsumugi::script::ast { class IStatement; }
 namespace tsumugi::script::ast { class IExpression; }
 namespace tsumugi::script::ast::expression { class Identifier; }
@@ -54,8 +54,14 @@ class Parser {
 public:
     Parser(tsumugi::script::lexer::Lexer* lexer);
     ~Parser();
-    void ReadToken();
-    script::ast::Root* ParseRoot();
+    std::unique_ptr<ast::Program> ParseProgram();
+    const auto& GetLexer() const { return lexer_; }
+    log::TextLogger& GetLogger() { return logger_; }
+
+public:
+    static const std::unordered_map<tsumugi::script::lexer::TokenType, parser::Precedence> Precedences;
+
+private:
     std::unique_ptr<script::ast::IStatement> ParseStatement();
     std::unique_ptr<script::ast::statement::LetStatement> ParseLetStatement();
     std::unique_ptr<script::ast::statement::ReturnStatement> ParseReturnStatement();
@@ -90,24 +96,19 @@ public:
     std::unique_ptr<script::ast::IExpression> ParseInstanceOfExpression(std::unique_ptr<script::ast::IExpression> left);
     bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
     bool ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>>& arguments);
-    std::unique_ptr<ast::Root> ParseProgram();
 
+    void ReadToken();
+    bool CurrentTokenIs(const tsumugi::script::lexer::TokenType& type);
     bool PeekTokenIs(const tsumugi::script::lexer::TokenType& type);
     bool ExpectPeek(const tsumugi::script::lexer::TokenType& type);
     const auto& GetCurrentToken() const { return currentToken_; }
     const auto& GetNextToken() const { return nextToken_; }
     const Precedence GetCurrentPrecedence() const;
     const Precedence GetNextPrecedence() const;
-    const auto& GetLexer() const { return lexer_; }
-    log::TextLogger& GetLogger() { return logger_; }
+    bool ExpectPeekRequiredTokenType(const tsumugi::script::lexer::TokenType tokenType, const std::string& symbol);
 
-public:
-    static const std::unordered_map<tsumugi::script::lexer::TokenType, parser::Precedence> Precedences;
-
-private:
     void RegisterPrefixParseFunctions();
     void RegisterInfixParseFunctions();
-    bool ExpectPeekRequiredTokenType(const tsumugi::script::lexer::TokenType tokenType, const std::string& symbol);
 
 private:
     log::TextLogger logger_;

@@ -159,7 +159,7 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IStatement.h">
       <Filter>Tsumugi\Private\Script\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Root.h">
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Program.h">
       <Filter>Tsumugi\Private\Script\AST</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IExpression.h">
@@ -455,7 +455,7 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IStatement.cpp">
       <Filter>Tsumugi\Private\Script\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Root.cpp">
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Program.cpp">
       <Filter>Tsumugi\Private\Script\AST</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IExpression.cpp">

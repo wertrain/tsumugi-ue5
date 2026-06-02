@@ -1,14 +1,14 @@
-#include "Script/AST/Root.h"
+﻿#include "Script/AST/Program.h"
 
 namespace tsumugi::script::ast {
 
-Root::Root() {
+Program::Program() {
 
 }
 
-Root::~Root() = default;
+Program::~Program() = default;
 
-tstring Root::TokenLiteral() const {
+tstring Program::TokenLiteral() const {
 
     if (statements_.size() == 0) {
         return tstring();
@@ -16,7 +16,7 @@ tstring Root::TokenLiteral() const {
     return statements_[0]->TokenLiteral();
 }
 
-tstring Root::ToCode() const {
+tstring Program::ToCode() const {
 
     tstring code;
     for (auto&& statement : statements_) {
@@ -25,7 +25,7 @@ tstring Root::ToCode() const {
     return code;
 }
 
-const IStatement* Root::GetStatement(int index) const {
+const IStatement* Program::GetStatement(int index) const {
 
     if (statements_.size() <= index) {
         return nullptr;
@@ -33,17 +33,17 @@ const IStatement* Root::GetStatement(int index) const {
     return statements_[index].get();
 }
 
-const tarray<std::unique_ptr<IStatement>>& Root::GetStatements() const {
+const tarray<std::unique_ptr<IStatement>>& Program::GetStatements() const {
 
     return statements_;
 }
 
-void Root::AddStatement(std::unique_ptr<IStatement> statement) {
+void Program::AddStatement(std::unique_ptr<IStatement> statement) {
 
     statements_.push_back(std::move(statement));
 }
 
-size_t Root::GetStatementCount() const {
+size_t Program::GetStatementCount() const {
 
     return statements_.size();
 }
