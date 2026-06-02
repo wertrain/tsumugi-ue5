@@ -1,4 +1,4 @@
-#include "Script/Objects/UserFunctionObject.h"
+﻿#include "Script/Objects/UserFunctionObject.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Statements/BlockStatement.h"
 

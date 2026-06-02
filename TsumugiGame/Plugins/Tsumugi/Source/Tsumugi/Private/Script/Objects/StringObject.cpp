@@ -1,4 +1,4 @@
-#include "Script/Objects/StringObject.h"
+﻿#include "Script/Objects/StringObject.h"
 #include "Script/Objects/StringMethods.h"
 
 namespace tsumugi::script::object {

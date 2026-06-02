@@ -1,4 +1,4 @@
-#include "Script/Objects/HashObject.h"
+﻿#include "Script/Objects/HashObject.h"
 #include "Script/Objects/HashMethods.h"
 
 namespace tsumugi::script::object {

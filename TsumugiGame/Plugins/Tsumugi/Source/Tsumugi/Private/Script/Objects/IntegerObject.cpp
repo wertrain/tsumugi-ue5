@@ -1,4 +1,4 @@
-#include "Script/Objects/IntegerObject.h"
+﻿#include "Script/Objects/IntegerObject.h"
 
 namespace tsumugi::script::object {
 

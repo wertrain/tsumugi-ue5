@@ -1,4 +1,4 @@
-#include "Script/Objects/ClassObject.h"
+﻿#include "Script/Objects/ClassObject.h"
 #include "Script/Objects/UserObject.h"
 #include "Script/Objects/UserFunctionObject.h"
 
@@ -20,7 +20,7 @@ ClassObject::ClassObject(const tstring& name)
 
 std::optional<std::shared_ptr<IObject>> ClassObject::TryGetOwnMethod(const tstring& name) const {
 
-    // 1. 自分の prototype チェーンからのみ探す
+    // 1. 閾ｪ蛻・・ prototype 繝√ぉ繝ｼ繝ｳ縺九ｉ縺ｮ縺ｿ謗｢縺・
     if (prototype_) {
         auto method = prototype_->TryGetProperty(name);
         if (method.has_value()) {
@@ -32,7 +32,7 @@ std::optional<std::shared_ptr<IObject>> ClassObject::TryGetOwnMethod(const tstri
 
 std::optional<std::shared_ptr<IObject>> ClassObject::TryGetMethod(const tstring& name) const {
 
-    // 1. 自分の prototype チェーンを探す
+    // 1. 閾ｪ蛻・・ prototype 繝√ぉ繝ｼ繝ｳ繧呈爾縺・
     if (prototype_) {
         auto method = prototype_->TryGetProperty(name);
         if (method.has_value()) {
@@ -40,7 +40,7 @@ std::optional<std::shared_ptr<IObject>> ClassObject::TryGetMethod(const tstring&
         }
     }
 
-    // 2. 親クラスを辿って探す
+    // 2. 隕ｪ繧ｯ繝ｩ繧ｹ繧定ｾｿ縺｣縺ｦ謗｢縺・
     auto parent = parent_;
     while (parent) {
         auto parentProto = parent->GetPrototype();
@@ -89,7 +89,7 @@ tstring ClassObject::Inspect() const {
 
     result.append(TT(" {\n"));
 
-    // static メソッド
+    // static 繝｡繧ｽ繝・ラ
     result.append(TT("  static: ["));
     {
         bool first = true;
@@ -101,7 +101,7 @@ tstring ClassObject::Inspect() const {
     }
     result.append(TT("]\n"));
 
-    // インスタンスメソッド（prototype の直下だけ）
+    // 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ繝｡繧ｽ繝・ラ・・rototype 縺ｮ逶ｴ荳九□縺托ｼ・
     result.append(TT("  methods: ["));
     if (prototype_) {
         bool first = true;

@@ -1,4 +1,4 @@
-#include "Script/Builtins/Vector/Vector3Class.h"
+﻿#include "Script/Builtins/Vector/Vector3Class.h"
 #include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Objects/BuiltinClassObject.h"
@@ -14,7 +14,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
     auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Vector3));
 
     //
-    // --- インスタンス生成 ---
+    // --- 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・ ---
     //
     klass->SetInstanceCreator(
         [](const std::vector<std::shared_ptr<object::IObject>>& args)
@@ -38,7 +38,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
     );
 
     //
-    // --- instance メソッド ---
+    // --- instance 繝｡繧ｽ繝・ラ ---
     //
 
     // length()
@@ -190,7 +190,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
         }
     );
 
-    // "div" と "/" の両方を登録
+    // "div" 縺ｨ "/" 縺ｮ荳｡譁ｹ繧堤匳骭ｲ
     klass->SetInstanceMethod(TT("div"), divBuiltin);
     klass->SetInstanceMethod(TT("/"), divBuiltin);
 
@@ -247,12 +247,12 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector3Class() {
         }
     );
 
-    // "neg", "unary-" を登録
+    // "neg", "unary-" 繧堤匳骭ｲ
     klass->SetInstanceMethod(TT("neg"), unaryMinusBuiltin);
     klass->SetInstanceMethod(TT("unary-"), unaryMinusBuiltin);
 
     //
-    // --- static メソッド ---
+    // --- static 繝｡繧ｽ繝・ラ ---
     //
 
     klass->SetStaticMethod(

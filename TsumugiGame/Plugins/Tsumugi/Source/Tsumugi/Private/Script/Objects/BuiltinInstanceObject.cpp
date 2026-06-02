@@ -1,4 +1,4 @@
-#include "Script/Objects/BuiltinInstanceObject.h"
+﻿#include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::object {
 
@@ -38,13 +38,13 @@ ObjectType BuiltinInstanceObject::GetType() const {
 
 std::optional<std::shared_ptr<object::IObject>> BuiltinInstanceObject::TryGetProperty(const tstring& name) {
 
-    // 自分自身のプロパティ
+    // 閾ｪ蛻・・霄ｫ縺ｮ繝励Ο繝代ユ繧｣
     auto it = properties_.find(name);
     if (it != properties_.end()) {
         return it->second;
     }
 
-    // プロトタイプを辿る
+    // 繝励Ο繝医ち繧､繝励ｒ霎ｿ繧・
     if (prototype_) {
         return prototype_->TryGetProperty( name);
     }
@@ -54,7 +54,7 @@ std::optional<std::shared_ptr<object::IObject>> BuiltinInstanceObject::TryGetPro
 
 bool BuiltinInstanceObject::TrySetProperty(const tstring& name, std::shared_ptr<object::IObject> value) {
 
-    // 自分自身のプロパティ
+    // 閾ｪ蛻・・霄ｫ縺ｮ繝励Ο繝代ユ繧｣
     auto it = properties_.find(name);
     if (it != properties_.end()) {
         it->second = value;

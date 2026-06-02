@@ -1,4 +1,4 @@
-#include "Script/Lexer/ScriptLexingTypes.h"
+﻿#include "Script/Lexer/ScriptLexingTypes.h"
 
 namespace tsumugi::script::lexer {
 

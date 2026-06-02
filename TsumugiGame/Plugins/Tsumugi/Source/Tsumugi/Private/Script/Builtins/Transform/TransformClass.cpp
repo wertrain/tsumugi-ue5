@@ -1,4 +1,4 @@
-#include "Script/Builtins/Transform/TransformClass.h"
+﻿#include "Script/Builtins/Transform/TransformClass.h"
 #include "Script/Builtins/Transform/TransformInstance.h"
 #include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Builtins/Vector/Vector3Instance.h"
@@ -18,7 +18,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateTransformClass() {
     auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Transform));
 
     //
-    // --- instance メソッド ---
+    // --- instance 繝｡繧ｽ繝・ラ ---
     //
 
     // forward()
@@ -107,7 +107,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateTransformClass() {
 
 
     //
-    // --- static メソッド ---
+    // --- static 繝｡繧ｽ繝・ラ ---
     //
 
     //

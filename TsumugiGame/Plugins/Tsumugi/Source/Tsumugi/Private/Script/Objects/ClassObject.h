@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Objects/IObject.h"
@@ -9,20 +9,20 @@ namespace tsumugi::script::object { class UserObject; }
 
 namespace tsumugi::script::object {
 
-// ClassObject は「ユーザー定義クラス」を表すオブジェクト。
+// ClassObject 縺ｯ縲後Θ繝ｼ繧ｶ繝ｼ螳夂ｾｩ繧ｯ繝ｩ繧ｹ縲阪ｒ陦ｨ縺吶が繝悶ず繧ｧ繧ｯ繝医・
 // 
-// - `class Foo {}` を定義すると ClassObject が生成される。
-// - `Foo()` を呼ぶと UserObject（インスタンス）が生成される。
-// - prototype ベースのメソッド解決や継承（parent_）をサポートする。
+// - `class Foo {}` 繧貞ｮ夂ｾｩ縺吶ｋ縺ｨ ClassObject 縺檎函謌舌＆繧後ｋ縲・
+// - `Foo()` 繧貞他縺ｶ縺ｨ UserObject・医う繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ・峨′逕滓・縺輔ｌ繧九・
+// - prototype 繝吶・繧ｹ縺ｮ繝｡繧ｽ繝・ラ隗｣豎ｺ繧・ｶ呎価・・arent_・峨ｒ繧ｵ繝昴・繝医☆繧九・
 // 
-// ※注意：Random, Math, Vector2 などの「組み込みクラス」には使用しない。
-//   組み込みクラスは BuiltinClassObject / BuiltinInstanceObject を使う。
-//   UserObject はユーザー定義クラス専用のインスタンス表現であり、
-//   組み込み構造体（Vector2 など）には適さない。
+// 窶ｻ豕ｨ諢擾ｼ啌andom, Math, Vector2 縺ｪ縺ｩ縺ｮ縲檎ｵ・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ縲阪↓縺ｯ菴ｿ逕ｨ縺励↑縺・・
+//   邨・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ縺ｯ BuiltinClassObject / BuiltinInstanceObject 繧剃ｽｿ縺・・
+//   UserObject 縺ｯ繝ｦ繝ｼ繧ｶ繝ｼ螳夂ｾｩ繧ｯ繝ｩ繧ｹ蟆ら畑縺ｮ繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ陦ｨ迴ｾ縺ｧ縺ゅｊ縲・
+//   邨・∩霎ｼ縺ｿ讒矩菴難ｼ・ector2 縺ｪ縺ｩ・峨↓縺ｯ驕ｩ縺輔↑縺・・
 
-// prototype_ はユーザー定義クラスのインスタンス（UserObject）が
-// メソッドを探索する際のプロトタイプチェーンの起点となる。
-// JavaScript の Foo.prototype に相当する。
+// prototype_ 縺ｯ繝ｦ繝ｼ繧ｶ繝ｼ螳夂ｾｩ繧ｯ繝ｩ繧ｹ縺ｮ繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ・・serObject・峨′
+// 繝｡繧ｽ繝・ラ繧呈爾邏｢縺吶ｋ髫帙・繝励Ο繝医ち繧､繝励メ繧ｧ繝ｼ繝ｳ縺ｮ襍ｷ轤ｹ縺ｨ縺ｪ繧九・
+// JavaScript 縺ｮ Foo.prototype 縺ｫ逶ｸ蠖薙☆繧九・
 
 class ClassObject : public IObject {
 public:

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Text/Lexer/TextTokenTypes.h"
@@ -9,7 +9,7 @@ namespace tsumugi::script::lexer { class LexingPosition; }
 namespace tsumugi::text::lexer {
 
 /// <summary>
-/// トークン
+/// 繝医・繧ｯ繝ｳ
 /// </summary>
 class Token {
 public:

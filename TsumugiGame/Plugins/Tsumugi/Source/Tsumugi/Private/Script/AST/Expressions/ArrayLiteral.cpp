@@ -1,4 +1,4 @@
-#include "Script/AST/Expressions/ArrayLiteral.h"
+﻿#include "Script/AST/Expressions/ArrayLiteral.h"
 #include "Script/Lexer/ScriptToken.h"
 
 namespace tsumugi::script::ast::expression {

@@ -1,4 +1,4 @@
-#include "Script/AST/Expressions/PropertyAccessExpression.h"
+﻿#include "Script/AST/Expressions/PropertyAccessExpression.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/Lexer/ScriptToken.h"
 

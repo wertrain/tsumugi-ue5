@@ -1,4 +1,4 @@
-#include "Script/Objects/BreakObject.h"
+﻿#include "Script/Objects/BreakObject.h"
 
 namespace tsumugi::script::object {
 

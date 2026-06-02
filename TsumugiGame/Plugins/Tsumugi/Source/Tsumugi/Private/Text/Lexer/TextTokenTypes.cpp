@@ -1,11 +1,11 @@
-#include "Text/Lexer/TextTokenTypes.h"
+﻿#include "Text/Lexer/TextTokenTypes.h"
 #include <unordered_map>
 
 namespace tsumugi::text::lexer {
 
 const tchar* TokenTypeToTString(const TokenType token_type) {
 
-    /// タイプの辞書
+    /// 繧ｿ繧､繝励・霎樊嶌
     static const std::unordered_map<tsumugi::text::lexer::TokenType, const tchar*> Table = {
         { tsumugi::text::lexer::TokenType::kIllegal, TT("kIllegal") },
         { tsumugi::text::lexer::TokenType::kEOF, TT("kEOF") },
@@ -28,7 +28,7 @@ const tchar* TokenTypeToTString(const TokenType token_type) {
 
 const char* TokenTypeToString(const TokenType token_type) {
 
-    // トークンタイプの辞書
+    // 繝医・繧ｯ繝ｳ繧ｿ繧､繝励・霎樊嶌
     static const std::unordered_map<tsumugi::text::lexer::TokenType, const char*> Table = {
         { tsumugi::text::lexer::TokenType::kIllegal, ("kIllegal") },
         { tsumugi::text::lexer::TokenType::kEOF, ("kEOF") },

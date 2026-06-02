@@ -1,22 +1,22 @@
-#include "Types.h"
+﻿#include "Types.h"
 #include <string>
 #include <codecvt>
 
 namespace tsumugi::type::convert {
 
-// 共通の数値変換ヘルパー（内部用）
+// 蜈ｱ騾壹・謨ｰ蛟､螟画鋤繝倥Ν繝代・・亥・驛ｨ逕ｨ・・
 template <typename T>
 bool InternalFromChars(const tstring_view view, T& result) {
     if (view.empty()) return false;
 
 #if defined (TSUMUGI_SUPPORT_U8STRING)
-    // char8_t は reinterpret_cast で char として std::from_chars に渡せます（C++20規格上安全）
+    // char8_t 縺ｯ reinterpret_cast 縺ｧ char 縺ｨ縺励※ std::from_chars 縺ｫ貂｡縺帙∪縺呻ｼ・++20隕乗ｼ荳雁ｮ牙・・・
     const char* first = reinterpret_cast<const char*>(view.data());
     const char* last = first + view.size();
     auto [ptr, ec] = std::from_chars(first, last, result);
     return ec == std::errc{};
 #elif (TSUMUGI_SUPPORT_WCHAR)
-    // Windows wstring 環境用。std::from_chars が wchar_t をサポートしていないためのフォールバック
+    // Windows wstring 迺ｰ蠅・畑縲Ｔtd::from_chars 縺・wchar_t 繧偵し繝昴・繝医＠縺ｦ縺・↑縺・◆繧√・繝輔か繝ｼ繝ｫ繝舌ャ繧ｯ
     tchar* end;
     if constexpr (std::is_integral_v<T>) {
         result = static_cast<T>(std::wcstol(view.data(), &end, 10));
@@ -62,14 +62,14 @@ std::string TStringToString(const tstring_view tstr) {
 
 tstring TStringViewToTString(const tstring_view tstr) {
 
-    // tstring と tstring_view は常に同じ文字コードなので
-    // 単純コピーでよい
+    // tstring 縺ｨ tstring_view 縺ｯ蟶ｸ縺ｫ蜷後§譁・ｭ励さ繝ｼ繝峨↑縺ｮ縺ｧ
+    // 蜊倡ｴ斐さ繝斐・縺ｧ繧医＞
     return tstring(tstr.begin(), tstr.end());
 }
 
 tstring StringToTString(const std::string_view str) {
 #if defined (TSUMUGI_SUPPORT_U8STRING)
-    // string から u8string への変換
+    // string 縺九ｉ u8string 縺ｸ縺ｮ螟画鋤
     return tstring(reinterpret_cast<const char8_t*>(str.data()), str.size());
 
 #elif (TSUMUGI_SUPPORT_WCHAR)
@@ -84,7 +84,7 @@ tstring StringToTString(const std::string_view str) {
     mbstowcs_s(nullptr, &res[0], size_needed, str.data(), _TRUNCATE);
     return res;
 #else
-    // tstring = std::string の場合
+    // tstring = std::string 縺ｮ蝣ｴ蜷・
     return tstring(str);
 #endif
 }

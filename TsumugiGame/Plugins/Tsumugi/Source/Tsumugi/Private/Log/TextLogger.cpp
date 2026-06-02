@@ -1,4 +1,4 @@
-#include "Log/TextLogger.h"
+﻿#include "Log/TextLogger.h"
 #include <iostream>
 
 namespace tsumugi::log {

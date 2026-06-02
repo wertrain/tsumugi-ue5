@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/Builtins/BuiltinTypes.h"
@@ -15,7 +15,7 @@ public:
     static std::shared_ptr<object::BuiltinClassObject> Get(builtin::BuiltinType type);
     static std::shared_ptr<object::BuiltinClassObject> Get(const tstring& name);
 
-    // 派生先のインスタンス生成に使用する（主に確実に SetPrototype させるためのもの）
+    // 豢ｾ逕溷・縺ｮ繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・縺ｫ菴ｿ逕ｨ縺吶ｋ・井ｸｻ縺ｫ遒ｺ螳溘↓ SetPrototype 縺輔○繧九◆繧√・繧ゅ・・・
     template <typename T = object::BuiltinInstanceObject, typename... Args>
     static std::shared_ptr<T> CreateInstance(Args&&... args) {
         auto instance = std::make_shared<T>(std::forward<Args>(args)...);
@@ -33,7 +33,7 @@ private:
 };
 
 /// <summary>
-/// すべての組み込みクラスを登録する
+/// 縺吶∋縺ｦ縺ｮ邨・∩霎ｼ縺ｿ繧ｯ繝ｩ繧ｹ繧堤匳骭ｲ縺吶ｋ
 /// </summary>
 void InitializeBuiltinClasses();
 

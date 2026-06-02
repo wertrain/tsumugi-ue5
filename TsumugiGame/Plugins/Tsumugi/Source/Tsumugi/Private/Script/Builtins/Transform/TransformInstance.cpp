@@ -1,4 +1,4 @@
-#include "Script/Builtins/Transform/TransformInstance.h"
+﻿#include "Script/Builtins/Transform/TransformInstance.h"
 #include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Builtins/Vector/Vector3Instance.h"
 #include "Script/Builtins/Quaternion/QuaternionInstance.h"
@@ -47,7 +47,7 @@ bool TransformInstance::TrySetProperty(const tstring& name, std::shared_ptr<obje
 
         auto vector = std::static_pointer_cast<builtin::vector::Vector3Instance>(value);
 
-        // 内部 math::Vector3 を更新
+        // 蜀・Κ math::Vector3 繧呈峩譁ｰ
         if (name == TT("position")) value_.position = vector->GetValue();
         else if (name == TT("scale")) value_.scale = vector->GetValue();
 
@@ -62,7 +62,7 @@ bool TransformInstance::TrySetProperty(const tstring& name, std::shared_ptr<obje
 
         auto quaternion = std::static_pointer_cast<builtin::quaternion::QuaternionInstance>(value);
 
-        // 内部 math::Vector3 を更新
+        // 蜀・Κ math::Vector3 繧呈峩譁ｰ
         if (name == TT("rotation")) value_.rotation = quaternion->GetValue();
 
         Set(name, value);

@@ -1,4 +1,4 @@
-#include "Script/Builtins/Random/RandomInstance.h"
+﻿#include "Script/Builtins/Random/RandomInstance.h"
 #include "Script/Objects/FloatObject.h"
 #include "Script/Objects/IntegerObject.h"
 

@@ -1,4 +1,4 @@
-#include "Script/AST/Statements/ForStatement.h"
+﻿#include "Script/AST/Statements/ForStatement.h"
 #include "Script/AST/Expressions/Identifier.h"
 #include "Script/AST/Statements/BlockStatement.h"
 #include "Script/Lexer/ScriptToken.h"

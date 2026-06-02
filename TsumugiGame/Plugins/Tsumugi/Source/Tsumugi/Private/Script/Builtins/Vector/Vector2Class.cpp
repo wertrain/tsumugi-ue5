@@ -1,4 +1,4 @@
-#include "Script/Builtins/Vector/Vector2Class.h"
+﻿#include "Script/Builtins/Vector/Vector2Class.h"
 #include "Script/Builtins/Vector/Vector2Instance.h"
 #include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Objects/BuiltinClassObject.h"
@@ -14,7 +14,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
     auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Vector2));
 
     //
-    // --- インスタンス生成 ---
+    // --- 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・ ---
     //
     klass->SetInstanceCreator(
         [](const std::vector<std::shared_ptr<object::IObject>>& args)
@@ -37,7 +37,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
     );
 
     //
-    // --- instance メソッド ---
+    // --- instance 繝｡繧ｽ繝・ラ ---
     //
 
     // length()
@@ -225,7 +225,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateVector2Class() {
     klass->SetInstanceMethod(TT("unary-"), unaryMinusBuiltin);
 
     //
-    // --- static メソッド ---
+    // --- static 繝｡繧ｽ繝・ラ ---
     //
 
     klass->SetStaticMethod(

@@ -1,4 +1,4 @@
-#include "Script/AST/INode.h"
+﻿#include "Script/AST/INode.h"
 
 namespace tsumugi::script::ast {
 

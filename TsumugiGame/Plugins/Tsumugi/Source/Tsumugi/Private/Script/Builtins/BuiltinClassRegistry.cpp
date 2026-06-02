@@ -1,7 +1,7 @@
-#include "Script/Builtins/BuiltinClassRegistry.h"
+﻿#include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Objects/BuiltinClassObject.h"
 
-// 以下は InitializeBuiltinClasses() のため
+// 莉･荳九・ InitializeBuiltinClasses() 縺ｮ縺溘ａ
 #include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Builtins/BuiltinTypes.h"
 #include "Script/Builtins/Vector/Vector3Class.h"

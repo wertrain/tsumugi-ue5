@@ -1,4 +1,4 @@
-#include "Script/Objects/ArrayMethods.h"
+﻿#include "Script/Objects/ArrayMethods.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
@@ -12,14 +12,14 @@ std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayOb
     auto& elems = arrayObject->GetElements();
 
     // -------------------------
-    // プロパティ
+    // 繝励Ο繝代ユ繧｣
     // -------------------------
     if (name == TT("length")) {
         return std::make_shared<object::IntegerObject>(static_cast<int>(elems.size()));
     }
 
     // -------------------------
-    // メソッド
+    // 繝｡繧ｽ繝・ラ
     // -------------------------
 
     // push(value)
@@ -33,7 +33,7 @@ std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayOb
                     elems.push_back(a);
                 }
 
-                return std::make_shared<object::IntegerObject>(elems.size());
+                return std::make_shared<object::IntegerObject>(static_cast<int>(elems.size()));
             }
         );
     }
@@ -63,17 +63,17 @@ std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayOb
                 auto arr = std::static_pointer_cast<object::ArrayObject>(receiver);
                 auto& elems = arr->GetElements();
 
-                int start = (args.size() >= 1)
+                int start = static_cast<int>(args.size() >= 1)
                     ? static_cast<object::IntegerObject*>(args[0].get())->GetValue()
                     : 0;
 
-                int end = (args.size() >= 2)
+                int end = static_cast<int>(args.size() >= 2)
                     ? static_cast<object::IntegerObject*>(args[1].get())->GetValue()
-                    : (int)elems.size();
+                    : static_cast<int>(elems.size());
 
                 if (start < 0) start = 0;
                 if (end < start) end = start;
-                if (end > (int)elems.size()) end = elems.size();
+                if (end > static_cast<int>(elems.size())) end = static_cast<int>(elems.size());
 
                 std::vector<std::shared_ptr<object::IObject>> newElems(
                     elems.begin() + start,
@@ -93,7 +93,7 @@ std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayOb
                 auto& elems = arr->GetElements();
 
                 tstring sep = TT(",");
-                if (args.size() >= 1) {
+                if (args.size() >= 1u) {
                     sep = static_cast<object::StringObject*>(args[0].get())->GetValue();
                 }
 

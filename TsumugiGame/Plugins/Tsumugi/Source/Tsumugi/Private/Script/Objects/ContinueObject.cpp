@@ -1,4 +1,4 @@
-#include "Script/Objects/ContinueObject.h"
+﻿#include "Script/Objects/ContinueObject.h"
 
 namespace tsumugi::script::object {
 

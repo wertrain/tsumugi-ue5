@@ -1,4 +1,4 @@
-#include "Script/Builtins/BuiltinFunctionRegistry.h"
+﻿#include "Script/Builtins/BuiltinFunctionRegistry.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/StringObject.h"

@@ -1,4 +1,4 @@
-#include "Script/Objects/BuiltinClassObject.h"
+﻿#include "Script/Objects/BuiltinClassObject.h"
 #include "Script/Objects/BuiltinInstanceObject.h"
 
 namespace tsumugi::script::object {
@@ -40,7 +40,7 @@ std::optional<std::shared_ptr<IObject>> BuiltinClassObject::TryGetProperty(const
     if (it != staticMethods_.end()) {
         return it->second;
     }
-    // instance メソッド（prototype）
+    // instance 繝｡繧ｽ繝・ラ・・rototype・・
     if (prototype_) {
         auto p = prototype_->TryGetProperty(name);
         if (p.has_value()) return p;

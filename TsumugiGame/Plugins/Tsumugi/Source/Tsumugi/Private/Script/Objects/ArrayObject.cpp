@@ -1,4 +1,4 @@
-#include "Script/Objects/ArrayObject.h"
+﻿#include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/ArrayMethods.h"
 
 namespace tsumugi::script::object {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Script/AST/IStatement.h"
@@ -11,9 +11,9 @@ namespace tsumugi::script::ast::statement { class BlockStatement; }
 namespace tsumugi::script::ast::statement {
 
 /// <summary>
-/// Function 文
-/// 定義：(static) function <identifier> (<identifier>, ...);
-/// 通常の関数宣言とまたクラス内のメソッド文両方で使用する
+/// Function 譁・
+/// 螳夂ｾｩ・・static) function <identifier> (<identifier>, ...);
+/// 騾壼ｸｸ縺ｮ髢｢謨ｰ螳｣險縺ｨ縺ｾ縺溘け繝ｩ繧ｹ蜀・・繝｡繧ｽ繝・ラ譁・ｸ｡譁ｹ縺ｧ菴ｿ逕ｨ縺吶ｋ
 /// </summary>
 class FunctionStatement : public IStatement {
 public:

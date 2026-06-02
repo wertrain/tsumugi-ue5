@@ -1,4 +1,4 @@
-#include "Script/Builtins/Quaternion/QuaternionClass.h"
+﻿#include "Script/Builtins/Quaternion/QuaternionClass.h"
 #include "Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "Script/Builtins/BuiltinClassRegistry.h"
 #include "Script/Builtins/Vector/Vector3Instance.h"
@@ -17,7 +17,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
     auto klass = std::make_shared<object::BuiltinClassObject>(builtin::BuiltinTypeName(builtin::BuiltinType::Quaternion));
 
     //
-    // --- インスタンス生成 ---
+    // --- 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓・ ---
     //
     klass->SetInstanceCreator(
         [](const std::vector<std::shared_ptr<object::IObject>>& args)
@@ -42,7 +42,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
     );
 
     //
-    // --- instance メソッド ---
+    // --- instance 繝｡繧ｽ繝・ラ ---
     //
 
     // length()
@@ -262,7 +262,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateQuaternionClass() {
     klass->SetInstanceMethod(TT("unary-"), unaryMinusBuiltin);
 
     //
-    // --- static メソッド ---
+    // --- static 繝｡繧ｽ繝・ラ ---
     //
 
     klass->SetStaticMethod(

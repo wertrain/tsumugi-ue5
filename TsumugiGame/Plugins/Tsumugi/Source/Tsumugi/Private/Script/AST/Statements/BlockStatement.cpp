@@ -1,4 +1,4 @@
-#include "Script/AST/Statements/BlockStatement.h"
+﻿#include "Script/AST/Statements/BlockStatement.h"
 #include "Script/AST/IExpression.h"
 #include "Script/Lexer/ScriptToken.h"
 

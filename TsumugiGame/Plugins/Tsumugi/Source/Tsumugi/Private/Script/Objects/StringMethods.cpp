@@ -1,4 +1,4 @@
-#include "Script/Objects/StringMethods.h"
+﻿#include "Script/Objects/StringMethods.h"
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/BooleanObject.h"
@@ -15,14 +15,14 @@ std::optional<std::shared_ptr<object::IObject>> GetStringProperty(object::String
     const auto& s = stringObject->GetValue();
 
     // -------------------------
-    // プロパティ
+    // 繝励Ο繝代ユ繧｣
     // -------------------------
     if (name == TT("length")) {
         return std::make_shared<object::IntegerObject>(static_cast<int>(s.size()));
     }
 
     // -------------------------
-    // メソッド
+    // 繝｡繧ｽ繝・ラ
     // -------------------------
 
     if (name == TT("substr")) {
