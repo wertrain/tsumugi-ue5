@@ -1,4 +1,4 @@
-#include "Script/Objects/ArrayMethods.h"
+﻿#include "Script/Objects/ArrayMethods.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/IntegerObject.h"
 #include "Script/Objects/StringObject.h"
@@ -33,7 +33,7 @@ std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayOb
                     elems.push_back(a);
                 }
 
-                return std::make_shared<object::IntegerObject>(elems.size());
+                return std::make_shared<object::IntegerObject>(static_cast<int>(elems.size()));
             }
         );
     }
@@ -69,11 +69,11 @@ std::optional<std::shared_ptr<object::IObject>> GetArrayProperty(object::ArrayOb
 
                 int end = (args.size() >= 2)
                     ? static_cast<object::IntegerObject*>(args[1].get())->GetValue()
-                    : (int)elems.size();
+                    : static_cast<int>(elems.size());
 
                 if (start < 0) start = 0;
                 if (end < start) end = start;
-                if (end > (int)elems.size()) end = elems.size();
+                if (end > static_cast<int>(elems.size())) end = static_cast<int>(elems.size());
 
                 std::vector<std::shared_ptr<object::IObject>> newElems(
                     elems.begin() + start,

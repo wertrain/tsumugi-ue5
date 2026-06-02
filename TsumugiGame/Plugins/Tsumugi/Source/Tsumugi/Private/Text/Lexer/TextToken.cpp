@@ -1,26 +1,28 @@
-#include "Text/Lexer/TextToken.h"
+﻿#include "Text/Lexer/TextToken.h"
 
 namespace tsumugi::text::lexer {
 
 Token::Token() :
     token_type_(TokenType::kIllegal),
-    literal_() {
+    literal_(),
+    position_(),
+    isLineHead_(true) {
 
 }
 
 Token::Token(const TokenType token_type, const tstring& literal_string, bool lineHead) :
     token_type_(token_type),
     literal_(literal_string),
-    isLineHead_(lineHead),
-    position_() {
+    position_(),
+    isLineHead_(lineHead) {
 
 }
 
 Token::Token(const TokenType token_type, const tstring& literal_string, bool lineHead, const script::lexer::LexingPosition& position) :
     token_type_(token_type),
     literal_(literal_string),
-    isLineHead_(lineHead),
-    position_(position) {
+    position_(position),
+    isLineHead_(lineHead) {
 
 }
 

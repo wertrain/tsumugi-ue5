@@ -1,4 +1,4 @@
-#include "Text/Lexer/TextTokenTypes.h"
+﻿#include "Text/Lexer/TextTokenTypes.h"
 #include <unordered_map>
 
 namespace tsumugi::text::lexer {

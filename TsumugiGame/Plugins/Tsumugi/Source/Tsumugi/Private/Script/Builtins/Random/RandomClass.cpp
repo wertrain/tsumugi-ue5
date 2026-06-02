@@ -1,4 +1,4 @@
-#include "Script/Builtins/Random/RandomClass.h"
+﻿#include "Script/Builtins/Random/RandomClass.h"
 #include "Script/Builtins/Random/RandomInstance.h"
 #include "Script/Objects/BuiltinClassObject.h"
 #include "Script/Objects/BuiltinFunctionObject.h"
@@ -127,7 +127,7 @@ std::shared_ptr<object::BuiltinClassObject> CreateRandomClass() {
 
                 if (elems.empty()) return object::NullObject::Instance();
 
-                std::uniform_int_distribution<int> dist(0, elems.size() - 1);
+                std::uniform_int_distribution<int> dist(0, static_cast<int>(elems.size()) - 1);
                 return elems[dist(g_rng)];
             }
         )
