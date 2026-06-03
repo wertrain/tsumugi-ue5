@@ -82,6 +82,15 @@
     <Filter Include="Tsumugi\Private\Text\AST\Statements">
       <UniqueIdentifier>{e0d656f1-b922-4779-a507-2f5fd5697291}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\Text\Evaluator">
+      <UniqueIdentifier>{69fb8ee1-a6d2-4375-bf18-034c1280206e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Text\Commands">
+      <UniqueIdentifier>{bf6ddb23-a88e-4650-aab1-2448031db392}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\Text\Context">
+      <UniqueIdentifier>{fc2d594e-b23a-4cdb-9567-329f65c5ae46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
@@ -384,6 +393,27 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextStatement.h">
       <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\IGameContext.h">
+      <Filter>Tsumugi\Private\Text\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ICommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\IScriptRuntime.h">
+      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\TextEvaluator.h">
+      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\WaitCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ClearTextCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\CommandRegistry.h">
+      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -667,6 +697,27 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextStatement.cpp">
       <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\IGameContext.cpp">
+      <Filter>Tsumugi\Private\Text\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ICommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\IScriptRuntime.cpp">
+      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\TextEvaluator.cpp">
+      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\WaitCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ClearTextCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\CommandRegistry.cpp">
+      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

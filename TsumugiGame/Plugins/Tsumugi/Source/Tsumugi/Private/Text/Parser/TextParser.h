@@ -3,6 +3,7 @@
 #include "Foundation/Types.h"
 #include "Text/Lexer/TextTokenTypes.h"
 #include "Common/ErrorReporter.h"
+#include <functional>
 
 namespace tsumugi::text::lexer { class Lexer; }
 namespace tsumugi::text::lexer { class Token; }
@@ -27,6 +28,7 @@ class Parser {public:
 private:
     std::unique_ptr<text::ast::IStatement> ParseStatement();
     std::unique_ptr<text::ast::statement::LabelStatement> ParseLabelStatement();
+    std::unique_ptr<text::ast::statement::TagStatement> ParseTagStatementCommon(std::function<bool()> shouldContinue);
     std::unique_ptr<text::ast::statement::TagStatement> ParseTagStatement();
     std::unique_ptr<text::ast::statement::TagStatement> ParseAtMarkTagStatement();
     std::unique_ptr<text::ast::statement::TextStatement> ParseTextStatement();

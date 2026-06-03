@@ -78,7 +78,9 @@ Libararys/TsumugiLib/*.user
 Tests/UnitTest/*.user
 Tests/REPL/*.user
 Tests/CodeDemo/*.user
+Tests/ConsoleTextGame/*.user
 Libararys/TsumugiLib/x64/
 Tests/UnitTest/x64/
 Tests/REPL/x64/
 Tests/CodeDemo/x64/
+Tests/ConsoleTextGame/x64/

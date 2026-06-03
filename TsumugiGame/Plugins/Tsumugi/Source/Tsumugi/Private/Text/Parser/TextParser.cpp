@@ -79,7 +79,7 @@ std::unique_ptr<ast::statement::LabelStatement> Parser::ParseLabelStatement() {
     return statement;
 }
 
-std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatement() {
+std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatementCommon(std::function<bool()> shouldContinue) {
 
     auto statement = std::make_unique<ast::statement::TagStatement>(std::move(currentToken_));
 
@@ -91,10 +91,17 @@ std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatement() 
 
     // 属性なしか判定
     if (PeekTokenIs(lexer::TokenType::kTagClose)) {
+        // 改行があれば進める
+        ReadToken();
+        if (PeekTokenIs(lexer::TokenType::kNewLine)) {
+            ReadToken();
+        }
         return statement;
     }
 
-    while (!PeekTokenIs(lexer::TokenType::kTagClose)) {
+    while (shouldContinue()) {
+        // 属性=値 を判定
+        // それ以外のタイプが来れば失敗
         if (!ExpectPeekRequiredTokenType(lexer::TokenType::kString, "attribute name")) {
             return nullptr;
         }
@@ -109,46 +116,32 @@ std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatement() 
         statement->AddAttribute(key, value);
     }
     ReadToken();
+
+    // 改行があれば進める
+    if (PeekTokenIs(lexer::TokenType::kNewLine)) {
+        ReadToken();
+    }
+
     return statement;
+}
+
+std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatement() {
+
+    return ParseTagStatementCommon([this]() { return !PeekTokenIs(lexer::TokenType::kTagClose); });
 }
 
 std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseAtMarkTagStatement() {
 
-    auto statement = std::make_unique<ast::statement::TagStatement>(std::move(currentToken_));
-
-    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kString, "tag")) {
-        return nullptr;
-    }
-    statement->SetTagName(currentToken_->GetLiteral());
-
-    if (PeekTokenIs(lexer::TokenType::kTagClose)) {
-        return statement;
-    }
-    while (!PeekTokenIs(lexer::TokenType::kNewLine) && !PeekTokenIs(lexer::TokenType::kEOF)) {
-        if (!ExpectPeekRequiredTokenType(lexer::TokenType::kString, "attribute name")) {
-            return nullptr;
-        }
-        tstring key = currentToken_->GetLiteral();
-        if (!ExpectPeekRequiredTokenType(lexer::TokenType::kAssign, "=")) {
-            return nullptr;
-        }
-        if (!ExpectPeekRequiredTokenType(lexer::TokenType::kString, "attribute value")) {
-            return nullptr;
-        }
-        tstring value = currentToken_->GetLiteral();
-        statement->AddAttribute(key, value);
-    }
-    ReadToken();
-    return statement;
+    return ParseTagStatementCommon([this]() {
+        return !PeekTokenIs(lexer::TokenType::kNewLine) && !PeekTokenIs(lexer::TokenType::kEOF);
+    });
 }
 
 std::unique_ptr<text::ast::statement::TextStatement> Parser::ParseTextStatement() {
 
+    tstring text = currentToken_->GetLiteral();
     auto statement = std::make_unique<ast::statement::TextStatement>(std::move(currentToken_));
-    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kString, "tag")) {
-        return nullptr;
-    }
-    statement->SetText(currentToken_->GetLiteral());
+    statement->SetText(text);
     return statement;
 }
 
