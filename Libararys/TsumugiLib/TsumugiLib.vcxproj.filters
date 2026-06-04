@@ -414,6 +414,24 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\CommandRegistry.h">
       <Filter>Tsumugi\Private\Text\Evaluator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\DelayState.h">
+      <Filter>Tsumugi\Private\Text\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\FontState.h">
+      <Filter>Tsumugi\Private\Text\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\PageBreakCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\NewLineCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\FontCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\DelayCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -718,6 +736,18 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\CommandRegistry.cpp">
       <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\PageBreakCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\NewLineCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\FontCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\DelayCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

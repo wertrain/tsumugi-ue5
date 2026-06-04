@@ -4,8 +4,9 @@
 
 namespace tsumugi::text::command {
 
-    void ClearTextCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void ClearTextCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
-        context.ClearText();
-    }
+    context.ClearText();
+}
+
 }

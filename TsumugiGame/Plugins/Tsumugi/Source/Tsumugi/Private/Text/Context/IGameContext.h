@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "Foundation/Types.h"
+#include "Text/Context/FontState.h"
+#include "Text/Context/DelayState.h"
 
 namespace tsumugi::text::context {
 
@@ -8,9 +10,43 @@ class IGameContext {
 public:
     virtual ~IGameContext() = default;
 
-    virtual void Wait(int ms) = 0;
     virtual void ClearText() = 0;
     virtual void ShowText(const tstring& text) = 0;
+    virtual void NewLine() = 0;
+    virtual void PageBreak() = 0;
+    virtual void WaitForClick() = 0;
+
+    // --- フォント ---
+    virtual FontState& GetFontState() = 0;
+    virtual void ApplyFontState(const FontState& state) = 0;
+
+    // --- 文字送り速度 ---
+    virtual DelayState& GetDelayState() = 0;
+    virtual void ApplyDelayState(const DelayState& state) = 0;
+
+    // --- 演出 ---
+    virtual void Wait(int ms) = 0;
+    virtual void ShakeScreen(int strength, int time) = 0;
+    virtual void FadeIn(int time) = 0;
+    virtual void FadeOut(int time) = 0;
+
+    // --- 画像・レイヤー ---
+    virtual void ShowImage(const tstring& layer, const tstring& path) = 0;
+    virtual void HideImage(const tstring& layer) = 0;
+    virtual void MoveImage(const tstring& layer, int x, int y, int time) = 0;
+    virtual void ClearLayer(const tstring& layer) = 0;
+
+    // --- サウンド ---
+    virtual void PlayBGM(const tstring& path, int loop = -1) = 0;
+    virtual void StopBGM(int time = 0) = 0;
+    virtual void PlaySE(const tstring& path) = 0;
+    virtual void StopSE(const tstring& path) = 0;
+
+    // --- システム ---
+    virtual void Save(int slot) = 0;
+    virtual void Load(int slot) = 0;
+    virtual void SetUserFont(const tstring& fontName) = 0;
+    virtual void SetUserTextSpeed(int ms) = 0;
 };
 
 }

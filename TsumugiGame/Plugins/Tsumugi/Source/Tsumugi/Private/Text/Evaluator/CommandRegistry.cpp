@@ -1,6 +1,10 @@
 ﻿#include "Text/Evaluator/CommandRegistry.h"
 #include "Text/Commands/WaitCommand.h"
 #include "Text/Commands/ClearTextCommand.h"
+#include "Text/Commands/FontCommand.h"
+#include "Text/Commands/DelayCommand.h"
+#include "Text/Commands/NewLineCommand.h"
+#include "Text/Commands/PageBreakCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -9,6 +13,11 @@ CommandRegistry::CommandRegistry()
 
     registry_[TT("wait")] = std::make_unique<command::WaitCommand>();
     registry_[TT("cm")] = std::make_unique<command::ClearTextCommand>();
+    registry_[TT("l")] = std::make_unique<command::NewLineCommand>();
+    registry_[TT("r")] = std::make_unique<command::NewLineCommand>();
+    registry_[TT("p")] = std::make_unique<command::PageBreakCommand>();
+    registry_[TT("font")] = std::make_unique<command::FontCommand>();
+    registry_[TT("delay")] = std::make_unique<command::DelayCommand>();
 }
 
 CommandRegistry::~CommandRegistry() {
