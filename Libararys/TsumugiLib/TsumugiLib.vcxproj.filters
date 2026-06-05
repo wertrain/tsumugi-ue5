@@ -432,6 +432,15 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\DelayCommand.h">
       <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EvalCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EmbCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\ScriptBlockStatement.h">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -748,6 +757,15 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\DelayCommand.cpp">
       <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EvalCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EmbCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\ScriptBlockStatement.cpp">
+      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

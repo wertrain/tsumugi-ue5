@@ -9,7 +9,7 @@ namespace tsumugi::text::ast::statement {
     , attributes_() {
 }
 
- TagStatement::~TagStatement() = default;
+TagStatement::~TagStatement() = default;
 
 tstring TagStatement::TokenLiteral() const {
 

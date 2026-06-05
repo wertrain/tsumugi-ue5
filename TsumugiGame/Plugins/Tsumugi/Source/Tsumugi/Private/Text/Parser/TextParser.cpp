@@ -6,9 +6,25 @@
 #include "Text/AST/Statements/LabelStatement.h"
 #include "Text/AST/Statements/TagStatement.h"
 #include "Text/AST/Statements/TextStatement.h"
+#include "Text/AST/Statements/ScriptBlockStatement.h"
 #include <cassert>
 
 namespace tsumugi::text::parser {
+
+struct BlockTagDefinition {
+    tstring begin;
+    tstring end;
+};
+
+static const BlockTagDefinition kScriptBlock {
+    TT("iscript"),
+    TT("endscript")
+};
+
+static const BlockTagDefinition kMacroBlock {
+    TT("macro"),
+    TT("endmacro")
+};
 
 Parser::Parser(lexer::Lexer* lexer)
     : errors_()
@@ -45,11 +61,15 @@ std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
                 return ParseLabelStatement();
             case lexer::TokenType::kAtMark:
                 return ParseAtMarkTagStatement();
+            case lexer::TokenType::kSemiColon:
+                return ParseCommentStatement();
         }
     }
     switch (currentToken_.get()->GetTokenType()) {
         case lexer::TokenType::kTagOpen:
             return ParseTagStatement();
+        case lexer::TokenType::kNewLine:
+            return nullptr;
     }
     return ParseTextStatement();
 }
@@ -79,7 +99,7 @@ std::unique_ptr<ast::statement::LabelStatement> Parser::ParseLabelStatement() {
     return statement;
 }
 
-std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatementCommon(std::function<bool()> shouldContinue) {
+std::unique_ptr<text::ast::IStatement> Parser::ParseTagStatementCommon(std::function<bool()> shouldContinue) {
 
     auto statement = std::make_unique<ast::statement::TagStatement>(std::move(currentToken_));
 
@@ -91,6 +111,21 @@ std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatementCom
 
     // 属性なしか判定
     if (PeekTokenIs(lexer::TokenType::kTagClose)) {
+        // iscript タグがチェックする
+        if (statement->GetTagName() == kScriptBlock.begin) {
+            tstring rawScript;
+            if (!lexer_->ReadRawUntil(rawScript, TT("[") + kScriptBlock.end + TT("]"))) {
+                errors_.LogError(i18n::MessageId::kUnclosedBlock, kScriptBlock.begin, TT("[") + kScriptBlock.end + TT("]"));
+                return nullptr;
+            }
+            // ReadRawUntil を呼び出した後はトークンの同期が必要
+            SyncTokens();
+
+            auto scriptStatement = std::make_unique<ast::statement::ScriptBlockStatement>(std::move(statement->GetTokenShared()));
+            scriptStatement->SetScriptText(rawScript);
+            return scriptStatement;
+        }
+
         // 改行があれば進める
         ReadToken();
         if (PeekTokenIs(lexer::TokenType::kNewLine)) {
@@ -125,12 +160,12 @@ std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatementCom
     return statement;
 }
 
-std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseTagStatement() {
+std::unique_ptr<text::ast::IStatement> Parser::ParseTagStatement() {
 
     return ParseTagStatementCommon([this]() { return !PeekTokenIs(lexer::TokenType::kTagClose); });
 }
 
-std::unique_ptr<text::ast::statement::TagStatement> Parser::ParseAtMarkTagStatement() {
+std::unique_ptr<text::ast::IStatement> Parser::ParseAtMarkTagStatement() {
 
     return ParseTagStatementCommon([this]() {
         return !PeekTokenIs(lexer::TokenType::kNewLine) && !PeekTokenIs(lexer::TokenType::kEOF);
@@ -145,10 +180,25 @@ std::unique_ptr<text::ast::statement::TextStatement> Parser::ParseTextStatement(
     return statement;
 }
 
+std::unique_ptr<text::ast::IStatement> Parser::ParseCommentStatement() {
+
+    while (!CurrentTokenIs(lexer::TokenType::kNewLine) && !CurrentTokenIs(lexer::TokenType::kEOF)) {
+        ReadToken();
+    }
+    // 常に nullptr を返しておく
+    return nullptr;
+}
+
 void Parser::ReadToken() {
 
     currentToken_ = nextToken_;
     nextToken_.reset();
+    nextToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
+}
+
+void Parser::SyncTokens() {
+
+    currentToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
     nextToken_ = std::shared_ptr<lexer::Token>(lexer_->NextToken());
 }
 

@@ -9,6 +9,7 @@ enum class NodeType {
     kLabelStatement,
     kTagStatement,
     kTextStatement,
+    kScriptBlockStatement,
     Num
 };
 

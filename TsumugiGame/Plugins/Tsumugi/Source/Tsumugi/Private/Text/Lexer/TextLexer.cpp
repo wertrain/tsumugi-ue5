@@ -49,6 +49,16 @@ enum SyntaxSymbol : int {
     /// 行頭のコメントマーク
     /// </summary>
     SemiColon = ';',
+
+    /// <summary>
+    /// ダブルクォーテーション
+    /// </summary>
+    DoubleQuote = '"',
+
+    /// <summary>
+    /// シングルクォーテーション
+    /// </summary>
+    SingleQuote = '\'',
 };
 
 Lexer::Lexer(const tchar* script)
@@ -99,6 +109,13 @@ Token* Lexer::NextToken() {
             }
             case SyntaxSymbol::SemiColon: {
                 token = CreateToken(TokenType::kSemiColon, tstring(1, c), currentIsLineHead);
+                break;
+            }
+            case SyntaxSymbol::DoubleQuote:
+            case SyntaxSymbol::SingleQuote: {
+                tstring out;
+                ReadQuotedString(out, c);
+                token = CreateToken(TokenType::kString, out, currentIsLineHead);
                 break;
             }
             case '\n': {
@@ -189,6 +206,79 @@ void Lexer::ReadString(tstring& out) const {
     reader_->Seek(-1, script::lexer::LexingStringReader::SeekOrigin::kCurrent);
 
     out = text;
+}
+
+void Lexer::ReadQuotedString(tstring& out, tchar quoteChar) const {
+
+    tstring text;
+
+    reader_->Read();
+
+    while (reader_->Peek() > 0) {
+        tchar next = reader_->Peek();
+        if (next == quoteChar) {
+            break;
+        }
+        if (next == '\n' || next == '\r') {
+            break;
+        }
+        text.push_back(reader_->Read());
+    }
+    if (reader_->Peek() == quoteChar) {
+        reader_->Read();
+    }
+
+    reader_->Seek(-1, script::lexer::LexingStringReader::SeekOrigin::kCurrent);
+
+    out = text;
+}
+
+bool Lexer::ReadRawUntil(tstring& out, const tstring& target) {
+
+    tstring result;
+
+    tchar targetBegin = target.front();
+    tchar targetEnd = target.back();
+
+    while (true) {
+
+        tchar c = reader_->Peek();
+
+        // EOF
+        if (c <= 0) {
+            return false;
+        }
+
+        // '[' を検出したらタグ判定
+        if (c == targetBegin) {
+            // 位置を保存
+            auto pos = reader_->GetPosition();
+
+            tstring readText;
+            readText.push_back(reader_->Read());
+            while (reader_->Peek() > 0 && reader_->Peek() != targetEnd && !IsWhiteSpace(reader_->Peek())) {
+                readText.push_back(reader_->Read());
+            }
+            // targetEnd までスキップ
+            while (reader_->Peek() > 0 && reader_->Peek() != targetEnd) {
+                reader_->Read();
+            }
+            if (reader_->Peek() == targetEnd) {
+                readText.push_back(reader_->Read());
+            }
+            if (readText == target) {
+                break;
+            }
+            // 違うなら元に戻してそのまま出力
+            reader_->Seek(pos, script::lexer::LexingStringReader::SeekOrigin::kBegin);
+            result.push_back(reader_->Read());
+            continue;
+        }
+        // 通常文字
+        result.push_back(reader_->Read());
+    }
+    out = result;
+    return true;
 }
 
 }

@@ -38,6 +38,7 @@ enum class MessageId : uint32_t {
     kNoSuperClass,
     kSuperConstructorNotFound,
     kInstanceOfRightMustBeClass,
+    kUnclosedBlock,
 };
 
 class Localizer {

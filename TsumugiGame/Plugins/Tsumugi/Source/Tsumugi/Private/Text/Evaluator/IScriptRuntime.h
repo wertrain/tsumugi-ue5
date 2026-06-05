@@ -4,6 +4,8 @@
 
 namespace tsumugi::text::ast::statement { class TagStatement; }
 namespace tsumugi::text::context { class IGameContext; }
+namespace tsumugi::script::object { class IObject; }
+namespace tsumugi::script::object { class Environment; }
 
 namespace tsumugi::text::evaluator {
 
@@ -17,6 +19,7 @@ public:
     virtual int  GetPC() const = 0;
     virtual void SetPC(int pc) = 0;
     virtual void ExpandMacro(const tstring& name) = 0;
+    virtual std::shared_ptr<tsumugi::script::object::IObject> ExecuteScript(const tstring& script) = 0;
 };
 
 }

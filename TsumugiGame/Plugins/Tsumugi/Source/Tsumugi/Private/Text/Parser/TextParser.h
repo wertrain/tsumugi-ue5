@@ -28,12 +28,14 @@ class Parser {public:
 private:
     std::unique_ptr<text::ast::IStatement> ParseStatement();
     std::unique_ptr<text::ast::statement::LabelStatement> ParseLabelStatement();
-    std::unique_ptr<text::ast::statement::TagStatement> ParseTagStatementCommon(std::function<bool()> shouldContinue);
-    std::unique_ptr<text::ast::statement::TagStatement> ParseTagStatement();
-    std::unique_ptr<text::ast::statement::TagStatement> ParseAtMarkTagStatement();
+    std::unique_ptr<text::ast::IStatement> ParseTagStatementCommon(std::function<bool()> shouldContinue);
+    std::unique_ptr<text::ast::IStatement> ParseTagStatement();
+    std::unique_ptr<text::ast::IStatement> ParseAtMarkTagStatement();
     std::unique_ptr<text::ast::statement::TextStatement> ParseTextStatement();
+    std::unique_ptr<text::ast::IStatement> ParseCommentStatement();
 
     void ReadToken();
+    void SyncTokens();
     bool CurrentTokenIs(const text::lexer::TokenType& type);
     bool PeekTokenIs(const text::lexer::TokenType& type);
     bool ExpectPeek(const text::lexer::TokenType& type);

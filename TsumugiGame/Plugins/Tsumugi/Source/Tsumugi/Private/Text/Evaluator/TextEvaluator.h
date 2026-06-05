@@ -3,12 +3,13 @@
 #include "Foundation/Types.h"
 #include "Text/Evaluator/IScriptRuntime.h"
 #include "Text/Evaluator/CommandRegistry.h"
+#include "Script/Objects/Environment.h"
 #include <vector>
 #include <unordered_map>
 
 namespace tsumugi::text::ast { class IStatement; }
 namespace tsumugi::text::ast { class Program; }
-namespace tsumugi::text::context { class IGameContext; }
+namespace tsumugi::script::object { class IObject; }
 
 namespace tsumugi::text::evaluator {
 
@@ -25,11 +26,13 @@ public:
     int GetPC() const override { return pc_; }
     void SetPC(int pc) override { pc_ = pc; }
     void ExpandMacro(const tstring& name);
+    std::shared_ptr<tsumugi::script::object::IObject> ExecuteScript(const tstring& script) override;
 
 private:
     context::IGameContext& context_;
     CommandRegistry registry_;
     int pc_;
+    std::shared_ptr<tsumugi::script::object::Environment> environment_;
 
     std::vector<int> callStack_;
     std::unordered_map<tstring, int> labelTable_;

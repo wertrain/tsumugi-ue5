@@ -1,16 +1,13 @@
 ﻿#include "ConsoleGameContext.h"
+#include "Script/Objects/Environment.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <windows.h>
 
-// --- テキスト表示 ---
-void ConsoleGameContext::ClearText() {
-
-    std::wcout << L"\x1b[2J\x1b[H"; // 画面クリア
-}
-
-void ConsoleGameContext::ShowText(const tstring& text) {
+ConsoleGameContext::ConsoleGameContext()
+    : fontState_()
+    , delayState_() {
 
     // 1. Windowsコンソールの設定
     SetConsoleOutputCP(CP_UTF8);
@@ -28,6 +25,15 @@ void ConsoleGameContext::ShowText(const tstring& text) {
 
     // 3. ロケールをシステム既定（動いているコードと同じ設定）にする
     std::setlocale(LC_ALL, "");
+}
+
+// --- テキスト表示 ---
+void ConsoleGameContext::ClearText() {
+
+    std::wcout << L"\x1b[2J\x1b[H"; // 画面クリア
+}
+
+void ConsoleGameContext::ShowText(const tstring& text) {
 
     // 色を適用
     ApplyConsoleColor(fontState_.color);
@@ -97,3 +103,4 @@ void ConsoleGameContext::ApplyConsoleColor(const tstring& hexColor) {
 
     std::wcout << L"\x1b[38;2;" << r << L";" << g << L";" << b << L"m";
 }
+

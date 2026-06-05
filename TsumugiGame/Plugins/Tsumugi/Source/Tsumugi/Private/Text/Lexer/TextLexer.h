@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Foundation/Types.h"
 #include "Text/Lexer/TextTokenTypes.h"
@@ -22,6 +22,10 @@ private:
     bool IsDigit(tchar c) const;
     bool IsLetter(tchar c) const;
     void ReadString(tstring& out) const;
+    void ReadQuotedString(tstring& out, tchar quoteChar) const;
+
+public:
+    bool ReadRawUntil(tstring& out, const tstring& target);
 
 private:
     std::unique_ptr<script::lexer::LexingStringReader> reader_;

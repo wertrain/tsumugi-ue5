@@ -5,7 +5,15 @@
 #include "Text/AST/Statements/LabelStatement.h"
 #include "Text/AST/Statements/TextStatement.h"
 #include "Text/AST/Statements/TagStatement.h"
+#include "Text/AST/Statements/ScriptBlockStatement.h"
 #include "Text/AST/TextProgram.h"
+
+#include "Script/Lexer/ScriptLexer.h"
+#include "Script/Parser/ScriptParser.h"
+#include "Script/Evaluator/Evaluator.h"
+#include "Script/AST/Program.h"
+#include "Script/Objects/Environment.h"
+#include "Script/Objects/UserObject.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -13,7 +21,14 @@ Evaluator::Evaluator(context::IGameContext& context)
     : context_(context)
     , registry_()
     , pc_(0)
-{
+    , environment_(std::make_shared<tsumugi::script::object::Environment>()) {
+
+    auto user = std::make_shared<tsumugi::script::object::UserObject>();
+    environment_->Set(TT("f"), user);
+    auto systemUser = std::make_shared<tsumugi::script::object::UserObject>();
+    environment_->Set(TT("sf"), systemUser);
+    auto tempUser = std::make_shared<tsumugi::script::object::UserObject>();
+    environment_->Set(TT("tf"), tempUser);
 }
 
 void Evaluator::Execute(const ast::Program& program) {
@@ -38,6 +53,13 @@ void Evaluator::Execute(const ast::Program& program) {
             if (auto* cmd = registry_.Get(tag->GetTagName())) {
                 cmd->Execute(*tag, *this, context_);
             }
+            pc_++;
+            continue;
+        }
+        // インラインスクリプト
+        if (statement->GetNodeType() == ast::NodeType::kScriptBlockStatement) {
+            auto script = static_cast<const ast::statement::ScriptBlockStatement*>(statement);
+            ExecuteScript(script->GetScriptText());
             pc_++;
             continue;
         }
@@ -76,6 +98,20 @@ void Evaluator::ReturnFromSubroutine() {
 
 void Evaluator::ExpandMacro(const tstring& name) {
 
+}
+
+std::shared_ptr<tsumugi::script::object::IObject> Evaluator::ExecuteScript(const tstring& script) {
+
+    auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(script.c_str());
+    auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+    auto root = parser->ParseProgram();
+
+    if (parser->GetLogger().HasAnyLog()) {
+        return nullptr; // パースエラーは無視
+    }
+
+    tsumugi::script::evaluator::Evaluator evaluator;
+    return evaluator.Eval(root.get(), environment_);
 }
 
 }

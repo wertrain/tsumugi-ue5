@@ -5,6 +5,8 @@
 
 class ConsoleGameContext : public tsumugi::text::context::IGameContext {
 public:
+    ConsoleGameContext();
+
     // --- テキスト表示 ---
     void ClearText() override;
     void ShowText(const tstring& text) override;

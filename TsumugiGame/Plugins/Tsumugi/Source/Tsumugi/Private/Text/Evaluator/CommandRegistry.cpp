@@ -5,6 +5,8 @@
 #include "Text/Commands/DelayCommand.h"
 #include "Text/Commands/NewLineCommand.h"
 #include "Text/Commands/PageBreakCommand.h"
+#include "Text/Commands/EvalCommand.h"
+#include "Text/Commands/EmbCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -18,6 +20,8 @@ CommandRegistry::CommandRegistry()
     registry_[TT("p")] = std::make_unique<command::PageBreakCommand>();
     registry_[TT("font")] = std::make_unique<command::FontCommand>();
     registry_[TT("delay")] = std::make_unique<command::DelayCommand>();
+    registry_[TT("eval")] = std::make_unique<command::EvalCommand>();
+    registry_[TT("emb")] = std::make_unique<command::EmbCommand>();
 }
 
 CommandRegistry::~CommandRegistry() {
