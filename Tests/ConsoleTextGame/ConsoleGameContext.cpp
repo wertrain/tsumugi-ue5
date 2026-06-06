@@ -30,7 +30,8 @@ ConsoleGameContext::ConsoleGameContext()
 // --- テキスト表示 ---
 void ConsoleGameContext::ClearText() {
 
-    std::wcout << L"\x1b[2J\x1b[H"; // 画面クリア
+    std::wcout << L"\x1b[2J\x1b[H"; // 画面クリア（ページ送り）
+    //std::wcout << L"\x1b[3J\x1b[2J\x1b[H" << std::flush;
 }
 
 void ConsoleGameContext::ShowText(const tstring& text) {

@@ -6,7 +6,7 @@ namespace tsumugi::text::command {
 
 void NewLineCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
-    context.ClearText();
+    context.NewLine();
 }
 
 }

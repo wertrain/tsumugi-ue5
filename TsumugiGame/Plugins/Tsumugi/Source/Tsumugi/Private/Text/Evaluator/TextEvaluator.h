@@ -25,12 +25,16 @@ public:
     void ReturnFromSubroutine() override;
     int GetPC() const override { return pc_; }
     void SetPC(int pc) override { pc_ = pc; }
+    void AdvancePC() override { ++pc_; }
+    const text::ast::IStatement* GetStatement(int pc) const;
+    void SkipUntil(const text::parser::BlockTagDefinition& block) override;
     void ExpandMacro(const tstring& name);
     std::shared_ptr<tsumugi::script::object::IObject> ExecuteScript(const tstring& script) override;
 
 private:
     context::IGameContext& context_;
     CommandRegistry registry_;
+    const text::ast::Program* program_;
     int pc_;
     std::shared_ptr<tsumugi::script::object::Environment> environment_;
 

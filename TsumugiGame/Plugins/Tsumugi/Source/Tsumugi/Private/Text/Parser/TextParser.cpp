@@ -1,4 +1,5 @@
 ﻿#include "Text/Parser/TextParser.h"
+#include "Text/Parser/BlockTagDefinition.h"
 #include "Text/Lexer/TextLexer.h"
 #include "Text/Lexer/TextToken.h"
 #include "Text/AST/ITextStatement.h"
@@ -10,21 +11,6 @@
 #include <cassert>
 
 namespace tsumugi::text::parser {
-
-struct BlockTagDefinition {
-    tstring begin;
-    tstring end;
-};
-
-static const BlockTagDefinition kScriptBlock {
-    TT("iscript"),
-    TT("endscript")
-};
-
-static const BlockTagDefinition kMacroBlock {
-    TT("macro"),
-    TT("endmacro")
-};
 
 Parser::Parser(lexer::Lexer* lexer)
     : errors_()

@@ -20,9 +20,12 @@ namespace tsumugi::text::evaluator {
 Evaluator::Evaluator(context::IGameContext& context)
     : context_(context)
     , registry_()
+    , program_(nullptr)
     , pc_(0)
     , environment_(std::make_shared<tsumugi::script::object::Environment>()) {
 
+    // 基本変数の登録
+    // ゲーム変数であれば f システム変数であれば sf 一時変数であれば tf
     auto user = std::make_shared<tsumugi::script::object::UserObject>();
     environment_->Set(TT("f"), user);
     auto systemUser = std::make_shared<tsumugi::script::object::UserObject>();
@@ -32,6 +35,8 @@ Evaluator::Evaluator(context::IGameContext& context)
 }
 
 void Evaluator::Execute(const ast::Program& program) {
+
+    program_ = &program;
 
     // ラベルテーブルの構築
     for (int i = 0; i < program.GetStatementCount(); i++) {
@@ -93,6 +98,46 @@ void Evaluator::ReturnFromSubroutine() {
     if (!callStack_.empty()) {
         pc_ = callStack_.back() + 1;
         callStack_.pop_back();
+    }
+}
+
+const text::ast::IStatement* Evaluator::GetStatement(int pc) const {
+
+    if (!program_) return nullptr;
+    if (pc < 0 || pc >= program_->GetStatementCount()) return nullptr;
+    return program_->GetStatement(pc);
+}
+
+void Evaluator::SkipUntil(const text::parser::BlockTagDefinition& block)
+{
+    int pc = this->pc_;
+
+    int nest = 0;
+
+    while (true) {
+        pc++;
+        this->pc_ = pc;
+
+        auto statement = GetStatement(pc);
+        if (!statement) return;
+
+        const text::ast::statement::TagStatement* tag = nullptr;
+        if (statement->GetNodeType() == text::ast::NodeType::kTagStatement) {
+            tag = static_cast<const text::ast::statement::TagStatement*>(statement);
+        }
+        if (!tag) continue;
+        const auto& name = tag->GetTagName();
+
+        if (name == block.begin) {
+            nest++;
+        } else if (name == block.end) {
+            if (nest == 0) return;
+            nest--;
+        } else if (nest == 0) {
+            for (auto& mid : block.middles) {
+                if (name == mid) return;
+            }
+        }
     }
 }
 

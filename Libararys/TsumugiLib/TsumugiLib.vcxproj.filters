@@ -441,6 +441,18 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\ScriptBlockStatement.h">
       <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IfCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElseCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndBlockCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\BlockTagDefinition.h">
+      <Filter>Tsumugi\Private\Text\Parser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -766,6 +778,15 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\ScriptBlockStatement.cpp">
       <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IfCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElseCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndBlockCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
