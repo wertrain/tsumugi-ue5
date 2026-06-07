@@ -6,7 +6,7 @@
 
 namespace tsumugi::text::command {
 
-void ElseCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void ElseCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     runtime.SkipUntil(text::parser::kIfBlock);  // endif まで飛ばす
 }

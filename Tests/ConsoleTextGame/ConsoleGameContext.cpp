@@ -62,7 +62,6 @@ void ConsoleGameContext::PageBreak() {
 
     std::wcout << L"\n--- Press Enter to continue ---";
     std::wcin.get();
-    std::wcout << L"\n";
 }
 
 void ConsoleGameContext::WaitForClick() {

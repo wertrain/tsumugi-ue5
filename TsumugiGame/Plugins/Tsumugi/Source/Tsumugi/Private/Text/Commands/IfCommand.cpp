@@ -8,7 +8,7 @@
 
 namespace tsumugi::text::command {
 
-void IfCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void IfCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     auto it = tag.GetAttributes().find(TT("exp"));
     if (it == tag.GetAttributes().end()) return;

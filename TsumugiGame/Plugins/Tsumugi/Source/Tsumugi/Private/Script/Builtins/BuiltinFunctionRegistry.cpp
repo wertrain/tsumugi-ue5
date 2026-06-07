@@ -1,8 +1,9 @@
-#include "Script/Builtins/BuiltinFunctionRegistry.h"
+﻿#include "Script/Builtins/BuiltinFunctionRegistry.h"
 #include "Script/Objects/ArrayObject.h"
 #include "Script/Objects/HashObject.h"
 #include "Script/Objects/StringObject.h"
 #include "Script/Objects/IntegerObject.h"
+#include "Script/Objects/FloatObject.h"
 #include "Script/Objects/BooleanObject.h"
 #include "Script/Objects/NullObject.h"
 #include "Script/Objects/ObjectHash.h"
@@ -128,7 +129,7 @@ void BuiltinFunctionRegistry::RegisterBuiltinFunctions() {
                 }
 
                 auto hashObj = static_cast<object::HashObject*>(args[0].get());
-                auto keyObj = args[1];
+                auto& keyObj = args[1];
 
                 object::HashKey key = MakeHashKey(keyObj.get());
                 const auto& pairs = hashObj->GetPairs();
@@ -182,6 +183,53 @@ void BuiltinFunctionRegistry::RegisterBuiltinFunctions() {
                 logger_.Log(log::TextLogger::Categories::Information, str);
 
                 return object::NullObject::Instance();
+            }
+        )
+    );
+
+    Register(TT("min"),
+        std::make_shared<object::BuiltinFunctionObject>(
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            {
+                if (args.size() != 2) {
+                    return errors_.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, tstring(TT("2")), std::to_string(args.size()));
+                }
+
+                if (args[0]->GetType() == object::ObjectType::kInteger && args[1]->GetType() == object::ObjectType::kInteger) {
+                    auto ai = std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue();
+                    auto bi = std::static_pointer_cast< object::IntegerObject>(args[1])->GetValue();
+                    return std::make_shared<object::IntegerObject>(std::min(ai, bi));
+                } else if (args[0]->GetType() == object::ObjectType::kFloat && args[1]->GetType() == object::ObjectType::kFloat) {
+                    auto af = std::static_pointer_cast<object::FloatObject> (args[0])->GetValue();
+                    auto bf = std::static_pointer_cast<object::FloatObject>(args[1])->GetValue();
+                    return std::make_shared<object::IntegerObject>(std::min(af, bf));
+                }
+
+                return errors_.MakeErrorObject(i18n::MessageId::kTypeMismatch, object::ObjectTypeToTString(args[0]->GetType()), object::ObjectTypeToTString(args[1]->GetType()));
+            }
+        )
+    );
+
+    Register(TT("max"),
+        std::make_shared<object::BuiltinFunctionObject>(
+            [](std::shared_ptr<object::IObject> receiver, const std::vector<std::shared_ptr<object::IObject>>& args) -> std::shared_ptr<object::IObject>
+            {
+                if (args.size() != 2) {
+                    return errors_.MakeErrorObject(i18n::MessageId::kWrongNumberOfArguments, tstring(TT("2")), std::to_string(args.size()));
+                }
+
+                if (args[0]->GetType() == object::ObjectType::kInteger && args[1]->GetType() == object::ObjectType::kInteger) {
+                    auto ai = std::static_pointer_cast<object::IntegerObject>(args[0])->GetValue();
+                    auto bi = std::static_pointer_cast<object::IntegerObject>(args[1])->GetValue();
+                    return std::make_shared<object::IntegerObject>(std::max(ai, bi));
+                }
+                else if (args[0]->GetType() == object::ObjectType::kFloat && args[1]->GetType() == object::ObjectType::kFloat) {
+                    auto af = std::static_pointer_cast<object::FloatObject> (args[0])->GetValue();
+                    auto bf = std::static_pointer_cast<object::FloatObject>(args[1])->GetValue();
+                    return std::make_shared<object::IntegerObject>(std::max(af, bf));
+                }
+
+                return errors_.MakeErrorObject(i18n::MessageId::kTypeMismatch, object::ObjectTypeToTString(args[0]->GetType()), object::ObjectTypeToTString(args[1]->GetType()));
             }
         )
     );

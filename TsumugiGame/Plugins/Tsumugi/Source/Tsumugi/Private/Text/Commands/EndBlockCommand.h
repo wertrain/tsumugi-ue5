@@ -11,7 +11,7 @@ namespace tsumugi::text::command {
 
 class EndBlockCommand : public command::ICommand {
 public:
-    void Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) override;
+    void Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) override;
 };
 
 }

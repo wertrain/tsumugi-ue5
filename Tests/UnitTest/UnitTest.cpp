@@ -2733,6 +2733,53 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestEvalMinMax)
+		{
+			struct {
+				tstring input;
+				std::function<void(tsumugi::script::object::IObject*)> tester;
+			} tests[] = {
+
+				// ----------------------------------------
+				// UserObject ‚ÌƒeƒXƒg
+				// ----------------------------------------
+				{
+					TT("min(-10, 0)"),
+					[](auto* obj) { _TestIntegerObject(obj, -10); }
+				},
+				{
+					TT("min(100, 0)"),
+					[](auto* obj) { _TestIntegerObject(obj, 0); }
+				},
+				{
+					TT("max(-10, 0)"),
+					[](auto* obj) { _TestIntegerObject(obj, 0); }
+				},
+				{
+					TT("max(100, 0)"),
+					[](auto* obj) { _TestIntegerObject(obj, 100); }
+				},
+				{
+					TT("max(100, false)"),
+					[](auto* obj) { Assert::AreEqual(obj->GetType() == tsumugi::script::object::ObjectType::kError, true); }
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				tt.tester(evaluated.get());
+			}
+		}
 
 		static void _TestIntegerObject(tsumugi::script::object::IObject *obj, int expected)
 		{

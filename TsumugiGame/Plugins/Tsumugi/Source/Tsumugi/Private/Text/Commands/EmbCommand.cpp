@@ -11,7 +11,7 @@
 
 namespace tsumugi::text::command {
 
-void EmbCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void EmbCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     auto it = tag.GetAttributes().find(TT("exp"));
     if (it == tag.GetAttributes().end()) return;

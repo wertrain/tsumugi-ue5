@@ -4,7 +4,7 @@
 
 namespace tsumugi::text::command {
 
-void WaitCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void WaitCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     int time = std::stoi(tag.GetAttributes().at(TT("time")));
     context.Wait(time);

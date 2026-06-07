@@ -4,7 +4,7 @@
 
 namespace tsumugi::text::command {
 
-void FontCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void FontCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     auto& font = context.GetFontState();
 

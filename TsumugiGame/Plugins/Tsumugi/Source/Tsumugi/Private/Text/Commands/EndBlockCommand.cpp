@@ -5,7 +5,7 @@
 
 namespace tsumugi::text::command {
 
-void EndBlockCommand::Execute(const ast::statement::TagStatement& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void EndBlockCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
 }
 

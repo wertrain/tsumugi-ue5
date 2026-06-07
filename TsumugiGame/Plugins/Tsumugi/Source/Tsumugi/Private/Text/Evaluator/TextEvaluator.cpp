@@ -55,8 +55,9 @@ void Evaluator::Execute(const ast::Program& program) {
         // タグ
         if (statement->GetNodeType() == ast::NodeType::kTagStatement) {
             auto tag = static_cast<const ast::statement::TagStatement*>(statement);
+            command::TagAttributeResolver resolver(*tag, *this);
             if (auto* cmd = registry_.Get(tag->GetTagName())) {
-                cmd->Execute(*tag, *this, context_);
+                cmd->Execute(resolver, *this, context_);
             }
             pc_++;
             continue;
