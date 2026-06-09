@@ -471,6 +471,9 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndIfCommand.h">
       <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\JumpCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -822,6 +825,9 @@
       <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndIfCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\JumpCommand.cpp">
       <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClCompile>
   </ItemGroup>

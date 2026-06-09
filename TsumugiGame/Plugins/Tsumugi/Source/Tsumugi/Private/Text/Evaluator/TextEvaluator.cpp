@@ -144,7 +144,7 @@ void Evaluator::ReturnFromSubroutine() {
     if (!callStack_.empty()) {
         int returnPc = callStack_.back();
         callStack_.pop_back();
-        pc_ = returnPc - 1;  // 次のステップの pc_++ で「コールタグの次の行」に進めたいので、コールタグ自身のインデックス（returnPc）の 1 つ前に戻す
+        pc_ = returnPc;
     }
 }
 

@@ -166,7 +166,7 @@ int main()
 		[cm]
 		条件によってサブルーチン内でジャンプします。[r]
 
-		[eval exp="f.flag = 1"]
+		[eval exp="f.flag = 0"]
 		; f.flag を 0 / 1 / 2 に変えて動作確認できます
 
 		[call target=*check]
@@ -203,7 +203,7 @@ int main()
 		[return]
 	)";
 
-	sample = LR"(
+	/*sample = LR"(
 		*start
 		[cm]
 		if / elsif / else のテストを開始します。[r]
@@ -356,7 +356,7 @@ int main()
 
 		テスト終了。[r]
 		[s]
-	)";
+	)";*/
 
 	std::wcout << "Hello Tsumugi Text!" << std::endl;
 
