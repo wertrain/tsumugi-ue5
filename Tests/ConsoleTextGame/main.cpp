@@ -161,7 +161,202 @@ int main()
 		これで eval / emb のテストは完了です。[r]
 		ご協力ありがとうございました。[p])";
 
+	sample = LR"(
+		*start
+		[cm]
+		条件によってサブルーチン内でジャンプします。[r]
 
+		[eval exp="f.flag = 1"]
+		; f.flag を 0 / 1 / 2 に変えて動作確認できます
+
+		[call target=*check]
+
+		戻ってきました。[r]
+		[s]
+
+		;---------------------------------------
+		; サブルーチン本体
+		;---------------------------------------
+		*check
+		[if exp="f.flag == 1"]
+			f.flag == 1 の処理です。[r]
+			[jump target=*path1]
+		[endif]
+
+		[if exp="f.flag == 2"]
+			f.flag == 2 の処理です。[r]
+			[jump target=*path2]
+		[endif]
+
+		どちらでもないので return。[r]
+		[return]
+
+		;---------------------------------------
+		; サブルーチンの分岐先
+		;---------------------------------------
+		*path1
+		flag1 の処理です。[r]
+		[return]
+
+		*path2
+		flag2 の処理です。[r]
+		[return]
+	)";
+
+	sample = LR"(
+		*start
+		[cm]
+		if / elsif / else のテストを開始します。[r]
+
+		;---------------------------------------
+		; テスト 1：if が true
+		;---------------------------------------
+		[eval exp="f.x = 0"]
+		[cm]
+		テスト1：f.x = 0 の場合。[r]
+
+		[if exp="f.x == 0"]
+			IF ブロックが実行されました。[r]
+		[elsif exp="f.x == 1"]
+			ELSIF ブロック（出てはいけない）。[r]
+		[else]
+			ELSE ブロック（出てはいけない）。[r]
+		[endif]
+
+		次へ。[r]
+
+
+		;---------------------------------------
+		; テスト 2：elsif が true
+		;---------------------------------------
+		[eval exp="f.x = 1"]
+		[cm]
+		テスト2：f.x = 1 の場合。[r]
+
+		[if exp="f.x == 0"]
+			IF ブロック（出てはいけない）。[r]
+		[elsif exp="f.x == 1"]
+			ELSIF ブロックが実行されました。[r]
+		[else]
+			ELSE ブロック（出てはいけない）。[r]
+		[endif]
+
+		次へ。[r]
+
+
+		;---------------------------------------
+		; テスト 3：else が実行される
+		;---------------------------------------
+		[eval exp="f.x = 2"]
+		[cm]
+		テスト3：f.x = 2 の場合。[r]
+
+		[if exp="f.x == 0"]
+			IF ブロック（出てはいけない）。[r]
+		[elsif exp="f.x == 1"]
+			ELSIF ブロック（出てはいけない）。[r]
+		[else]
+			ELSE ブロックが実行されました。[r]
+		[endif]
+
+		テスト終了。[r]
+		[s]
+	)";
+
+	sample = LR"(
+		*start
+		[cm]
+		ネスト if / elsif / else のテストを開始します。[r]
+
+		;---------------------------------------
+		; テスト 1：外側 if が true
+		;---------------------------------------
+		[eval exp="f.x = 0"]
+		[eval exp="f.y = 1"]
+		[cm]
+		テスト1：f.x=0, f.y=1 の場合。[r]
+
+		[if exp="f.x == 0"]
+			外側 IF が実行されました。[r]
+
+			[if exp="f.y == 1"]
+				内側 IF が実行されました。[r]
+			[elsif exp="f.y == 2"]
+				内側 ELSIF（出てはいけない）。[r]
+			[else]
+				内側 ELSE（出てはいけない）。[r]
+			[endif]
+
+		[elsif exp="f.x == 1"]
+			外側 ELSIF（出てはいけない）。[r]
+		[else]
+			外側 ELSE（出てはいけない）。[r]
+		[endif]
+
+		次へ。[r]
+
+
+		;---------------------------------------
+		; テスト 2：外側 elsif が true
+		;---------------------------------------
+		[eval exp="f.x = 1"]
+		[eval exp="f.y = 2"]
+		[cm]
+		テスト2：f.x=1, f.y=2 の場合。[r]
+
+		[if exp="f.x == 0"]
+			外側 IF（出てはいけない）。[r]
+
+			[if exp="f.y == 1"]
+				内側 IF（出てはいけない）。[r]
+			[else]
+				内側 ELSE（出てはいけない）。[r]
+			[endif]
+
+		[elsif exp="f.x == 1"]
+			外側 ELSIF が実行されました。[r]
+
+			[if exp="f.y == 2"]
+				内側 IF が実行されました。[r]
+			[else]
+				内側 ELSE（出てはいけない）。[r]
+			[endif]
+
+		[else]
+			外側 ELSE（出てはいけない）。[r]
+		[endif]
+
+		次へ。[r]
+
+
+		;---------------------------------------
+		; テスト 3：外側 else が実行される
+		;---------------------------------------
+		[eval exp="f.x = 2"]
+		[eval exp="f.y = 3"]
+		[cm]
+		テスト3：f.x=2, f.y=3 の場合。[r]
+
+		[if exp="f.x == 0"]
+			外側 IF（出てはいけない）。[r]
+		[elsif exp="f.x == 1"]
+			外側 ELSIF（出てはいけない）。[r]
+		[else]
+			外側 ELSE が実行されました。[r]
+
+			[if exp="f.y == 1"]
+				内側 IF（出てはいけない）。[r]
+			[elsif exp="f.y == 2"]
+				内側 ELSIF（出てはいけない）。[r]
+			[else]
+				内側 ELSE が実行されました。[r]
+			[endif]
+
+		[endif]
+
+		テスト終了。[r]
+		[s]
+	)";
 
 	std::wcout << "Hello Tsumugi Text!" << std::endl;
 
@@ -172,7 +367,11 @@ int main()
 	ConsoleGameContext ctx;
 	tsumugi::text::evaluator::Evaluator eval(ctx);
 
-	eval.Execute(*program);
+	//eval.Execute(*program);
+
+	eval.Start(*program);
+	while (!eval.IsStopRequested() && eval.Step()) {
+	}
 
 	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 

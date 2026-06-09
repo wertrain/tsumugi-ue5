@@ -47,6 +47,9 @@ public:
     virtual void Load(int slot) = 0;
     virtual void SetUserFont(const tstring& fontName) = 0;
     virtual void SetUserTextSpeed(int ms) = 0;
+
+    // --- 実行制御 ---
+    virtual bool IsWaiting() const = 0;
 };
 
 }

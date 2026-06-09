@@ -89,6 +89,12 @@ void ConsoleGameContext::Wait(int ms) {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 
+// --- 実行制御 ---
+bool ConsoleGameContext::IsWaiting() const {
+
+    return false;
+}
+
 // --- 色変換 ---
 void ConsoleGameContext::ApplyConsoleColor(const tstring& hexColor) {
 
@@ -103,4 +109,5 @@ void ConsoleGameContext::ApplyConsoleColor(const tstring& hexColor) {
 
     std::wcout << L"\x1b[38;2;" << r << L";" << g << L";" << b << L"m";
 }
+
 

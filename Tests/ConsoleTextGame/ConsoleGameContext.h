@@ -46,6 +46,8 @@ public:
     void SetUserFont(const tstring& fontName) override {}
     void SetUserTextSpeed(int ms) override {}
 
+    // --- é¿çsêßå‰ ---
+    virtual bool IsWaiting() const override;
 private:
     tsumugi::text::context::FontState fontState_;
     tsumugi::text::context::DelayState delayState_;

@@ -18,6 +18,13 @@ public:
     virtual void JumpToLabel(const tstring& label) = 0;
     virtual void CallSubroutine(const tstring& label) = 0;
     virtual void ReturnFromSubroutine() = 0;
+    virtual void RequestStop() = 0;
+    virtual bool IsStopRequested() const = 0;
+
+    virtual void PushBlockState(bool initial) = 0;
+    virtual bool GetBlockState() const = 0;
+    virtual void SetBlockState(bool value) = 0;
+    virtual void PopBlockState() = 0;
 
     virtual int  GetPC() const = 0;
     virtual void SetPC(int pc) = 0;

@@ -8,8 +8,13 @@
 #include "Text/Commands/EvalCommand.h"
 #include "Text/Commands/EmbCommand.h"
 #include "Text/Commands/IfCommand.h"
+#include "Text/Commands/ElsifCommand.h"
 #include "Text/Commands/ElseCommand.h"
+#include "Text/Commands/EndIfCommand.h"
 #include "Text/Commands/EndBlockCommand.h"
+#include "Text/Commands/CallCommand.h"
+#include "Text/Commands/ReturnCommand.h"
+#include "Text/Commands/StopCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -26,9 +31,12 @@ CommandRegistry::CommandRegistry()
     registry_[TT("eval")] = std::make_unique<command::EvalCommand>();
     registry_[TT("emb")] = std::make_unique<command::EmbCommand>();
     registry_[TT("if")] = std::make_unique<command::IfCommand>();
-    registry_[TT("elsif")] = std::make_unique<command::IfCommand>();
+    registry_[TT("elsif")] = std::make_unique<command::ElsifCommand>();
     registry_[TT("else")] = std::make_unique<command::ElseCommand>();
-    registry_[TT("endif")] = std::make_unique<command::EndBlockCommand>();
+    registry_[TT("endif")] = std::make_unique<command::EndIfCommand>();
+    registry_[TT("call")] = std::make_unique<command::CallCommand>();
+    registry_[TT("return")] = std::make_unique<command::ReturnCommand>();
+    registry_[TT("s")] = std::make_unique<command::StopCommand>();
 }
 
 CommandRegistry::~CommandRegistry() {

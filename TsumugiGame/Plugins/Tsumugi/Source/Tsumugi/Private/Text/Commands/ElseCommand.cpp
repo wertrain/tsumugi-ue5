@@ -8,7 +8,11 @@ namespace tsumugi::text::command {
 
 void ElseCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
-    runtime.SkipUntil(text::parser::kIfBlock);  // endif まで飛ばす
+    if (runtime.GetBlockState()) {
+        runtime.SkipUntil(text::parser::kIfBlock);
+    } else {
+        runtime.SetBlockState(true);
+    }
 }
 
 }

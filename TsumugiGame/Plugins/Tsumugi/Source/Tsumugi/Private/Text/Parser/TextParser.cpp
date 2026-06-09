@@ -130,6 +130,12 @@ std::unique_ptr<text::ast::IStatement> Parser::ParseTagStatementCommon(std::func
         if (!ExpectPeekRequiredTokenType(lexer::TokenType::kAssign, "=")) {
             return nullptr;
         }
+
+        // call などラベルの指定で * が入る場合がある
+        if (PeekTokenIs(lexer::TokenType::kAsterisk)) {
+            ReadToken();
+        }
+
         if (!ExpectPeekRequiredTokenType(lexer::TokenType::kString, "attribute value")) {
             return nullptr;
         }

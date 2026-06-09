@@ -453,6 +453,24 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\BlockTagDefinition.h">
       <Filter>Tsumugi\Private\Text\Parser</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IgnoreCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\CallCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ReturnCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\StopCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElsifCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndIfCommand.h">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
@@ -786,6 +804,24 @@
       <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndBlockCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IgnoreCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\CallCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ReturnCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\StopCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElsifCommand.cpp">
+      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndIfCommand.cpp">
       <Filter>Tsumugi\Private\Text\Commands</Filter>
     </ClCompile>
   </ItemGroup>

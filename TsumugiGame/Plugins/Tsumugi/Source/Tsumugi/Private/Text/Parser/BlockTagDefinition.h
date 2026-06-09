@@ -12,23 +12,30 @@ namespace tsumugi::text::parser {
     };
 
     // iscript
-    static const BlockTagDefinition kScriptBlock{
+    static const BlockTagDefinition kScriptBlock {
         TT("iscript"),
         {},
         TT("endscript")
     };
 
     // macro
-    static const BlockTagDefinition kMacroBlock{
+    static const BlockTagDefinition kMacroBlock {
         TT("macro"),
         {},
         TT("endmacro")
     };
 
     // if / elsif / else / endif
-    static const BlockTagDefinition kIfBlock{
+    static const BlockTagDefinition kIfBlock {
         TT("if"),
         { TT("elsif"), TT("else") },
         TT("endif")
     };
+
+    // ignore
+    static const BlockTagDefinition kIgnoreBlock {
+        TT("ignore"),
+        {},
+        TT("endignore")
+    }; 
 }

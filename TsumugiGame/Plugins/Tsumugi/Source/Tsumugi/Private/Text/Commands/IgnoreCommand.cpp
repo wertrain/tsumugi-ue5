@@ -1,4 +1,4 @@
-﻿#include "Text/Commands/IfCommand.h"
+﻿#include "Text/Commands/IgnoreCommand.h"
 #include "Text/AST/Statements/TagStatement.h"
 #include "Text/Context/IGameContext.h"
 #include "Text/Evaluator/IScriptRuntime.h"
@@ -8,7 +8,7 @@
 
 namespace tsumugi::text::command {
 
-void IfCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
+void IgnoreCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     auto it = tag.GetAttributes().find(TT("exp"));
     if (it == tag.GetAttributes().end()) return;
@@ -20,14 +20,9 @@ void IfCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRunti
     if (result->GetType() == script::object::ObjectType::kBoolean) {
         condition = std::static_pointer_cast<script::object::BooleanObject>(result)->GetValue();
     }
-
-    runtime.PushBlockState(false);
-
     if (condition) {
-        runtime.SetBlockState(true);
-    } else {
-        // 次の elsif / else / endif までスキップ
-        runtime.SkipUntil(text::parser::kIfBlock);
+        // false → endignore までスキップ
+        runtime.SkipUntil(text::parser::kIgnoreBlock);
     }
 }
 
