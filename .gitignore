@@ -79,8 +79,13 @@ Tests/UnitTest/*.user
 Tests/REPL/*.user
 Tests/CodeDemo/*.user
 Tests/ConsoleTextGame/*.user
+Tests/SDLTextGame/*.user
 Libararys/TsumugiLib/x64/
 Tests/UnitTest/x64/
 Tests/REPL/x64/
 Tests/CodeDemo/x64/
 Tests/ConsoleTextGame/x64/
+Tests/SDLTextGame/x64/
+
+Tests/SDLTextGame/SDL3-*/lib/*/*.pdb
+Tests/SDLTextGame/SDL3_ttf-*/lib/*/*.pdb
