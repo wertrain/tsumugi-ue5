@@ -80,13 +80,6 @@ bool Evaluator::Step() {
         context_.ShowText(text->GetText());
     }
 
-    // 新しくウェイトが発生した場合は、 pc_ を進めずにここで終了する（現在の pc_ を維持して次フレームへ）。
-    // ジャンプ系コマンドで pc_ が書き換わった場合も、IsWaiting が false ならそのまま進む。
-    if (context_.IsWaiting()) {
-        return true;
-    }
-
-    // ジャンプ補正方式：基本はここで 1 進める
     pc_++;
 
     return true;

@@ -56,28 +56,12 @@ void SDLGameContext::ClearText() {
     textTimer_ = 0.0f;
     mode_ = Mode::Idle;
     waiting_ = false;
-    lastProcessedText_ = ""; // 履歴リセット
 }
 
 void SDLGameContext::ShowText(const tstring& text) {
     std::string utf8 = WStringToUTF8(text);
 
-    // 💡【究極の修正ポイント】
-    // Evaluator が pc_ を進められずに、今さっき表示し終わったテキストと
-    // 「完全に同じ文字列」を再実行して突っ込んできた場合：
-    if (lastProcessedText_ == utf8 && currentIndex_ >= currentText_.size()) {
-        // 「もう私は表示し終わっています！」という合図として、
-        // waiting_ をあえて false にします。
-        // これにより、Evaluator::Step() 末尾の if (context_.IsWaiting()) を
-        // すり抜けさせ、pc_++ を強制的に実行させて次の命令へ進めます！
-        waiting_ = false;
-        return;
-    }
-
-    // 💡 本当に新しいテキスト（または次の細切れテキスト）が来た場合のみ結合・再生する
     currentText_ += utf8;
-    lastProcessedText_ = utf8; // 最後に処理した生の文字列を記憶
-
     mode_ = Mode::ShowingText;
     waiting_ = true; // 新規再生が始まるので、このフレーム内での先読みをブロック
 }
@@ -131,7 +115,6 @@ void SDLGameContext::HandleEvent(const SDL_Event& e) {
             visibleText_.clear();
             currentIndex_ = 0;
             textTimer_ = 0.0f;
-            lastProcessedText_ = ""; // 履歴も消去
 
             waiting_ = false;
             mode_ = Mode::Idle;
@@ -201,17 +184,38 @@ void SDLGameContext::Update(float dt) {
 }
 
 void SDLGameContext::Render() {
+    // 背景クリア（黒）
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
     SDL_RenderClear(renderer_);
 
     if (!visibleText_.empty() && font_) {
-        SDL_Surface* surface = TTF_RenderText_Solid(font_, visibleText_.c_str(), visibleText_.length(), currentColor_);
+        // ウィンドウの現在のサイズを動的に取得する
+        int winW = 800;
+        int winH = 600;
+        SDL_GetWindowSize(window_, &winW, &winH);
+        // 右側にも左側と同じだけの余白（マージン）を持たせる
+        int paddingRight = cursorX_;
+        int wrapWidth = winW - cursorX_ - paddingRight;
+
+        // もしウィンドウが極端に狭くなった場合の安全弁
+        if (wrapWidth < 100) wrapWidth = 100;
+
+        SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(
+            font_,
+            visibleText_.c_str(),
+            visibleText_.length(),
+            currentColor_,
+            wrapWidth
+        );
+
         if (surface) {
             SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_, surface);
             if (texture) {
                 float w, h;
                 SDL_GetTextureSize(texture, &w, &h);
-                SDL_FRect dst = { (float)cursorX_, (float)cursorY_, (float)w, (float)h };
+
+                // cursorX_, cursorY_ を基準に描画
+                SDL_FRect dst = { (float)cursorX_, (float)cursorY_, w, h };
                 SDL_RenderTexture(renderer_, texture, nullptr, &dst);
                 SDL_DestroyTexture(texture);
             }
@@ -219,9 +223,21 @@ void SDLGameContext::Render() {
         }
     }
 
+    // [p] タグによるクリック待ち記号の描画
     if (mode_ == Mode::WaitingForClick) {
         SDL_SetRenderDrawColor(renderer_, 0, 170, 255, 255);
-        SDL_FRect sign = { 730.0f, 520.0f, 20.0f, 20.0f };
+
+        int winW = 800;
+        int winH = 600;
+        SDL_GetWindowSize(window_, &winW, &winH);
+
+        float signSize = 20.0f;
+        float marginRight = 50.0f;
+        float marginBottom = 50.0f;
+        float signX = (float)winW - signSize - marginRight;
+        float signY = (float)winH - signSize - marginBottom;
+
+        SDL_FRect sign = { signX, signY, signSize, signSize };
         SDL_RenderFillRect(renderer_, &sign);
     }
 

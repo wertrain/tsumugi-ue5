@@ -6,7 +6,6 @@ namespace tsumugi::text::command {
 
 void PageBreakCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
-    runtime.AdvancePC();
     context.PageBreak();
 }
 

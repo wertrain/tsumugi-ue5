@@ -79,8 +79,6 @@ private:
     int cursorX_ = 50;
     int cursorY_ = 50;
 
-    std::string lastProcessedText_;
-
     std::string WStringToUTF8(const std::wstring& wstr);
     size_t NextUTF8CharSize(const char* p);
 };
