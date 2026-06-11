@@ -102,7 +102,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SDL3-3.4.10/include;$(ProjectDir)SDL3_ttf-3.2.2/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL3-3.4.10\include;$(ProjectDir)SDL3_ttf-3.2.2\include;$(SolutionDir)Plugins\Tsumugi\Source\Tsumugi\Private</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +124,8 @@ copy "$(ProjectDir)SDL3_ttf-3.2.2\lib\x64\SDL3_ttf.dll" "$(OutDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SDL3-3.4.10/include;$(ProjectDir)SDL3_ttf-3.2.2/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL3-3.4.10\include;$(ProjectDir)SDL3_ttf-3.2.2\include;$(SolutionDir)Plugins\Tsumugi\Source\Tsumugi\Private</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,6 +140,15 @@ copy "$(ProjectDir)SDL3_ttf-3.2.2\lib\x64\SDL3_ttf.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SDLGameContext.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDLGameContext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libararys\TsumugiLib\TsumugiLib.vcxproj">
+      <Project>{20ae2b99-38ac-4f0f-be7d-a576786f309b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,7 +14,7 @@ public:
     virtual void ShowText(const tstring& text) = 0;
     virtual void NewLine() = 0;
     virtual void PageBreak() = 0;
-    virtual void WaitForClick() = 0;
+    virtual void WaitForInput() = 0;
 
     // --- フォント ---
     virtual FontState& GetFontState() = 0;

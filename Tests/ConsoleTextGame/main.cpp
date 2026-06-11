@@ -203,7 +203,7 @@ int main()
 		[return]
 	)";
 
-	/*sample = LR"(
+	sample = LR"(
 		*start
 		[cm]
 		if / elsif / else のテストを開始します。[r]
@@ -356,7 +356,7 @@ int main()
 
 		テスト終了。[r]
 		[s]
-	)";*/
+	)";
 
 	std::wcout << "Hello Tsumugi Text!" << std::endl;
 

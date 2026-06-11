@@ -39,13 +39,6 @@
 #include "Script/Lexer/LexingStringReader.h"
 #include "Script/Evaluator/Evaluator.h"
 #include "Log/TextLogger.h"
-#include "Text/Lexer/TextLexer.h"
-#include "Text/Lexer/TextToken.h"
-#include "Text/Parser/TextParser.h"
-#include "Text/AST/TextProgram.h"
-#include "Text/AST/Statements/LabelStatement.h"
-#include "Text/AST/Statements/TagStatement.h"
-#include "Text/AST/Statements/TextStatement.h"
 #include <vector>
 #include <variant>
 
@@ -63,7 +56,7 @@ public:
 
 namespace UnitTest
 {
-	TEST_CLASS(LexingUnitTest)
+	TEST_CLASS(TsumugiScriptTest)
 	{
 	public:
 		
@@ -158,106 +151,6 @@ namespace UnitTest
 				delete nextToken;
 			}
 			testTokens.clear();
-		}
-
-		TEST_METHOD(SimpleTextLexer)
-		{
-			auto input = 
-				TT("[wait time=200]\n")
-				TT("*start | スタート\r\n")
-				TT("[cm]\r\n")
-				TT("こんにちは。\n");
-			tsumugi::text::lexer::Lexer lexer(input);
-
-			std::vector<tsumugi::text::lexer::Token*> testTokens;
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagOpen, TT("["), true));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("wait"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("time"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kAssign, TT("="), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("200"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagClose, TT("]"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("\\n"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kAsterisk, TT("*"), true));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("start"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kPipe, TT("|"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("スタート"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("\\r\\n"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagOpen, TT("["), true));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("cm"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kTagClose, TT("]"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("\\r\\n"), false));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kString, TT("こんにちは。"), true));
-			testTokens.push_back(new tsumugi::text::lexer::Token(tsumugi::text::lexer::TokenType::kNewLine, TT("(\\n"), false));
-
-			for (const auto* testToken : testTokens)
-			{
-				const auto* nextToken = lexer.NextToken();
-				Logger::WriteMessage((TT("\nTesting code: ") + testToken->GetLiteral()).c_str());
-				Assert::IsNotNull(nextToken);
-				Assert::AreEqual(testToken->GetTokenType() == nextToken->GetTokenType(), true,
-					MSG("Expected " << tsumugi::text::lexer::TokenTypeToString(testToken->GetTokenType()) << " Actual:" << tsumugi::text::lexer::TokenTypeToString(nextToken->GetTokenType())));
-				//Assert::AreEqual(testToken->GetLiteral().compare(nextToken->GetLiteral()), 0);
-				delete nextToken;
-			}
-			testTokens.clear();
-		}
-
-		TEST_METHOD(TextParserLabelStatement)
-		{
-			tstring testcode =
-				TT("*start | スタート");
-
-			auto lexer = std::make_unique<tsumugi::text::lexer::Lexer>(testcode.c_str());
-			auto parser = std::make_unique<tsumugi::text::parser::Parser>(lexer.get());
-			auto root = parser->ParseProgram();
-
-			Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
-			auto statement = dynamic_cast<const tsumugi::text::ast::statement::LabelStatement*>(root->GetStatement(0));
-			Assert::IsNotNull(statement);
-			Assert::AreEqual(statement->TokenLiteral().compare(TT("*")) == 0, true);
-			Assert::AreEqual(statement->GetLabelName().compare(TT("start")) == 0, true);
-			Assert::AreEqual(statement->GetLabelHeadline().compare(TT("スタート")) == 0, true);
-		}
-
-		TEST_METHOD(TextParserTagStatement)
-		{
-			std::vector<tstring> tests = {
-				TT("[wait time=200]"),
-				TT("@wait time=200"),
-			};
-
-			for (auto& testcode : tests) {
-				Logger::WriteMessage((TT("\nTesting code: ") + testcode + TT("\n")).c_str());
-				auto lexer = std::make_unique<tsumugi::text::lexer::Lexer>(testcode.c_str());
-				auto parser = std::make_unique<tsumugi::text::parser::Parser>(lexer.get());
-				auto root = parser->ParseProgram();
-
-				Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
-				auto statement = dynamic_cast<const tsumugi::text::ast::statement::TagStatement*>(root->GetStatement(0));
-				Assert::IsNotNull(statement);
-				Assert::AreEqual(statement->TokenLiteral().compare(TT("[")) == 0 || statement->TokenLiteral().compare(TT("@")) == 0, true);
-				Assert::AreEqual(statement->GetTagName().compare(TT("wait")) == 0, true);
-				Assert::AreEqual(statement->GetAttributes().at(TT("time")).compare(TT("200")) == 0, true);
-			}
-		}
-
-		TEST_METHOD(TextParserTagStatementMultiAttribute)
-		{
-			tstring testcode =
-				TT("[wait time=200 aaa=test]");
-				TT("@wait time=200 aaa=test");
-
-			auto lexer = std::make_unique<tsumugi::text::lexer::Lexer>(testcode.c_str());
-			auto parser = std::make_unique<tsumugi::text::parser::Parser>(lexer.get());
-			auto root = parser->ParseProgram();
-
-			Assert::AreEqual(root->GetStatementCount() == 1, true, MSG("The number of Root.Statements is incorrect."));
-			auto statement = dynamic_cast<const tsumugi::text::ast::statement::TagStatement*>(root->GetStatement(0));
-			Assert::IsNotNull(statement);
-			Assert::AreEqual(statement->TokenLiteral().compare(TT("[")) == 0, true);
-			Assert::AreEqual(statement->GetTagName().compare(TT("wait")) == 0, true);
-			Assert::AreEqual(statement->GetAttributes().at(TT("time")).compare(TT("200")) == 0, true);
-			Assert::AreEqual(statement->GetAttributes().at(TT("aaa")).compare(TT("test")) == 0, true);
 		}
 
 		TEST_METHOD(SimpleCode)

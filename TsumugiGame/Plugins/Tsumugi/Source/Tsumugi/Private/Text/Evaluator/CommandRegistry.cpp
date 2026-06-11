@@ -16,6 +16,7 @@
 #include "Text/Commands/ReturnCommand.h"
 #include "Text/Commands/StopCommand.h"
 #include "Text/Commands/JumpCommand.h"
+#include "Text/Commands/LineWaitCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -24,7 +25,7 @@ CommandRegistry::CommandRegistry()
 
     registry_[TT("wait")] = std::make_unique<command::WaitCommand>();
     registry_[TT("cm")] = std::make_unique<command::ClearTextCommand>();
-    registry_[TT("l")] = std::make_unique<command::NewLineCommand>();
+    registry_[TT("l")] = std::make_unique<command::LineWaitCommand>();
     registry_[TT("r")] = std::make_unique<command::NewLineCommand>();
     registry_[TT("p")] = std::make_unique<command::PageBreakCommand>();
     registry_[TT("font")] = std::make_unique<command::FontCommand>();

@@ -1,56 +1,86 @@
-#pragma once
+ï»¿#pragma once
 #include "Text/Context/IGameContext.h"
-#include <iostream>
-#include <thread>
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <string>
 
-class ConsoleGameContext : public tsumugi::text::context::IGameContext {
+class SDLGameContext : public tsumugi::text::context::IGameContext {
 public:
-    ConsoleGameContext();
+    SDLGameContext();
+    ~SDLGameContext();
 
-    // --- ƒeƒLƒXƒg•\¦ ---
+    // --- IGameContext API ---
     void ClearText() override;
     void ShowText(const tstring& text) override;
     void NewLine() override;
     void PageBreak() override;
     void WaitForInput() override;
 
-    // --- ƒtƒHƒ“ƒg ---
     tsumugi::text::context::FontState& GetFontState() override { return fontState_; }
     void ApplyFontState(const tsumugi::text::context::FontState& state) override;
 
-    // --- •¶š‘—‚è‘¬“x ---
     tsumugi::text::context::DelayState& GetDelayState() override { return delayState_; }
     void ApplyDelayState(const tsumugi::text::context::DelayState& state) override;
 
-    // --- ‰‰o ---
     void Wait(int ms) override;
     void ShakeScreen(int strength, int time) override {}
     void FadeIn(int time) override {}
     void FadeOut(int time) override {}
 
-    // --- ‰æ‘œEƒŒƒCƒ„[ ---
     void ShowImage(const tstring& layer, const tstring& path) override {}
     void HideImage(const tstring& layer) override {}
     void MoveImage(const tstring& layer, int x, int y, int time) override {}
     void ClearLayer(const tstring& layer) override {}
 
-    // --- ƒTƒEƒ“ƒh ---
     void PlayBGM(const tstring& path, int loop = -1) override {}
     void StopBGM(int time = 0) override {}
     void PlaySE(const tstring& path) override {}
     void StopSE(const tstring& path) override {}
 
-    // --- ƒVƒXƒeƒ€ ---
     void Save(int slot) override {}
     void Load(int slot) override {}
     void SetUserFont(const tstring& fontName) override {}
     void SetUserTextSpeed(int ms) override {}
 
-    // --- Às§Œä ---
-    virtual bool IsWaiting() const override;
+    // ğŸ’¡ Evaluatorã‚’åˆ¶å¾¡ã™ã‚‹ãƒ•ãƒ©ã‚°ã€‚trueã®é–“ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ãƒ‘ãƒ¼ã‚¹ãŒå®Œå…¨ã«æ­¢ã¾ã‚Šã¾ã™
+    bool IsWaiting() const override { return waiting_; }
+
+    void HandleEvent(const SDL_Event& e);
+    void Update(float dt);
+    void Render();
+
 private:
+    enum class Mode {
+        Idle,
+        ShowingText,
+        WaitingForClick,
+        WaitingTimer
+    };
+
+    Mode mode_ = Mode::Idle;
+
+    SDL_Window* window_ = nullptr;
+    SDL_Renderer* renderer_ = nullptr;
+    TTF_Font* font_ = nullptr;
+
     tsumugi::text::context::FontState fontState_;
     tsumugi::text::context::DelayState delayState_;
 
-    void ApplyConsoleColor(const tstring& hexColor);
+    SDL_Color currentColor_ = { 255, 255, 255, 255 };
+
+    std::string currentText_;
+    std::string visibleText_;
+    size_t currentIndex_ = 0;
+    float textTimer_ = 0.0f;
+
+    float waitTimer_ = 0.0f;
+    bool waiting_ = false;               // ã‚¹ã‚¯ãƒªãƒ—ãƒˆåœæ­¢ãƒ•ãƒ©ã‚°
+
+    int cursorX_ = 50;
+    int cursorY_ = 50;
+
+    std::string lastProcessedText_;
+
+    std::string WStringToUTF8(const std::wstring& wstr);
+    size_t NextUTF8CharSize(const char* p);
 };
