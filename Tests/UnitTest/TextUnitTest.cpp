@@ -469,9 +469,9 @@ namespace UnitTest
             Assert::IsTrue(ctx.GetCapturedText().find(TT("A")) != tstring::npos);
         }
 
-        /*TEST_METHOD(EvalCommand_ExecutesScript)
+        TEST_METHOD(EvalCommand_ExecutesScript)
         {
-            tstring sample = LR"([eval code="tf.x = 10"]A)";
+            tstring sample = LR"([eval exp="tf.x = 10"][emb exp="tf.x"]A)";
             auto program = Parse(sample);
 
             TestGameContext ctx;
@@ -479,11 +479,11 @@ namespace UnitTest
             eval.Start(*program);
 
             eval.Step(); // eval
-            auto tf = eval.GetEnvironment()->Get(TT("tf"));
-            Assert::AreEqual(10, tf->Get(TT("x"))->AsInt());
-
+            eval.Step(); // emb
             eval.Step(); // A
-        }*/
+
+            Assert::IsTrue(ctx.GetCapturedText().find(TT("10A")) != tstring::npos);
+        }
 
         TEST_METHOD(EmbCommand_EmbedsScriptResult)
         {
