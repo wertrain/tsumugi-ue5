@@ -117,6 +117,9 @@ public:
     void SetUserFont(const tstring& fontName) override {}
     void SetUserTextSpeed(int ms) override {}
     bool IsWaiting() const override { return waiting_; }
+    void AddChoice(const tstring& text, const tstring& target) override {}
+    void ClearChoices() override {}
+    std::optional<tstring> PollChoice() override { return std::nullopt; }
 };
 
 namespace UnitTest

@@ -42,8 +42,11 @@ public:
     void SetUserFont(const tstring& fontName) override {}
     void SetUserTextSpeed(int ms) override {}
 
-    // 💡 Evaluatorを制御するフラグ。trueの間はスクリプトのパースが完全に止まります
     bool IsWaiting() const override { return waiting_; }
+
+    void AddChoice(const tstring& text, const tstring& target) override;
+    void ClearChoices() override;
+    std::optional<tstring> PollChoice() override;
 
     void HandleEvent(const SDL_Event& e);
     void Update(float dt);
@@ -55,6 +58,13 @@ private:
         ShowingText,
         WaitingForClick,
         WaitingTimer
+    };
+
+    struct SDLChoice {
+        tstring text;
+        tstring target;
+        SDL_FRect rect;        // マウスクリック判定用の画面座標
+        SDL_Texture* texture;  // 生成したテキストテクスチャ（キャッシュ用）
     };
 
     Mode mode_ = Mode::Idle;
@@ -78,6 +88,9 @@ private:
 
     int cursorX_ = 50;
     int cursorY_ = 50;
+
+    std::vector<SDLChoice> choices_;
+    std::optional<tstring> selectedTarget_ = std::nullopt;
 
     std::string WStringToUTF8(const std::wstring& wstr);
     size_t NextUTF8CharSize(const char* p);

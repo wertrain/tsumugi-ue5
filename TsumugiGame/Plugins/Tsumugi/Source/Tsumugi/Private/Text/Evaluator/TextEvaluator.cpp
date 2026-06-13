@@ -27,7 +27,10 @@ Evaluator::Evaluator(context::IGameContext& context)
     , callStack_()
     , labelTable_()
     , macroTable_()
-    , blockStateStack_() {
+    , blockStateStack_()
+    , linkPending_(false)
+    , linkTarget_()
+    , linkBuffer_() {
 
     // 基本変数の登録
     // ゲーム変数であれば f システム変数であれば sf 一時変数であれば tf
@@ -57,9 +60,14 @@ void Evaluator::Start(const ast::Program& program) {
 bool Evaluator::Step() {
 
     if (!program_) return false;
-    if (stopRequested_) return false;
+    if (stopRequested_) return true;
     if (pc_ < 0 || pc_ >= program_->GetStatementCount()) return false;
-    if (context_.IsWaiting()) return true;
+    // 選択肢の処理は待機中かどうかにかかわらず行う
+    if (auto choice = context_.PollChoice()) {
+        JumpToLabel(*choice);
+        return true;
+    }  
+    if (context_.IsWaiting())return true;
 
     auto statement = program_->GetStatement(pc_);
 
@@ -77,7 +85,13 @@ bool Evaluator::Step() {
     // テキスト
     } else if (statement->GetNodeType() == ast::NodeType::kTextStatement) {
         auto text = static_cast<const ast::statement::TextStatement*>(statement);
-        context_.ShowText(text->GetText());
+        if (IsLinkPending()) {
+            AppendLinkText(text->GetText());
+            context_.ShowText(text->GetText());
+        }
+        else {
+            context_.ShowText(text->GetText());
+        }
     }
 
     pc_++;
@@ -112,7 +126,12 @@ void Evaluator::Execute(const ast::Program& program) {
         // テキスト
         else if (statement->GetNodeType() == ast::NodeType::kTextStatement) {
             auto text = static_cast<const ast::statement::TextStatement*>(statement);
-            context_.ShowText(text->GetText());
+            if (IsLinkPending()) {
+                AppendLinkText(text->GetText());
+                context_.ShowText(text->GetText());
+            } else {
+                context_.ShowText(text->GetText());
+            }
         }
         pc_++;
     }
@@ -146,6 +165,12 @@ void Evaluator::RequestStop() {
     stopRequested_ = true;
 }
 
+void Evaluator::CancelStop() {
+
+    stopRequested_ = false;
+}
+
+
 bool Evaluator::IsStopRequested() const {
 
     return stopRequested_;
@@ -174,6 +199,38 @@ void Evaluator::PopBlockState() {
     if (!blockStateStack_.empty()) {
         blockStateStack_.pop_back();
     }
+}
+
+void Evaluator::BeginLink(const tstring& target) {
+
+    linkPending_ = true;
+    linkTarget_ = target;
+    linkBuffer_.clear();
+}
+
+void Evaluator::AppendLinkText(const tstring& text) {
+
+    if (linkPending_) {
+        linkBuffer_.push_back(text);
+    }
+}
+
+void Evaluator::EndLink() {
+
+    if (!linkPending_) return;
+
+    tstring linkText;
+    for (auto& s : linkBuffer_) linkText += s;
+
+    context_.AddChoice(linkText, linkTarget_);
+
+    linkPending_ = false;
+    linkBuffer_.clear();
+}
+
+bool Evaluator::IsLinkPending() const {
+
+    return linkPending_;
 }
 
 const text::ast::IStatement* Evaluator::GetStatement(int pc) const {

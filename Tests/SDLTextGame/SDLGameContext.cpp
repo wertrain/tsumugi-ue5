@@ -106,7 +106,88 @@ void SDLGameContext::Wait(int ms) {
     mode_ = Mode::WaitingTimer;
 }
 
+void SDLGameContext::AddChoice(const tstring& text, const tstring& target) {
+
+    // 1. テキストを UTF-8 に変換してサーフェスを作成
+    std::string utf8Text = WStringToUTF8(text);
+
+    // 選択肢用の色（例として少し明るい水色。お好みで fontState_ から取ってもOKです）
+    SDL_Color choiceColor = { 0, 200, 255, 255 };
+
+    SDL_Surface* surface = TTF_RenderText_Solid(font_, utf8Text.c_str(), utf8Text.length(), choiceColor);
+    if (!surface) return;
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_, surface);
+    float w = (float)surface->w;
+    float h = (float)surface->h;
+    SDL_DestroySurface(surface);
+
+    if (!texture) return;
+
+    // 2. 選択肢の配置座標（Rect）を計算する
+    // 今回はシンプルに「画面中央」に上から順に並べるレイアウトにします
+    int winW = 800;
+    SDL_GetWindowSize(window_, &winW, nullptr);
+
+    float posX = (winW - w) / 2.0f; // 中央揃え
+
+    // 既存の選択肢の数に応じて Y 座標を下にずらしていく
+    // 画面中央やや下方（y=300）から、50ピクセル間隔で並べる例
+    float posY = 300.0f + (choices_.size() * 60.0f);
+
+    SDL_FRect rect = { posX, posY, w, h };
+
+    // 3. 即時クリック可能な選択肢としてリストに登録
+    choices_.push_back({ text, target, rect, texture });
+}
+
+void SDLGameContext::ClearChoices() {
+
+    // テクスチャのメモリリークを防ぐために破棄
+    for (auto& choice : choices_) {
+        if (choice.texture) {
+            SDL_DestroyTexture(choice.texture);
+        }
+    }
+    choices_.clear();
+    selectedTarget_ = std::nullopt;
+}
+
+std::optional<tstring> SDLGameContext::PollChoice() { 
+
+    // 選択されたターゲットがあれば、それを引っこ抜いて返す
+    if (selectedTarget_.has_value()) {
+        auto target = selectedTarget_;
+
+        // ジャンプが確定するので、現在の選択肢はすべてクリアする（KAG仕様）
+        ClearChoices();
+        return target;
+    }
+    return std::nullopt;
+}
+
 void SDLGameContext::HandleEvent(const SDL_Event& e) {
+
+    if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && !choices_.empty()) {
+        float mouseX = e.button.x;
+        float mouseY = e.button.y;
+        SDL_FPoint mousePos = { mouseX, mouseY };
+
+        for (const auto& choice : choices_) {
+            if (mousePos.x >= choice.rect.x && mousePos.x <= (choice.rect.x + choice.rect.w) &&
+                mousePos.y >= choice.rect.y && mousePos.y <= (choice.rect.y + choice.rect.h)) {
+                // ヒットしたターゲットを記録（次の PollChoice で Evaluator に回収される）
+                selectedTarget_ = choice.target;
+
+                // 選択肢が選ばれたので、通常の画面クリック待ち（WaitingForClick）などの
+                // 他のウエイト状態も強制解除して Idle に戻す
+                waiting_ = false;
+                mode_ = Mode::Idle;
+                return; // 処理確定のため終了
+            }
+        }
+    }
+
     if (mode_ == Mode::WaitingForClick) {
         if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN || e.type == SDL_EVENT_KEY_DOWN) {
 
@@ -220,6 +301,18 @@ void SDLGameContext::Render() {
                 SDL_DestroyTexture(texture);
             }
             SDL_DestroySurface(surface);
+        }
+    }
+
+    // ★ 追加：選択肢（ボタン）の描画処理
+    for (const auto& choice : choices_) {
+        if (choice.texture) {
+            // AddChoice 時に計算した rect の場所にテクスチャを描画
+            SDL_RenderTexture(renderer_, choice.texture, nullptr, &choice.rect);
+
+            // デバッグやUIの見た目用に、うっすら枠線を描くとボタンらしくなります（お好みで）
+            SDL_SetRenderDrawColor(renderer_, 0, 200, 255, 100);
+            SDL_RenderRect(renderer_, &choice.rect);
         }
     }
 

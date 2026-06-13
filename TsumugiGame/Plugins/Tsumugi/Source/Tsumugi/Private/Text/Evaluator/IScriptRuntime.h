@@ -19,6 +19,7 @@ public:
     virtual void CallSubroutine(const tstring& label) = 0;
     virtual void ReturnFromSubroutine() = 0;
     virtual void RequestStop() = 0;
+    virtual void CancelStop() = 0;
     virtual bool IsStopRequested() const = 0;
 
     virtual void PushBlockState(bool initial) = 0;
@@ -29,6 +30,11 @@ public:
     virtual int  GetPC() const = 0;
     virtual void SetPC(int pc) = 0;
     virtual void AdvancePC() = 0;
+
+    virtual void BeginLink(const tstring& target) = 0;
+    virtual void AppendLinkText(const tstring& text) = 0;
+    virtual void EndLink() = 0;
+    virtual bool IsLinkPending() const = 0;
 
     virtual const text::ast::IStatement* GetStatement(int pc) const = 0;
 

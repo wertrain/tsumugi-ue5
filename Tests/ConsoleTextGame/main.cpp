@@ -370,7 +370,7 @@ int main()
 	//eval.Execute(*program);
 
 	eval.Start(*program);
-	while (!eval.IsStopRequested() && eval.Step()) {
+	while (eval.Step()) {
 	}
 
 	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);

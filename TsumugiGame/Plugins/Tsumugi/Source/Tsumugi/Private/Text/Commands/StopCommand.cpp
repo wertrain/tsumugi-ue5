@@ -8,7 +8,7 @@ namespace tsumugi::text::command {
 
 void StopCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
-    runtime.SkipUntil(text::parser::kIfBlock);  // endif まで飛ばす
+    runtime.RequestStop();
 }
 
 }

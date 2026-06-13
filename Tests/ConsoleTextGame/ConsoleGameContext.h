@@ -48,6 +48,11 @@ public:
 
     // --- é¿çsêßå‰ ---
     virtual bool IsWaiting() const override;
+
+    // --- ëIëéà ---
+    virtual void AddChoice(const tstring& text, const tstring& target) override {}
+    virtual void ClearChoices() override {}
+    virtual std::optional<tstring> PollChoice() override { return std::nullopt; }
 private:
     tsumugi::text::context::FontState fontState_;
     tsumugi::text::context::DelayState delayState_;

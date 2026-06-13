@@ -7,6 +7,7 @@ namespace tsumugi::text::command {
 void ClearTextCommand::Execute(const TagAttributeResolver& tag, evaluator::IScriptRuntime& runtime, context::IGameContext& context) {
 
     context.ClearText();
+    context.ClearChoices();
 }
 
 }

@@ -17,6 +17,8 @@
 #include "Text/Commands/StopCommand.h"
 #include "Text/Commands/JumpCommand.h"
 #include "Text/Commands/LineWaitCommand.h"
+#include "Text/Commands/LinkCommand.h"
+#include "Text/Commands/EndLinkCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -40,6 +42,8 @@ CommandRegistry::CommandRegistry()
     registry_[TT("return")] = std::make_unique<command::ReturnCommand>();
     registry_[TT("s")] = std::make_unique<command::StopCommand>();
     registry_[TT("jump")] = std::make_unique<command::JumpCommand>();
+    registry_[TT("link")] = std::make_unique<command::LinkCommand>();
+    registry_[TT("endlink")] = std::make_unique<command::EndLinkCommand>();
 }
 
 CommandRegistry::~CommandRegistry() {

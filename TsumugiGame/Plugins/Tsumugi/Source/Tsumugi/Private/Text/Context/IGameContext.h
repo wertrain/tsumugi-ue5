@@ -3,6 +3,7 @@
 #include "Foundation/Types.h"
 #include "Text/Context/FontState.h"
 #include "Text/Context/DelayState.h"
+#include <optional>
 
 namespace tsumugi::text::context {
 
@@ -50,6 +51,11 @@ public:
 
     // --- 実行制御 ---
     virtual bool IsWaiting() const = 0;
+
+    // --- 選択肢 ---
+    virtual void AddChoice(const tstring& text, const tstring& target) = 0;
+    virtual void ClearChoices() = 0;
+    virtual std::optional<tstring> PollChoice() = 0;
 };
 
 }
