@@ -543,6 +543,137 @@ namespace UnitTest
             Assert::IsTrue(ctx.GetCapturedText() == TT("ABC"));
         }
 
+        TEST_METHOD(Call_Return_Nested)
+        {
+            tstring sample = LR"(
+                A
+                [call target=*foo]
+                C
+                [s]
+
+                *foo
+                B
+                [call target=*bar]
+                D
+                [return]
+
+                *bar
+                X
+                [return]
+            )";
+
+            auto program = Parse(sample);
+
+            TestGameContext ctx;
+            tsumugi::text::evaluator::Evaluator eval(ctx);
+            eval.Start(*program);
+
+            while (eval.Step()) {}
+
+            Assert::IsTrue(TT("ABXDC") == ctx.GetCapturedText());
+        }
+
+        TEST_METHOD(Call_Inside_If)
+        {
+            tstring sample = LR"(
+                A
+                [call target=*foo]
+                C
+                [s]
+
+                *foo
+                [if exp="1 == 1"]
+                    B
+                    [call target=*bar]
+                    D
+                [endif]
+                [return]
+
+                *bar
+                X
+                [return]
+            )";
+
+            auto program = Parse(sample);
+
+            TestGameContext ctx;
+            tsumugi::text::evaluator::Evaluator eval(ctx);
+            eval.Start(*program);
+
+            while (eval.Step()) {}
+
+            Assert::IsTrue(TT("ABXDC") == ctx.GetCapturedText());
+        }
+
+        TEST_METHOD(Call_Jump_Inside)
+        {
+            tstring sample = LR"(
+                A
+                [call target=*foo]
+                C
+                [s]
+
+                *foo
+                B
+                [jump target=*bar]
+                Ç±Ç±ÇÕèoÇƒÇÕÇ¢ÇØÇ»Ç¢
+                [return]
+
+                *bar
+                X
+                [return]
+            )";
+
+            auto program = Parse(sample);
+
+            TestGameContext ctx;
+            tsumugi::text::evaluator::Evaluator eval(ctx);
+            eval.Start(*program);
+
+            while (eval.Step()) {}
+
+            Assert::IsTrue(TT("ABXC") == ctx.GetCapturedText());
+        }
+
+        TEST_METHOD(Call_Deep_Nesting_With_If_And_Jump)
+        {
+            tstring sample = LR"(
+                A
+                [call target=*foo]
+                Z
+                [s]
+
+                *foo
+                B
+                [call target=*bar]
+                C
+                [return]
+
+                *bar
+                [if exp="1 == 1"]
+                    X
+                    [jump target=*baz]
+                    Ç±Ç±ÇÕèoÇƒÇÕÇ¢ÇØÇ»Ç¢
+                [endif]
+                Y
+                [return]
+
+                *baz
+                W
+                [return]
+            )";
+
+            auto program = Parse(sample);
+
+            TestGameContext ctx;
+            tsumugi::text::evaluator::Evaluator eval(ctx);
+            eval.Start(*program);
+
+            while (eval.Step()) {}
+
+            Assert::IsTrue(TT("ABXWCZ") == ctx.GetCapturedText());
+        }
+
         TEST_METHOD(JumpCommand_JumpsToLabel)
         {
             tstring sample = LR"(
@@ -562,7 +693,6 @@ namespace UnitTest
 
             Assert::IsTrue(ctx.GetCapturedText() == TT("AB"));
         }
-
 
     private:
 
