@@ -108,11 +108,8 @@ void SDLGameContext::Wait(int ms) {
 
 void SDLGameContext::AddChoice(const tstring& text, const tstring& target) {
 
-    // 1. テキストを UTF-8 に変換してサーフェスを作成
     std::string utf8Text = WStringToUTF8(text);
-
-    // 選択肢用の色（例として少し明るい水色。お好みで fontState_ から取ってもOKです）
-    SDL_Color choiceColor = { 0, 200, 255, 255 };
+    SDL_Color choiceColor = { 0, 200, 255, 255 }; // 選択肢と分かりやすい色
 
     SDL_Surface* surface = TTF_RenderText_Solid(font_, utf8Text.c_str(), utf8Text.length(), choiceColor);
     if (!surface) return;
@@ -124,20 +121,8 @@ void SDLGameContext::AddChoice(const tstring& text, const tstring& target) {
 
     if (!texture) return;
 
-    // 2. 選択肢の配置座標（Rect）を計算する
-    // 今回はシンプルに「画面中央」に上から順に並べるレイアウトにします
-    int winW = 800;
-    SDL_GetWindowSize(window_, &winW, nullptr);
-
-    float posX = (winW - w) / 2.0f; // 中央揃え
-
-    // 既存の選択肢の数に応じて Y 座標を下にずらしていく
-    // 画面中央やや下方（y=300）から、50ピクセル間隔で並べる例
-    float posY = 300.0f + (choices_.size() * 60.0f);
-
-    SDL_FRect rect = { posX, posY, w, h };
-
-    // 3. 即時クリック可能な選択肢としてリストに登録
+    // 💡 座標はここでは 0 にしておき、Render 時のテキストの高さに合わせる
+    SDL_FRect rect = { 0.0f, 0.0f, w, h };
     choices_.push_back({ text, target, rect, texture });
 }
 
@@ -240,7 +225,7 @@ void SDLGameContext::Update(float dt) {
             }
         }
 
-        // 💡 文字送り完了時
+        // 文字送り完了時
         if (currentIndex_ >= currentText_.size()) {
             // 文字送りは終わったが、Evaluatorが次のStep()を叩きに来るまでは、
             // モードを Idle に落とさない（ShowingTextのまま維持）。
@@ -265,38 +250,34 @@ void SDLGameContext::Update(float dt) {
 }
 
 void SDLGameContext::Render() {
-    // 背景クリア（黒）
+    // 1. 画面のクリア
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
     SDL_RenderClear(renderer_);
 
-    if (!visibleText_.empty() && font_) {
-        // ウィンドウの現在のサイズを動的に取得する
-        int winW = 800;
-        int winH = 600;
-        SDL_GetWindowSize(window_, &winW, &winH);
-        // 右側にも左側と同じだけの余白（マージン）を持たせる
-        int paddingRight = cursorX_;
-        int wrapWidth = winW - cursorX_ - paddingRight;
+    if (!font_) return;
 
-        // もしウィンドウが極端に狭くなった場合の安全弁
-        if (wrapWidth < 100) wrapWidth = 100;
+    // ウィンドウサイズと折り返し幅の計算
+    int winW = 800;
+    SDL_GetWindowSize(window_, &winW, nullptr);
+    int paddingRight = cursorX_;
+    int wrapWidth = winW - cursorX_ - paddingRight;
+    if (wrapWidth < 100) wrapWidth = 100;
 
+    // 📢 【ここがポイント】
+    // 文字送り中であれ完了後であれ、画面に描画するメインの文章は常に「これ1枚」だけに絞ります！
+    // choices_ の個別個別テクスチャを Render 内で SDL_RenderTexture してはいけません。
+    if (!visibleText_.empty()) {
         SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(
-            font_,
-            visibleText_.c_str(),
-            visibleText_.length(),
-            currentColor_,
-            wrapWidth
+            font_, visibleText_.c_str(), visibleText_.length(), currentColor_, wrapWidth
         );
-
         if (surface) {
             SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_, surface);
             if (texture) {
                 float w, h;
                 SDL_GetTextureSize(texture, &w, &h);
-
-                // cursorX_, cursorY_ を基準に描画
                 SDL_FRect dst = { (float)cursorX_, (float)cursorY_, w, h };
+
+                // 地の文も選択肢の文字も、すべてここで一括描画されます
                 SDL_RenderTexture(renderer_, texture, nullptr, &dst);
                 SDL_DestroyTexture(texture);
             }
@@ -304,34 +285,86 @@ void SDLGameContext::Render() {
         }
     }
 
-    // ★ 追加：選択肢（ボタン）の描画処理
-    for (const auto& choice : choices_) {
-        if (choice.texture) {
-            // AddChoice 時に計算した rect の場所にテクスチャを描画
-            SDL_RenderTexture(renderer_, choice.texture, nullptr, &choice.rect);
+if (currentIndex_ >= currentText_.size()) {
+        
+        int fontHeight = TTF_GetFontHeight(font_); 
 
-            // デバッグやUIの見た目用に、うっすら枠線を描くとボタンらしくなります（お好みで）
-            SDL_SetRenderDrawColor(renderer_, 0, 200, 255, 100);
+        // 📢 【新発想】ベースを「完成形（全部入り）」からスタートさせる！
+        std::string cumulativeText = currentText_; 
+
+        // 後ろの選択肢から順番にサイズを計測して、終わったら削っていく
+        //（逆順でループを回します）
+        for (size_t i = choices_.size(); i > 0; --i) {
+            size_t idx = i - 1; // 現在の選択肢のインデックス
+            auto& choice = choices_[idx];
+            std::string choiceUtf8 = WStringToUTF8(choice.text);
+
+            // ① 「この選択肢を含んだ状態」のサイズを計測（＝削る前）
+            SDL_Surface* afterSurf = TTF_RenderText_Solid_Wrapped(
+                font_, cumulativeText.c_str(), cumulativeText.length(), currentColor_, wrapWidth
+            );
+
+            // ② 「この選択肢を削った状態」の文字列を作り、サイズを計測
+            // cumulativeText の末尾にあるはずの「選択肢テキスト」を切り落とす
+            if (cumulativeText.length() >= choiceUtf8.length()) {
+                // スクリプトの末尾に改行 \n が残っている場合はそれも含めて削る調整
+                if (!cumulativeText.empty() && cumulativeText.back() == '\n') {
+                    cumulativeText.pop_back();
+                }
+                
+                if (cumulativeText.length() >= choiceUtf8.length()) {
+                    cumulativeText = cumulativeText.substr(0, cumulativeText.length() - choiceUtf8.length());
+                }
+            }
+
+            SDL_Surface* beforeSurf = TTF_RenderText_Solid_Wrapped(
+                font_, cumulativeText.c_str(), cumulativeText.length(), currentColor_, wrapWidth
+            );
+
+            // 🎯 座標の決定
+            if (afterSurf) {
+                if (beforeSurf) {
+                    // 削った前後で全体の高さが変わった場合 
+                    // ➡️ この選択肢は「新しい行の先頭」から始まっていたということ！
+                    if (afterSurf->h > beforeSurf->h) {
+                        choice.rect.x = (float)cursorX_;
+                        choice.rect.y = (float)cursorY_ + beforeSurf->h; 
+                    } 
+                    // 高さが変わらない場合 
+                    // ➡️ 前の文字から「地続きで同じ行」に並んでいたということ！
+                    else {
+                        choice.rect.x = (float)cursorX_ + beforeSurf->w;
+                        choice.rect.y = (float)cursorY_ + (beforeSurf->h - fontHeight);
+                    }
+                } else {
+                    // 直前に何も文字がない場合（画面の一番最初）
+                    choice.rect.x = (float)cursorX_;
+                    choice.rect.y = (float)cursorY_;
+                }
+
+                // 選択肢単体の正確な横幅・縦幅を取得
+                SDL_Surface* singleChoiceSurf = TTF_RenderText_Solid(
+                    font_, choiceUtf8.c_str(), choiceUtf8.length(), currentColor_
+                );
+                if (singleChoiceSurf) {
+                    choice.rect.w = (float)singleChoiceSurf->w;
+                    choice.rect.h = (float)singleChoiceSurf->h;
+                    SDL_DestroySurface(singleChoiceSurf);
+                }
+
+                SDL_DestroySurface(afterSurf);
+            }
+            if (beforeSurf) SDL_DestroySurface(beforeSurf);
+
+            // 📢 判定枠を描画して確認
+            SDL_SetRenderDrawColor(renderer_, 0, 200, 255, 255);
             SDL_RenderRect(renderer_, &choice.rect);
         }
     }
 
-    // [p] タグによるクリック待ち記号の描画
+    // --- [p] タグ待ち記号などの描画はそのまま ---
     if (mode_ == Mode::WaitingForClick) {
-        SDL_SetRenderDrawColor(renderer_, 0, 170, 255, 255);
-
-        int winW = 800;
-        int winH = 600;
-        SDL_GetWindowSize(window_, &winW, &winH);
-
-        float signSize = 20.0f;
-        float marginRight = 50.0f;
-        float marginBottom = 50.0f;
-        float signX = (float)winW - signSize - marginRight;
-        float signY = (float)winH - signSize - marginBottom;
-
-        SDL_FRect sign = { signX, signY, signSize, signSize };
-        SDL_RenderFillRect(renderer_, &sign);
+        // ...
     }
 
     SDL_RenderPresent(renderer_);

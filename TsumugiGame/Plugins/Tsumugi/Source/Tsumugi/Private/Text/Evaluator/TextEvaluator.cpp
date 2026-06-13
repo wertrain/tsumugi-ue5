@@ -60,13 +60,17 @@ void Evaluator::Start(const ast::Program& program) {
 bool Evaluator::Step() {
 
     if (!program_) return false;
-    if (stopRequested_) return true;
     if (pc_ < 0 || pc_ >= program_->GetStatementCount()) return false;
     // 選択肢の処理は待機中かどうかにかかわらず行う
     if (auto choice = context_.PollChoice()) {
         JumpToLabel(*choice);
-        return true;
-    }  
+        // もともと JumpToLabel はコマンドでの実行を前提としていて、
+        // ジャンプ先 pc - 1 （ループ側で pc_++ されることを期待）となっている
+        // ここでは、即時次の実行を行いたいので AdvancePC を呼び出す
+        AdvancePC();
+        stopRequested_ = false;
+    }
+    if (stopRequested_) return true;
     if (context_.IsWaiting())return true;
 
     auto statement = program_->GetStatement(pc_);
@@ -164,12 +168,6 @@ void Evaluator::RequestStop() {
 
     stopRequested_ = true;
 }
-
-void Evaluator::CancelStop() {
-
-    stopRequested_ = false;
-}
-
 
 bool Evaluator::IsStopRequested() const {
 

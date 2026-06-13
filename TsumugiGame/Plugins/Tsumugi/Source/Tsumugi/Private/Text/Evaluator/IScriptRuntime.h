@@ -19,7 +19,6 @@ public:
     virtual void CallSubroutine(const tstring& label) = 0;
     virtual void ReturnFromSubroutine() = 0;
     virtual void RequestStop() = 0;
-    virtual void CancelStop() = 0;
     virtual bool IsStopRequested() const = 0;
 
     virtual void PushBlockState(bool initial) = 0;

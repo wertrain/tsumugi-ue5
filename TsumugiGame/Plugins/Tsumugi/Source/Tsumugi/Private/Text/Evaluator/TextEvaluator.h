@@ -39,7 +39,6 @@ public:
     void CallSubroutine(const tstring& label) override;
     void ReturnFromSubroutine() override;
     void RequestStop() override;
-    void CancelStop() override;
     bool IsStopRequested() const override;
     void PushBlockState(bool initial) override;
     bool GetBlockState() const override;

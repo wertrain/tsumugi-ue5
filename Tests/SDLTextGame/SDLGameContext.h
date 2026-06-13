@@ -50,6 +50,7 @@ public:
 
     void HandleEvent(const SDL_Event& e);
     void Update(float dt);
+    void RebuildLayout();
     void Render();
 
 private:
@@ -91,6 +92,9 @@ private:
 
     std::vector<SDLChoice> choices_;
     std::optional<tstring> selectedTarget_ = std::nullopt;
+    float penX_ = 0.0f;
+    float penY_ = 0.0f;
+    int lineHeight_ = 0;
 
     std::string WStringToUTF8(const std::wstring& wstr);
     size_t NextUTF8CharSize(const char* p);

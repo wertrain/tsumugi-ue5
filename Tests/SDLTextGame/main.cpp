@@ -69,9 +69,11 @@ int main(int argc, char** argv)
     sample = LR"(
         *start|スタート
         [cm]
+        どうしようか[r]
         [link target=*select1]選択肢１[endlink][r]
         [link target=*select2]選択肢２[endlink][r]
         [link target=*select3]選択肢３[endlink][r]
+
         [s]
 
         *select1
@@ -114,19 +116,8 @@ int main(int argc, char** argv)
         float dt = (currentTime - lastTime) / 1000.0f;
         lastTime = currentTime;
 
-        // ここで選択肢クリックを拾う
-        if (auto choice = context.PollChoice()) {
-            // 停止中で Step が呼ばれていないときにも選択肢を拾うため、外部での判定
-            // JumpToLabel 自体は Step での実行を前提としているので、 pc_ を -1 している
-            // ここでは　Step 外の実行なので追加で AdvancePC を呼び出す
-            eval.JumpToLabel(*choice);
-            eval.AdvancePC();
-            // [s] タグでストップしていた場合のキャンセル処理
-            eval.CancelStop();
-        }
-
         // スクリプトが終了しておらず、コンテキストが待機を要求していない時だけ進める
-        if (!isScriptFinished && !context.IsWaiting()) {
+        if (!isScriptFinished) {
             bool hasNext = eval.Step();
             if (!hasNext) {
                 isScriptFinished = true; // スクリプトの終端に達したら安全に Step を停止
