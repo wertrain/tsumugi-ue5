@@ -19,6 +19,7 @@
 #include "Text/Commands/LineWaitCommand.h"
 #include "Text/Commands/LinkCommand.h"
 #include "Text/Commands/EndLinkCommand.h"
+#include "Text/Commands/IgnoreCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -44,6 +45,7 @@ CommandRegistry::CommandRegistry()
     registry_[TT("jump")] = std::make_unique<command::JumpCommand>();
     registry_[TT("link")] = std::make_unique<command::LinkCommand>();
     registry_[TT("endlink")] = std::make_unique<command::EndLinkCommand>();
+    registry_[TT("ignore")] = std::make_unique<command::IgnoreCommand>();
 }
 
 CommandRegistry::~CommandRegistry() {

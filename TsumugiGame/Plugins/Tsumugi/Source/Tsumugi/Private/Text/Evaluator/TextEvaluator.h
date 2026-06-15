@@ -32,7 +32,7 @@ public:
     /// スクリプトを最後まで実行する（デバッグ用）
     /// </summary>
     /// <param name="program"></param>
-    void Execute(const ast::Program& program);
+    bool Execute(const ast::Program& program);
 
     // --- IScriptRuntime の実装 ---
     void JumpToLabel(const tstring& label) override;

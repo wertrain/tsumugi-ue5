@@ -249,8 +249,7 @@ namespace UnitTest
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
 
-            eval.Start(*program);
-            while (!eval.IsStopRequested() && eval.Step()) {}
+            Run(eval, *program.get());
 
             // テキスト出力を検証
             tstring actualText = ctx.GetCapturedText();
@@ -517,9 +516,7 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(ctx.GetCapturedText().find(TT("B")) != tstring::npos);
         }
@@ -539,9 +536,7 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(ctx.GetCapturedText() == TT("ABC"));
         }
@@ -569,9 +564,7 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(TT("ABXDC") == ctx.GetCapturedText());
         }
@@ -601,9 +594,7 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(TT("ABXDC") == ctx.GetCapturedText());
         }
@@ -631,9 +622,7 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(TT("ABXC") == ctx.GetCapturedText());
         }
@@ -670,9 +659,7 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(TT("ABXWCZ") == ctx.GetCapturedText());
         }
@@ -690,11 +677,47 @@ namespace UnitTest
 
             TestGameContext ctx;
             tsumugi::text::evaluator::Evaluator eval(ctx);
-            eval.Start(*program);
-
-            while (eval.Step()) {}
+            Run(eval, *program.get());
 
             Assert::IsTrue(ctx.GetCapturedText() == TT("AB"));
+        }
+
+        TEST_METHOD(IgnoreCommand_True_SkipsBlock)
+        {
+            tstring sample = LR"(
+                A
+                [ignore exp="true"]
+                    X
+                [endignore]
+                B
+            )";
+
+            auto program = Parse(sample);
+
+            TestGameContext ctx;
+            tsumugi::text::evaluator::Evaluator eval(ctx);
+            Run(eval, *program.get());
+
+            Assert::IsTrue(ctx.GetCapturedText() == TT("AB"));
+        }
+
+        TEST_METHOD(IgnoreCommand_False_DoesNotSkipBlock)
+        {
+            tstring sample = LR"(
+                A
+                [ignore exp="false"]
+                    X
+                [endignore]
+                B
+            )";
+
+            auto program = Parse(sample);
+
+            TestGameContext ctx;
+            tsumugi::text::evaluator::Evaluator eval(ctx);
+            Run(eval, *program.get());
+
+            Assert::IsTrue(ctx.GetCapturedText() == TT("AXB"));
         }
 
     private:
@@ -710,8 +733,7 @@ namespace UnitTest
             return parser.ParseProgram();
         }
 
-        void Run(tsumugi::text::evaluator::Evaluator& eval,
-            tsumugi::text::ast::Program& program)
+        void Run(tsumugi::text::evaluator::Evaluator& eval, tsumugi::text::ast::Program& program)
         {
             eval.Start(program);
             while (!eval.IsStopRequested() && eval.Step()) {}

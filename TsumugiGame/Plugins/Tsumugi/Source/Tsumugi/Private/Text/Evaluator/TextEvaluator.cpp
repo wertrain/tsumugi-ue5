@@ -71,7 +71,7 @@ bool Evaluator::Step() {
         stopRequested_ = false;
     }
     if (stopRequested_) return true;
-    if (context_.IsWaiting())return true;
+    if (context_.IsWaiting()) return true;
 
     auto statement = program_->GetStatement(pc_);
 
@@ -103,42 +103,24 @@ bool Evaluator::Step() {
     return true;
 }
 
-void Evaluator::Execute(const ast::Program& program) {
+bool Evaluator::Execute(const ast::Program& program) {
 
-    Start(program);
-
-    // 実行ループ
-    while (pc_ < program.GetStatementCount()) {
-
-        if (stopRequested_) {
-            break;
-        }
-        auto statement = program.GetStatement(pc_);
-        // タグ
-        if (statement->GetNodeType() == ast::NodeType::kTagStatement) {
-            auto tag = static_cast<const ast::statement::TagStatement*>(statement);
-            command::TagAttributeResolver resolver(*tag, *this);
-            if (auto* cmd = registry_.Get(tag->GetTagName())) {
-                cmd->Execute(resolver, *this, context_);
-            }
-        }
-        // インラインスクリプト
-        else if (statement->GetNodeType() == ast::NodeType::kScriptBlockStatement) {
-            auto script = static_cast<const ast::statement::ScriptBlockStatement*>(statement);
-            ExecuteScript(script->GetScriptText());
-        }
-        // テキスト
-        else if (statement->GetNodeType() == ast::NodeType::kTextStatement) {
-            auto text = static_cast<const ast::statement::TextStatement*>(statement);
-            if (IsLinkPending()) {
-                AppendLinkText(text->GetText());
-                context_.ShowText(text->GetText());
-            } else {
-                context_.ShowText(text->GetText());
-            }
-        }
-        pc_++;
+    if (program_ != &program) {
+        Start(program);
     }
+
+    int stepCount = 0;
+    const int kMaxSteps = 1000;
+    while (Step()) {
+        if (stopRequested_) return true;
+        if (context_.IsWaiting())return true;
+
+        if (++stepCount > kMaxSteps) {
+            // ログ出して止める
+            return true;
+        }
+    }
+    return false;
 }
 
 void Evaluator::JumpToLabel(const tstring& label) {
