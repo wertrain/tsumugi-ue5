@@ -1,10 +1,10 @@
 ﻿#define _CRTDBG_MAP_ALLOC
-#include "Foundation/Types.h"
-#include "Text/Lexer/TextLexer.h"
-#include "Text/Parser/TextParser.h"
-#include "Text/Lexer/TextToken.h"
-#include "Text/Evaluator/TextEvaluator.h"
-#include "Text/AST/TextProgram.h"
+#include "TsumugiEngine/Foundation/Types.h"
+#include "TsumugiEngine/Text/Lexer/TextLexer.h"
+#include "TsumugiEngine/Text/Parser/TextParser.h"
+#include "TsumugiEngine/Text/Lexer/TextToken.h"
+#include "TsumugiEngine/Text/Evaluator/TextEvaluator.h"
+#include "TsumugiEngine/Text/AST/TextProgram.h"
 #include "ConsoleGameContext.h"
 #include <crtdbg.h>
 

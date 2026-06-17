@@ -16,11 +16,11 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include "Script/Lexer/ScriptLexer.h"
-#include "Script/Parser/ScriptParser.h"
-#include "Script/AST/Program.h"
-#include "Script/Evaluator/Evaluator.h"
-#include "Script/Objects/Environment.h"
+#include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
+#include "TsumugiEngine/Script/Parser/ScriptParser.h"
+#include "TsumugiEngine/Script/AST/Program.h"
+#include "TsumugiEngine/Script/Evaluator/Evaluator.h"
+#include "TsumugiEngine/Script/Objects/Environment.h"
 
 // 24bit ANSI 色（Visual Studio Dark テーマに近い）
 static const std::wstring VS_KEYWORD = L"\x1b[38;2;86;156;214m";   // #569CD6

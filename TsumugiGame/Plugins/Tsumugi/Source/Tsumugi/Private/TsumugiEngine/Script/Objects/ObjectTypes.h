@@ -1,0 +1,41 @@
+﻿#pragma once
+
+#include "TsumugiEngine/Foundation/Types.h"
+
+namespace tsumugi::script::object {
+
+/// <summary>
+/// 評価機オブジェクトタイプ
+/// </summary>
+enum class ObjectType : int32_t {
+    kNull,
+    kInteger,
+    kFloat,
+    kString,
+    kBoolean,
+    kArray,
+    kHash,
+    kReturnValue,
+    kBreak,
+    kContinue,
+    kPropertyReference,
+    kBuiltinFunction,
+    kUserFunction,
+    kBoundMethod,
+    kUserObject,
+    kClass,
+    kBuiltinClass,
+    kBuiltinInstance,
+    kError,
+    kNum
+};
+
+/// <summary>
+/// オブジェクトタイプを文字列に変更する
+/// </summary>
+/// <param name="token_type"></param>
+/// <returns></returns>
+const tchar* ObjectTypeToTString(const ObjectType objectType);
+const char* ObjectTypeToString(const ObjectType objectType);
+
+}

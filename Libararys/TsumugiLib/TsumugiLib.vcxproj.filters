@@ -10,852 +10,855 @@
     <Filter Include="Tsumugi\Private">
       <UniqueIdentifier>{97b3b594-6a34-4ee8-b200-06577da7e0c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Foundation">
-      <UniqueIdentifier>{84c67e5e-eabc-4bbe-84cf-afd7283f79cd}</UniqueIdentifier>
+    <Filter Include="Tsumugi\Private\TsumugiEngine">
+      <UniqueIdentifier>{b85b577f-9d0b-44f8-87ff-5f457762995f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Script">
-      <UniqueIdentifier>{000c33f3-ce6e-4a65-a70a-8ad262429216}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Text">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text">
       <UniqueIdentifier>{1c1d30b0-7075-4aa8-a623-cf7eae4505b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Log">
-      <UniqueIdentifier>{e68bea62-ca71-4afc-ab86-e0c80a3356ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Localization">
-      <UniqueIdentifier>{fbbe1591-9dd0-416e-b8ad-0f1dd03d872e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Objects">
-      <UniqueIdentifier>{e537086d-8b1e-4a21-b0c3-c09c51399711}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Evaluator">
-      <UniqueIdentifier>{88f26a19-0d84-49cb-8cd6-60339e1e88b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Common">
-      <UniqueIdentifier>{c9c05af4-6710-4cf3-8d56-3882d968947d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\AST">
-      <UniqueIdentifier>{932431a9-2d32-4995-a0b0-5de6b4b8bf74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\AST\Statements">
-      <UniqueIdentifier>{d322b0e5-ab11-4248-b557-6a80d23045e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\AST\Expressions">
-      <UniqueIdentifier>{7235f005-a981-4b4a-b0a2-aa41221733ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Parser">
-      <UniqueIdentifier>{e58f3d88-6487-4324-a633-5cfd43fcd841}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Text\Lexer">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\Lexer">
       <UniqueIdentifier>{43aba79e-cf8b-498a-888c-f50e65ee7904}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Script\Lexer">
-      <UniqueIdentifier>{1c684aec-eb96-4d1d-9c45-56a29645760e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Builtins">
-      <UniqueIdentifier>{6c35b43e-d84d-45c9-a9bb-363679afa7e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Objects\Protocol">
-      <UniqueIdentifier>{98a08907-0bab-4d49-bbdf-64c28bf88cda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Builtins\Vector">
-      <UniqueIdentifier>{77c14ad7-64c4-4651-977a-3f25ce83622b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Builtins\Random">
-      <UniqueIdentifier>{c2fd6328-51dc-4dcf-88e3-1b548423b71a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Builtins\Quaternion">
-      <UniqueIdentifier>{70c7c89e-5f99-4861-bb1a-4f2237a17d3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Script\Builtins\Transform">
-      <UniqueIdentifier>{037eb67a-b9e8-4c56-94fd-f6dc085e2039}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Foundation\Math">
-      <UniqueIdentifier>{aeb0aaff-2554-4a1a-82e9-a4dea0f848e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tsumugi\Private\Text\Parser">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\Parser">
       <UniqueIdentifier>{c313082a-4e6a-4666-8091-d6b888bd2f12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Text\AST">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\AST">
       <UniqueIdentifier>{b1a87a45-eb74-469c-9027-949b2b8e6a50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Text\AST\Statements">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\AST\Statements">
       <UniqueIdentifier>{e0d656f1-b922-4779-a507-2f5fd5697291}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Text\Evaluator">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\Evaluator">
       <UniqueIdentifier>{69fb8ee1-a6d2-4375-bf18-034c1280206e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Text\Commands">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\Commands">
       <UniqueIdentifier>{bf6ddb23-a88e-4650-aab1-2448031db392}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tsumugi\Private\Text\Context">
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Text\Context">
       <UniqueIdentifier>{fc2d594e-b23a-4cdb-9567-329f65c5ae46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script">
+      <UniqueIdentifier>{000c33f3-ce6e-4a65-a70a-8ad262429216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Objects">
+      <UniqueIdentifier>{e537086d-8b1e-4a21-b0c3-c09c51399711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Objects\Protocol">
+      <UniqueIdentifier>{98a08907-0bab-4d49-bbdf-64c28bf88cda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Evaluator">
+      <UniqueIdentifier>{88f26a19-0d84-49cb-8cd6-60339e1e88b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\AST">
+      <UniqueIdentifier>{932431a9-2d32-4995-a0b0-5de6b4b8bf74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\AST\Statements">
+      <UniqueIdentifier>{d322b0e5-ab11-4248-b557-6a80d23045e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\AST\Expressions">
+      <UniqueIdentifier>{7235f005-a981-4b4a-b0a2-aa41221733ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Parser">
+      <UniqueIdentifier>{e58f3d88-6487-4324-a633-5cfd43fcd841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Lexer">
+      <UniqueIdentifier>{1c684aec-eb96-4d1d-9c45-56a29645760e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins">
+      <UniqueIdentifier>{6c35b43e-d84d-45c9-a9bb-363679afa7e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector">
+      <UniqueIdentifier>{77c14ad7-64c4-4651-977a-3f25ce83622b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Random">
+      <UniqueIdentifier>{c2fd6328-51dc-4dcf-88e3-1b548423b71a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion">
+      <UniqueIdentifier>{70c7c89e-5f99-4861-bb1a-4f2237a17d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform">
+      <UniqueIdentifier>{037eb67a-b9e8-4c56-94fd-f6dc085e2039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Localization">
+      <UniqueIdentifier>{fbbe1591-9dd0-416e-b8ad-0f1dd03d872e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Foundation">
+      <UniqueIdentifier>{84c67e5e-eabc-4bbe-84cf-afd7283f79cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Foundation\Math">
+      <UniqueIdentifier>{aeb0aaff-2554-4a1a-82e9-a4dea0f848e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Common">
+      <UniqueIdentifier>{c9c05af4-6710-4cf3-8d56-3882d968947d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Log">
+      <UniqueIdentifier>{e68bea62-ca71-4afc-ab86-e0c80a3356ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.h">
-      <Filter>Tsumugi\Private\Common</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Types.h">
-      <Filter>Tsumugi\Private\Foundation</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Types.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Localization\Localizer.h">
-      <Filter>Tsumugi\Private\Localization</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Localization\Localizer.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Localization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Log\LogConsole.h">
-      <Filter>Tsumugi\Private\Log</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\LogConsole.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Log</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Log\TextLogger.h">
-      <Filter>Tsumugi\Private\Log</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\TextLogger.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Log</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextLexer.h">
-      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Lexer\TextLexer.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextToken.h">
-      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Lexer\TextToken.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Parser\ScriptParser.h">
-      <Filter>Tsumugi\Private\Script\Parser</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Parser\ScriptParser.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ArrayObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ArrayObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BooleanObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BooleanObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Environment.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\Environment.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ErrorObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ErrorObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\IntegerObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\IntegerObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\IObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\IObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\NullObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\NullObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ObjectTypes.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ObjectTypes.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ReturnValue.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ReturnValue.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\StringObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\StringObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\LexingStringReader.h">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\LexingStringReader.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptLexer.h">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptLexer.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptLexingTypes.h">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptLexingTypes.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptToken.h">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptToken.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptTokenTypes.h">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptTokenTypes.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Evaluator\Evaluator.h">
-      <Filter>Tsumugi\Private\Script\Evaluator</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Evaluator\Evaluator.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Evaluator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IStatement.h">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\IStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Program.h">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Program.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IExpression.h">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\IExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\INode.h">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\INode.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\FunctionStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\FunctionStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\LetStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\LetStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ReturnStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ReturnStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\BlockStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\BlockStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ExpressionStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ExpressionStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\ArrayLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\ArrayLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\AssignmentExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\AssignmentExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\BooleanLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\BooleanLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\CallExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\CallExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\FunctionLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\FunctionLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\Identifier.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\Identifier.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IfExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IfExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IndexAssignmentExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IndexAssignmentExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IndexExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IndexExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\InfixExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\InfixExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IntegerLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IntegerLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PrefixExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\PrefixExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\StringLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\StringLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\WhileExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\WhileExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\HashLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\HashLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\HashObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\HashObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ObjectHash.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ObjectHash.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ForStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ForStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\BreakStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\BreakStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ContinueStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ContinueStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BreakObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BreakObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ContinueObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ContinueObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PropertyAccessExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\PropertyAccessExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinFunctionObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BuiltinFunctionObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ArrayMethods.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ArrayMethods.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\HashMethods.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\HashMethods.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\StringMethods.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\StringMethods.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.h">
-      <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\Protocol\ObjectProtocolDispatcher.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects\Protocol</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\UserFunctionObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\UserObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\UserObjectLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\UserObjectLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\NullLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\NullLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ClassObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ClassObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ClassStatement.h">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ClassStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\SuperExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\SuperExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\FloatLiteral.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\FloatLiteral.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\FloatObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\FloatObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\InstanceOfExpression.h">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\InstanceOfExpression.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinClassObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BuiltinClassObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Instance.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector3Instance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector3Class.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomInstance.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Random\RandomInstance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Random</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Random\RandomClass.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Random</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Instance.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector2Instance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Class.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector2Class.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionClass.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionClass.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionInstance.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionInstance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinInstanceObject.h">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BuiltinInstanceObject.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinTypes.h">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinTypes.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformClass.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform\TransformClass.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformInstance.h">
-      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform\TransformInstance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Matrix4x4.h">
-      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Matrix4x4.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Quaternion.h">
-      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Quaternion.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\TransformMath.h">
-      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\TransformMath.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector2.h">
-      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Vector2.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector3.h">
-      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Vector3.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Math\Vector4.h">
-      <Filter>Tsumugi\Private\Foundation\Math</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Vector4.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinClassRegistry.h">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinClassRegistry.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctionRegistry.h">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinFunctionRegistry.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextTokenTypes.h">
-      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Lexer\TextTokenTypes.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\TextParser.h">
-      <Filter>Tsumugi\Private\Text\Parser</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Parser\TextParser.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\TextProgram.h">
-      <Filter>Tsumugi\Private\Text\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\TextProgram.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextStatement.h">
-      <Filter>Tsumugi\Private\Text\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\ITextStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextNode.h">
-      <Filter>Tsumugi\Private\Text\AST</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\ITextNode.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\LabelStatement.h">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\LabelStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TagStatement.h">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\TagStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextStatement.h">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\TextStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\IGameContext.h">
-      <Filter>Tsumugi\Private\Text\Context</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Context\IGameContext.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Context</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ICommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ICommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\IScriptRuntime.h">
-      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Evaluator\IScriptRuntime.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Evaluator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\TextEvaluator.h">
-      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Evaluator\TextEvaluator.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Evaluator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\WaitCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\WaitCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ClearTextCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ClearTextCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\CommandRegistry.h">
-      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Evaluator\CommandRegistry.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Evaluator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\DelayState.h">
-      <Filter>Tsumugi\Private\Text\Context</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Context\DelayState.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Context</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\FontState.h">
-      <Filter>Tsumugi\Private\Text\Context</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Context\FontState.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Context</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\PageBreakCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\PageBreakCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\NewLineCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\NewLineCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\FontCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\FontCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\DelayCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\DelayCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EvalCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EvalCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EmbCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EmbCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\ScriptBlockStatement.h">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\ScriptBlockStatement.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IfCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\IfCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElseCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ElseCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndBlockCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EndBlockCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\BlockTagDefinition.h">
-      <Filter>Tsumugi\Private\Text\Parser</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Parser\BlockTagDefinition.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IgnoreCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\IgnoreCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\CallCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\CallCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ReturnCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ReturnCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\StopCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\StopCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElsifCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ElsifCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndIfCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EndIfCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\JumpCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\JumpCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\LineWaitCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\LineWaitCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\LinkCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\LinkCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndLinkCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EndLinkCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\LayerParams.h">
-      <Filter>Tsumugi\Private\Text\Context</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Context\LayerParams.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Context</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ImageCommand.h">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ImageCommand.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Common\ErrorReporter.cpp">
-      <Filter>Tsumugi\Private\Common</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Foundation\Types.cpp">
-      <Filter>Tsumugi\Private\Foundation</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Types.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Localization\Localizer.cpp">
-      <Filter>Tsumugi\Private\Localization</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Localization\Localizer.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Localization</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Log\LogConsole.cpp">
-      <Filter>Tsumugi\Private\Log</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\LogConsole.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Log</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Log\TextLogger.cpp">
-      <Filter>Tsumugi\Private\Log</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\TextLogger.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Log</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextLexer.cpp">
-      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Lexer\TextLexer.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextToken.cpp">
-      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Lexer\TextToken.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Parser\ScriptParser.cpp">
-      <Filter>Tsumugi\Private\Script\Parser</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Parser\ScriptParser.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Parser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ArrayObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ArrayObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BooleanObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BooleanObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Environment.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\Environment.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ErrorObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ErrorObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\IntegerObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\IntegerObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\IObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\IObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\NullObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\NullObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ObjectTypes.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ObjectTypes.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ReturnValue.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ReturnValue.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\StringObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\StringObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\LexingStringReader.cpp">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\LexingStringReader.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptLexer.cpp">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptLexer.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptLexingTypes.cpp">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptLexingTypes.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptToken.cpp">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptToken.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Lexer\ScriptTokenTypes.cpp">
-      <Filter>Tsumugi\Private\Script\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Lexer\ScriptTokenTypes.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Evaluator\Evaluator.cpp">
-      <Filter>Tsumugi\Private\Script\Evaluator</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Evaluator\Evaluator.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Evaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\IStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Program.cpp">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Program.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\IExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\IExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\INode.cpp">
-      <Filter>Tsumugi\Private\Script\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\INode.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\FunctionStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\FunctionStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\LetStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\LetStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ReturnStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ReturnStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\BlockStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\BlockStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ExpressionStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ExpressionStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\ArrayLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\ArrayLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\AssignmentExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\AssignmentExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\BooleanLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\BooleanLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\CallExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\CallExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\FunctionLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\FunctionLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\Identifier.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\Identifier.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IfExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IfExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IndexAssignmentExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IndexAssignmentExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IndexExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IndexExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\InfixExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\InfixExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\IntegerLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\IntegerLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PrefixExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\PrefixExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\StringLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\StringLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\WhileExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\WhileExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\HashLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\HashLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\HashObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\HashObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ObjectHash.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ObjectHash.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ForStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ForStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\BreakStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\BreakStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ContinueStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ContinueStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BreakObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BreakObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ContinueObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ContinueObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\PropertyAccessExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\PropertyAccessExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinFunctionObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BuiltinFunctionObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ArrayMethods.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ArrayMethods.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\HashMethods.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\HashMethods.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\StringMethods.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\StringMethods.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\Protocol\ObjectProtocolDispatcher.cpp">
-      <Filter>Tsumugi\Private\Script\Objects\Protocol</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\Protocol\ObjectProtocolDispatcher.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects\Protocol</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserFunctionObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\UserFunctionObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\UserObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\UserObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\UserObjectLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\UserObjectLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\NullLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\NullLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\ClassObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\ClassObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Statements\ClassStatement.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Statements\ClassStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\SuperExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\SuperExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\FloatLiteral.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\FloatLiteral.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\FloatObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\FloatObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\AST\Expressions\InstanceOfExpression.cpp">
-      <Filter>Tsumugi\Private\Script\AST\Expressions</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\InstanceOfExpression.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinClassObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BuiltinClassObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Instance.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector3Instance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector3Class.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector3Class.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomInstance.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Random\RandomInstance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Random</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Random\RandomClass.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Random</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Random\RandomClass.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Random</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Class.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector2Class.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Vector\Vector2Instance.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Vector</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector\Vector2Instance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Vector</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionClass.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionClass.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Quaternion\QuaternionInstance.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Quaternion</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionInstance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Objects\BuiltinInstanceObject.cpp">
-      <Filter>Tsumugi\Private\Script\Objects</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Objects\BuiltinInstanceObject.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinTypes.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinTypes.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformClass.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform\TransformClass.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\Transform\TransformInstance.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins\Transform</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform\TransformInstance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinClassRegistry.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinClassRegistry.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Script\Builtins\BuiltinFunctionRegistry.cpp">
-      <Filter>Tsumugi\Private\Script\Builtins</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinFunctionRegistry.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Lexer\TextTokenTypes.cpp">
-      <Filter>Tsumugi\Private\Text\Lexer</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Lexer\TextTokenTypes.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Parser\TextParser.cpp">
-      <Filter>Tsumugi\Private\Text\Parser</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Parser\TextParser.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Parser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\TextProgram.cpp">
-      <Filter>Tsumugi\Private\Text\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\TextProgram.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextStatement.cpp">
-      <Filter>Tsumugi\Private\Text\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\ITextStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\ITextNode.cpp">
-      <Filter>Tsumugi\Private\Text\AST</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\ITextNode.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\LabelStatement.cpp">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\LabelStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TagStatement.cpp">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\TagStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\TextStatement.cpp">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\TextStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Context\IGameContext.cpp">
-      <Filter>Tsumugi\Private\Text\Context</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Context\IGameContext.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Context</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ICommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ICommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\IScriptRuntime.cpp">
-      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Evaluator\IScriptRuntime.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Evaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\TextEvaluator.cpp">
-      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Evaluator\TextEvaluator.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Evaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\WaitCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\WaitCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ClearTextCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ClearTextCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Evaluator\CommandRegistry.cpp">
-      <Filter>Tsumugi\Private\Text\Evaluator</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Evaluator\CommandRegistry.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Evaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\PageBreakCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\PageBreakCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\NewLineCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\NewLineCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\FontCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\FontCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\DelayCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\DelayCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EvalCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EvalCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EmbCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EmbCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\AST\Statements\ScriptBlockStatement.cpp">
-      <Filter>Tsumugi\Private\Text\AST\Statements</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\AST\Statements\ScriptBlockStatement.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\AST\Statements</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IfCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\IfCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElseCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ElseCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndBlockCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EndBlockCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\IgnoreCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\IgnoreCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\CallCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\CallCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ReturnCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ReturnCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\StopCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\StopCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ElsifCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ElsifCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndIfCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EndIfCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\JumpCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\JumpCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\LineWaitCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\LineWaitCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\LinkCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\LinkCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\EndLinkCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\EndLinkCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\Text\Commands\ImageCommand.cpp">
-      <Filter>Tsumugi\Private\Text\Commands</Filter>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ImageCommand.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

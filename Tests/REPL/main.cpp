@@ -2,15 +2,15 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #include <iostream>
-#include "Script/Lexer/ScriptLexer.h"
-#include "Script/Parser/ScriptParser.h"
-#include "Script/Lexer/ScriptToken.h"
-#include "Script/Lexer/LexingStringReader.h"
-#include "Script/Evaluator/Evaluator.h"
-#include "Script/AST/Program.h"
-#include "Script/Objects/IObject.h"
-#include "Script/Objects/BooleanObject.h"
-#include "Script/Objects/Environment.h"
+#include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
+#include "TsumugiEngine/Script/Parser/ScriptParser.h"
+#include "TsumugiEngine/Script/Lexer/ScriptToken.h"
+#include "TsumugiEngine/Script/Lexer/LexingStringReader.h"
+#include "TsumugiEngine/Script/Evaluator/Evaluator.h"
+#include "TsumugiEngine/Script/AST/Program.h"
+#include "TsumugiEngine/Script/Objects/IObject.h"
+#include "TsumugiEngine/Script/Objects/BooleanObject.h"
+#include "TsumugiEngine/Script/Objects/Environment.h"
 
 int main()
 {

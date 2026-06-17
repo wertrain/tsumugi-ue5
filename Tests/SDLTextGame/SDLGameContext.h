@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Text/Context/IGameContext.h"
+#include "TsumugiEngine/Text/Context/IGameContext.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <string>

@@ -2,12 +2,12 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 #include "SDLGameContext.h"
-#include "Foundation/Types.h"
-#include "Text/Lexer/TextLexer.h"
-#include "Text/Parser/TextParser.h"
-#include "Text/Lexer/TextToken.h"
-#include "Text/Evaluator/TextEvaluator.h"
-#include "Text/AST/TextProgram.h"
+#include "TsumugiEngine/Foundation/Types.h"
+#include "TsumugiEngine/Text/Lexer/TextLexer.h"
+#include "TsumugiEngine/Text/Parser/TextParser.h"
+#include "TsumugiEngine/Text/Lexer/TextToken.h"
+#include "TsumugiEngine/Text/Evaluator/TextEvaluator.h"
+#include "TsumugiEngine/Text/AST/TextProgram.h"
 
 int main(int argc, char** argv)
 {

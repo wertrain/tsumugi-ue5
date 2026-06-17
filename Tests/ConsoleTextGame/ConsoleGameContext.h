@@ -1,5 +1,5 @@
 #pragma once
-#include "Text/Context/IGameContext.h"
+#include "TsumugiEngine/Text/Context/IGameContext.h"
 #include <iostream>
 #include <thread>
 
