@@ -3,6 +3,7 @@
 #include "Foundation/Types.h"
 #include "Text/Context/FontState.h"
 #include "Text/Context/DelayState.h"
+#include "Text/Context/LayerParams.h"
 #include <optional>
 
 namespace tsumugi::text::context {
@@ -32,6 +33,7 @@ public:
     virtual void FadeOut(int time) = 0;
 
     // --- 画像・レイヤー ---
+    virtual void SetLayer(const LayerParams& params) = 0;
     virtual void ShowImage(const tstring& layer, const tstring& path) = 0;
     virtual void HideImage(const tstring& layer) = 0;
     virtual void MoveImage(const tstring& layer, int x, int y, int time) = 0;

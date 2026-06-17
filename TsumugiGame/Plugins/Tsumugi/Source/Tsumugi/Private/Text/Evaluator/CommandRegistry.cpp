@@ -20,6 +20,7 @@
 #include "Text/Commands/LinkCommand.h"
 #include "Text/Commands/EndLinkCommand.h"
 #include "Text/Commands/IgnoreCommand.h"
+#include "Text/Commands/ImageCommand.h"
 
 namespace tsumugi::text::evaluator {
 
@@ -46,6 +47,7 @@ CommandRegistry::CommandRegistry()
     registry_[TT("link")] = std::make_unique<command::LinkCommand>();
     registry_[TT("endlink")] = std::make_unique<command::EndLinkCommand>();
     registry_[TT("ignore")] = std::make_unique<command::IgnoreCommand>();
+    registry_[TT("image")] = std::make_unique<command::ImageCommand>();
 }
 
 CommandRegistry::~CommandRegistry() {

@@ -1,4 +1,5 @@
 ﻿#include "SDLGameContext.h"
+#include <SDL3_image/SDL_image.h>
 #include <iostream>
 
 SDLGameContext::SDLGameContext() {
@@ -16,6 +17,8 @@ SDLGameContext::SDLGameContext() {
     if (!font_) {
         std::cerr << "Font Load Error: " << SDL_GetError() << std::endl;
     }
+
+    fgLayers.resize(16);
 }
 
 SDLGameContext::~SDLGameContext() {
@@ -104,6 +107,67 @@ void SDLGameContext::Wait(int ms) {
     waitTimer_ = (float)ms / 1000.0f;
     waiting_ = true;
     mode_ = Mode::WaitingTimer;
+}
+
+void SDLGameContext::SetLayer(const tsumugi::text::context::LayerParams& params) {
+
+    // --- 1. 対象レイヤを決定 ---
+    Layer* layer = nullptr;
+
+    if (params.isBase) {
+        layer = &baseLayer;
+    }
+    else {
+        if (params.layerIndex >= fgLayers.size()) {
+            size_t oldSize = fgLayers.size();
+            fgLayers.resize(params.layerIndex + 1);
+
+            for (size_t i = oldSize; i < fgLayers.size(); ++i) {
+                fgLayers[i].texture = nullptr;
+                fgLayers[i].visible = false;
+                fgLayers[i].x = 0;
+                fgLayers[i].y = 0;
+                fgLayers[i].opacity = 255;
+            }
+        }
+        layer = &fgLayers[params.layerIndex];
+    }
+
+    // --- 2. 画像読み込み ---
+    if (!params.storage.empty()) {
+        std::string path = tsumugi::type::convert::TStringToString(params.storage);
+
+        SDL_Surface* surf = IMG_Load(path.c_str());
+        if (!surf) {
+            SDL_Log("Failed to load image: %s", path.c_str());
+        }
+        else {
+            // 💡 修正：renderer_ (アンダースコアあり) に統一
+            SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer_, surf);
+            SDL_DestroySurface(surf);
+
+            if (!tex) {
+                SDL_Log("Failed to create texture: %s", path.c_str());
+            }
+            else {
+                if (layer->texture) {
+                    SDL_DestroyTexture(layer->texture);
+                }
+                layer->texture = tex;
+                SDL_SetTextureBlendMode(layer->texture, SDL_BLENDMODE_BLEND);
+            }
+        }
+    }
+
+    // --- 3. 各種パラメータの同期 ---
+    if (params.hasVisible) layer->visible = params.visible;
+    if (params.hasLeft)    layer->x = params.left;
+    if (params.hasTop)     layer->y = params.top;
+    if (params.hasOpacity) layer->opacity = params.opacity;
+
+    if (layer->texture) {
+        SDL_SetTextureAlphaMod(layer->texture, layer->opacity);
+    }
 }
 
 void SDLGameContext::AddChoice(const tstring& text, const tstring& target) {
@@ -250,22 +314,37 @@ void SDLGameContext::Update(float dt) {
 }
 
 void SDLGameContext::Render() {
-    // 1. 画面のクリア
+    // --- 1. 画面のクリア ---
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
     SDL_RenderClear(renderer_);
 
+    // 【背景レイヤの描画
+    if (baseLayer.visible && baseLayer.texture) {
+        float w, h;
+        SDL_GetTextureSize(baseLayer.texture, &w, &h);
+        SDL_FRect dst = { (float)baseLayer.x, (float)baseLayer.y, w, h };
+        SDL_RenderTexture(renderer_, baseLayer.texture, nullptr, &dst);
+    }
+
+    // 前景レイヤ（立ち絵など）
+    for (const auto& layer : fgLayers) {
+        if (layer.visible && layer.texture) {
+            float w, h;
+            SDL_GetTextureSize(layer.texture, &w, &h);
+            SDL_FRect dst = { (float)layer.x, (float)layer.y, w, h };
+            SDL_RenderTexture(renderer_, layer.texture, nullptr, &dst);
+        }
+    }
+
+    // --- 2. テキスト・UIレイヤの描画（最手前） ---
     if (!font_) return;
 
-    // ウィンドウサイズと折り返し幅の計算
     int winW = 800;
     SDL_GetWindowSize(window_, &winW, nullptr);
     int paddingRight = cursorX_;
     int wrapWidth = winW - cursorX_ - paddingRight;
     if (wrapWidth < 100) wrapWidth = 100;
 
-    // 📢 【ここがポイント】
-    // 文字送り中であれ完了後であれ、画面に描画するメインの文章は常に「これ1枚」だけに絞ります！
-    // choices_ の個別個別テクスチャを Render 内で SDL_RenderTexture してはいけません。
     if (!visibleText_.empty()) {
         SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(
             font_, visibleText_.c_str(), visibleText_.length(), currentColor_, wrapWidth
@@ -277,7 +356,6 @@ void SDLGameContext::Render() {
                 SDL_GetTextureSize(texture, &w, &h);
                 SDL_FRect dst = { (float)cursorX_, (float)cursorY_, w, h };
 
-                // 地の文も選択肢の文字も、すべてここで一括描画されます
                 SDL_RenderTexture(renderer_, texture, nullptr, &dst);
                 SDL_DestroyTexture(texture);
             }
@@ -285,33 +363,24 @@ void SDLGameContext::Render() {
         }
     }
 
-if (currentIndex_ >= currentText_.size()) {
-        
-        int fontHeight = TTF_GetFontHeight(font_); 
+    // --- 3. 選択肢の幾何計算とアタリ判定枠の描画 ---
+    if (currentIndex_ >= currentText_.size()) {
+        int fontHeight = TTF_GetFontHeight(font_);
+        std::string cumulativeText = currentText_;
 
-        // 📢 【新発想】ベースを「完成形（全部入り）」からスタートさせる！
-        std::string cumulativeText = currentText_; 
-
-        // 後ろの選択肢から順番にサイズを計測して、終わったら削っていく
-        //（逆順でループを回します）
         for (size_t i = choices_.size(); i > 0; --i) {
-            size_t idx = i - 1; // 現在の選択肢のインデックス
+            size_t idx = i - 1;
             auto& choice = choices_[idx];
             std::string choiceUtf8 = WStringToUTF8(choice.text);
 
-            // ① 「この選択肢を含んだ状態」のサイズを計測（＝削る前）
             SDL_Surface* afterSurf = TTF_RenderText_Solid_Wrapped(
                 font_, cumulativeText.c_str(), cumulativeText.length(), currentColor_, wrapWidth
             );
 
-            // ② 「この選択肢を削った状態」の文字列を作り、サイズを計測
-            // cumulativeText の末尾にあるはずの「選択肢テキスト」を切り落とす
             if (cumulativeText.length() >= choiceUtf8.length()) {
-                // スクリプトの末尾に改行 \n が残っている場合はそれも含めて削る調整
                 if (!cumulativeText.empty() && cumulativeText.back() == '\n') {
                     cumulativeText.pop_back();
                 }
-                
                 if (cumulativeText.length() >= choiceUtf8.length()) {
                     cumulativeText = cumulativeText.substr(0, cumulativeText.length() - choiceUtf8.length());
                 }
@@ -321,28 +390,22 @@ if (currentIndex_ >= currentText_.size()) {
                 font_, cumulativeText.c_str(), cumulativeText.length(), currentColor_, wrapWidth
             );
 
-            // 🎯 座標の決定
             if (afterSurf) {
                 if (beforeSurf) {
-                    // 削った前後で全体の高さが変わった場合 
-                    // ➡️ この選択肢は「新しい行の先頭」から始まっていたということ！
                     if (afterSurf->h > beforeSurf->h) {
                         choice.rect.x = (float)cursorX_;
-                        choice.rect.y = (float)cursorY_ + beforeSurf->h; 
-                    } 
-                    // 高さが変わらない場合 
-                    // ➡️ 前の文字から「地続きで同じ行」に並んでいたということ！
+                        choice.rect.y = (float)cursorY_ + beforeSurf->h;
+                    }
                     else {
                         choice.rect.x = (float)cursorX_ + beforeSurf->w;
                         choice.rect.y = (float)cursorY_ + (beforeSurf->h - fontHeight);
                     }
-                } else {
-                    // 直前に何も文字がない場合（画面の一番最初）
+                }
+                else {
                     choice.rect.x = (float)cursorX_;
                     choice.rect.y = (float)cursorY_;
                 }
 
-                // 選択肢単体の正確な横幅・縦幅を取得
                 SDL_Surface* singleChoiceSurf = TTF_RenderText_Solid(
                     font_, choiceUtf8.c_str(), choiceUtf8.length(), currentColor_
                 );
@@ -356,16 +419,12 @@ if (currentIndex_ >= currentText_.size()) {
             }
             if (beforeSurf) SDL_DestroySurface(beforeSurf);
 
-            // 📢 判定枠を描画して確認
+            // 選択肢のバウンディングボックス（判定枠）を可視化
             SDL_SetRenderDrawColor(renderer_, 0, 200, 255, 255);
             SDL_RenderRect(renderer_, &choice.rect);
         }
     }
 
-    // --- [p] タグ待ち記号などの描画はそのまま ---
-    if (mode_ == Mode::WaitingForClick) {
-        // ...
-    }
-
+    // --- 4. バックバッファを画面に転送 ---
     SDL_RenderPresent(renderer_);
 }

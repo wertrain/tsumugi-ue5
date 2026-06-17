@@ -4,6 +4,14 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <string>
 
+struct Layer {
+    SDL_Texture* texture = nullptr;
+    bool visible = true;
+    int x = 0;
+    int y = 0;
+    int opacity = 255;
+};
+
 class SDLGameContext : public tsumugi::text::context::IGameContext {
 public:
     SDLGameContext();
@@ -27,6 +35,7 @@ public:
     void FadeIn(int time) override {}
     void FadeOut(int time) override {}
 
+    void SetLayer(const tsumugi::text::context::LayerParams& params) override;
     void ShowImage(const tstring& layer, const tstring& path) override {}
     void HideImage(const tstring& layer) override {}
     void MoveImage(const tstring& layer, int x, int y, int time) override {}
@@ -95,6 +104,9 @@ private:
     float penX_ = 0.0f;
     float penY_ = 0.0f;
     int lineHeight_ = 0;
+
+    Layer baseLayer;
+    std::vector<Layer> fgLayers;
 
     std::string WStringToUTF8(const std::wstring& wstr);
     size_t NextUTF8CharSize(const char* p);

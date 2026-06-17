@@ -86,10 +86,14 @@ Tests/REPL/x64/
 Tests/CodeDemo/x64/
 Tests/ConsoleTextGame/x64/
 Tests/SDLTextGame/x64/
+
 Tests/SDLTextGame/SDL3-*/lib/*/*.pdb
 Tests/SDLTextGame/SDL3_ttf-*/lib/*/*.pdb
+Tests/SDLTextGame/SDL3_image-*/lib/*/*.pdb
 
 !Tests/SDLTextGame/SDL3-*/lib/*/*.lib
 !Tests/SDLTextGame/SDL3-*/lib/*/*.dll
 !Tests/SDLTextGame/SDL3_ttf-*/lib/*/*.lib
 !Tests/SDLTextGame/SDL3_ttf-*/lib/*/*.dll
+Tests/SDLTextGame/SDL3_image-*/lib/*/*.lib
+!Tests/SDLTextGame/SDL3_image-*/lib/*/*.dll

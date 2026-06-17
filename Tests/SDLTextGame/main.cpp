@@ -92,6 +92,19 @@ int main(int argc, char** argv)
         [s]
     )";
 
+    sample = LR"(
+        ;---------------------------------------
+        ; 画像とレイヤの基本
+        ;---------------------------------------
+
+        [image storage="sample\\image\\bg_room.png" layer="base"]
+        [image storage="sample\\image\\char_idle.png" layer=0 left=200 top=100 visible=true opacity=255]
+
+        「ここは主人公の部屋だ。」
+
+        [s]
+    )";
+
     tsumugi::text::lexer::Lexer lexer(sample.c_str());
     tsumugi::text::parser::Parser parser(&lexer);
     auto program = parser.ParseProgram();

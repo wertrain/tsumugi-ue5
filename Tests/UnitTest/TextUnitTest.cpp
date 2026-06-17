@@ -104,6 +104,7 @@ public:
     void ShakeScreen(int strength, int time) override {}
     void FadeIn(int time) override {}
     void FadeOut(int time) override {}
+    void SetLayer(const tsumugi::text::context::LayerParams& params) override {}
     void ShowImage(const tstring& layer, const tstring& path) override {}
     void HideImage(const tstring& layer) override {}
     void MoveImage(const tstring& layer, int x, int y, int time) override {}
