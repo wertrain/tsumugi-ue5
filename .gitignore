@@ -74,13 +74,13 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # My Project
-Libararys/TsumugiLib/*.user
+Libraries/TsumugiLib/*.user
 Tests/UnitTest/*.user
 Tests/REPL/*.user
 Tests/CodeDemo/*.user
 Tests/ConsoleTextGame/*.user
 Tests/SDLTextGame/*.user
-Libararys/TsumugiLib/x64/
+Libraries/TsumugiLib/x64/
 Tests/UnitTest/x64/
 Tests/REPL/x64/
 Tests/CodeDemo/x64/
