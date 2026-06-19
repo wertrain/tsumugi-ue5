@@ -127,16 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libararys\TsumugiLib\TsumugiLib.vcxproj">
-      <Project>{20ae2b99-38ac-4f0f-be7d-a576786f309b}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="ConsoleGameContext.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleGameContext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\TsumugiLib\TsumugiLib.vcxproj">
+      <Project>{20ae2b99-38ac-4f0f-be7d-a576786f309b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

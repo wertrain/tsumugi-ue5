@@ -148,7 +148,7 @@ copy "$(ProjectDir)SDL3_image-3.4.4\lib\x64\SDL3_image.dll" "$(OutDir)"</Command
     <ClInclude Include="SDLGameContext.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libararys\TsumugiLib\TsumugiLib.vcxproj">
+    <ProjectReference Include="..\..\Libraries\TsumugiLib\TsumugiLib.vcxproj">
       <Project>{20ae2b99-38ac-4f0f-be7d-a576786f309b}</Project>
     </ProjectReference>
   </ItemGroup>
