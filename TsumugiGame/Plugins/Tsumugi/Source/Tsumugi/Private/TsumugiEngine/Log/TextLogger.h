@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdarg>
 #include <sstream>
+#include <functional>
 
 namespace tsumugi::log {
 
@@ -43,9 +44,16 @@ public:
         }
     };
 
+    /// <summary>
+    /// ログを受け取るコールバック
+    /// </summary>
+    using LogOutputCallback = std::function<void(Categories, const tlogchar* text)>;
+
 public:
     TextLogger() :
         histories_(),
+        // outputCallback_(TextLogger::defaultCallback_),
+        outputCallback_(nullptr), // いったんデフォルト挙動をコンソールにするために nullptr に
         console_(&defaultConsole_)
     {}
     virtual ~TextLogger() {}
@@ -120,6 +128,9 @@ public:
         return false;
     }
 
+    void SetLogCallback(LogOutputCallback callback) { outputCallback_ = callback; }
+    static void SetGlobalLogCallback(LogOutputCallback callback) { globalCallback_ = callback; }
+
     const auto& GetLogConsole() const { return console_; }
     void SetLogConsole(ILogConsole* console) { console_ = console; }
 
@@ -132,8 +143,15 @@ private:
     virtual void Log_(const Categories& category, const tlogstring& message) {
 
         Logging(category, message);
-        if (console_) {
+
+        if (outputCallback_) {
+            outputCallback_(category, message.c_str());
+        } else if (globalCallback_) {
+            globalCallback_(category, message.c_str());
+        } else if (console_) {
             console_->WriteLine(message.c_str());
+        } else {
+            defaultCallback_(category, message.c_str());
         }
     }
 
@@ -149,8 +167,12 @@ private:
 
 private:
     std::array<std::vector<History>, static_cast<size_t>(Categories::Num)> histories_;
+    LogOutputCallback outputCallback_;
     ILogConsole* console_;
     DefaultConsole defaultConsole_;
+
+    static LogOutputCallback globalCallback_;
+    static const LogOutputCallback defaultCallback_;
 };
 
 }

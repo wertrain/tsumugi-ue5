@@ -200,8 +200,8 @@ void BuiltinFunctionRegistry::RegisterBuiltinFunctions() {
                     auto bi = std::static_pointer_cast< object::IntegerObject>(args[1])->GetValue();
                     return std::make_shared<object::IntegerObject>(std::min(ai, bi));
                 } else if (args[0]->GetType() == object::ObjectType::kFloat && args[1]->GetType() == object::ObjectType::kFloat) {
-                    auto af = std::static_pointer_cast<object::FloatObject> (args[0])->GetValue();
-                    auto bf = std::static_pointer_cast<object::FloatObject>(args[1])->GetValue();
+                    auto af = static_cast<int>(std::static_pointer_cast<object::FloatObject> (args[0])->GetValue());
+                    auto bf = static_cast<int>(std::static_pointer_cast<object::FloatObject>(args[1])->GetValue());
                     return std::make_shared<object::IntegerObject>(std::min(af, bf));
                 }
 
@@ -224,8 +224,8 @@ void BuiltinFunctionRegistry::RegisterBuiltinFunctions() {
                     return std::make_shared<object::IntegerObject>(std::max(ai, bi));
                 }
                 else if (args[0]->GetType() == object::ObjectType::kFloat && args[1]->GetType() == object::ObjectType::kFloat) {
-                    auto af = std::static_pointer_cast<object::FloatObject> (args[0])->GetValue();
-                    auto bf = std::static_pointer_cast<object::FloatObject>(args[1])->GetValue();
+                    auto af = static_cast<int>(std::static_pointer_cast<object::FloatObject> (args[0])->GetValue());
+                    auto bf = static_cast<int>(std::static_pointer_cast<object::FloatObject>(args[1])->GetValue());
                     return std::make_shared<object::IntegerObject>(std::max(af, bf));
                 }
 

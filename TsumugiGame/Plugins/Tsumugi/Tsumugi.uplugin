@@ -5,6 +5,7 @@
   "FriendlyName": "Tsumugi Script Engine",
   "Description": "Lightweight script engine for Unreal Engine.",
   "Category": "Scripting",
+  "CanContainContent": true,
   "Modules": [
     {
       "Name": "Tsumugi",

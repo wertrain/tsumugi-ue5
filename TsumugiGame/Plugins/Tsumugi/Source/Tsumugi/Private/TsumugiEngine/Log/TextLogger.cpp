@@ -10,4 +10,10 @@ void DefaultConsole::WriteLine(const tlogchar* text) {
     std::cout << text << std::endl;
 }
 
+TextLogger::LogOutputCallback TextLogger::globalCallback_ = nullptr;
+
+const TextLogger::LogOutputCallback TextLogger::defaultCallback_ = [](Categories, const tlogchar* text) {
+    std::cout << text << std::endl;
+};
+
 }

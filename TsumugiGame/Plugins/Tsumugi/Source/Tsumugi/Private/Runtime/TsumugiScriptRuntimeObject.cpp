@@ -1,4 +1,4 @@
-﻿#include "Runtime/TsumugiScriptRuntime.h"
+﻿#include "Runtime/TsumugiScriptRuntimeObject.h"
 #include "Kismet/GameplayStatics.h"
 #include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
 #include "TsumugiEngine/Script/Parser/ScriptParser.h"
@@ -7,18 +7,9 @@
 #include "TsumugiEngine/Script/Evaluator/Evaluator.h"
 #include "TsumugiEngine/Script/AST/Program.h"
 #include "TsumugiEngine/Script/Objects/Environment.h"
+#include "TsumugiEngine/Log/TextLogger.h"
 
-void UTsumugiScriptRuntime::Initialize(FSubsystemCollectionBase& Collection)
-{
-    Environment = std::make_shared<tsumugi::script::object::Environment>();
-}
-
-void UTsumugiScriptRuntime::Deinitialize()
-{
-    Environment->Clear();
-}
-
-void UTsumugiScriptRuntime::RunScript(const FString& Code)
+void UTsumugiScriptRuntimeObject::RunScript(const FString& Code)
 {
     tstring Input = *Code;
 
@@ -26,11 +17,16 @@ void UTsumugiScriptRuntime::RunScript(const FString& Code)
     auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
     auto root = parser->ParseProgram();
 
+    if (!Environment)
+    {
+        Environment = std::make_shared<tsumugi::script::object::Environment>();
+    }
+
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
     evaluator->Eval(root.get(), Environment);
 }
 
-FString UTsumugiScriptRuntime::Eval(const FString& Expression)
+FString UTsumugiScriptRuntimeObject::Eval(const FString& Expression)
 {
     tstring Input = *Expression;
 
@@ -38,13 +34,26 @@ FString UTsumugiScriptRuntime::Eval(const FString& Expression)
     auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
     auto root = parser->ParseProgram();
 
+    if (!Environment)
+    {
+        Environment = std::make_shared<tsumugi::script::object::Environment>();
+    }
+
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
     auto object = evaluator->Eval(root.get(), Environment);
 
     return ObjectToString(object);
 }
 
-FString UTsumugiScriptRuntime::ObjectToString(const std::shared_ptr<tsumugi::script::object::IObject>& Object) const
+void UTsumugiScriptRuntimeObject::ClearEnvironment()
+{
+    if (Environment)
+    {
+        Environment->Clear();
+    }
+}
+
+FString UTsumugiScriptRuntimeObject::ObjectToString(const std::shared_ptr<tsumugi::script::object::IObject>& Object) const
 {
     if (!Object || Object->GetType() == tsumugi::script::object::ObjectType::kNull)
     {
