@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "Runtime/UELogConsole.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Runtime/TsumugiScriptValue.h"
 #include "TsumugiScriptRuntime.generated.h"
 
 namespace tsumugi::script::object { class Environment; }
@@ -22,8 +22,7 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Tsumugi")
     void RunScript(const FString& Code);
     UFUNCTION(BlueprintCallable, Category = "Tsumugi")
-    FString Eval(const FString& Expression);
-
+    UTsumugiScriptValue* Eval(const FString& Expression);
 
 public:
     UPROPERTY(BlueprintAssignable)
@@ -34,5 +33,4 @@ private:
 
 private:
     std::shared_ptr<tsumugi::script::object::Environment> Environment;
-    UELogConsole UEConsole;
 };

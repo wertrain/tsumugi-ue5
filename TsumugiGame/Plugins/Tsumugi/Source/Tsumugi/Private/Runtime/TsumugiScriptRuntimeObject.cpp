@@ -1,4 +1,5 @@
 ﻿#include "Runtime/TsumugiScriptRuntimeObject.h"
+#include "Runtime/TsumugiScriptValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
 #include "TsumugiEngine/Script/Parser/ScriptParser.h"
@@ -8,6 +9,17 @@
 #include "TsumugiEngine/Script/AST/Program.h"
 #include "TsumugiEngine/Script/Objects/Environment.h"
 #include "TsumugiEngine/Log/TextLogger.h"
+
+void UTsumugiScriptRuntimeObject::BeginDestroy()
+{
+    if (Environment)
+    {
+        Environment->Clear();
+        Environment.reset();
+    }
+
+    Super::BeginDestroy();
+}
 
 void UTsumugiScriptRuntimeObject::RunScript(const FString& Code)
 {
@@ -26,7 +38,7 @@ void UTsumugiScriptRuntimeObject::RunScript(const FString& Code)
     evaluator->Eval(root.get(), Environment);
 }
 
-FString UTsumugiScriptRuntimeObject::Eval(const FString& Expression)
+UTsumugiScriptValue* UTsumugiScriptRuntimeObject::Eval(const FString& Expression)
 {
     tstring Input = *Expression;
 
@@ -42,7 +54,7 @@ FString UTsumugiScriptRuntimeObject::Eval(const FString& Expression)
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
     auto object = evaluator->Eval(root.get(), Environment);
 
-    return ObjectToString(object);
+    return UTsumugiScriptValue::FromObject(this, object);
 }
 
 void UTsumugiScriptRuntimeObject::ClearEnvironment()

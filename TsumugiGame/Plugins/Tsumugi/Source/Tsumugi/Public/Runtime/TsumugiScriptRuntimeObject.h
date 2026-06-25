@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "UObject/Object.h"
 #include <memory>
+#include "Runtime/TsumugiScriptValue.h"
 #include "TsumugiScriptRuntimeObject.generated.h"
 
 namespace tsumugi::script::object { class Environment; }
@@ -16,10 +17,13 @@ class TSUMUGI_API UTsumugiScriptRuntimeObject : public UObject
     GENERATED_BODY()
 
 public:
+    virtual void BeginDestroy() override;
+
     UFUNCTION(BlueprintCallable, Category = "Tsumugi")
     void RunScript(const FString& Code);
     UFUNCTION(BlueprintCallable, Category = "Tsumugi")
-    FString Eval(const FString& Expression);
+    UTsumugiScriptValue* Eval(const FString& Expression);
+
     UFUNCTION(BlueprintCallable)
     void ClearEnvironment();
 

@@ -1,4 +1,5 @@
 ﻿#include "Runtime/TsumugiScriptRuntime.h"
+#include "Runtime/TsumugiScriptValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
 #include "TsumugiEngine/Script/Parser/ScriptParser.h"
@@ -30,7 +31,7 @@ void UTsumugiScriptRuntime::RunScript(const FString& Code)
     evaluator->Eval(root.get(), Environment);
 }
 
-FString UTsumugiScriptRuntime::Eval(const FString& Expression)
+UTsumugiScriptValue* UTsumugiScriptRuntime::Eval(const FString& Expression)
 {
     tstring Input = *Expression;
 
@@ -41,7 +42,7 @@ FString UTsumugiScriptRuntime::Eval(const FString& Expression)
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
     auto object = evaluator->Eval(root.get(), Environment);
 
-    return ObjectToString(object);
+    return UTsumugiScriptValue::FromObject(this, object);
 }
 
 FString UTsumugiScriptRuntime::ObjectToString(const std::shared_ptr<tsumugi::script::object::IObject>& Object) const
