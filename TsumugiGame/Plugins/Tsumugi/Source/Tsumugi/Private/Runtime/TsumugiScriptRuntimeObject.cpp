@@ -1,5 +1,6 @@
 ﻿#include "Runtime/TsumugiScriptRuntimeObject.h"
 #include "Runtime/TsumugiScriptValue.h"
+#include "Integration/StringConversion.h"
 #include "Kismet/GameplayStatics.h"
 #include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
 #include "TsumugiEngine/Script/Parser/ScriptParser.h"
@@ -72,5 +73,5 @@ FString UTsumugiScriptRuntimeObject::ObjectToString(const std::shared_ptr<tsumug
         return TEXT("");
     }
     const auto S = Object->Inspect();
-    return FString(S.c_str());
+    return tsumugi::integration::ToFString(S);
 }

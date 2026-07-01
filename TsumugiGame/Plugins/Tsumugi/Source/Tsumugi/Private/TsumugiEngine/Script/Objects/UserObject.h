@@ -29,8 +29,8 @@ class UserObject : public IObject {
 public:
     explicit UserObject();
 
-    std::shared_ptr<IObject> Get(const tstring& name) const;
-    void Set(const tstring& name, std::shared_ptr<IObject> value);
+    virtual std::shared_ptr<IObject> Get(const tstring& name) const;
+    virtual void Set(const tstring& name, std::shared_ptr<IObject> value);
     std::shared_ptr<UserObject> GetPrototype() const;
     void SetPrototype(std::shared_ptr<UserObject> proto);
     const std::unordered_map<tstring, std::shared_ptr<IObject>>& GetProperties() const { return properties_; }

@@ -1,4 +1,5 @@
 ﻿#include "Runtime/TsumugiScriptValue.h"
+#include "Integration/StringConversion.h"
 #include "TsumugiEngine/Script/Objects/IObject.h"
 
 bool UTsumugiScriptValue::IsValid() const
@@ -18,5 +19,5 @@ FString UTsumugiScriptValue::ToString() const
         return TEXT("null");
     }
     const auto S = Object->Inspect();
-    return FString(S.c_str());
+    return tsumugi::integration::ToFString(S);
 }
