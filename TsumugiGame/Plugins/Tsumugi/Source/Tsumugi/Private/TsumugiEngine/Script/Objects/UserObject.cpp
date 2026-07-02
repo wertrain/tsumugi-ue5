@@ -5,12 +5,12 @@ namespace tsumugi::script::object {
 
 UserObject::UserObject() = default;
 
-std::shared_ptr<IObject> UserObject::Get(const tstring& name) const {
-
-    auto it = properties_.find(name);
-    if (it != properties_.end()) return it->second;
-    return nullptr;
-}
+//std::shared_ptr<IObject> UserObject::Get(const tstring& name) const {
+//
+//    auto it = properties_.find(name);
+//    if (it != properties_.end()) return it->second;
+//    return nullptr;
+//}
 
 void UserObject::Set(const tstring& name, std::shared_ptr<IObject> value) {
 
@@ -76,7 +76,7 @@ ObjectType UserObject::GetType() const {
     return ObjectType::kUserObject;
 }
 
-std::optional<std::shared_ptr<object::IObject>> UserObject::TryGetProperty(const tstring& name) {
+std::optional<std::shared_ptr<object::IObject>> UserObject::TryGetProperty(const tstring& name) const {
 
     // 自分自身のプロパティ
     auto it = properties_.find(name);

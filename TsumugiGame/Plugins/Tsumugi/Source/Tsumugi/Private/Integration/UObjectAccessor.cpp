@@ -21,13 +21,12 @@ UObjectAccessor::UObjectAccessor(UObject* InTarget)
 
 }
 
-std::shared_ptr<script::object::IObject> UObjectAccessor::Get(const tstring& name) const
+std::optional<std::shared_ptr<script::object::IObject>> UObjectAccessor::TryGetProperty(const tstring& name) const
 {
-    if (auto v = UserObject::Get(name))
+    if (auto v = UserObject::TryGetProperty(name))
     {
         return v;
     }
-
 
     if (auto v = GetUEProperty(name))
     {
@@ -39,12 +38,7 @@ std::shared_ptr<script::object::IObject> UObjectAccessor::Get(const tstring& nam
         return v;
     }
 
-    if (auto proto = GetPrototype())
-    {
-        return proto->Get(name);
-    }
-
-    return nullptr;
+    return std::nullopt;
 }
 
 void UObjectAccessor::Set(const tstring& name, std::shared_ptr<script::object::IObject> value)
@@ -67,24 +61,8 @@ std::shared_ptr<script::object::IObject> UObjectAccessor::GetUEProperty(const ts
 
     uint8* Data = Property->ContainerPtrToValuePtr<uint8>(Target);
 
-    if (auto* NumProperty = CastField<FIntProperty>(Property))
-    {
-        return std::make_shared<tsumugi::script::object::IntegerObject>(NumProperty->GetPropertyValue(Data));
-    }
-
-    if (auto* FloatProperty = CastField<FFloatProperty>(Property))
-    {
-        return std::make_shared<tsumugi::script::object::FloatObject>(FloatProperty->GetPropertyValue(Data));
-    }
-
-    if (auto* StrProperty = CastField<FStrProperty>(Property))
-    {
-        return std::make_shared<tsumugi::script::object::StringObject>(tsumugi::integration::ToTString(StrProperty->GetPropertyValue(Data)));
-    }
-
-    return nullptr;
+    return ConvertPropertyValue(Property, Data);
 }
-
 
 bool UObjectAccessor::SetUEProperty(const tstring& name, const std::shared_ptr<script::object::IObject>& value)
 {
@@ -182,6 +160,7 @@ std::shared_ptr<tsumugi::script::object::IObject> UObjectAccessor::GetUFunction(
 
             Target->ProcessEvent(Func, Buffer);
 
+            // 戻り値（ReturnParam）の処理
             std::shared_ptr<tsumugi::script::object::IObject> ReturnValue = tsumugi::script::object::NullObject::Instance();
 
             for (TFieldIterator<FProperty> It(Func); It; ++It)
@@ -190,7 +169,7 @@ std::shared_ptr<tsumugi::script::object::IObject> UObjectAccessor::GetUFunction(
                 if (Property->HasAnyPropertyFlags(CPF_ReturnParm))
                 {
                     uint8* PropertyData = Property->ContainerPtrToValuePtr<uint8>(Buffer);
-                    ReturnValue = ConvertReturnValue(Property, PropertyData);
+                    ReturnValue = ConvertPropertyValue(Property, PropertyData);
                     break;
                 }
             }
@@ -293,7 +272,7 @@ bool UObjectAccessor::ConvertArgument(class FProperty* Property, uint8* Property
     return false;
 }
 
-std::shared_ptr<script::object::IObject> UObjectAccessor::ConvertReturnValue(class FProperty* Property, uint8* PropertyData) const
+std::shared_ptr<script::object::IObject> UObjectAccessor::ConvertPropertyValue(class FProperty* Property, uint8* PropertyData) const
 {
     if (auto* FloatProperty = CastField<FFloatProperty>(Property))
     {
@@ -322,8 +301,209 @@ std::shared_ptr<script::object::IObject> UObjectAccessor::ConvertReturnValue(cla
         }
     }
 
+    if (auto* ObjectProperty = CastField<FObjectProperty>(Property))
+    {
+        UObject* Obj = ObjectProperty->GetObjectPropertyValue(PropertyData);
+
+        if (!Obj)
+        {
+            return script::object::NullObject::Instance();
+        }
+
+        return std::make_shared<UObjectAccessor>(Obj);
+    }
+
     return tsumugi::script::object::NullObject::Instance();
     //return std::make_shared<tsumugi::script::object::ErrorObject>(tsumugi::script::object::ErrorCode::kInvalidProperty, std::unordered_map<std::string, tstring>{});
+}
+
+tstring UObjectAccessor::Inspect() const
+{
+    if (!Target)
+        return TT("<null>");
+
+    FString Out;
+
+    // ヘッダ
+    Out += FString::Printf(TEXT("%s (%s)\n"),
+        *Target->GetName(),
+        *Target->GetClass()->GetName());
+    Out += TEXT("--------------------------------------------------\n");
+
+    // =========================
+    // Properties（値付き）
+    // =========================
+    Out += TEXT("Properties:\n");
+
+    for (TFieldIterator<FProperty> PropIt(Target->GetClass()); PropIt; ++PropIt)
+    {
+        FProperty* Property = *PropIt;
+        FString PropName = Property->GetName();
+        FString PropType = Property->GetCPPType();
+        void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Target);
+
+        FString ValueStr = TEXT("<unsupported>");
+
+        // Int
+        if (FIntProperty* IntProperty = CastField<FIntProperty>(Property))
+        {
+            ValueStr = FString::FromInt(IntProperty->GetPropertyValue(ValuePtr));
+        }
+        // Float
+        else if (FFloatProperty* FloatProperty = CastField<FFloatProperty>(Property))
+        {
+            ValueStr = FString::SanitizeFloat(FloatProperty->GetPropertyValue(ValuePtr));
+        }
+        // Bool
+        else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
+        {
+            ValueStr = BoolProperty->GetPropertyValue(ValuePtr) ? TEXT("true") : TEXT("false");
+        }
+        // String
+        else if (FStrProperty* StrProperty = CastField<FStrProperty>(Property))
+        {
+            ValueStr = StrProperty->GetPropertyValue(ValuePtr);
+        }
+        // Name
+        else if (FNameProperty* NameProperty = CastField<FNameProperty>(Property))
+        {
+            ValueStr = NameProperty->GetPropertyValue(ValuePtr).ToString();
+        }
+        // Enum
+        else if (FEnumProperty* EnumProperty = CastField<FEnumProperty>(Property))
+        {
+            int64 Raw = EnumProperty->GetUnderlyingProperty()->GetSignedIntPropertyValue(ValuePtr);
+            ValueStr = EnumProperty->GetEnum()->GetNameStringByValue(Raw);
+        }
+        // UObject*
+        else if (FObjectProperty* ObjectProperty = CastField<FObjectProperty>(Property))
+        {
+            UObject* Obj = ObjectProperty->GetObjectPropertyValue(ValuePtr);
+            ValueStr = Obj ? Obj->GetName() : TEXT("null");
+        }
+        // Struct（代表的なもの）
+        else if (FStructProperty* StructProperty = CastField<FStructProperty>(Property))
+        {
+            if (StructProperty->Struct == TBaseStructure<FVector>::Get())
+            {
+                FVector* Vec = StructProperty->ContainerPtrToValuePtr<FVector>(Target);
+                ValueStr = Vec->ToString();
+            }
+            else if (StructProperty->Struct == TBaseStructure<FRotator>::Get())
+            {
+                FRotator* Rot = StructProperty->ContainerPtrToValuePtr<FRotator>(Target);
+                ValueStr = Rot->ToString();
+            }
+            else if (StructProperty->Struct == TBaseStructure<FTransform>::Get())
+            {
+                FTransform* Tr = StructProperty->ContainerPtrToValuePtr<FTransform>(Target);
+                ValueStr = Tr->ToString();
+            }
+            else if (StructProperty->Struct == TBaseStructure<FColor>::Get())
+            {
+                FColor* Col = StructProperty->ContainerPtrToValuePtr<FColor>(Target);
+                ValueStr = Col->ToString();
+            }
+            else
+            {
+                ValueStr = TEXT("<struct>");
+            }
+        }
+        // Array（要素数 + 代表値）
+        else if (FArrayProperty* ArrayProperty = CastField<FArrayProperty>(Property))
+        {
+            FScriptArrayHelper Helper(ArrayProperty, ValuePtr);
+            const int32 Num = Helper.Num();
+            ValueStr = FString::Printf(TEXT("Array[%d]"), Num);
+
+            // 代表値として先頭要素を軽く表示（必要なら拡張）
+            if (Num > 0)
+            {
+                FProperty* Inner = ArrayProperty->Inner;
+                void* ElemPtr = Helper.GetRawPtr(0);
+
+                if (FIntProperty* IP = CastField<FIntProperty>(Inner))
+                {
+                    ValueStr += FString::Printf(TEXT(" = [%d, ...]"), IP->GetPropertyValue(ElemPtr));
+                }
+                else if (FFloatProperty* FP = CastField<FFloatProperty>(Inner))
+                {
+                    ValueStr += FString::Printf(TEXT(" = [%s, ...]"), *FString::SanitizeFloat(FP->GetPropertyValue(ElemPtr)));
+                }
+                else if (FStrProperty* SP = CastField<FStrProperty>(Inner))
+                {
+                    ValueStr += FString::Printf(TEXT(" = [\"%s\", ...]"), *SP->GetPropertyValue(ElemPtr));
+                }
+                else if (FNameProperty* NP = CastField<FNameProperty>(Inner))
+                {
+                    ValueStr += FString::Printf(TEXT(" = [%s, ...]"), *NP->GetPropertyValue(ElemPtr).ToString());
+                }
+                else if (FObjectProperty* OP = CastField<FObjectProperty>(Inner))
+                {
+                    UObject* Obj = OP->GetObjectPropertyValue(ElemPtr);
+                    ValueStr += FString::Printf(TEXT(" = [%s, ...]"), Obj ? *Obj->GetName() : TEXT("null"));
+                }
+            }
+        }
+
+        Out += FString::Printf(TEXT("  %s : %s = %s\n"),
+            *PropName, *PropType, *ValueStr);
+    }
+
+    Out += TEXT("\n--------------------------------------------------\n");
+
+    // =========================
+    // Methods（引数 + 戻り値）
+    // =========================
+    Out += TEXT("Methods:\n");
+
+    for (TFieldIterator<UFunction> FuncIt(Target->GetClass()); FuncIt; ++FuncIt)
+    {
+        UFunction* Func = *FuncIt;
+
+        // 必要なら BlueprintCallable のみ
+        // if (!Func->HasAnyFunctionFlags(FUNC_BlueprintCallable))
+        //     continue;
+
+        FString FuncName = Func->GetName();
+
+        // 引数一覧
+        FString ArgList;
+        for (TFieldIterator<FProperty> ParamIt(Func); ParamIt; ++ParamIt)
+        {
+            FProperty* Param = *ParamIt;
+
+            if (Param->HasAnyPropertyFlags(CPF_ReturnParm))
+                continue;
+
+            FString ParamType = Param->GetCPPType();
+            FString ParamName = Param->GetName();
+
+            if (!ArgList.IsEmpty())
+                ArgList += TEXT(", ");
+
+            ArgList += FString::Printf(TEXT("%s %s"), *ParamType, *ParamName);
+        }
+
+        // 戻り値
+        FString ReturnStr;
+        if (FProperty* ReturnProp = Func->GetReturnProperty())
+        {
+            FString ReturnType = ReturnProp->GetCPPType();
+            ReturnStr = FString::Printf(TEXT(" -> %s"), *ReturnType);
+        }
+
+        if (ArgList.IsEmpty())
+        {
+            Out += FString::Printf(TEXT("  %s()%s\n"), *FuncName, *ReturnStr);
+        }
+        else
+        {
+            Out += FString::Printf(TEXT("  %s(%s)%s\n"), *FuncName, *ArgList, *ReturnStr);
+        }
+    }
+
+    return ToTString(Out);
 }
 
 } // namespace tsumugi::integration

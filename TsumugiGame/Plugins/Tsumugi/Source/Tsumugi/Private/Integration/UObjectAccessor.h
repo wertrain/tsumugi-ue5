@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "TsumugiEngine/Script/Objects/UserObject.h"
+#include <optional>
 
 namespace tsumugi::integration {
 
@@ -23,7 +24,7 @@ public:
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    virtual std::shared_ptr<script::object::IObject> Get(const tstring& name) const override;
+    virtual std::optional<std::shared_ptr<script::object::IObject>> TryGetProperty(const tstring& name) const override;
 
     /// <summary>
     /// Tsumugi からのプロパティ設定要求を処理する。
@@ -37,6 +38,12 @@ public:
     /// ラップしている Unreal の UObject を返す。
     /// </summary>
     UObject* GetTarget() const { return Target; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    tstring Inspect() const override;
 
 private:
     UObject* Target;
@@ -78,7 +85,7 @@ private:
     /// <param name="Property"></param>
     /// <param name="PropertyData"></param>
     /// <returns></returns>
-    std::shared_ptr<script::object::IObject> ConvertReturnValue(class FProperty* Property, uint8* PropertyData) const;
+    std::shared_ptr<script::object::IObject> ConvertPropertyValue(class FProperty* Property, uint8* PropertyData) const;
 };
 
 } // namespace tsumugi::integration

@@ -29,7 +29,7 @@ class UserObject : public IObject {
 public:
     explicit UserObject();
 
-    virtual std::shared_ptr<IObject> Get(const tstring& name) const;
+    //std::shared_ptr<IObject> Get(const tstring& name) const;
     virtual void Set(const tstring& name, std::shared_ptr<IObject> value);
     std::shared_ptr<UserObject> GetPrototype() const;
     void SetPrototype(std::shared_ptr<UserObject> proto);
@@ -38,7 +38,7 @@ public:
     tstring Inspect() const override;
     ObjectType GetType() const override;
 
-    std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name);
+    virtual std::optional<std::shared_ptr<object::IObject>> TryGetProperty(const tstring& name) const;
     std::shared_ptr<ClassObject> GetOwnerClass() const { return ownerClass_.lock(); }
     void SetOwnerClass(const std::shared_ptr<ClassObject>& klass) { ownerClass_ = klass; }
 
