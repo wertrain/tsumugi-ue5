@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix4x4.h"
@@ -13,8 +13,8 @@ struct TransformMath {
     TransformMath()
         : position(0,0,0), rotation(0,0,0,1), scale(1,1,1) {}
 
-    TransformMath(const Vector3& p, const Quaternion& r, const Vector3& s)
-        : position(p), rotation(r), scale(s) {}
+    TransformMath(const Vector3& t, const Quaternion& r, const Vector3& s)
+        : position(t), rotation(r), scale(s) {}
 
     // ローカル → ワールド行列
     Matrix4x4 LocalToWorldMatrix() const {

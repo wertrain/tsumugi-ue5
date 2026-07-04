@@ -18,6 +18,7 @@ public:
 
 public:
     TransformInstance();
+    TransformInstance(const math::Vector3& t, const math::Quaternion& r, const math::Vector3& s);
     const math::TransformMath& GetValue() const { return value_; }
     const math::Vector3& GetPosition() const;
     const math::Quaternion& GetRotation() const;

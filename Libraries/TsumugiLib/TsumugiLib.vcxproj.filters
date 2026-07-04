@@ -94,6 +94,9 @@
     <Filter Include="Tsumugi\Private\TsumugiEngine\Log">
       <UniqueIdentifier>{e68bea62-ca71-4afc-ab86-e0c80a3356ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator">
+      <UniqueIdentifier>{a31d3251-c1e2-4751-8d74-08a48998d277}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.h">
@@ -492,6 +495,12 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ImageCommand.h">
       <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator\RotatorInstance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator\RotatorClass.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.cpp">
@@ -859,6 +868,12 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Text\Commands\ImageCommand.cpp">
       <Filter>Tsumugi\Private\TsumugiEngine\Text\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator\RotatorInstance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator\RotatorClass.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

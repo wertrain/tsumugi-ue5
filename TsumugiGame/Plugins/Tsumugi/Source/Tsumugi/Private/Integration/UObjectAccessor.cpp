@@ -12,6 +12,7 @@
 #include "TsumugiEngine/Script/Builtins/Vector/Vector2Instance.h"
 #include "TsumugiEngine/Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "TsumugiEngine/Script/Builtins/Transform/TransformInstance.h"
+#include "TsumugiEngine/Script/Builtins/Rotator/RotatorInstance.h"
 
 namespace tsumugi::integration {
 
@@ -125,8 +126,7 @@ std::shared_ptr<tsumugi::script::object::IObject> UObjectAccessor::GetUFunction(
     UFunction* Func = Target->FindFunction(ToFName(name));
     if (!Func) return nullptr;
 
-    // ここで BuiltinFunctionObject にラップして返す
-    // （あなたの BuiltinFunctionObject 実装に合わせて書き換え）
+    // BuiltinFunctionObject にラップして返す
     return std::make_shared<tsumugi::script::object::BuiltinFunctionObject>(
         [this, Func](std::shared_ptr<tsumugi::script::object::IObject>, const std::vector<std::shared_ptr<tsumugi::script::object::IObject>>& args)
         -> std::shared_ptr<tsumugi::script::object::IObject>
@@ -155,7 +155,6 @@ std::shared_ptr<tsumugi::script::object::IObject> UObjectAccessor::GetUFunction(
                     FMemory::Free(Buffer);
                     return std::make_shared<tsumugi::script::object::ErrorObject>(tsumugi::script::object::ErrorCode::kTypeMismatch, std::unordered_map<std::string, tstring>{});
                 }
-
             }
 
             Target->ProcessEvent(Func, Buffer);
@@ -266,6 +265,17 @@ bool UObjectAccessor::ConvertArgument(class FProperty* Property, uint8* Property
                 return true;
             }
         }
+        else if (StructProperty->Struct == TBaseStructure<FRotator>::Get())
+        {
+            if (BuiltinInstanceValue->GetBuiltinType() == tsumugi::script::builtin::BuiltinType::Rotator)
+            {
+                auto Rotator = std::static_pointer_cast<tsumugi::script::builtin::rotator::RotatorInstance>(BuiltinInstanceValue);
+
+                auto e = Rotator->GetQuaternion().ToEuler();
+                *(FRotator*)PropertyData = FRotator(e.x, e.y, e.z);
+                return true;
+            }
+        }
         // TODO: FRotator, FColor, FTransform なども追加
     }
 
@@ -298,6 +308,16 @@ std::shared_ptr<script::object::IObject> UObjectAccessor::ConvertPropertyValue(c
         {
             FVector Value = *(FVector*)PropertyData;
             return std::make_shared<tsumugi::script::builtin::vector::Vector3Instance>(Value.X, Value.Y, Value.Z);
+        }
+        else if (StructProperty->Struct == TBaseStructure<FTransform>::Get())
+        {
+            FTransform Value = *(FTransform*)PropertyData;
+            return std::make_shared<tsumugi::script::builtin::transform::TransformInstance>();
+        }
+        else if (StructProperty->Struct == TBaseStructure<FRotator>::Get())
+        {
+            FRotator Value = *(FRotator*)PropertyData;
+            return std::make_shared<tsumugi::script::builtin::rotator::RotatorInstance>(Value.Pitch, Value.Yaw, Value.Roll);
         }
     }
 

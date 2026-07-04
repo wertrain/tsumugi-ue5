@@ -6,7 +6,13 @@
 
 namespace tsumugi::script::builtin::transform {
 
-TransformInstance::TransformInstance() {
+TransformInstance::TransformInstance()
+    : value_() {
+
+}
+
+TransformInstance::TransformInstance(const math::Vector3& t, const math::Quaternion& r, const math::Vector3& s)
+   : value_(t, r, s) {
 
 }
 

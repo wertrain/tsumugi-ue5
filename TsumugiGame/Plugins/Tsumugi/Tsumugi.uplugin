@@ -11,6 +11,11 @@
       "Name": "Tsumugi",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "TsumugiEditor",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
     }
   ]
 }

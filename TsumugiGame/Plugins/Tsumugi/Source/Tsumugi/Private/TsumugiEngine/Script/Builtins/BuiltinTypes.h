@@ -13,6 +13,7 @@ enum class BuiltinType : int32_t {
     Quaternion,
     Random,
     Transform,
+    Rotator,
     Num
 };
 
