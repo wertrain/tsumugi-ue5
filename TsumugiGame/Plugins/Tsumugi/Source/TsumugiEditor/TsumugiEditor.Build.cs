@@ -10,15 +10,15 @@ public class TsumugiEditor : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
-            "UnrealEd",              // EditorUtilityWidget に必要
-            "Blutility",             // Editor Utility
-            "UMG",                   // UI
-            "Slate",
-            "SlateCore",
-            "Tsumugi"                // Runtime モジュールへの依存
+            "Tsumugi"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {
+            "UnrealEd",
+            "Blutility",
+            "UMG",
+            "Slate",
+            "SlateCore",
             "EditorSubsystem",
             "InputCore",
             "Projects"
