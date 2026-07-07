@@ -13,6 +13,8 @@
 #include "TsumugiEngine/Script/Builtins/Quaternion/QuaternionInstance.h"
 #include "TsumugiEngine/Script/Builtins/Transform/TransformInstance.h"
 #include "TsumugiEngine/Script/Builtins/Rotator/RotatorInstance.h"
+#include "TsumugiEngine/Script/Builtins/Color/ColorInstance.h"
+#include "TsumugiEngine/Script/Builtins/Color/LinearColorInstance.h"
 
 namespace tsumugi::integration {
 
@@ -115,6 +117,83 @@ bool UObjectAccessor::SetUEProperty(const tstring& name, const std::shared_ptr<s
             return true;
         }
     }
+
+    if (auto* StructProp = CastField<FStructProperty>(Property))
+    {
+        if (value->GetType() == script::object::ObjectType::kBuiltinInstance)
+        {
+            auto inst = std::static_pointer_cast<tsumugi::script::object::BuiltinInstanceObject>(value);
+
+            // math::Color → FColor
+            if (StructProp->Struct == TBaseStructure<FColor>::Get())
+            {
+                auto c = std::static_pointer_cast<tsumugi::script::builtin::color::ColorInstance>(value)->GetValue();
+
+                FColor* Dest = reinterpret_cast<FColor*>(Data);
+                Dest->R = c.r;
+                Dest->G = c.g;
+                Dest->B = c.b;
+                Dest->A = c.a;
+
+                return true;
+            }
+
+            // math::LinearColor → FLinearColor
+            if (StructProp->Struct == TBaseStructure<FLinearColor>::Get())
+            {
+                auto c = std::static_pointer_cast<tsumugi::script::builtin::color::LinearColorInstance>(value)->GetValue();
+
+                FLinearColor* Dest = reinterpret_cast<FLinearColor*>(Data);
+                Dest->R = c.r;
+                Dest->G = c.g;
+                Dest->B = c.b;
+                Dest->A = c.a;
+
+                return true;
+            }
+
+            // math::Vector3 → FVector
+            if (StructProp->Struct == TBaseStructure<FVector>::Get())
+            {
+                auto v = std::static_pointer_cast<tsumugi::script::builtin::vector::Vector3Instance>(value)->GetValue();
+
+                FVector* Dest = reinterpret_cast<FVector*>(Data);
+                Dest->X = v.x;
+                Dest->Y = v.y;
+                Dest->Z = v.z;
+
+                return true;
+            }
+
+            // math::Quaternion → FQuat
+            if (StructProp->Struct == TBaseStructure<FQuat>::Get())
+            {
+                auto q = std::static_pointer_cast<tsumugi::script::builtin::quaternion::QuaternionInstance>(value)->GetValue();
+
+                FQuat* Dest = reinterpret_cast<FQuat*>(Data);
+                Dest->X = q.x;
+                Dest->Y = q.y;
+                Dest->Z = q.z;
+                Dest->W = q.w;
+
+                return true;
+            }
+
+            // math::Transform → FTransform
+            if (StructProp->Struct == TBaseStructure<FTransform>::Get())
+            {
+                auto t = std::static_pointer_cast<tsumugi::script::builtin::transform::TransformInstance>(value)->GetValue();
+
+                FTransform* Dest = reinterpret_cast<FTransform*>(Data);
+                Dest->SetLocation(FVector(t.position.x, t.position.y, t.position.z));
+                Dest->SetRotation(FQuat(t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w));
+                Dest->SetScale3D(FVector(t.scale.x, t.scale.y, t.scale.z));
+
+                return true;
+            }
+        }
+    }
+
 
     return false;
 }
@@ -276,7 +355,28 @@ bool UObjectAccessor::ConvertArgument(class FProperty* Property, uint8* Property
                 return true;
             }
         }
-        // TODO: FRotator, FColor, FTransform なども追加
+        else if (StructProperty->Struct == TBaseStructure<FColor>::Get())
+        {
+            if (BuiltinInstanceValue->GetBuiltinType() == tsumugi::script::builtin::BuiltinType::Color)
+            {
+                auto Color = std::static_pointer_cast<tsumugi::script::builtin::color::ColorInstance>(BuiltinInstanceValue);
+
+                auto e = Color->GetValue();
+                *(FColor*)PropertyData = FColor(e.r, e.g, e.b, e.a);
+                return true;
+            }
+        }
+        else if (StructProperty->Struct == TBaseStructure<FLinearColor>::Get())
+        {
+            if (BuiltinInstanceValue->GetBuiltinType() == tsumugi::script::builtin::BuiltinType::LinearColor)
+            {
+                auto LinearColor = std::static_pointer_cast<tsumugi::script::builtin::color::LinearColorInstance>(BuiltinInstanceValue);
+
+                auto e = LinearColor->GetValue();
+                *(FLinearColor*)PropertyData = FLinearColor(e.r, e.g, e.b, e.a);
+                return true;
+            }
+        }
     }
 
     return false;
@@ -318,6 +418,16 @@ std::shared_ptr<script::object::IObject> UObjectAccessor::ConvertPropertyValue(c
         {
             FRotator Value = *(FRotator*)PropertyData;
             return std::make_shared<tsumugi::script::builtin::rotator::RotatorInstance>(Value.Pitch, Value.Yaw, Value.Roll);
+        }
+        else if (StructProperty->Struct == TBaseStructure<FColor>::Get())
+        {
+            FColor Value = *(FColor*)PropertyData;
+            return std::make_shared<tsumugi::script::builtin::color::ColorInstance>(Value.R, Value.G, Value.B, Value.A);
+        }
+        else if (StructProperty->Struct == TBaseStructure<FLinearColor>::Get())
+        {
+            FLinearColor Value = *(FLinearColor*)PropertyData;
+            return std::make_shared<tsumugi::script::builtin::color::LinearColorInstance>(Value.R, Value.G, Value.B, Value.A);
         }
     }
 

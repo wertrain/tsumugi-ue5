@@ -97,6 +97,9 @@
     <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator">
       <UniqueIdentifier>{a31d3251-c1e2-4751-8d74-08a48998d277}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Color">
+      <UniqueIdentifier>{4c0cf791-87cf-4cd7-bb3d-e42ea282015c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.h">
@@ -501,6 +504,24 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator\RotatorClass.h">
       <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorClass.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorInstance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorClass.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorInstance.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Color.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\LinearColor.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.cpp">
@@ -874,6 +895,18 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator\RotatorClass.cpp">
       <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Rotator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorClass.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorInstance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorClass.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorInstance.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

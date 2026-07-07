@@ -146,6 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Color.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\LinearColor.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Matrix4x4.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\Quaternion.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\TransformMath.h" />
@@ -193,6 +195,10 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinClassRegistry.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinFunctionRegistry.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinTypes.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorClass.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorInstance.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorClass.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorInstance.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionClass.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionInstance.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Random\RandomClass.h" />
@@ -323,6 +329,10 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinClassRegistry.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinFunctionRegistry.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\BuiltinTypes.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorClass.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\ColorInstance.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorClass.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorInstance.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionClass.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Quaternion\QuaternionInstance.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Random\RandomClass.cpp" />

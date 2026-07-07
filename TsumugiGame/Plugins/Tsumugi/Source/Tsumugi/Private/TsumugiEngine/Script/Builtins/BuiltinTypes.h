@@ -14,6 +14,8 @@ enum class BuiltinType : int32_t {
     Random,
     Transform,
     Rotator,
+    Color,
+    LinearColor,
     Num
 };
 

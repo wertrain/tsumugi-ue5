@@ -1,4 +1,4 @@
-#include "Types.h"
+﻿#include "Types.h"
 #include <string>
 #include <codecvt>
 
