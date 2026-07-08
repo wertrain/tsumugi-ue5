@@ -355,6 +355,17 @@ bool UObjectAccessor::ConvertArgument(class FProperty* Property, uint8* Property
                 return true;
             }
         }
+        else if (StructProperty->Struct == TBaseStructure<FQuat>::Get())
+        {
+            if (BuiltinInstanceValue->GetBuiltinType() == tsumugi::script::builtin::BuiltinType::Quaternion)
+            {
+                auto Quaternion = std::static_pointer_cast<tsumugi::script::builtin::quaternion::QuaternionInstance>(BuiltinInstanceValue);
+
+                auto e = Quaternion->GetValue();
+                *(FQuat*)PropertyData = FQuat(e.x, e.y, e.z, e.w);
+                return true;
+            }
+        }
         else if (StructProperty->Struct == TBaseStructure<FColor>::Get())
         {
             if (BuiltinInstanceValue->GetBuiltinType() == tsumugi::script::builtin::BuiltinType::Color)
@@ -418,6 +429,11 @@ std::shared_ptr<script::object::IObject> UObjectAccessor::ConvertPropertyValue(c
         {
             FRotator Value = *(FRotator*)PropertyData;
             return std::make_shared<tsumugi::script::builtin::rotator::RotatorInstance>(Value.Pitch, Value.Yaw, Value.Roll);
+        }
+        else if (StructProperty->Struct == TBaseStructure<FQuat>::Get())
+        {
+            FQuat Value = *(FQuat*)PropertyData;
+            return std::make_shared<tsumugi::script::builtin::quaternion::QuaternionInstance>(Value.X, Value.Y, Value.Z, Value.W);
         }
         else if (StructProperty->Struct == TBaseStructure<FColor>::Get())
         {
