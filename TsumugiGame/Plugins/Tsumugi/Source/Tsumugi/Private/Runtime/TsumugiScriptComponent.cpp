@@ -2,6 +2,7 @@
 #include "Integration/UObjectAccessor.h"
 #include "Integration/StringConversion.h"
 #include "Integration/TypeConversion.h"
+#include "Assets/TsumugiScriptAsset.h"
 #include "TsumugiEngine/Script/Lexer/ScriptLexer.h"
 #include "TsumugiEngine/Script/Parser/ScriptParser.h"
 #include "TsumugiEngine/Script/Lexer/ScriptToken.h"
@@ -26,6 +27,12 @@ void UTsumugiScriptComponent::RunScript()
 {
     tstring Input = tsumugi::integration::ToTString(ScriptSource);
 
+    // アセットがあればアセットを優先しておく
+    if (ScriptAsset)
+    {
+        Input = tsumugi::integration::ToTString(ScriptAsset->SourceCode);
+    }
+
     auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(Input.c_str());
     auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
     auto root = parser->ParseProgram();
@@ -36,6 +43,22 @@ void UTsumugiScriptComponent::RunScript()
     // イベントハンドラーのキャッシュ
     // いったん、スクリプトの実行後は毎回呼び出す
     CacheEventHandlers();
+}
+
+void UTsumugiScriptComponent::ReloadScript()
+{
+    // 実行中の状態を破棄
+    if (Environment)
+    {
+        Environment->Clear();
+        Environment.reset();
+    }
+    SelfObject = std::make_shared<tsumugi::integration::UObjectAccessor>(this);
+    Environment = std::make_shared<tsumugi::script::object::Environment>();
+
+    Environment->Set(TT("self"), SelfObject);
+
+    RunScript();
 }
 
 void UTsumugiScriptComponent::BeginPlay()
@@ -53,6 +76,13 @@ void UTsumugiScriptComponent::BeginPlay()
 
         DispatchEvent(ETsumugiScriptEvent::BeginPlay, {});
     }
+
+#if WITH_EDITOR
+    if (ScriptAsset)
+    {
+        ScriptAsset->OnScriptChanged.AddUObject(this, &UTsumugiScriptComponent::ReloadScript);
+    }
+#endif
 }
 
 void UTsumugiScriptComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -69,6 +99,13 @@ void UTsumugiScriptComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
         Environment.reset();
     }
     SelfObject.reset();
+
+#if WITH_EDITOR
+    if (ScriptAsset)
+    {
+        ScriptAsset->OnScriptChanged.RemoveAll(this);
+    }
+#endif
 }
 
 void UTsumugiScriptComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

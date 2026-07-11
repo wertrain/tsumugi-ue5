@@ -1,4 +1,5 @@
 ﻿#include "Runtime/TsumugiScriptRuntime.h"
+#include "Assets/TsumugiScriptAsset.h"
 #include "Runtime/TsumugiScriptValue.h"
 #include "Integration/StringConversion.h"
 #include "Kismet/GameplayStatics.h"
@@ -20,7 +21,25 @@ void UTsumugiScriptRuntime::Deinitialize()
     Environment->Clear();
 }
 
-void UTsumugiScriptRuntime::RunScript(const FString& Code)
+void UTsumugiScriptRuntime::Run(class UTsumugiScriptAsset* Asset)
+{
+    if (!Asset) return;
+
+    FString Input = Asset->SourceCode;
+
+    RunCode(Input);
+}
+
+UTsumugiScriptValue* UTsumugiScriptRuntime::Eval(class UTsumugiScriptAsset* Asset)
+{
+    if (!Asset) return nullptr;
+
+    FString Input = Asset->SourceCode;
+
+    return EvalCode(Input);
+}
+
+void UTsumugiScriptRuntime::RunCode(const FString& Code)
 {
     tstring Input = *Code;
 
@@ -32,7 +51,7 @@ void UTsumugiScriptRuntime::RunScript(const FString& Code)
     evaluator->Eval(root.get(), Environment);
 }
 
-UTsumugiScriptValue* UTsumugiScriptRuntime::Eval(const FString& Expression)
+UTsumugiScriptValue* UTsumugiScriptRuntime::EvalCode(const FString& Expression)
 {
     tstring Input = *Expression;
 

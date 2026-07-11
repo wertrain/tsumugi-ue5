@@ -21,7 +21,8 @@ public class TsumugiEditor : ModuleRules
             "SlateCore",
             "EditorSubsystem",
             "InputCore",
-            "Projects"
+            "Projects",
+            "AssetDefinition"
         });
     }
 }

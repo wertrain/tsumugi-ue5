@@ -47,6 +47,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Tsumugi")
     void RunScript();
+    void ReloadScript();
 
 protected:
     virtual void BeginPlay() override;
@@ -54,6 +55,9 @@ protected:
 
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tsumugi")
+    TObjectPtr<class UTsumugiScriptAsset> ScriptAsset;
 
     // エディタのプロパティから直接スクリプトを書き込めるようにする
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tsumugi", meta = (MultiLine = true))
