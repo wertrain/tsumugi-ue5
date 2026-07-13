@@ -20,6 +20,7 @@
 #include "TsumugiEngine/Script/AST/Statements/ReturnStatement.h"
 #include "TsumugiEngine/Script/AST/Statements/ExpressionStatement.h"
 #include "TsumugiEngine/Script/AST/Statements/BlockStatement.h"
+#include "TsumugiEngine/Script/AST/Attributes/ScriptAttribute.h"
 #include "TsumugiEngine/Script/Objects/IntegerObject.h"
 #include "TsumugiEngine/Script/Objects/FloatObject.h"
 #include "TsumugiEngine/Script/Objects/BooleanObject.h"
@@ -38,6 +39,7 @@
 #include "TsumugiEngine/Script/Parser/ScriptParser.h"
 #include "TsumugiEngine/Script/Lexer/LexingStringReader.h"
 #include "TsumugiEngine/Script/Evaluator/Evaluator.h"
+#include "TsumugiEngine/Script/Analyzer/AttributeAnalyzer.h"
 #include "TsumugiEngine/Log/TextLogger.h"
 #include <vector>
 #include <variant>
@@ -1536,14 +1538,14 @@ namespace UnitTest
 			};
 
 			for (auto& tt : tests) {
-				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(tt.input.c_str()));
-				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
 				parser->GetLogger().SetLogConsole(&s_Console);
 
 				auto root = parser->ParseProgram();
 				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
 
-				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
 				auto environment = std::make_shared<tsumugi::script::object::Environment>();
 				auto evaluated = evaluator->Eval(root.get(), environment);
 				tt.tester(evaluated.get());
@@ -2695,6 +2697,92 @@ namespace UnitTest
 				auto evaluated = evaluator->Eval(root.get(), environment);
 
 				tt.tester(evaluated.get());
+			}
+		}
+
+		TEST_METHOD(TestAttributes)
+		{
+			struct {
+				tstring input;
+				std::function<void(const tsumugi::script::analyzer::AttributeAnalyzer&)> tester;
+			} tests[] = {
+
+				// íPèÉÇ»ëÆê´
+				{
+					TT("@export\nlet hp = 100"),
+					[](const tsumugi::script::analyzer::AttributeAnalyzer& analyzer) {
+						const auto& vars = analyzer.GetVariables();
+						Assert::AreEqual((size_t)1, vars.size(), MSG("Variable count mismatch"));
+
+						const auto& attrs = vars[0].Attributes;
+						Assert::AreEqual((size_t)1, attrs.size(), MSG("Attribute count mismatch"));
+
+						Assert::AreEqual(tstring(TT("export")), attrs[0].Name, MSG("Attribute name mismatch"));
+					}
+				},
+
+				// à¯êîïtÇ´ëÆê´
+				{
+					TT("@range(0, 100)\nlet hp = 100"),
+					[](const tsumugi::script::analyzer::AttributeAnalyzer& analyzer) {
+						const auto& vars = analyzer.GetVariables();
+						Assert::AreEqual((size_t)1, vars.size());
+
+						const auto& attrs = vars[0].Attributes;
+						Assert::AreEqual((size_t)1, attrs.size());
+
+						const auto& attr = attrs[0];
+						Assert::AreEqual(tstring(TT("range")), attr.Name);
+
+						Assert::AreEqual((size_t)2, attr.Arguments.size());
+
+						// 0
+						auto arg0 = dynamic_cast<tsumugi::script::object::IntegerObject*>(attr.Arguments[0].get());
+						Assert::IsNotNull(arg0);
+						Assert::AreEqual(0, arg0->GetValue());
+
+						// 100
+						auto arg1 = dynamic_cast<tsumugi::script::object::IntegerObject*>(attr.Arguments[1].get());
+						Assert::IsNotNull(arg1);
+						Assert::AreEqual(100, arg1->GetValue());
+					}
+				},
+
+				// ï°êîëÆê´
+				{
+					TT("@export\n@tooltip(\"HP\")\nlet hp = 100"),
+					[](const tsumugi::script::analyzer::AttributeAnalyzer& analyzer) {
+						const auto& vars = analyzer.GetVariables();
+						Assert::AreEqual((size_t)1, vars.size());
+
+						const auto& attrs = vars[0].Attributes;
+						Assert::AreEqual((size_t)2, attrs.size());
+
+						Assert::AreEqual(tstring(TT("export")), attrs[0].Name);
+						Assert::AreEqual(tstring(TT("tooltip")), attrs[1].Name);
+
+						auto arg = dynamic_cast<tsumugi::script::object::StringObject*>(attrs[1].Arguments[0].get());
+						Assert::IsNotNull(arg);
+						Assert::AreEqual(tstring(TT("HP")), arg->GetValue());
+					}
+				},
+			};
+
+			for (auto& tt : tests) {
+				auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(tt.input.c_str());
+				auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+
+				Logger::WriteMessage((TT("\nTesting code: ") + tt.input + TT("\n")).c_str());
+
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+
+				tsumugi::script::analyzer::AttributeAnalyzer analyzer;
+				analyzer.Analyze(root.get(), environment);
+
+				tt.tester(analyzer);
 			}
 		}
 
