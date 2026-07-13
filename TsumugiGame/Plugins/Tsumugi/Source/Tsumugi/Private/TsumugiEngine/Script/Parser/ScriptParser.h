@@ -11,6 +11,7 @@ namespace tsumugi::script::lexer{ class Token; }
 namespace tsumugi::script::ast { class Program; }
 namespace tsumugi::script::ast { class IStatement; }
 namespace tsumugi::script::ast { class IExpression; }
+namespace tsumugi::script::ast { class Attribute; }
 namespace tsumugi::script::ast::expression { class Identifier; }
 namespace tsumugi::script::ast::statement { class LetStatement; }
 namespace tsumugi::script::ast::statement { class ReturnStatement; }
@@ -94,6 +95,8 @@ private:
     std::unique_ptr<script::ast::IExpression> ParseAssignmentExpression(std::unique_ptr<script::ast::IExpression> left);
     std::unique_ptr<script::ast::IExpression> ParsePropertyAccessExpression(std::unique_ptr<script::ast::IExpression> left);
     std::unique_ptr<script::ast::IExpression> ParseInstanceOfExpression(std::unique_ptr<script::ast::IExpression> left);
+    std::unique_ptr<script::ast::Attribute> ParseAttribute();
+    bool ParseAttributes();
     bool ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters);
     bool ParseCallArguments(std::vector<std::unique_ptr<tsumugi::script::ast::IExpression>>& arguments);
 
@@ -118,6 +121,7 @@ private:
     tsumugi::script::lexer::Lexer* lexer_;
     std::unordered_map<tsumugi::script::lexer::TokenType, PrefixParseFunction> prefixParseFunctions_;
     std::unordered_map<tsumugi::script::lexer::TokenType, InfixParseFunction> infixParseFunctions_;
+    std::vector<std::unique_ptr<ast::Attribute>> pendingAttributes_;
 };
 
 }

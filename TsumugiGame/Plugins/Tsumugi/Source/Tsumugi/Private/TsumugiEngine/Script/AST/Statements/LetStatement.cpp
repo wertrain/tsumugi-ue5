@@ -1,5 +1,6 @@
 ﻿#include "TsumugiEngine/Script/AST/Statements/LetStatement.h"
 #include "TsumugiEngine/Script/AST/Expressions/Identifier.h"
+#include "TsumugiEngine/Script/AST/Attributes/ScriptAttribute.h"
 #include "TsumugiEngine/Script/Lexer/ScriptToken.h"
 
 namespace tsumugi::script::ast::statement {
@@ -8,6 +9,11 @@ LetStatement::LetStatement() {
 }
 
 LetStatement::~LetStatement() = default;
+
+void LetStatement::SetAttributes(std::vector<std::unique_ptr<ast::Attribute>>&& attributes) {
+
+    attributes_ = std::move(attributes);
+}
 
 tstring LetStatement::TokenLiteral() const {
 

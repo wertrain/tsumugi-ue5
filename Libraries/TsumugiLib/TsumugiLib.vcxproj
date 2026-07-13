@@ -158,6 +158,9 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Localization\Localizer.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\LogConsole.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\TextLogger.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Analyzer\AttributeAnalyzer.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Analyzer\ScriptMetadata.h" />
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Attributes\ScriptAttribute.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\ArrayLiteral.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\AssignmentExpression.h" />
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\BooleanLiteral.h" />
@@ -292,6 +295,8 @@
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Localization\Localizer.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\LogConsole.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Log\TextLogger.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Analyzer\AttributeAnalyzer.cpp" />
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Attributes\ScriptAttribute.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\ArrayLiteral.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\AssignmentExpression.cpp" />
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Expressions\BooleanLiteral.cpp" />

@@ -100,6 +100,12 @@
     <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Builtins\Color">
       <UniqueIdentifier>{4c0cf791-87cf-4cd7-bb3d-e42ea282015c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\AST\Attributes">
+      <UniqueIdentifier>{9d2fbbd1-3f8e-46c4-99f6-1dcae945aeec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tsumugi\Private\TsumugiEngine\Script\Analyzer">
+      <UniqueIdentifier>{841ea388-ba9c-4124-afa6-cd8a743f01b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.h">
@@ -522,6 +528,15 @@
     <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Foundation\Math\LinearColor.h">
       <Filter>Tsumugi\Private\TsumugiEngine\Foundation\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Attributes\ScriptAttribute.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Analyzer\ScriptMetadata.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Analyzer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Analyzer\AttributeAnalyzer.h">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Analyzer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Common\ErrorReporter.cpp">
@@ -907,6 +922,12 @@
     </ClCompile>
     <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Builtins\Color\LinearColorInstance.cpp">
       <Filter>Tsumugi\Private\TsumugiEngine\Script\Builtins\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\AST\Attributes\ScriptAttribute.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\AST\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TsumugiGame\Plugins\Tsumugi\Source\Tsumugi\Private\TsumugiEngine\Script\Analyzer\AttributeAnalyzer.cpp">
+      <Filter>Tsumugi\Private\TsumugiEngine\Script\Analyzer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

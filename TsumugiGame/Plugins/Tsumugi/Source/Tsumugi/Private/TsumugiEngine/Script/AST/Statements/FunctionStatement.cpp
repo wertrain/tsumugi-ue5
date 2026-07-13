@@ -1,6 +1,7 @@
 ﻿#include "TsumugiEngine/Script/AST/Statements/FunctionStatement.h"
 #include "TsumugiEngine/Script/AST/Expressions/Identifier.h"
 #include "TsumugiEngine/Script/AST/Statements/BlockStatement.h"
+#include "TsumugiEngine/Script/AST/Attributes/ScriptAttribute.h"
 #include "TsumugiEngine/Script/Lexer/ScriptToken.h"
 
 namespace tsumugi::script::ast::statement {
@@ -14,6 +15,11 @@ FunctionStatement::FunctionStatement(std::shared_ptr<lexer::Token> token)
 }
 
 FunctionStatement::~FunctionStatement() = default;
+
+void FunctionStatement::SetAttributes(std::vector<std::unique_ptr<ast::Attribute>>&& attributes) {
+
+    attributes_ = std::move(attributes);
+}
 
 tstring FunctionStatement::TokenLiteral() const {
 

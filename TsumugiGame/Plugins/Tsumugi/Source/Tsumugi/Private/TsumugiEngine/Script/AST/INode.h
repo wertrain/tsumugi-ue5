@@ -36,6 +36,7 @@ enum class NodeType {
     kClassStatement,
     kSuperExpression,
     kInstanceOfExpression,
+    kAttribute,
     Num
 };
 

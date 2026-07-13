@@ -710,6 +710,30 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestParseAttribute)
+		{
+			struct TestSet {
+				tstring code_;
+				tstring to_code_;
+			};
+			std::vector<TestSet> tests = {
+				{TT("@export"), TT("@export")},
+				{TT("@category(\"UI\")"), TT("@category(\"UI\")")},
+				{TT("@range(0, 100)"), TT("@range(0, 100)")},
+			};
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Assert::AreEqual(root->GetStatementCount(), size_t{ 0 }, MSG("The number of Root.Statements is incorrect."));
+				const auto* statement = dynamic_cast<const tsumugi::script::ast::statement::ExpressionStatement*>(root->GetStatement(0));
+				Assert::IsNull(statement, MSG("statement is not ExpressionStatement."));
+			}
+		}
+
+
 		TEST_METHOD(LiteralBasicTemplate)
 		{
 			struct TestSet {

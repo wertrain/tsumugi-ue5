@@ -32,6 +32,7 @@
 #include "TsumugiEngine/Script/AST/Expressions/IndexAssignmentExpression.h"
 #include "TsumugiEngine/Script/AST/Expressions/PropertyAccessExpression.h"
 #include "TsumugiEngine/Script/AST/Expressions/InstanceOfExpression.h"
+#include "TsumugiEngine/Script/AST/Attributes/ScriptAttribute.h"
 #include <cassert>
 #include <unordered_map>
 
@@ -76,18 +77,27 @@ Parser::~Parser() = default;
 
 std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
 
+    // ここで Attribute（ @~~~ ）をパースする
+    // Attribute は 宣言系構文(let/class/function) のみに適用し
+    // それ以外の Statement の前に現れたものは破棄する
+    ParseAttributes();
+
     switch (currentToken_.get()->GetTokenType()) {
     case lexer::TokenType::kLet:
         return ParseLetStatement();
     case lexer::TokenType::kClass:
         return ParseClassStatement();
     case lexer::TokenType::kReturn :
+        pendingAttributes_.clear(); // Attribute は無効なので捨てる
         return ParseReturnStatement();
     case lexer::TokenType::kFor:
+        pendingAttributes_.clear();
         return ParseForStatement();
     case lexer::TokenType::kBreak:
+        pendingAttributes_.clear();
         return ParseBreakStatement();
     case lexer::TokenType::kContinue:
+        pendingAttributes_.clear();
         return ParseContinueStatement();
     // 既存の仕様と競合するので関数宣言はいったん閉じる
     //case lexer::TokenType::kFunction:
@@ -97,8 +107,10 @@ std::unique_ptr<ast::IStatement> Parser::ParseStatement() {
         if (PeekTokenIs(lexer::TokenType::kIdentifier)) {
             return Parser::ParseFunctionStatement();
         }
+        pendingAttributes_.clear();
         return ParseExpressionStatement();
     default:
+        pendingAttributes_.clear();
         return ParseExpressionStatement();
     }
 }
@@ -107,6 +119,8 @@ std::unique_ptr<ast::statement::LetStatement> Parser::ParseLetStatement() {
 
     auto statement = std::make_unique<ast::statement::LetStatement>();
     statement->SetToken(currentToken_);
+
+    statement->SetAttributes(std::move(pendingAttributes_));
 
     if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
         return nullptr;
@@ -194,6 +208,8 @@ std::unique_ptr<script::ast::statement::FunctionStatement> Parser::ParseFunction
 
     auto statement = std::make_unique<ast::statement::FunctionStatement>(currentToken_);
 
+    statement->SetAttributes(std::move(pendingAttributes_));
+
     if (PeekTokenIs(lexer::TokenType::kStatic)) {
         statement->SetStatic(true);
         ReadToken();
@@ -264,6 +280,8 @@ std::unique_ptr<script::ast::statement::ForStatement> Parser::ParseForStatement(
 std::unique_ptr<script::ast::statement::ClassStatement> Parser::ParseClassStatement() {
 
     auto statement = std::make_unique<ast::statement::ClassStatement>(currentToken_);
+
+    statement->SetAttributes(std::move(pendingAttributes_));
 
     if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
         return nullptr;
@@ -341,7 +359,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseExpression(const Preceden
 
     std::unique_ptr<ast::IExpression> left;
     if (auto it = prefixParseFunctions_.find(currentToken_->GetTokenType()); it != prefixParseFunctions_.end()) {
-        auto [keyFound, value] = *it;
+        auto& [keyFound, value] = *it;
         left = value();
     }
     else {
@@ -355,7 +373,7 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseExpression(const Preceden
     while (!PeekTokenIs(lexer::TokenType::kSemicolon) && precedence < GetNextPrecedence()) {
 
         if (auto it = infixParseFunctions_.find(nextToken_->GetTokenType()); it != infixParseFunctions_.end()) {
-            auto [keyFound, value] = *it;
+            auto& [keyFound, value] = *it;
             ReadToken(); 
             left = it->second(std::move(left));
         }
@@ -781,6 +799,58 @@ std::unique_ptr<script::ast::IExpression> Parser::ParseInstanceOfExpression(std:
     return expression;
 }
 
+std::unique_ptr<script::ast::Attribute> Parser::ParseAttribute() {
+
+    auto attribute = std::make_unique<ast::Attribute>(currentToken_);
+
+    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "Identifier")) {
+        return nullptr;
+    }
+
+    auto& name = currentToken_->GetLiteral();
+    attribute->SetName(std::move(name));
+
+    // 後続が '(' なら引数リストをパースする（オプション）
+    if (PeekTokenIs(lexer::TokenType::kLeftParenthesis)) {
+        ReadToken(); // '(' へ進む
+        ReadToken(); // 引数の最初のトークンへ進む
+
+        if (!CurrentTokenIs(lexer::TokenType::kRightParenthesis)) {
+            auto arg = ParseExpression(Precedence::kLowest);
+            if (!arg) return nullptr;
+            attribute->AddArgument(std::move(arg));
+
+            while (PeekTokenIs(lexer::TokenType::kComma)) {
+                ReadToken(); // ',' をスキップ
+                ReadToken(); // 次の引数へ
+                auto nextArg = ParseExpression(Precedence::kLowest);
+                if (!nextArg) return nullptr;
+                attribute->AddArgument(std::move(nextArg));
+            }
+
+            if (!ExpectPeekRequiredTokenType(lexer::TokenType::kRightParenthesis, ")")) {
+                return nullptr;
+            }
+        }
+    }
+
+    ReadToken();
+
+    return attribute;
+}
+
+bool Parser::ParseAttributes() {
+
+    while (currentToken_->GetTokenType() == lexer::TokenType::kAtSign) {
+        std::unique_ptr<ast::Attribute> attribute = ParseAttribute();
+        if (!attribute) {
+            return false; // TODO: 適切にハンドリング
+        }
+        pendingAttributes_.push_back(std::move(attribute));
+    }
+    return true;
+}
+
 bool Parser::ParseParameters(std::vector<std::shared_ptr<tsumugi::script::ast::expression::Identifier>>& parameters) {
 
     parameters.clear();
@@ -906,7 +976,7 @@ bool Parser::ExpectPeek(const lexer::TokenType& type) {
 const Precedence Parser::GetCurrentPrecedence() const {
 
     if (auto it = Parser::Precedences.find(currentToken_->GetTokenType()); it != Parser::Precedences.end()) {
-        auto [keyFound, value] = *it;
+        auto& [keyFound, value] = *it;
         return value;
     }
     else {
@@ -917,7 +987,7 @@ const Precedence Parser::GetCurrentPrecedence() const {
 const Precedence Parser::GetNextPrecedence() const {
 
     if (auto it = Parser::Precedences.find(nextToken_->GetTokenType()); it != Parser::Precedences.end()) {
-        auto [keyFound, value] = *it;
+        auto& [keyFound, value] = *it;
         return value;
     }
     else {

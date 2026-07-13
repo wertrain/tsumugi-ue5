@@ -192,6 +192,11 @@ enum class TokenType : int32_t {
     /// </summary>
     kSharp,
 
+    /// <summary>
+    /// @ 記号
+    /// </summary>
+    kAtSign,
+
     /// --------- キーワード --------- 
 
     /// <summary>
