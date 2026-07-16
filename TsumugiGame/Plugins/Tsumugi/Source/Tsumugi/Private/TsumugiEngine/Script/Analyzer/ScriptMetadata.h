@@ -18,6 +18,7 @@ struct AttributeInfo {
 struct VariableMetadata {
     tstring Name;
     std::vector<AttributeInfo> Attributes;
+    std::shared_ptr<object::IObject> DefaultValue;
 };
 
 struct FunctionMetadata {

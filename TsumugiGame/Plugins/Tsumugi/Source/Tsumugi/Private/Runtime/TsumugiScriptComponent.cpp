@@ -61,6 +61,30 @@ void UTsumugiScriptComponent::ReloadScript()
     RunScript();
 }
 
+void UTsumugiScriptComponent::AnalyzeScriptVariables()
+{
+    tstring Input = tsumugi::integration::ToTString(ScriptSource);
+
+    if (ScriptAsset)
+    {
+        Input = tsumugi::integration::ToTString(ScriptAsset->SourceCode);
+    }
+
+    auto lexer = std::make_unique<tsumugi::script::lexer::Lexer>(Input.c_str());
+    auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
+    auto root = parser->ParseProgram();
+
+    std::shared_ptr<tsumugi::script::object::Environment> AnalyzeEnvironment = Environment;
+    if (!AnalyzeEnvironment) AnalyzeEnvironment = std::make_shared<tsumugi::script::object::Environment>();
+
+    ITsumugiVariablesInterface::AnalyzeScriptVariables(root.get(), AnalyzeEnvironment);
+}
+
+void UTsumugiScriptComponent::UpdateVariableValue(const FString& VarName, const FString& NewValue)
+{
+
+}
+
 void UTsumugiScriptComponent::BeginPlay()
 {
     Super::BeginPlay();

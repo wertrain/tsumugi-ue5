@@ -15,7 +15,7 @@
     {
       "Name": "TsumugiEditor",
       "Type": "Editor",
-      "LoadingPhase": "Default"
+      "LoadingPhase": "PostEngineInit"
     }
   ]
 }

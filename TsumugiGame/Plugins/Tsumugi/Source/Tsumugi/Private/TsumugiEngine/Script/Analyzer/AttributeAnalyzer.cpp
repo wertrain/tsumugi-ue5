@@ -81,6 +81,9 @@ void AttributeAnalyzer::Analyze(const ast::Program* program, evaluator::Evaluato
             metadata.Name = let->GetName()->GetValue();
             metadata.Attributes = evaluateAttributes(let->GetAttributes());
 
+            if (let->GetValue() && evaluator) {
+                metadata.DefaultValue = evaluator->Eval(let->GetValue(), environment);
+            }
             variables_.emplace_back(std::move(metadata));
         }
     }

@@ -2,12 +2,16 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include <memory>
+#include "Runtime/TsumugiVariablesInterface.h"
 #include "Integration/UObjectAccessor.h"
+#include <memory>
+#include <vector>
+#include <array>
 #include "TsumugiScriptComponent.generated.h"
 
 namespace tsumugi::script::object { class Environment; }
 namespace tsumugi::script::object { class IObject; }
+namespace tsumugi::integration { class UObjectAccessor; }
 
 enum class ETsumugiScriptEvent : uint8
 {
@@ -38,7 +42,7 @@ enum class ETsumugiScriptEvent : uint8
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class TSUMUGI_API UTsumugiScriptComponent : public UActorComponent
+class TSUMUGI_API UTsumugiScriptComponent : public UActorComponent, public ITsumugiVariablesInterface
 {
     GENERATED_BODY()
 
@@ -48,6 +52,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Tsumugi")
     void RunScript();
     void ReloadScript();
+
+    virtual void AnalyzeScriptVariables() override;
+    virtual void UpdateVariableValue(const FString& VarName, const FString& NewValue) override;
 
 protected:
     virtual void BeginPlay() override;
