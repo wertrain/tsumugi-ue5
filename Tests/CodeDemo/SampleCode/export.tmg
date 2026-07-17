@@ -1,0 +1,11 @@
+@export(category = "Status", tooltip = "プレイヤーの最大体力です")
+let maxHealth = 200;
+
+@export(category = "Status", tooltip = "移動速度の倍率です。1.0が標準です")
+let moveSpeedRate = 1.2;
+
+@export(category = "Config", tooltip = "デバッグ用の無敵フラグです")
+let isGodMode = false;
+
+@export(category = "Config", tooltip = "画面に表示するプレイヤーの識別名です")
+let displayName = "Hero";

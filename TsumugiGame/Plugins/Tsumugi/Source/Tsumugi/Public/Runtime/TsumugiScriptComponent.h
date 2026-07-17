@@ -55,6 +55,7 @@ public:
 
     virtual void AnalyzeScriptVariables() override;
     virtual void UpdateVariableValue(const FString& VarName, const FString& NewValue) override;
+    virtual const TMap<FString, FTsumugiOverriddenVariable>& GetOverriddenVariables() const override;
 
 protected:
     virtual void BeginPlay() override;
@@ -63,15 +64,29 @@ protected:
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+    /// <summary>
+    /// スクリプトアセット
+    /// </summary>
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tsumugi")
     TObjectPtr<class UTsumugiScriptAsset> ScriptAsset;
 
-    // エディタのプロパティから直接スクリプトを書き込めるようにする
+    /// <summary>
+    /// エディタのプロパティから直接スクリプトを書き込めるようにする
+    /// </summary>
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tsumugi", meta = (MultiLine = true))
     FString ScriptSource;
-    // BeginPlay でスクリプトを自動実行する
+
+    /// <summary>
+    /// BeginPlay でスクリプトを自動実行する
+    /// </summary>
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tsumugi")
     bool bRunOnBeginPlay = false;
+
+    /// <summary>
+    /// export 変数でユーザーが書き換えたものを保持する
+    /// </summary>
+    UPROPERTY(EditAnywhere)
+    TMap<FString, FTsumugiOverriddenVariable> OverriddenVariables;
 
 private:
     void CacheEventHandlers();

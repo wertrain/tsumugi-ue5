@@ -82,7 +82,19 @@ void UTsumugiScriptComponent::AnalyzeScriptVariables()
 
 void UTsumugiScriptComponent::UpdateVariableValue(const FString& VarName, const FString& NewValue)
 {
+#if WITH_EDITOR
+    Modify();
+#endif
+    FTsumugiOverriddenVariable& Variable = OverriddenVariables.FindOrAdd(VarName);
+    Variable.Value = NewValue;
+#if WITH_EDITOR
+    MarkPackageDirty();
+#endif
+}
 
+const TMap<FString, FTsumugiOverriddenVariable>& UTsumugiScriptComponent::GetOverriddenVariables() const
+{
+    return OverriddenVariables;
 }
 
 void UTsumugiScriptComponent::BeginPlay()

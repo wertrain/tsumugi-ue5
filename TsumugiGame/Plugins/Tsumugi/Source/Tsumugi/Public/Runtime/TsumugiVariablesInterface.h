@@ -41,6 +41,21 @@ struct FStringExposedVariable
     ETsumugiVariableType Type = ETsumugiVariableType::Unknown;
 };
 
+/// <summary>
+/// 値を書き戻すための型付き変数
+/// </summary>
+USTRUCT(BlueprintType)
+struct FTsumugiOverriddenVariable
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, Category = "Tsumugi")
+    FString Value; // 編集された値を文字列化したもの
+
+    UPROPERTY(VisibleAnywhere, Category = "Tsumugi")
+    ETsumugiVariableType OriginalType = ETsumugiVariableType::Unknown;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType)
 class UTsumugiVariablesInterface : public UInterface
 {
@@ -72,6 +87,19 @@ public:
     /// <param name="VarName"></param>
     /// <param name="NewValue"></param>
     virtual void UpdateVariableValue(const FString& VarName, const FString& NewValue) = 0;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="VarName"></param>
+    /// <returns></returns>
+    FString GetVariableValue(const FString& VarName) const;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    virtual const TMap<FString, FTsumugiOverriddenVariable>& GetOverriddenVariables() const = 0;
 
 protected:
     /// <summary>

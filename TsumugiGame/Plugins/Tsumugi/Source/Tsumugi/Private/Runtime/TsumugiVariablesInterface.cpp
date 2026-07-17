@@ -78,7 +78,8 @@ void ITsumugiVariablesInterface::AnalyzeScriptVariables(const tsumugi::script::a
                             break;
                         }
                         default:
-                            UEVar.Value = TEXT("");
+                            UEVar.Value = tsumugi::integration::ToFString(Metadata.DefaultValue->Inspect());
+                            UEVar.Type = ETsumugiVariableType::String;
                             break;
                     }
                 }
@@ -88,3 +89,25 @@ void ITsumugiVariablesInterface::AnalyzeScriptVariables(const tsumugi::script::a
         }
     }
 }
+
+FString ITsumugiVariablesInterface::GetVariableValue(const FString& VarName) const
+{
+    const auto& OverrideMap = GetOverriddenVariables();
+
+    if (const auto* Override = OverrideMap.Find(VarName))
+    {
+        return Override->Value;
+    }
+
+    if (const auto* Var = ExposedVariables.FindByPredicate(
+        [&](const auto& Item)
+        {
+            return Item.Name == VarName;
+        }))
+    {
+        return Var->Value;
+    }
+
+    return TEXT("");
+}
+
