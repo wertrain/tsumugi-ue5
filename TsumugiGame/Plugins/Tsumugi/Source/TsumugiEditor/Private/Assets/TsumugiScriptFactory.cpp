@@ -64,9 +64,9 @@ EReimportResult::Type UTsumugiScriptFactory::Reimport(UObject* Obj)
 
     FString Filename = ScriptAsset->AssetImportData->GetFirstFilename();
 
-    // ここで実際に元ファイル（Filename）を読み込んで、
-    // ScriptAsset->SourceCode に文字列を再格納する処理を記述します。
-    // （最初のインポート時に書いたロジックとほぼ同じです）
+    FString Text;
+    if (!FFileHelper::LoadFileToString(Text, *Filename)) return EReimportResult::Failed;
+    ScriptAsset->SourceCode = Text;
 
     ScriptAsset->MarkPackageDirty();
     return EReimportResult::Succeeded;

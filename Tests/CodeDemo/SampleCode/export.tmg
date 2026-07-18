@@ -1,6 +1,9 @@
 @export(category = "Status", tooltip = "プレイヤーの最大体力です")
 let maxHealth = 200;
 
+@export(category = "Status", tooltip = "プレイヤーの最大攻撃力です")
+let maxPower= 100;
+
 @export(category = "Status", tooltip = "移動速度の倍率です。1.0が標準です")
 let moveSpeedRate = 1.2;
 
