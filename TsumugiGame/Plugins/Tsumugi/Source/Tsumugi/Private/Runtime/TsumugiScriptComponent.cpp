@@ -40,6 +40,9 @@ void UTsumugiScriptComponent::RunScript()
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
     evaluator->Eval(root.get(), Environment);
 
+    // エディタで編集した分を適用
+    ApplyOverriddenVariables(Environment);
+
     // イベントハンドラーのキャッシュ
     // いったん、スクリプトの実行後は毎回呼び出す
     CacheEventHandlers();

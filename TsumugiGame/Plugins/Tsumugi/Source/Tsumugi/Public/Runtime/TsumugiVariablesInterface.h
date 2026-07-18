@@ -51,9 +51,6 @@ struct FTsumugiOverriddenVariable
 
     UPROPERTY(EditAnywhere, Category = "Tsumugi")
     FString Value; // 編集された値を文字列化したもの
-
-    UPROPERTY(VisibleAnywhere, Category = "Tsumugi")
-    ETsumugiVariableType OriginalType = ETsumugiVariableType::Unknown;
 };
 
 UINTERFACE(MinimalAPI, BlueprintType)
@@ -106,6 +103,12 @@ protected:
     /// 公開変数の解析を行う内部実装
     /// </summary>
     void AnalyzeScriptVariables(const tsumugi::script::ast::Program* InProgram, const std::shared_ptr<tsumugi::script::object::Environment>& InEnvironment);
+
+    /// <summary>
+    /// 派生先で変更した値（OverriddenVariables）を Environment に適用する
+    /// </summary>
+    /// <param name="Environment"></param>
+    void ApplyOverriddenVariables(const std::shared_ptr<tsumugi::script::object::Environment>& Environment);
 
 protected:
     TArray<FStringExposedVariable> ExposedVariables;

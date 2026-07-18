@@ -90,6 +90,45 @@ void ITsumugiVariablesInterface::AnalyzeScriptVariables(const tsumugi::script::a
     }
 }
 
+void ITsumugiVariablesInterface::ApplyOverriddenVariables(const std::shared_ptr<tsumugi::script::object::Environment>& Environment)
+{
+    if (!Environment) return;
+
+    const auto& Overrides = GetOverriddenVariables();
+
+    for (const auto& Exposed : ExposedVariables)
+    {
+        const auto* Override = Overrides.Find(Exposed.Name);
+        if (!Override)
+        {
+            continue;
+        }
+
+        switch (Exposed.Type)
+        {
+            case ETsumugiVariableType::Integer:
+                Environment->Set(
+                    tsumugi::integration::ToTString(Exposed.Name),
+                    std::make_shared<tsumugi::script::object::IntegerObject>(FCString::Atoi(*Override->Value)));
+                break;
+
+            case ETsumugiVariableType::Boolean:
+                Environment->Set(
+                    tsumugi::integration::ToTString(Exposed.Name),
+                    tsumugi::script::object::BooleanObject::FromBool(Override->Value.ToBool()));
+                break;
+
+            case ETsumugiVariableType::String:
+                Environment->Set(
+                    tsumugi::integration::ToTString(Exposed.Name),
+                    std::make_shared<tsumugi::script::object::StringObject>(tsumugi::integration::ToTString(Override->Value)));
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 FString ITsumugiVariablesInterface::GetVariableValue(const FString& VarName) const
 {
     const auto& OverrideMap = GetOverriddenVariables();
