@@ -12,4 +12,5 @@ public:
     virtual FText GetAssetDisplayName() const override;
     virtual FLinearColor GetAssetColor() const override;
     virtual TSoftClassPtr<UObject> GetAssetClass() const override;
+    virtual bool CanImport() const override { return true; }
 };
