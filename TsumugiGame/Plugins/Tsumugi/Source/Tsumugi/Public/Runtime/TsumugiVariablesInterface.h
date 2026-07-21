@@ -7,13 +7,17 @@
 namespace tsumugi::script::object { class Environment; }
 namespace tsumugi::script::ast { class Program; }
 
-// もし未定義なら、UEで扱いやすいEnumを定義
+/// <summary>
+/// UI の判定などに使用する基本的な型名
+/// </summary>
 UENUM(BlueprintType)
 enum class ETsumugiVariableType : uint8
 {
     Integer,
+    Float,
     Boolean,
     String,
+    Object,
     Unknown
 };
 
@@ -39,6 +43,9 @@ struct FStringExposedVariable
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tsumugi")
     ETsumugiVariableType Type = ETsumugiVariableType::Unknown;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tsumugi")
+    FString TypeName;
 };
 
 /// <summary>

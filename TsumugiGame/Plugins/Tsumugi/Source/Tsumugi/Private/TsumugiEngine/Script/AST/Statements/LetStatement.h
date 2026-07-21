@@ -2,6 +2,7 @@
 
 #include "TsumugiEngine/Foundation/Types.h"
 #include "TsumugiEngine/Script/AST/IStatement.h"
+#include <optional>
 
 namespace tsumugi::script::lexer { class Token; }
 namespace tsumugi::script::ast { class IExpression; }
@@ -28,6 +29,8 @@ public:
     void SetValue(std::unique_ptr<ast::IExpression> value) { value_ = std::move(value); }
     const std::vector<std::unique_ptr<ast::Attribute>>& GetAttributes() const { return attributes_; }
     void SetAttributes(std::vector<std::unique_ptr<ast::Attribute>>&& attributes);
+    const std::optional<tstring>& GetTypeAnnotation() const { return typeAnnotation_; }
+    void SetTypeAnnotation(const tstring& typeAnnotation) { typeAnnotation_ = typeAnnotation; }
 
     NodeType GetNodeType() const final override { return NodeType::kLetStatement; }
     tstring TokenLiteral() const override final;
@@ -38,6 +41,7 @@ private:
     std::unique_ptr<ast::expression::Identifier> name_;
     std::unique_ptr<ast::IExpression> value_;
     std::vector<std::unique_ptr<ast::Attribute>> attributes_;
+    std::optional<tstring> typeAnnotation_;
 };
 
 }

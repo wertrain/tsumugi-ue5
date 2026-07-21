@@ -37,8 +37,15 @@ void UTsumugiScriptComponent::RunScript()
     auto parser = std::make_unique<tsumugi::script::parser::Parser>(lexer.get());
     auto root = parser->ParseProgram();
 
+    AnalyzeScriptVariables();
+
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
-    evaluator->Eval(root.get(), Environment);
+    auto evaluated = evaluator->Eval(root.get(), Environment);
+
+    if (evaluated != nullptr && evaluated->GetType() == tsumugi::script::object::ObjectType::kError) {
+        tsumugi::log::TextLogger logger;
+        logger.Log(tsumugi::log::TextLogger::Categories::Error, tsumugi::log::ToLogString(evaluated->Inspect()));
+    }
 
     // エディタで編集した分を適用
     ApplyOverriddenVariables(Environment);
@@ -201,7 +208,11 @@ void UTsumugiScriptComponent::DispatchEvent(const ETsumugiScriptEvent EventType,
     if (!Handler) return;
 
     auto evaluator = std::make_unique<tsumugi::script::evaluator::Evaluator>();
-    evaluator->Invoke(Handler, SelfObject, Arguments);
+    auto evaluated = evaluator->Invoke(Handler, SelfObject, Arguments);
+    if (evaluated != nullptr && evaluated->GetType() == tsumugi::script::object::ObjectType::kError) {
+        tsumugi::log::TextLogger logger;
+        logger.Log(tsumugi::log::TextLogger::Categories::Error, tsumugi::log::ToLogString(evaluated->Inspect()));
+    }
 }
 
 void UTsumugiScriptComponent::OnActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)

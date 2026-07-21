@@ -10,6 +10,8 @@
 
 namespace tsumugi::log {
 
+tlogstring ToLogString(const tstring& tstr);
+
 class DefaultConsole : public ILogConsole {
 public:
     DefaultConsole() {}

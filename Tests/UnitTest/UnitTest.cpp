@@ -1168,6 +1168,33 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestEvalLetStatementTypeAnnotation)
+		{
+			struct EvalSet {
+				tstring code_;
+				int expected_;
+			};
+			std::vector<EvalSet> tests = {
+				{ TT("let x:int = 5; x;"), 5 },
+				{ TT("let x:int = 5 * 5; x;"), 25 },
+			};
+
+			for (auto& test : tests) {
+				auto lexer = std::unique_ptr<tsumugi::script::lexer::Lexer>(new tsumugi::script::lexer::Lexer(test.code_.c_str()));
+				auto parser = std::unique_ptr<tsumugi::script::parser::Parser>(new tsumugi::script::parser::Parser(lexer.get()));
+				parser->GetLogger().SetLogConsole(&s_Console);
+
+				auto root = parser->ParseProgram();
+				Logger::WriteMessage((TT("\nTesting code: ") + test.code_ + TT("\n")).c_str());
+
+				auto evaluator = std::unique_ptr<tsumugi::script::evaluator::Evaluator>(new tsumugi::script::evaluator::Evaluator());
+				auto environment = std::make_shared<tsumugi::script::object::Environment>();
+				auto evaluated = evaluator->Eval(root.get(), environment);
+
+				_TestIntegerObject(evaluated.get(), test.expected_);
+			}
+		}
+
 		TEST_METHOD(LiteralArrayAssignment)
 		{
 			tstring code = TT("let arr = [1, 2, 3];");

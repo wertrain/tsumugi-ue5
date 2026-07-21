@@ -3,6 +3,7 @@
 #include "DetailLayoutBuilder.h"
 #include "DetailWidgetRow.h"
 #include "DetailCategoryBuilder.h"
+#include "PropertyCustomizationHelpers.h"
 #include "Widgets/Input/SSpinBox.h"
 #include "Widgets/Input/SCheckBox.h"
 #include "Widgets/Input/SEditableTextBox.h"
@@ -58,7 +59,7 @@ void FTsumugiComponentDetails::CustomizeDetails(IDetailLayoutBuilder& DetailBuil
         {
             case ETsumugiVariableType::Boolean:
             {
-                // --- 1. Boolean 用のチェックボックス (SCheckBox) ---
+                // Boolean 用のチェックボックス (SCheckBox)
                 ValueWidget = SNew(SCheckBox)
                     .IsChecked_Lambda([VariablesInterface, TargetVarName]() -> ECheckBoxState
                     {
@@ -76,7 +77,7 @@ void FTsumugiComponentDetails::CustomizeDetails(IDetailLayoutBuilder& DetailBuil
 
             case ETsumugiVariableType::Integer:
             {
-                // --- 2. 数値用のスピンボックス (SSpinBox) ---
+                // 数値用のスピンボックス (SSpinBox)
                 ValueWidget = SNew(SSpinBox<int32>)
                     .Value_Lambda([VariablesInterface, TargetVarName]() -> int32
                     {
@@ -91,10 +92,31 @@ void FTsumugiComponentDetails::CustomizeDetails(IDetailLayoutBuilder& DetailBuil
                 break;
             }
 
+            case ETsumugiVariableType::Object:
+            {
+                UClass* AllowedClass = FindFirstObject<UClass>(*Var.TypeName);
+                if (AllowedClass == nullptr) AllowedClass = UObject::StaticClass();
+                ValueWidget =
+                    SNew(SObjectPropertyEntryBox)
+                    .AllowedClass(AllowedClass)
+                    .ObjectPath_Lambda([VariablesInterface, TargetVarName]()
+                    {
+                        return VariablesInterface->GetVariableValue(TargetVarName);
+                    })
+                    .OnObjectChanged_Lambda([VariablesInterface, TargetVarName](const FAssetData& AssetData)
+                    {
+                        VariablesInterface->UpdateVariableValue(
+                            TargetVarName,
+                            AssetData.GetSoftObjectPath().ToString());
+                    });
+
+                break;
+            }
+
             case ETsumugiVariableType::String:
             default:
             {
-                // --- 3. 文字列・その他のためのテキストボックス (SEditableTextBox) ---
+                // 文字列・その他のためのテキストボックス (SEditableTextBox)
                 ValueWidget = SNew(SEditableTextBox)
                     .Text_Lambda([VariablesInterface, TargetVarName]() -> FText
                     {

@@ -129,22 +129,38 @@ std::unique_ptr<ast::statement::LetStatement> Parser::ParseLetStatement() {
     auto name = std::make_unique<ast::expression::Identifier>(currentToken_, currentToken_->GetLiteral());
     statement->SetName(std::move(name));
 
-    // 次は = (等号)がある
-    if (!ExpectPeekRequiredTokenType(lexer::TokenType::kAssign, "=")) {
-        return nullptr;
+    // 型注釈があるか
+    if (PeekTokenIs(lexer::TokenType::kColon)) {
+        ExpectPeek(lexer::TokenType::kColon);
+
+        // 次のトークンが Identifier か確認
+        if (!ExpectPeekRequiredTokenType(lexer::TokenType::kIdentifier, "TypeName")) {
+            return nullptr;
+        }
+        statement->SetTypeAnnotation(currentToken_->GetLiteral());
     }
-    // = を読み飛ばす
-    ReadToken();
 
-    auto expression = ParseExpression(Precedence::kLowest);
-    if (!expression) return nullptr;
-    statement->SetValue(std::move(expression));
-
-    // セミコロンは必須ではない
+    // セミコロンがあれば終了
     if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
         ReadToken();
+        return statement;
     }
 
+    // '=' があれば初期値を読む
+    if (PeekTokenIs(lexer::TokenType::kAssign)) {
+        ExpectPeek(lexer::TokenType::kAssign);
+        ReadToken(); // '='
+
+        auto expression = ParseExpression(Precedence::kLowest);
+        if (!expression) return nullptr;
+        statement->SetValue(std::move(expression));
+        if (PeekTokenIs(lexer::TokenType::kSemicolon)) {
+            ReadToken();
+        }
+        return statement;
+    }
+
+    // '=' も ';' もない場合も許可
     return statement;
 }
 

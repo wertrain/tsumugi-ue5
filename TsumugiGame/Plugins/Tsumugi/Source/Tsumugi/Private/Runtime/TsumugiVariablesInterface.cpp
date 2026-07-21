@@ -3,10 +3,12 @@
 #include "TsumugiEngine/Script/Objects/IObject.h"
 #include "TsumugiEngine/Script/Objects/StringObject.h"
 #include "TsumugiEngine/Script/Objects/IntegerObject.h"
+#include "TsumugiEngine/Script/Objects/FloatObject.h"
 #include "TsumugiEngine/Script/Objects/BooleanObject.h"
 #include "TsumugiEngine/Script/Objects/Environment.h"
 #include "TsumugiEngine/Script/Analyzer/AttributeAnalyzer.h"
 #include "Integration/StringConversion.h"
+#include "Integration/UObjectAccessor.h"
 #include <memory>
 
 void ITsumugiVariablesInterface::AnalyzeScriptVariables(const tsumugi::script::ast::Program* InProgram, const std::shared_ptr<tsumugi::script::object::Environment>& InEnvironment)
@@ -25,6 +27,7 @@ void ITsumugiVariablesInterface::AnalyzeScriptVariables(const tsumugi::script::a
             {
                 FStringExposedVariable UEVar;
                 UEVar.Name = tsumugi::integration::ToFString(Metadata.Name);
+                if (Metadata.TypeAnnotation) UEVar.TypeName = tsumugi::integration::ToFString(*Metadata.TypeAnnotation);
 
                 // カテゴリの解析
                 if (Attribute.NamedArguments.contains(TT("category")))
@@ -83,6 +86,25 @@ void ITsumugiVariablesInterface::AnalyzeScriptVariables(const tsumugi::script::a
                             break;
                     }
                 }
+                else if (Metadata.TypeAnnotation)
+                {
+                    const tstring& TypeAnnotation = *Metadata.TypeAnnotation;
+                    if (TypeAnnotation == TT("int"))
+                        UEVar.Type = ETsumugiVariableType::Integer;
+                    else if (TypeAnnotation == TT("float"))
+                        UEVar.Type = ETsumugiVariableType::Float;
+                    else if (TypeAnnotation == TT("string"))
+                        UEVar.Type = ETsumugiVariableType::String;
+                    else if (TypeAnnotation == TT("bool"))
+                        UEVar.Type = ETsumugiVariableType::Boolean;
+                    else
+                        UEVar.Type = ETsumugiVariableType::Object; // 未知の型は Object 扱い
+                }
+                else
+                {
+                    // 型指定なしなら UObject
+                    UEVar.Type = ETsumugiVariableType::Object;
+                }
 
                 ExposedVariables.Add(UEVar);
             }
@@ -112,6 +134,12 @@ void ITsumugiVariablesInterface::ApplyOverriddenVariables(const std::shared_ptr<
                     std::make_shared<tsumugi::script::object::IntegerObject>(FCString::Atoi(*Override->Value)));
                 break;
 
+            case ETsumugiVariableType::Float:
+                Environment->Set(
+                    tsumugi::integration::ToTString(Exposed.Name),
+                    std::make_shared<tsumugi::script::object::FloatObject>(FCString::Atoi(*Override->Value)));
+                break;
+
             case ETsumugiVariableType::Boolean:
                 Environment->Set(
                     tsumugi::integration::ToTString(Exposed.Name),
@@ -123,6 +151,21 @@ void ITsumugiVariablesInterface::ApplyOverriddenVariables(const std::shared_ptr<
                     tsumugi::integration::ToTString(Exposed.Name),
                     std::make_shared<tsumugi::script::object::StringObject>(tsumugi::integration::ToTString(Override->Value)));
                 break;
+
+            // 設定されたオブジェクトをロードして、UObjectAccessor でラップしてセット
+            case ETsumugiVariableType::Object:
+            {
+                FString Path = Override->Value;
+                UObject* Object = LoadObject<UObject>(nullptr, *Path);
+                if (Object)
+                {
+                    Environment->Set(
+                        tsumugi::integration::ToTString(Exposed.Name),
+                        std::make_shared<tsumugi::integration::UObjectAccessor>(Object));
+                }
+                break;
+            }
+
             default:
                 break;
         }

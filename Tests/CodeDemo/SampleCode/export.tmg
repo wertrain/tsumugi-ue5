@@ -12,3 +12,14 @@ let isGodMode = false;
 
 @export(category = "Config", tooltip = "画面に表示するプレイヤーの識別名です")
 let displayName = "Hero";
+
+@export(category = "Status", tooltip = "オブジェクト参照です")
+let actor:Actor;
+
+function OnBeginPlay() { 
+    print("hello");
+    print(displayName);
+    print(actor);
+    let location = Target.GetActorLocation()
+    print(location)
+}

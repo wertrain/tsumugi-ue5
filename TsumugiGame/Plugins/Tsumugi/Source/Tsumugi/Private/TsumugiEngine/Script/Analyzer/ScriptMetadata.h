@@ -2,6 +2,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 #include "TsumugiEngine/Foundation/Types.h"
 
 namespace tsumugi::script::object { class IObject; }
@@ -19,6 +20,7 @@ struct VariableMetadata {
     tstring Name;
     std::vector<AttributeInfo> Attributes;
     std::shared_ptr<object::IObject> DefaultValue;
+    std::optional<tstring> TypeAnnotation;
 };
 
 struct FunctionMetadata {

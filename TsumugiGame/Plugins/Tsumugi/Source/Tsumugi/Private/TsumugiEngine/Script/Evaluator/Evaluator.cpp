@@ -168,12 +168,15 @@ std::shared_ptr<object::IObject> Evaluator::Eval(const ast::INode* node, const s
         }
         case ast::NodeType::kLetStatement: {
             auto* letStatement = static_cast<const ast::statement::LetStatement*>(node);
-            auto value = Eval(letStatement->GetValue(), environment);
-            if (IsErrorObject(value)) {
-                return value;
+            std::shared_ptr<object::IObject> value = object::NullObject::Instance();
+            if (letStatement->GetValue()) {
+                value = Eval(letStatement->GetValue(), environment);
+                if (IsErrorObject(value)) {
+                    return value;
+                }
             }
             environment->Set(letStatement->GetName()->GetValue(), value);
-            return std::make_shared<object::NullObject>();
+            return object::NullObject::Instance();
         }
         case ast::NodeType::kIdentifier: {
             auto* identifier = static_cast<const ast::expression::Identifier*>(node);
