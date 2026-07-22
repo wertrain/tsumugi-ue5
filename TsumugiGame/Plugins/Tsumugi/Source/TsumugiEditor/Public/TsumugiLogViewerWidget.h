@@ -62,52 +62,58 @@ public:
     /// Blueprint にログを通知するイベント
     /// </summary>
     /// <param name="Entry"></param>
-    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor|Log")
     void OnLogAdded(const FTsumugiLogEntry& Entry);
 
     /// <summary>
     /// Blueprint にログを通知するイベント
     /// </summary>
     /// <param name="Entry"></param>
-    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor|Log")
     void OnLogDataAdded(const UTsumugiLogItemData* Entry);
 
     /// <summary>
     /// Blueprint にフィルタ後のログ一覧を通知するイベント
     /// </summary>
     /// <param name="Entries"></param>
-    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor|Log")
     void OnLogListUpdated(const TArray<FTsumugiLogEntry>& Entries);
 
     /// <summary>
     /// Blueprint にフィルタ後のログ一覧を通知するイベント
     /// </summary>
     /// <param name="Entries"></param>
-    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintImplementableEvent, Category = "Tsumugi|Editor|Log")
     void OnLogDataListUpdated(const TArray<UTsumugiLogItemData*>& Entries);
 
     /// <summary>
     /// 検索フィルタを設定（Blueprint から呼ぶ）
     /// </summary>
     /// <param name="Filter"></param>
-    UFUNCTION(BlueprintCallable, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintCallable, Category = "Tsumugi|Editor|Log")
     void SetSearchFilter(const FString& Filter);
+
+    /// <summary>
+    /// カテゴリフィルタを設定
+    /// </summary>
+    /// <param name="Filter"></param>
+    UFUNCTION(BlueprintCallable, Category = "Tsumugi|Editor|Log")
+    void SetCategoryFilter(const FString& SelectedCategoryOption);
 
     /// <summary>
     /// ログをクリア（Blueprint から呼ぶ）
     /// </summary>
-    UFUNCTION(BlueprintCallable, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintCallable, Category = "Tsumugi|Editor|Log")
     void ClearLogs();
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure, Category = "Tsumugi|Editor")
+    UFUNCTION(BlueprintPure, Category = "Tsumugi|Editor|Log")
     FText GetLogCountText() const;
 
-private:
-
+protected:
     /// <summary>
     /// Subsystem のログ受信
     /// </summary>
@@ -117,44 +123,69 @@ private:
     void HandleLogMessage(const FString& Message, ETsumugiLogCategory Category);
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="SelectedItem"></param>
+    /// <param name="SelectionType"></param>
+    UFUNCTION()
+    void OnCategorySelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
+
+private:
+    /// <summary>
+    /// 
+    /// </summary>
+    void SetupCategoryComboBox();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Entry"></param>
+    /// <returns></returns>
+    UTsumugiLogItemData* AppendLogInternal(const FTsumugiLogEntry& Entry);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Entry"></param>
+    /// <returns></returns>
+    bool IsMatchFilter(const FTsumugiLogEntry& Entry) const;
+
+    /// <summary>
     /// フィルタ適用
     /// </summary>
     void ApplyFilter();
 
 protected:
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    TObjectPtr<class UListView> LogListView;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    UPROPERTY(meta = (BindWidget))
-    class UImage* ClearButtonIcon;
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    TObjectPtr<class UCheckBox> AutoScrollToggle;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    UPROPERTY(meta = (BindWidget))
-    class UImage* SaveButtonIcon;
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    TObjectPtr<class UComboBoxString> CategoryFilter;
+    
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional))
+    TObjectPtr<class UImage> ClearButtonIcon;
 
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional))
+    TObjectPtr<class UImage> SaveButtonIcon;
 
 private:
+    UPROPERTY(EditAnywhere, Category = "Tsumugi|Editor|Log")
+    int32 MaxLogs = 1000;
 
-    /// <summary>
-    /// 全ログ（リングバッファ）
-    /// </summary>
     TArray<FTsumugiLogEntry> AllLogs;
-
-    /// <summary>
-    /// フィルタ後のログ
-    /// </summary>
     TArray<FTsumugiLogEntry> FilteredLogs;
 
-    /// <summary>
-    /// 検索文字列
-    /// </summary>
-    FString SearchFilter;
+    UPROPERTY()
+    TArray<TObjectPtr<UTsumugiLogItemData>> AllItemDatas;
 
-    /// <summary>
-    /// 最大ログ保持数
-    /// </summary>
-    static constexpr int32 MaxLogs = 2000;
+    UPROPERTY()
+    TArray<TObjectPtr<UTsumugiLogItemData>> FilteredItemDatas;
+
+    FString SearchFilter;
+    FString CurrentCategoryFilter;
+
+    static FString CategoryEnumToString(ETsumugiLogCategory Category);
 };
